@@ -6,12 +6,14 @@ using FSM_System;
 public class PlayerRootState : FSM_State<EnumPlayerState>
 {
 
+    protected PlayerDataSO playerData;
     protected Rigidbody2D rigid;
     protected PlayerInputController inputController => PlayerController.InputController;
 
-    public PlayerRootState(FSM_Controller<EnumPlayerState> controller) : base(controller)
+    public PlayerRootState(PlayerController controller) : base(controller)
     {
 
+        playerData = controller.playerData;
         rigid = GetComponent<Rigidbody2D>();
 
     }

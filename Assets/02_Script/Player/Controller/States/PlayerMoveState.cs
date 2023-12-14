@@ -6,14 +6,14 @@ using UnityEngine;
 public class PlayerMoveState : PlayerRootState
 {
 
-    public PlayerMoveState(FSM_Controller<EnumPlayerState> controller) : base(controller)
+    public PlayerMoveState(PlayerController controller) : base(controller)
     {
     }
 
     protected override void UpdateState()
     {
 
-        rigid.velocity = inputController.MoveDir * 5;
+        rigid.velocity = inputController.MoveDir * playerData.MoveSpeed;
 
     }
 

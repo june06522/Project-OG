@@ -16,6 +16,8 @@ public enum EnumPlayerState
 public class PlayerController : FSM_Controller<EnumPlayerState>
 {
 
+    [field: SerializeField] public PlayerDataSO playerData { get; protected set; }
+
     private static PlayerInputController inputController;
 
     public static PlayerInputController InputController => inputController;
