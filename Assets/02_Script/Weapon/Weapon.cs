@@ -3,17 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void ChargedWeapon(float curCharge, float maxCharge);
-
 public abstract class Weapon : MonoBehaviour
 {
 
     [SerializeField] private float chargeGauge;
 
-    public event ChargedWeapon OnWeaponCharged;
-    public event Action OnAttackEvent;
-
     private float chargeValue;
+
+    public Guid WeaponGuid { get; protected set; }
+
+    private void Awake()
+    {
+
+        WeaponGuid = Guid.NewGuid();
+
+    }
 
     public void DoAttack(Transform target)
     {
@@ -22,8 +26,8 @@ public abstract class Weapon : MonoBehaviour
 
     }
 
-    public abstract void Attack(Transform target);
-    public abstract void Skill();
+    protected abstract void Attack(Transform target);
+    protected abstract void Skill();
 
     public virtual void Charge(float value)
     {
@@ -45,8 +49,6 @@ public abstract class Weapon : MonoBehaviour
             chargeValue = 0f;
 
         }
-
-        OnWeaponCharged?.Invoke(chargeGauge, chargeValue);
 
     }
 
