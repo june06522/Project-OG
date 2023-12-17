@@ -18,7 +18,7 @@ public abstract class Weapon : MonoBehaviour
     public void DoAttack(Transform target)
     {
 
-
+        Attack(target);
 
     }
 
@@ -33,8 +33,16 @@ public abstract class Weapon : MonoBehaviour
         if(chargeValue >= chargeGauge)
         {
 
+            int cnt = Mathf.FloorToInt(chargeValue / chargeGauge);
+
+            for(int i = 0; i < cnt; i++)
+            {
+
+                Skill();
+
+            }
+
             chargeValue = 0f;
-            Skill();
 
         }
 
