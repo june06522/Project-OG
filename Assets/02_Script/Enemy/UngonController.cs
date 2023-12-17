@@ -40,6 +40,6 @@ public class UngonMoveState<T> : FSM_State<T> where T : System.Enum
 {
     public UngonMoveState(T idleState, FSM_Controller<T> controller, EnemyDataSO data) : base(controller)
     {
-        _idleState = idleState;
+        //_idleState = idleState;
     }
 }
