@@ -11,6 +11,10 @@ public class GunWeapon : Weapon
     [SerializeField] private string bulletKey = "DefaultBullet";
 
     private SpriteRenderer spriteRenderer;
+    private LineRenderer laserRanderer;
+    private float laserDuration;
+    private float laserAttackCool = 0.1f;
+    private float lastLaserAttack;
     private bool isShake;
 
     protected override void Awake()
@@ -27,6 +31,33 @@ public class GunWeapon : Weapon
         FlipAndRotate(target);
 
         base.Run(target);
+
+        LaserSkill(target);
+    }
+
+    private void LaserSkill(Transform target)
+    {
+
+        if (laserDuration <= 0)
+        {
+
+            laserRanderer = null;
+            return;
+
+        }
+
+        laserDuration -= Time.deltaTime;
+
+        laserRanderer.SetPosition(0, transform.position);
+        laserRanderer.SetPosition(1, target.position);
+
+        if(Time.time - lastLaserAttack >= laserDuration)
+        {
+
+            lastLaserAttack = Time.time;
+            //공격 코드 작성
+
+        }
 
     }
 
@@ -74,6 +105,16 @@ public class GunWeapon : Weapon
 
     protected override void Skill(int count)
     {
+
+        laserDuration += 3 * count;
+
+        if(laserRanderer == null)
+        {
+
+            laserRanderer = FAED.TakePool<LineRenderer>("Laser");
+
+        }
+
     }
 
     public override void OnRePosition()
