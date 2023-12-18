@@ -9,7 +9,17 @@ public delegate void OneDirInput(float value);
 public class PlayerInputController : IDisposable
 {
 
+    public event Action OnDashKeyPressed;
     public Vector2 MoveDir { get; private set; }
+    public Vector2 LastMoveDir { get; private set; } = Vector2.right;
+
+    public void Update()
+    {
+
+        CheckMovementKeyInput();
+        CheckDashKey();
+
+    }
 
     private void CheckMovementKeyInput()
     {
@@ -19,19 +29,32 @@ public class PlayerInputController : IDisposable
 
         MoveDir = new Vector2(x, y).normalized;
 
+        if(MoveDir != Vector2.zero)
+        {
+
+            LastMoveDir = MoveDir;
+
+        }
+
     }
 
-    public void Update()
+
+    private void CheckDashKey()
     {
 
-        CheckMovementKeyInput();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+
+            OnDashKeyPressed?.Invoke();
+
+        }
 
     }
 
     public void Dispose()
     {
 
-        //나중에 이밴트 추가하면 여기서 null로 밀어주기
+        OnDashKeyPressed = null;
 
     }
 

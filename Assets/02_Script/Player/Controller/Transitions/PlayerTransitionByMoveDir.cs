@@ -33,8 +33,6 @@ public class PlayerTransitionByMoveDir : FSM_Transition<EnumPlayerState>
 
         if(PlayerController.InputController == null) return false;
 
-        Debug.Log(PlayerController.InputController.MoveDir.sqrMagnitude + " : " + checkValue.sqrMagnitude);
-
         switch (checkType)
         {
 

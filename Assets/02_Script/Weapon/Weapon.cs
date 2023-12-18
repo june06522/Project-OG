@@ -6,45 +6,47 @@ using UnityEngine;
 public abstract class Weapon : MonoBehaviour
 {
 
-    [SerializeField] private float chargeGauge;
-
     private float chargeValue;
 
+    [field:SerializeField] public WeaponDataSO Data { get; protected set; }
     public Guid WeaponGuid { get; protected set; }
 
-    private void Awake()
+    protected virtual void Awake()
     {
 
         WeaponGuid = Guid.NewGuid();
 
+        Data = Instantiate(Data);
+        Data.Init(this);
+
     }
 
-    public void DoAttack(Transform target)
+    public virtual void Run(Transform target)
     {
 
-        Attack(target);
+        if (!Data.isAttackCoolDown)
+        {
+
+            Data.SetCoolDown();
+            Attack(target);
+
+        }
 
     }
 
     protected abstract void Attack(Transform target);
-    protected abstract void Skill();
+    protected abstract void Skill(int count);
 
     public virtual void Charge(float value)
     {
 
         chargeValue += value;
 
-        if(chargeValue >= chargeGauge)
+        if(chargeValue >= Data.ChangeGauge.GetValue())
         {
 
-            int cnt = Mathf.FloorToInt(chargeValue / chargeGauge);
-
-            for(int i = 0; i < cnt; i++)
-            {
-
-                Skill();
-
-            }
+            int cnt = Mathf.FloorToInt(chargeValue / Data.ChangeGauge.GetValue());
+            Skill(cnt);
 
             chargeValue = 0f;
 

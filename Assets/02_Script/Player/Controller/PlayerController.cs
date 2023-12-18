@@ -11,6 +11,7 @@ public enum EnumPlayerState
 
 }
 
+
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
 public class PlayerController : FSM_Controller<EnumPlayerState>
@@ -19,13 +20,16 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
     [field: SerializeField] public PlayerDataSO playerData { get; protected set; }
 
     private static PlayerInputController inputController;
+    private static PlayerEventController eventController;
 
     public static PlayerInputController InputController => inputController;
+    public static PlayerEventController EventController => eventController;
 
     protected override void Awake()
     {
 
         inputController = new PlayerInputController();
+        eventController = new PlayerEventController();
 
         var idleState = new PlayerRootState(this);
         var idleToMove = new PlayerTransitionByMoveDir(this, EnumPlayerState.Move, Vector2.zero, TransitionCheckType.Greater);

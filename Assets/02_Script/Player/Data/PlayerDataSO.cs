@@ -5,7 +5,15 @@ using UnityEngine;
 public enum PlayerStatsType
 {
 
-    MoveSpeed
+    MoveSpeed,
+    DashCoolDown
+
+}
+
+public enum PlayerCoolDownType
+{
+
+    Dash,
 
 }
 
@@ -14,17 +22,40 @@ public class PlayerDataSO : ScriptableObject
 {
 
     [SerializeField] private Stats moveSpeed;
+    [SerializeField] private Stats dashCoolDown;
 
-    private Dictionary<PlayerStatsType, Stats> playerStatsContainer;
+    private Dictionary<PlayerStatsType, Stats> playerStatsContainer = new();
+    private Dictionary<PlayerCoolDownType, bool> playerCoolDownContainer = new();
     private PlayerController owner;
 
     public float MoveSpeed => moveSpeed.GetValue();
+    public float DashCoolDown => dashCoolDown.GetValue();
+
+    public bool this[PlayerCoolDownType type]
+    {
+        get 
+        { 
+
+            return playerCoolDownContainer[type];
+            
+        }
+    }
 
     public void SetOwner(PlayerController controller) 
     {
         
         owner = controller;
         playerStatsContainer.Add(PlayerStatsType.MoveSpeed, moveSpeed);
+        playerStatsContainer.Add(PlayerStatsType.DashCoolDown, dashCoolDown);
+
+    }
+
+    public void SetCoolDown(PlayerCoolDownType type, float duration)
+    {
+
+        if (playerCoolDownContainer[type] == true) return;
+
+        owner.StartCoroutine(SetCoolDownCo(type, duration));
 
     }
 
@@ -39,8 +70,17 @@ public class PlayerDataSO : ScriptableObject
     {
 
         playerStatsContainer[type].AddModify(modifyValue);
-        yield return new WaitForSeconds(modifyValue);
+        yield return new WaitForSeconds(duration);
         playerStatsContainer[type].RemoveModify(modifyValue);
+
+    }
+
+    private IEnumerator SetCoolDownCo(PlayerCoolDownType type, float duration)
+    {
+
+        playerCoolDownContainer[type] = true;
+        yield return new WaitForSeconds(duration);
+        playerCoolDownContainer[type] = false;
 
     }
 
