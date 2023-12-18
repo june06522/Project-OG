@@ -24,7 +24,7 @@ public abstract class Weapon : MonoBehaviour
     public virtual void Run(Transform target)
     {
 
-        if (!Data.isAttackCoolDown)
+        if (!Data.isAttackCoolDown && target != null)
         {
 
             Data.SetCoolDown();

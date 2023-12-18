@@ -55,6 +55,12 @@ public class WeaponController : MonoBehaviour
                 weapon.Run(FindCloseEnemy(cnt));
 
             }
+            else
+            {
+
+                weapon.Run(null);
+
+            }
 
         }
 

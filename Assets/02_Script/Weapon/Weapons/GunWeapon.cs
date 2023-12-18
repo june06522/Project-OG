@@ -1,5 +1,6 @@
 using DG.Tweening;
 using FD.Dev;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,14 @@ public class GunWeapon : Weapon
         base.Awake();
         
         spriteRenderer = GetComponent<SpriteRenderer>();
+        PlayerController.EventController.OnDash += HandleChargeDash;
+
+    }
+
+    private void HandleChargeDash()
+    {
+
+        Charge(10);
 
     }
 
@@ -38,24 +47,39 @@ public class GunWeapon : Weapon
     private void LaserSkill(Transform target)
     {
 
+        if(target == null && laserRanderer != null)
+        {
+
+            laserRanderer.SetPosition(0, Vector2.zero);
+            laserRanderer.SetPosition(1, Vector2.zero);
+            return;
+
+        }
+
         if (laserDuration <= 0)
         {
 
-            laserRanderer = null;
+            if(laserRanderer != null)
+            {
+
+                FAED.InsertPool(laserRanderer.gameObject);
+                laserRanderer = null;
+
+            }
+
             return;
 
         }
 
         laserDuration -= Time.deltaTime;
 
-        laserRanderer.SetPosition(0, transform.position);
+        laserRanderer.SetPosition(0, shootPos.position);
         laserRanderer.SetPosition(1, target.position);
 
-        if(Time.time - lastLaserAttack >= laserDuration)
+        if(Time.time - lastLaserAttack >= laserAttackCool)
         {
 
             lastLaserAttack = Time.time;
-            //공격 코드 작성
 
         }
 
@@ -63,6 +87,8 @@ public class GunWeapon : Weapon
 
     private void FlipAndRotate(Transform target)
     {
+
+        if (target == null) return;
 
         var dir = target.position - transform.position;
         dir.Normalize();
