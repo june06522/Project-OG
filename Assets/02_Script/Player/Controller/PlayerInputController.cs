@@ -12,6 +12,7 @@ public class PlayerInputController : IDisposable
     public event Action OnDashKeyPressed;
     public Vector2 MoveDir { get; private set; }
     public Vector2 LastMoveDir { get; private set; } = Vector2.right;
+    public bool isDashKeyPressed { get; private set; }
 
     public void Update()
     {
@@ -42,7 +43,9 @@ public class PlayerInputController : IDisposable
     private void CheckDashKey()
     {
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        isDashKeyPressed = Input.GetKeyDown(KeyCode.Space);
+
+        if (isDashKeyPressed)
         {
 
             OnDashKeyPressed?.Invoke();

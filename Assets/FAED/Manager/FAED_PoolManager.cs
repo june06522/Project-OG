@@ -66,8 +66,6 @@ namespace FD.Core
         public void CreateScenePool(string sceneName)
         {
 
-            Debug.Log(sceneName);
-
             var pool = poolingSO.scenePoolingObjects.Find(x => x.sceneName == sceneName);
 
             if (pool == null) return;

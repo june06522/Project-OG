@@ -6,7 +6,9 @@ public enum PlayerStatsType
 {
 
     MoveSpeed,
-    DashCoolDown
+    DashCoolDown,
+    DashLenght,
+    DashSpeed
 
 }
 
@@ -23,6 +25,10 @@ public class PlayerDataSO : ScriptableObject
 
     [SerializeField] private Stats moveSpeed;
     [SerializeField] private Stats dashCoolDown;
+    [SerializeField] private Stats dashLength;
+    [SerializeField] private Stats dashSpeed;
+
+    [field:SerializeField] public LayerMask DashObstacleLayer { get; private set; }
 
     private Dictionary<PlayerStatsType, Stats> playerStatsContainer = new();
     private Dictionary<PlayerCoolDownType, bool> playerCoolDownContainer = new();
@@ -35,7 +41,7 @@ public class PlayerDataSO : ScriptableObject
     {
 
         get 
-        { 
+        {
 
             return playerCoolDownContainer[type];
             
@@ -59,8 +65,21 @@ public class PlayerDataSO : ScriptableObject
     {
         
         owner = controller;
+
         playerStatsContainer.Add(PlayerStatsType.MoveSpeed, moveSpeed);
         playerStatsContainer.Add(PlayerStatsType.DashCoolDown, dashCoolDown);
+        playerStatsContainer.Add(PlayerStatsType.DashLenght, dashLength);
+        playerStatsContainer.Add(PlayerStatsType.DashSpeed, dashSpeed);
+
+        foreach(var type in System.Enum.GetValues(typeof(PlayerCoolDownType))) 
+        {
+
+            Debug.Log(type.ToString());
+            playerCoolDownContainer.Add(System.Enum.Parse<PlayerCoolDownType>(type.ToString()), false);
+        
+        }
+
+
 
     }
 
