@@ -1,18 +1,22 @@
+using FD.Dev;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageTextFeedback : MonoBehaviour
+public class DamageTextFeedback : Feedback
 {
-    // Start is called before the first frame update
-    void Start()
+
+    public DamageTextFeedback(FeedbackPlayer player) : base(player)
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Play(float damage)
     {
-        
+
+        var pos = transform.position + (Vector3)Random.insideUnitCircle;
+
+        FAED.TakePool<DamageText>("DamageText", pos).Set(damage);
+
     }
+
 }

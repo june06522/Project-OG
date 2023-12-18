@@ -27,10 +27,10 @@ public class DamageText : MonoBehaviour
 
         Sequence seq = DOTween.Sequence();
 
-        seq.Append(transform.DOScale(Vector3.one, 0.4f).SetEase(Ease.OutBounce));
-        seq.Join(transform.DOMoveY(transform.position.y + 0.2f, 0.4f).SetEase(Ease.InOutElastic));
-        seq.Join(text.DOColor(Color.red, 0.4f).SetEase(Ease.InSine));
-        seq.AppendInterval(0.2f);
+        seq.Append(transform.DOScale(Vector3.one, 0.25f).SetEase(Ease.OutBounce));
+        seq.Join(transform.DOMoveY(transform.position.y + 0.2f, 0.25f).SetEase(Ease.InOutElastic));
+        seq.Join(text.DOColor(Color.red, 0.25f).SetEase(Ease.InSine));
+        seq.AppendInterval(0.15f);
         seq.AppendCallback(() =>
         {
 

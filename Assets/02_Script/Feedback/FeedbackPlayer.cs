@@ -28,6 +28,7 @@ public class FeedbackPlayer : MonoBehaviour
         feedbackContainer.Add(FeedbackFlag.HitBlink, new HitBlinkFeedback(this));
         feedbackContainer.Add(FeedbackFlag.HitShake, new HitShakeFeedback(this));
         feedbackContainer.Add(FeedbackFlag.HitStop, new HitStopFeedback(this));
+        feedbackContainer.Add(FeedbackFlag.DamageText, new DamageTextFeedback(this));
 
     }
 

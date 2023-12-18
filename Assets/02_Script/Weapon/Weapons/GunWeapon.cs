@@ -5,6 +5,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Random = UnityEngine.Random;
+
 public class GunWeapon : Weapon
 {
 
@@ -80,6 +82,7 @@ public class GunWeapon : Weapon
         {
 
             lastLaserAttack = Time.time;
+            target.GetComponent<IHitAble>().Hit(Data.WeaponValue.GetValue());
 
         }
 

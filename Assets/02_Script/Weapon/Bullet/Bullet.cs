@@ -72,6 +72,13 @@ public class Bullet : MonoBehaviour
                 HitOther();
                 Release();
 
+                if(collision.TryGetComponent<IHitAble>(out var hitAble))
+                {
+
+                    hitAble.Hit(curDamage + Data.Damage);
+
+                }
+
             }
 
         }
