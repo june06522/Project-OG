@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -92,6 +93,7 @@ public class WeaponController : MonoBehaviour
         for(int i = 1; i <= weaponContainer.Count; i++)
         {
 
+            weaponContainer[i - 1].OnRePosition();
             weaponContainer[i - 1].transform.position 
                 = transform.position + (Quaternion.Euler(0, 0, angle * i) * Vector2.right);
 
