@@ -5,14 +5,18 @@ using UnityEngine;
 public abstract class Feedback
 {
 
-    protected FeedbackPlayer player;
     protected SpriteRenderer spriteRenderer;
+    protected FeedbackPlayer player;
+    protected Transform transform;
+    protected GameObject gameObject;
 
     public Feedback(FeedbackPlayer player)
     {
 
         this.player = player;
         spriteRenderer = player.GetComponent<SpriteRenderer>();
+        gameObject = player.gameObject;
+        transform = gameObject.transform;
 
     }
 
