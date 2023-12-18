@@ -33,12 +33,26 @@ public class PlayerDataSO : ScriptableObject
 
     public bool this[PlayerCoolDownType type]
     {
+
         get 
         { 
 
             return playerCoolDownContainer[type];
             
         }
+
+    }
+
+    public float this[PlayerStatsType type]
+    {
+
+        get
+        {
+
+            return playerStatsContainer[type].GetValue();
+
+        }
+
     }
 
     public void SetOwner(PlayerController controller) 
