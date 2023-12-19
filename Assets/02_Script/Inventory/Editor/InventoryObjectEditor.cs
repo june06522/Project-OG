@@ -1,5 +1,7 @@
 using FD.Core.Editors;
 using FD.Dev.AI;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -78,7 +80,15 @@ public class InventoryEditorWindow : FAED_GraphBaseWindow<InventoryEditorGraph>
 public class InventoryEditorGraph : FAED_BaseGraphView
 {
 
+    public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
+    {
 
+        return ports.ToList().Where(
+            x => x.direction != startPort.direction && 
+            x.node != startPort.node && 
+            x.portType == startPort.portType).ToList();
+
+    }
 
 }
 

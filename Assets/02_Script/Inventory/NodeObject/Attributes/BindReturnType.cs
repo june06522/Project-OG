@@ -4,12 +4,12 @@ using System;
 public class BindReturnType : Attribute
 {
 
-    public Type returnType { get; private set; }
+    public Type bindType { get; private set; }
 
-    public BindReturnType(Type returnType)
+    public BindReturnType(Type bindType)
     {
 
-        this.returnType = returnType;
+        this.bindType = bindType;
 
     }
 
