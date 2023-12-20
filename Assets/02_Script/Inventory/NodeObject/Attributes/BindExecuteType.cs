@@ -1,12 +1,12 @@
 using System;
 
 [AttributeUsage(AttributeTargets.Method)]
-public class BindReturnType : Attribute
+public class BindExecuteType : Attribute
 {
 
     public Type bindType { get; private set; }
 
-    public BindReturnType(Type bindType)
+    public BindExecuteType(Type bindType)
     {
 
         this.bindType = bindType;

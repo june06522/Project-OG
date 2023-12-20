@@ -1,12 +1,18 @@
 using FD.Core.Editors;
 using FD.Dev.AI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.Searcher;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static FD.Core.Editors.FAED_BehaviorTreeEditorWindow;
 
+/// <summary>
+/// 
+/// </summary>
 public class InventoryEditorWindow : FAED_GraphBaseWindow<InventoryEditorGraph>
 {
 
@@ -72,6 +78,8 @@ public class InventoryEditorWindow : FAED_GraphBaseWindow<InventoryEditorGraph>
         SetUpSplit();
         SetUpToolBar();
 
+        graphView.Init(inspactor);
+
     }
 
 }
@@ -79,6 +87,17 @@ public class InventoryEditorWindow : FAED_GraphBaseWindow<InventoryEditorGraph>
 
 public class InventoryEditorGraph : FAED_BaseGraphView
 {
+
+    private InvenVisualWindow inspactor;
+    private InvenSearchWindow searchWindow;
+
+    public void Init(InvenVisualWindow inspactor)
+    {
+        this.inspactor = inspactor;
+        searchWindow = ScriptableObject.CreateInstance<InvenSearchWindow>();
+        nodeCreationRequest = context => SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), searchWindow);
+
+    }
 
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
     {
@@ -90,9 +109,94 @@ public class InventoryEditorGraph : FAED_BaseGraphView
 
     }
 
+
+    private class InvenSearchWindow : ScriptableObject, ISearchWindowProvider
+    {
+        private InventoryEditorGraph graph;
+
+        public void Init(InventoryEditorGraph graph)
+        {
+
+            this.graph = graph;
+
+        }
+
+        public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
+        {
+
+            var tree = new List<SearchTreeEntry>()
+            {
+
+                new SearchTreeGroupEntry(new GUIContent("원준이는 원준이가 아니라 원준이입니다"), 0),
+                new SearchTreeGroupEntry(new GUIContent("Create Event Node"), 1),
+
+            };
+
+            var types = TypeCache.GetTypesDerivedFrom<InventoryEventReceiver>();
+
+            foreach (var t in types)
+            {
+
+                if (t.IsAbstract) continue;
+
+                tree.Add(new SearchTreeEntry(new GUIContent(t.Name))
+                {
+
+                    userData = t,
+                    level = 2
+
+                });
+
+            }
+
+
+
+            return tree;
+
+        }
+
+        public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
+        {
+
+            if (SearchTreeEntry.userData as Type != null)
+            {
+
+                var type = SearchTreeEntry.userData as Type;
+
+                if (type.IsSubclassOf(typeof(InventoryEventReceiver)))
+                {
+
+                    var node = new EventReveiveNode(type);
+
+                    graph.AddInvenNode(node);
+                    
+                }
+
+                return true;
+
+            }
+
+            return false;
+
+        }
+
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="node"></param>
+    public void AddInvenNode(InventoryBaseNode node)
+    {
+
+        node.OnSelectedEvent += inspactor.HandleCreateInspactor;
+        AddElement(node);
+
+    }
+
+
 }
 
-internal class InvenVisualWindow : VisualElement
+public class InvenVisualWindow : VisualElement
 {
 
     private Editor editor;
@@ -142,7 +246,7 @@ internal class InvenVisualWindow : VisualElement
 
     }
 
-    public void HandleCreateInspactor(Object obj)
+    public void HandleCreateInspactor(UnityEngine.Object obj)
     {
 
         UnityEngine.Object.DestroyImmediate(editor);

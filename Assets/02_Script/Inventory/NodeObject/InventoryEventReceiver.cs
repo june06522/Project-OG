@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 public delegate void ReceiveEvent(object parm = null);
 
-public abstract class InventoryEventReceiver : ScriptableObject, IDisposable
+public abstract class InventoryEventReceiver : InventoryObjectRoot, IDisposable
 {
     
     public event ReceiveEvent OnReceived;
@@ -18,7 +19,7 @@ public abstract class InventoryEventReceiver : ScriptableObject, IDisposable
     {
     }
 
-    public virtual void OnReceiveExecute(object parm = null)
+    public override void GetSignal(object parm)
     {
 
         OnReceived?.Invoke(parm);

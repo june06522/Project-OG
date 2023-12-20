@@ -19,17 +19,18 @@ public class DashEventReceiver : InventoryEventReceiver
 
     }
 
-    public override void OnReceiveExecute([BindParameterType(typeof(float))] object parm)
+    [BindExecuteType(typeof(float))]
+    public override void GetSignal(object parm)
     {
-
-        base.OnReceiveExecute(parm);
+        
+        base.GetSignal(parm);
 
     }
 
     private void HandleDash()
     {
 
-        OnReceiveExecute(chargeValue);
+        GetSignal(chargeValue);
 
     }
 

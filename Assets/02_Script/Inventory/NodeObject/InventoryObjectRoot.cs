@@ -5,6 +5,6 @@ using UnityEngine;
 public abstract class InventoryObjectRoot : ScriptableObject
 {
 
-    public abstract object GetSignal(object signal);
+    public abstract void GetSignal(object signal);
 
 }
