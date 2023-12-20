@@ -9,7 +9,7 @@ public class WeaponController : MonoBehaviour
 {
 
     [SerializeField] private LayerMask enemyLayer;
-    [SerializeField] private Weapon debugWeapon;
+    [SerializeField] private Weapon debugWeapon, wp2, wp3;
     [SerializeField] private int maxCheckCount = 100;
 
     private Collider2D[] enemyArr;
@@ -31,6 +31,27 @@ public class WeaponController : MonoBehaviour
 
             AddWeapon(Instantiate(debugWeapon));
 
+        }
+
+        if (wp2 != null && Input.GetKeyDown(KeyCode.K))
+        {
+
+            AddWeapon(Instantiate(wp2));
+
+        }
+
+        if (wp3 != null && Input.GetKeyDown(KeyCode.J))
+        {
+
+            AddWeapon(Instantiate(wp3));
+
+        }
+
+        if(Input.GetKeyDown(KeyCode.H)) 
+        { 
+            
+            RemoveAllWeapon();
+        
         }
 
         CheckEnemy();
@@ -133,6 +154,20 @@ public class WeaponController : MonoBehaviour
         }
 
         RePosition();
+
+    }
+
+    public void RemoveAllWeapon()
+    {
+
+        foreach(var item in weaponContainer)
+        {
+
+            Destroy(item.gameObject);
+
+        }
+
+        weaponContainer.Clear();
 
     }
 

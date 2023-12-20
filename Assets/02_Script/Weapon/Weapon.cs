@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class Weapon : MonoBehaviour
 {
 
+    protected Transform target;
     private float chargeValue;
 
     [field:SerializeField] public WeaponDataSO Data { get; protected set; }
@@ -23,6 +24,8 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void Run(Transform target)
     {
+
+        this.target = target;
 
         if (!Data.isAttackCoolDown && target != null)
         {

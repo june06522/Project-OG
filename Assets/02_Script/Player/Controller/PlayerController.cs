@@ -19,6 +19,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 {
 
     [field: SerializeField] public PlayerDataSO playerData { get; protected set; }
+    [SerializeField] private GameObject inv;
 
     private static PlayerInputController inputController;
     private static PlayerEventController eventController;
@@ -67,6 +68,13 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
         base.Update();
 
         inputController.Update();
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+
+            inv.SetActive(!inv.activeSelf);
+
+        }
 
     }
 

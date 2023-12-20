@@ -29,7 +29,7 @@ public class GunWeapon : Weapon
 
     }
 
-    private void HandleChargeDash()
+    protected virtual void HandleChargeDash()
     {
 
         Charge(10);
@@ -151,6 +151,20 @@ public class GunWeapon : Weapon
 
         DOTween.Kill(transform);
         isShake = false;
+
+    }
+
+    private void OnDestroy()
+    {
+
+        PlayerController.EventController.OnDash -= HandleChargeDash;
+
+        if (laserRanderer != null)
+        {
+
+            Destroy(laserRanderer.gameObject);
+
+        }
 
     }
 
