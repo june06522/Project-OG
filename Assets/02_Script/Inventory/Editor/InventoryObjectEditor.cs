@@ -1,18 +1,12 @@
 using FD.Core.Editors;
-using FD.Dev.AI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
-using UnityEditor.Searcher;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static FD.Core.Editors.FAED_BehaviorTreeEditorWindow;
 
-/// <summary>
-/// 
-/// </summary>
 public class InventoryEditorWindow : FAED_GraphBaseWindow<InventoryEditorGraph>
 {
 
@@ -93,9 +87,11 @@ public class InventoryEditorGraph : FAED_BaseGraphView
 
     public void Init(InvenVisualWindow inspactor)
     {
+
         this.inspactor = inspactor;
         searchWindow = ScriptableObject.CreateInstance<InvenSearchWindow>();
         nodeCreationRequest = context => SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), searchWindow);
+        searchWindow.Init(this);
 
     }
 
@@ -127,7 +123,7 @@ public class InventoryEditorGraph : FAED_BaseGraphView
             var tree = new List<SearchTreeEntry>()
             {
 
-                new SearchTreeGroupEntry(new GUIContent("원준이는 원준이가 아니라 원준이입니다"), 0),
+                new SearchTreeGroupEntry(new GUIContent("Node Window"), 0),
                 new SearchTreeGroupEntry(new GUIContent("Create Event Node"), 1),
 
             };
@@ -150,6 +146,24 @@ public class InventoryEditorGraph : FAED_BaseGraphView
             }
 
 
+            tree.Add(new SearchTreeGroupEntry(new GUIContent("Create Converter Node"), 1));
+
+            types = TypeCache.GetTypesDerivedFrom<InventoryConverterBase>();
+
+            foreach (var t in types)
+            {
+
+                if (t.IsAbstract) continue;
+
+                tree.Add(new SearchTreeEntry(new GUIContent(t.Name))
+                {
+
+                    userData = t,
+                    level = 2
+
+                });
+
+            }
 
             return tree;
 
@@ -169,7 +183,19 @@ public class InventoryEditorGraph : FAED_BaseGraphView
                     var node = new EventReveiveNode(type);
 
                     graph.AddInvenNode(node);
+
+                    node.transform.position = graph.ChangeCoordinatesTo(node, context.screenMousePosition);
                     
+                }
+                else if (type.IsSubclassOf(typeof(InventoryConverterBase)))
+                {
+
+                    var node = new ConverterNode(type);
+
+                    graph.AddInvenNode(node);
+
+                    node.transform.position = graph.ChangeCoordinatesTo(node, context.screenMousePosition);
+
                 }
 
                 return true;
@@ -181,10 +207,7 @@ public class InventoryEditorGraph : FAED_BaseGraphView
         }
 
     }
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="node"></param>
+
     public void AddInvenNode(InventoryBaseNode node)
     {
 

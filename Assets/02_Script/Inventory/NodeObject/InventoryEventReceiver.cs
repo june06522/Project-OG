@@ -8,8 +8,8 @@ public delegate void ReceiveEvent(object parm = null);
 
 public abstract class InventoryEventReceiver : InventoryObjectRoot, IDisposable
 {
-    
-    public event ReceiveEvent OnReceived;
+
+    protected List<InventoryObjectRoot> connects = new();
 
     public virtual void Dispose()
     {
@@ -22,7 +22,12 @@ public abstract class InventoryEventReceiver : InventoryObjectRoot, IDisposable
     public override void GetSignal(object parm)
     {
 
-        OnReceived?.Invoke(parm);
+        foreach(var item in connects)
+        {
+
+            item.DoGetSignal(parm);
+
+        }
 
     }
 
