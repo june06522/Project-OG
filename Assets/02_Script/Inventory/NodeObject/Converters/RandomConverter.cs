@@ -33,7 +33,7 @@ public class RandomConverter : InventoryConverterBase
 
         };
 
-        foreach(var item in connects)
+        foreach(var item in connectedOutput)
         {
 
             item.DoGetSignal(value);

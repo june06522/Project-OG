@@ -11,15 +11,29 @@ public class EventReveiveNode : InventoryBaseNode
     public EventReveiveNode(Type invenType) : base(invenType)
     {
 
-        var method = invenType.GetMethod("GetSignal");
-        Type executeType = method.GetCustomAttribute<BindExecuteType>() == null ? 
+        Create();
+
+    }
+
+    public EventReveiveNode(InventoryObjectRoot obj) : base(obj)
+    {
+
+        Create();
+
+    }
+
+    private void Create()
+    {
+
+        var method = invenObj.GetType().GetMethod("GetSignal");
+        Type executeType = method.GetCustomAttribute<BindExecuteType>() == null ?
             typeof(object) : method.GetCustomAttribute<BindExecuteType>().bindType;
 
 
         var outputPort = AddPort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, executeType);
         outputPort.portName = $"output({executeType.Name})";
 
-        title = invenType.Name;
+        title = invenObj.GetType().Name;
 
     }
 

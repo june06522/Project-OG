@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DashEventReceiver : InventoryEventReceiver
+public class DashEventReceiver : InventoryEventReceiverBase
 {
 
     public float chargeValue;
 
-    public override void Init()
+    protected override void OnInit()
     {
 
         if(PlayerController.EventController != null)

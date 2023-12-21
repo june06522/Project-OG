@@ -8,11 +8,24 @@ using UnityEngine;
 public class ConverterNode : InventoryBaseNode
 {
 
-
     public ConverterNode(Type invenType) : base(invenType)
     {
 
-        var method = invenType.GetMethod("GetSignal");
+        Create();
+
+    }
+
+    public ConverterNode(InventoryObjectRoot obj) : base(obj)
+    {
+
+        Create();
+
+    }
+
+    public void Create()
+    {
+
+        var method = invenObj.GetType().GetMethod("GetSignal");
         Type executeType = method.GetCustomAttribute<BindExecuteType>() == null ?
             typeof(object) : method.GetCustomAttribute<BindExecuteType>().bindType;
 
@@ -26,7 +39,7 @@ public class ConverterNode : InventoryBaseNode
         var inputPort = AddPort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, parmType);
         inputPort.portName = $"input({parmType.Name})";
 
-        title = invenType.Name;
+        title = invenObj.GetType().Name;
 
     }
 

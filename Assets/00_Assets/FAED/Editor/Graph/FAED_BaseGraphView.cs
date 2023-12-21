@@ -62,7 +62,7 @@ namespace FD.Core.Editors
         }
         public void SetZoom()
         {
-
+            this.AddManipulator(new ContentZoomer());
             SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
 
         }
