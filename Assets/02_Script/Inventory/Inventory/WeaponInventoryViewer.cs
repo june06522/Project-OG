@@ -6,7 +6,17 @@ using UnityEngine;
 public class WeaponInventoryViewer : MonoBehaviour
 {
 
+    [Header("Prefab")]
+    [SerializeField] private InvenSlot slotPrefab;
+
+    [Space]
+    [Header("Setting")]
+    [SerializeField] private Transform point; //인벤토리의 중앙지점
+    [SerializeField] private Transform parent; //인벤토리 슬롯들의 부모 오브젝트
+
     private WeaponInventory inventory;
+
+    private List<InvenSlot> slots = new List<InvenSlot>();
 
     private void Awake()
     {
@@ -16,10 +26,16 @@ public class WeaponInventoryViewer : MonoBehaviour
 
     }
 
-    private void HandleSlotAdded(Vector2 point)
+    private void HandleSlotAdded(Vector2Int point)
     {
 
+        var pos = (this.point.position + (Vector3)((Vector2)point * 100)) - (new Vector3(inventory.Width, inventory.Height) * 100 / 2);
 
+        var slot = Instantiate(slotPrefab, Vector2.zero, Quaternion.identity ,parent);
+        slot.invenPoint = point;
+        slot.transform.position = pos + new Vector3(50, 50);
+
+        slots.Add(slot);
 
     }
 

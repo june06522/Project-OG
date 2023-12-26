@@ -5,7 +5,7 @@ using UnityEngine;
 public class SlotData
 {
 
-    public SlotData(Vector2 point)
+    public SlotData(Vector2Int point)
     {
 
         this.point = point;
@@ -13,13 +13,13 @@ public class SlotData
 
     }
 
-    public Vector2 point;
+    public Vector2Int point;
     public bool isFilled;
 
 }
 
-public delegate void SlotAdded(Vector2 point);
-public delegate void SlotChanged(Vector2 point, bool fill);
+public delegate void SlotAdded(Vector2Int point);
+public delegate void SlotChanged(Vector2Int point, bool fill);
 
 public class WeaponInventory : MonoBehaviour
 {
@@ -28,6 +28,7 @@ public class WeaponInventory : MonoBehaviour
     [field:SerializeField] public int Height { get; private set; }
 
     private List<SlotData> invenslots = new();
+    private List<InventoryObjectData> container = new();
 
     public event SlotAdded OnSlotAddEvent;
     public event SlotChanged OnSlotChangeEvent;
@@ -41,7 +42,7 @@ public class WeaponInventory : MonoBehaviour
             for(int y = 0; y < Height; y++)
             {
 
-                Vector2 point = new Vector2(x, y);
+                Vector2Int point = new Vector2Int(x, y);
                 invenslots.Add(new SlotData(point));
                 OnSlotAddEvent?.Invoke(point);
 
@@ -51,7 +52,7 @@ public class WeaponInventory : MonoBehaviour
 
     }
 
-    public void AddSlot(Vector2 point)
+    public void AddSlot(Vector2Int point)
     {
 
         invenslots.Add(new SlotData(point));
@@ -59,7 +60,7 @@ public class WeaponInventory : MonoBehaviour
 
     }
 
-    public void FillSlot(Vector2 point, bool value) 
+    public void FillSlot(Vector2Int point, bool value) 
     {
 
         var slot = invenslots.Find(x => x.point == point);
@@ -70,19 +71,19 @@ public class WeaponInventory : MonoBehaviour
 
     }
 
-    public void FillSlots(List<Vector2> points, bool value)
+    public void FillSlots(List<Vector2Int> points, Vector2Int origin, bool value)
     {
 
         foreach(var point in points)
         {
 
-            FillSlot(point, value);
+            FillSlot(point + origin, value);
 
         }
 
     }
 
-    public bool CheckFill(Vector2 point)
+    public bool CheckFill(Vector2Int point)
     {
 
         var slot = invenslots.Find(x => x.point == point);
@@ -91,17 +92,64 @@ public class WeaponInventory : MonoBehaviour
 
     }
 
-    public bool CheckFill(List<Vector2> points)
+    public bool CheckFills(List<Vector2Int> points, Vector2Int origin)
     {
 
         foreach (var point in points)
         {
 
-            if(!CheckFill(point)) return false;
+            if(!CheckFill(point + origin)) return false;
 
         }
 
         return true;
+
+    }
+
+    public bool AddItem(InventoryObjectData item, Vector2Int origin)
+    {
+
+        if(CheckFills(item.bricks, origin))
+        {
+
+            container.Add(item);
+            FillSlots(item.bricks, origin, true);
+            return true;
+
+        }
+
+        return false;
+
+    }
+
+    public void RemoveItem(InventoryObjectData item, Vector2Int origin) 
+    {
+        
+        FillSlots(item.bricks, origin, false);
+    
+    }
+
+    public Vector2? AddItemAuto(InventoryObjectData item)
+    {
+
+        foreach(var slot in invenslots)
+        {
+
+            if (slot.isFilled) continue;
+
+            if(CheckFills(item.bricks, slot.point))
+            {
+
+                invenslots.Add(slot);
+                FillSlots(item.bricks, slot.point, true);
+
+                return slot.point;
+
+            }
+
+        }
+
+        return null;
 
     }
 
