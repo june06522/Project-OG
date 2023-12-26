@@ -6,6 +6,7 @@ using UnityEngine;
 public class InventoryObjectData : ScriptableObject
 {
 
+    public List<Vector2> bricks = new List<Vector2>();
     [HideInInspector] public List<InventoryObjectRoot> includes = new();
 
     public void Init(Transform owner)

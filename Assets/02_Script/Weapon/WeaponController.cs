@@ -9,7 +9,6 @@ public class WeaponController : MonoBehaviour
 {
 
     [SerializeField] private LayerMask enemyLayer;
-    [SerializeField] private Weapon debugWeapon, wp2, wp3;
     [SerializeField] private int maxCheckCount = 100;
 
     private Collider2D[] enemyArr;
@@ -25,34 +24,6 @@ public class WeaponController : MonoBehaviour
 
     private void Update()
     {
-        
-        if(debugWeapon != null && Input.GetKeyDown(KeyCode.L))
-        {
-
-            AddWeapon(Instantiate(debugWeapon));
-
-        }
-
-        if (wp2 != null && Input.GetKeyDown(KeyCode.K))
-        {
-
-            AddWeapon(Instantiate(wp2));
-
-        }
-
-        if (wp3 != null && Input.GetKeyDown(KeyCode.J))
-        {
-
-            AddWeapon(Instantiate(wp3));
-
-        }
-
-        if(Input.GetKeyDown(KeyCode.H)) 
-        { 
-            
-            RemoveAllWeapon();
-        
-        }
 
         CheckEnemy();
 

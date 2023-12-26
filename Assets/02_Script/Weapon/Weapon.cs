@@ -38,24 +38,6 @@ public abstract class Weapon : MonoBehaviour
     }
 
     protected abstract void Attack(Transform target);
-    protected abstract void Skill(int count);
-
-    public virtual void Charge(float value)
-    {
-
-        chargeValue += value;
-
-        if(chargeValue >= Data.ChangeGauge.GetValue())
-        {
-
-            int cnt = Mathf.FloorToInt(chargeValue / Data.ChangeGauge.GetValue());
-            Skill(cnt);
-
-            chargeValue = 0f;
-
-        }
-
-    }
 
     public virtual void OnRePosition() { }
 

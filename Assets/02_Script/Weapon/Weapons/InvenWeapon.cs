@@ -20,10 +20,8 @@ public class InvenWeapon : Weapon
     protected override void Attack(Transform target)
     {
 
-    }
 
-    protected override void Skill(int count)
-    {
+
     }
 
 }
