@@ -9,10 +9,10 @@ public class WeaponInventoryViewer : MonoBehaviour
     [Header("Prefab")]
     [SerializeField] private InvenSlot slotPrefab;
 
-    [Space]
-    [Header("Setting")]
-    [SerializeField] private Transform point; //인벤토리의 중앙지점
-    [SerializeField] private Transform parent; //인벤토리 슬롯들의 부모 오브젝트
+    [field:Space]
+    [field:Header("Setting")]
+    [SerializeField] public Transform point { get; protected set; } //인벤토리의 중앙지점
+    [SerializeField] public Transform parent { get; protected set; } //인벤토리 슬롯들의 부모 오브젝트
 
     private WeaponInventory inventory;
 

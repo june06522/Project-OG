@@ -129,7 +129,7 @@ public class WeaponInventory : MonoBehaviour
     
     }
 
-    public Vector2? AddItemAuto(InventoryObjectData item)
+    public Vector2? CheckItemAuto(InventoryObjectData item)
     {
 
         foreach(var slot in invenslots)
@@ -139,9 +139,6 @@ public class WeaponInventory : MonoBehaviour
 
             if(CheckFills(item.bricks, slot.point))
             {
-
-                invenslots.Add(slot);
-                FillSlots(item.bricks, slot.point, true);
 
                 return slot.point;
 
