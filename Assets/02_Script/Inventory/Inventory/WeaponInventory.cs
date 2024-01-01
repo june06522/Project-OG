@@ -113,6 +113,7 @@ public class WeaponInventory : MonoBehaviour
         {
 
             container.Add(item);
+            item.originPos = origin;
             FillSlots(item.bricks, origin, true);
             return true;
 
@@ -147,6 +148,14 @@ public class WeaponInventory : MonoBehaviour
         }
 
         return null;
+
+    }
+
+    public InventoryObjectData GetObjectData(Vector2Int point, Vector2Int dir, Vector2Int origin)
+    {
+
+        return null;
+        //return container.Find(x => x.bricks.Contains(x.))
 
     }
 

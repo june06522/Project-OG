@@ -27,12 +27,13 @@ public class Item : MonoBehaviour
         {
 
             var point =  inventory.CheckItemAuto(brick.InvenObject);
-
             if(point != null)
             {
 
-                var obj = Instantiate(brick, (point.Value * 100) - new Vector2(50, 50), Quaternion.identity, parent);
+                Debug.Log(123);
+                var obj = Instantiate(brick, Vector3.zero, Quaternion.identity, parent);
                 inventory.AddItem(obj.InvenObject, Vector2Int.FloorToInt(point.Value));
+                obj.transform.localPosition = (point.Value * 100) - (new Vector2(inventory.Width, inventory.Height) * 50) + new Vector2(50, 50);
 
             }
 

@@ -16,12 +16,14 @@ public struct SignalPoint
 public class InventoryObjectData : ScriptableObject
 {
 
-    public List<Vector2Int> bricks { get; protected set; } = new();
-    public List<SignalPoint> signalPoints { get; protected set; } = new();
+    [field:SerializeField] public List<Vector2Int> bricks { get; protected set; } = new();
+    [field:SerializeField] public List<SignalPoint> signalPoints { get; protected set; } = new();
     [HideInInspector] public List<InventoryObjectRoot> includes = new();
 
     public Action<object> OnSignalReceived;
     public Action<Vector2Int, object> OnSignalSend;
+
+    public Vector2 originPos { get; set; }
 
     public void Init(Transform owner)
     {

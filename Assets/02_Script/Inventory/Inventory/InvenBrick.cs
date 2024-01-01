@@ -3,25 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct WeaponInvenConnectData
-{
-
-    public Vector2Int connectedPort;
-    public InventoryObjectData connectedObject;
-
-}
 
 public class InvenBrick : MonoBehaviour
 {
 
-    private List<WeaponInvenConnectData> connectData = new();
-
-    public InventoryObjectData InvenObject { get; private set; }
+    [field:SerializeField] public InventoryObjectData InvenObject { get; private set; }
     public Vector2 InvenPoint { get; set; }
 
-    protected void Awake()
+    protected virtual void Awake()
     {
 
+        InvenObject = Instantiate(InvenObject);
         InvenObject.Init(transform);
 
     }
@@ -46,11 +38,7 @@ public class InvenBrick : MonoBehaviour
     private void HandleSignalSend(Vector2Int point, object signal)
     {
 
-        var slot = connectData.Find(x => x.connectedPort == point);
-
-        if (slot.connectedObject == null) return;
-
-        slot.connectedObject.GetSignal(signal);
+        
 
     }
 
