@@ -20,13 +20,17 @@ public class InventoryObjectData : ScriptableObject
     [field:SerializeField] public List<SignalPoint> signalPoints { get; protected set; } = new();
     [HideInInspector] public List<InventoryObjectRoot> includes = new();
 
+    private WeaponInventory inventory;
+
     public Action<object> OnSignalReceived;
     public Action<Vector2Int, object> OnSignalSend;
 
-    public Vector2 originPos { get; set; }
+    public Vector2Int originPos { get; set; }
 
     public void Init(Transform owner)
     {
+
+        inventory = UnityEngine.Object.FindObjectOfType<WeaponInventory>();
 
         for(int i  = 0; i < includes.Count; i++)
         {
@@ -45,7 +49,7 @@ public class InventoryObjectData : ScriptableObject
         for (int i = 0; i < includes.Count; i++)
         {
 
-            includes[i].Init(owner);
+            includes[i].Init(owner, this);
 
         }
 
@@ -58,12 +62,26 @@ public class InventoryObjectData : ScriptableObject
 
     }
 
-    public void SendSignal(Vector2Int point, object signal)
+    public void SendSignal(object signal)
     {
 
-        if (!bricks.Contains(point)) return;
+        List<InventoryObjectData> datas = new List<InventoryObjectData>();
 
-        OnSignalSend?.Invoke(point, signal);
+        foreach(var item in signalPoints)
+        {
+
+            var d = inventory.GetObjectData(item.point, item.dir, originPos);
+
+            if (d != null) datas.Add(d);
+
+        }
+
+        foreach(var item in datas)
+        {
+
+            item.GetSignal(signal);
+
+        }
 
     }
 

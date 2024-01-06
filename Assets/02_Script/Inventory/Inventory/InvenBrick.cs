@@ -2,44 +2,82 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-
-public class InvenBrick : MonoBehaviour
+public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
 
     [field:SerializeField] public InventoryObjectData InvenObject { get; private set; }
     public Vector2 InvenPoint { get; set; }
+
+    private WeaponInventory inventory;
+
+    private bool isDrag;
 
     protected virtual void Awake()
     {
 
         InvenObject = Instantiate(InvenObject);
         InvenObject.Init(transform);
+        inventory = FindObjectOfType<WeaponInventory>();
 
     }
 
-    public void Setting(InventoryObjectData invenObject)
+    public virtual void Setting()
     {
 
-        if(InvenObject != null)
+
+    }
+
+    private void Update()
+    {
+
+        if (isDrag)
         {
 
-            InvenObject.OnSignalSend -= HandleSignalSend;
+            transform.position = Input.mousePosition;
 
         }
 
-        InvenObject = invenObject;
-
-        InvenObject.OnSignalSend += HandleSignalSend;
-
     }
 
-
-    private void HandleSignalSend(Vector2Int point, object signal)
+    public virtual void OnPointerUp(PointerEventData eventData)
     {
 
-        
+        isDrag = false;
+
+        Vector3Int p = Vector3Int.FloorToInt(transform.position / 100);
+        var point = inventory.FindInvenPoint(Vector2Int.FloorToInt(transform.position / 100));
+
+        Debug.Log(point);
+
+        if (point == null)
+        {
+
+            Destroy(gameObject);
+            return;
+
+        }
+
+        if (inventory.CheckFills(InvenObject.bricks, point.Value))
+        {
+
+            inventory.AddItem(InvenObject, point.Value);
+            InvenPoint = point.Value;
+
+            transform.position = p * 100 + new Vector3Int(60, 40);
+
+            Setting();
+
+        }
 
     }
 
+    public virtual void OnPointerDown(PointerEventData eventData)
+    {
+
+        isDrag = true;
+        inventory.RemoveItem(InvenObject, InvenObject.originPos);
+
+    }
 }

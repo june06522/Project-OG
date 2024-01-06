@@ -16,7 +16,7 @@ public class WeaponInventoryViewer : MonoBehaviour
 
     private WeaponInventory inventory;
 
-    private List<InvenSlot> slots = new List<InvenSlot>();
+    public List<InvenSlot> slots { get; set; } = new List<InvenSlot>();
 
     private void Awake()
     {
@@ -34,6 +34,7 @@ public class WeaponInventoryViewer : MonoBehaviour
         var slot = Instantiate(slotPrefab, Vector2.zero, Quaternion.identity ,parent);
         slot.invenPoint = point;
         slot.transform.position = pos + new Vector3(50, 50);
+        slot.localPoint = slot.transform.localPosition / 100;
 
         slots.Add(slot);
 

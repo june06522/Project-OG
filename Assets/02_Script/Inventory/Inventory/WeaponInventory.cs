@@ -27,11 +27,19 @@ public class WeaponInventory : MonoBehaviour
     [field:SerializeField] public int Width { get; private set; }
     [field:SerializeField] public int Height { get; private set; }
 
+    private WeaponInventoryViewer viewer;
     private List<SlotData> invenslots = new();
     private List<InventoryObjectData> container = new();
 
     public event SlotAdded OnSlotAddEvent;
     public event SlotChanged OnSlotChangeEvent;
+
+    private void Awake()
+    {
+        
+        viewer = FindObjectOfType<WeaponInventoryViewer>();
+
+    }
 
     private void Start()
     {
@@ -126,6 +134,7 @@ public class WeaponInventory : MonoBehaviour
     public void RemoveItem(InventoryObjectData item, Vector2Int origin) 
     {
         
+        container.Remove(item);
         FillSlots(item.bricks, origin, false);
     
     }
@@ -154,8 +163,30 @@ public class WeaponInventory : MonoBehaviour
     public InventoryObjectData GetObjectData(Vector2Int point, Vector2Int dir, Vector2Int origin)
     {
 
-        return null;
-        //return container.Find(x => x.bricks.Contains(x.))
+        var c = container.Find(
+            x => x.signalPoints.Count != 0 ? 
+            x.signalPoints.FindIndex(y => y.point + x.originPos == origin + (point + dir)) != -1 && dir == -dir
+            : x.bricks.FindIndex(y => y + x.originPos == origin + (point + dir)) != -1);
+
+        if(c == null) return null;
+
+        return c;
+
+    }
+
+    public Vector2Int? FindInvenPoint(Vector2Int localPoint)
+    {
+        ///
+        var c = viewer.slots.Find(x =>
+        {
+
+            return Vector2Int.FloorToInt(x.transform.position  / 100) == Vector2Int.FloorToInt(Input.mousePosition / 100);
+
+        });
+
+        if (c == null) return null;
+
+        return Vector2Int.FloorToInt(c.invenPoint);
 
     }
 

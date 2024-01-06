@@ -102,6 +102,7 @@ public class WeaponController : MonoBehaviour
     public Guid AddWeapon(Weapon weapon)
     {
 
+
         weaponContainer.Add(weapon);
 
         weapon.transform.SetParent(transform);

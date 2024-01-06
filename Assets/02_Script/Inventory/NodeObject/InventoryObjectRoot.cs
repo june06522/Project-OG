@@ -22,6 +22,7 @@ public abstract class InventoryObjectRoot : ScriptableObject
 
     [HideInInspector] public List<InventoryObjectRoot> connectedInput = new(); //들어오는녀석
     [HideInInspector] public List<InventoryObjectRoot> connectedOutput = new(); //내보내는 녀석
+    protected InventoryObjectData data;
 
 #if UNITY_EDITOR
 
@@ -99,11 +100,13 @@ public abstract class InventoryObjectRoot : ScriptableObject
 
     }
 
-    public void Init(Transform owner)
+    public void Init(Transform owner, InventoryObjectData data)
     {
 
         transform = owner;
         gameObject = transform.gameObject;
+
+        this.data = data;
 
         OnInit();
 

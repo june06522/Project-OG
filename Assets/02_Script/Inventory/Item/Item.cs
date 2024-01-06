@@ -30,9 +30,9 @@ public class Item : MonoBehaviour
             if(point != null)
             {
 
-                Debug.Log(123);
                 var obj = Instantiate(brick, Vector3.zero, Quaternion.identity, parent);
                 inventory.AddItem(obj.InvenObject, Vector2Int.FloorToInt(point.Value));
+                obj.Setting();
                 obj.transform.localPosition = (point.Value * 100) - (new Vector2(inventory.Width, inventory.Height) * 50) + new Vector2(50, 50);
 
             }
