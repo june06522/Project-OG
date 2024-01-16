@@ -37,6 +37,15 @@ public abstract class Weapon : MonoBehaviour
 
     }
 
+    protected virtual void RotateWeapon(Transform target)
+    {
+
+        var dir = target.position - transform.position;
+
+        transform.up = dir.normalized;
+
+    }
+
     protected abstract void Attack(Transform target);
 
     public virtual void OnRePosition() { }

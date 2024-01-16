@@ -41,7 +41,7 @@ public class InventoryEditorWindow : FAED_GraphBaseWindow<InventoryEditorGraph>
     private void SetUpInspacter()
     {
 
-        inspactor = new InvenVisualWindow("Inspactor", Position.Relative, new Color(0.3f, 0.3f, 0.3f));
+        inspactor = new InvenVisualWindow("Inspector", Position.Relative, new Color(0.3f, 0.3f, 0.3f));
 
     }
 

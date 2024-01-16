@@ -143,4 +143,9 @@ public class WeaponController : MonoBehaviour
 
     }
 
+    public void ExcuteSkill(Guid guid)
+    {
+        
+    }
+
 }

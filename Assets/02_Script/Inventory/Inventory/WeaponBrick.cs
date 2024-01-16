@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+// 인벤토리에 들어오는 아이템 이미지
+// 여기서 플레이어한테 달린 아이템 찾아서 스킬 작동시켜야함
+
+
 public class WeaponBrick : InvenBrick
 {
-
-
     [SerializeField] private InvenWeapon weaponPrefab;
 
     private WeaponController weaponController;

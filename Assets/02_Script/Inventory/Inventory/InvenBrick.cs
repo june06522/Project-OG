@@ -27,6 +27,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
 
 
+
     }
 
     private void Update()
