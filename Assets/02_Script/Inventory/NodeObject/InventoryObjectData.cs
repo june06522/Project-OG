@@ -58,6 +58,7 @@ public class InventoryObjectData : ScriptableObject
     public void GetSignal(object signal)
     {
 
+        Debug.Log("w");
         OnSignalReceived?.Invoke(signal);
 
     }

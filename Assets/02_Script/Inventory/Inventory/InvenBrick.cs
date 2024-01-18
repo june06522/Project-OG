@@ -50,7 +50,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         Vector3Int p = Vector3Int.FloorToInt(transform.position / 100);
         var point = inventory.FindInvenPoint(Vector2Int.FloorToInt(transform.position / 100));
 
-        Debug.Log(point);
+        //Debug.Log(point);
 
         if (point == null)
         {

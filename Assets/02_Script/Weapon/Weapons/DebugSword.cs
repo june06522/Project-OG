@@ -1,15 +1,18 @@
 using DG.Tweening;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class DebugInvenWeapon : InvenWeapon
+public class DebugSword : InvenWeapon
 {
 
-    [SerializeField] private Transform _shootPos;
-    [SerializeField] private Bullet _bullet;
+    SpriteRenderer _spriteRenderer;
+
+    [SerializeField] private Bullet attack;
+
     [SerializeField] private Bullet skill1;
     [SerializeField] private Bullet skill2;
 
-    SpriteRenderer _spriteRenderer;
 
     protected override void Awake()
     {
@@ -17,30 +20,31 @@ public class DebugInvenWeapon : InvenWeapon
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    protected override void Attack(Transform target)
+
+    [BindExecuteType(typeof(float))]
+    public override void GetSignal([BindParameterType(typeof(float))] object signal)
     {
-        Shoot(target, _bullet);
+        if ((float)signal == 0)
+        {
+
+        }
+        else if ((float)signal == 1)
+        {
+
+        }
     }
 
     private void Shoot(Transform target, Bullet prefab)
     {
-        var blt = Instantiate(prefab, _shootPos.position, transform.rotation);
+        var blt = Instantiate(prefab, transform.position, transform.rotation);
         blt.Shoot(prefab.Data.Damage);
 
         transform.DOShakePosition(0.1f, 0.25f);
     }
 
-    [BindExecuteType(typeof(float))]
-    public override void GetSignal([BindParameterType(typeof(float))] object signal)
+    protected override void Attack(Transform target)
     {
-        if ((float)signal == 0f)
-        {
-            Shoot(target, skill1);
-        }
-        else if ((float)signal == 1f)
-        {
-            Shoot(target, skill2);
-        }
+        Shoot(target, attack);
     }
 
     protected override void RotateWeapon(Transform target)

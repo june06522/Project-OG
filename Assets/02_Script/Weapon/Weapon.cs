@@ -9,7 +9,7 @@ public abstract class Weapon : MonoBehaviour
     protected Transform target;
     private float chargeValue;
 
-    [field:SerializeField] public WeaponDataSO Data { get; protected set; }
+    [field: SerializeField] public WeaponDataSO Data { get; protected set; }
     public Guid WeaponGuid { get; protected set; }
 
     protected virtual void Awake()
@@ -27,6 +27,8 @@ public abstract class Weapon : MonoBehaviour
 
         this.target = target;
 
+        RotateWeapon(target);
+
         if (!Data.isAttackCoolDown && target != null)
         {
 
@@ -39,6 +41,7 @@ public abstract class Weapon : MonoBehaviour
 
     protected virtual void RotateWeapon(Transform target)
     {
+        if (target == null) return;
 
         var dir = target.position - transform.position;
 

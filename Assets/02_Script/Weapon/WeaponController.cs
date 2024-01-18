@@ -17,7 +17,7 @@ public class WeaponController : MonoBehaviour
 
     private void Awake()
     {
-        
+
         enemyArr = new Collider2D[maxCheckCount];
 
     }
@@ -32,16 +32,16 @@ public class WeaponController : MonoBehaviour
     private void CheckEnemy()
     {
 
-        foreach(var weapon in weaponContainer)
+        foreach (var weapon in weaponContainer)
         {
 
             int cnt = Physics2D.OverlapCircle(
-                weapon.transform.position, 
-                weapon.Data.AttackRange.GetValue(), 
-                new ContactFilter2D { layerMask = enemyLayer, useLayerMask = true}, 
+                weapon.transform.position,
+                weapon.Data.AttackRange.GetValue(),
+                new ContactFilter2D { layerMask = enemyLayer, useLayerMask = true },
                 enemyArr);
 
-            if(cnt != 0)
+            if (cnt != 0)
             {
 
                 weapon.Run(FindCloseEnemy(cnt));
@@ -64,12 +64,12 @@ public class WeaponController : MonoBehaviour
         float minDist = float.MaxValue;
         Transform curTarget = null;
 
-        for(int i = 0; i < enemyCount; i++)
+        for (int i = 0; i < enemyCount; i++)
         {
 
             float dist = Vector2.Distance(enemyArr[i].transform.position, transform.position);
 
-            if(minDist > dist)
+            if (minDist > dist)
             {
 
                 minDist = dist;
@@ -88,15 +88,15 @@ public class WeaponController : MonoBehaviour
 
         float angle = 360 / (float)weaponContainer.Count;
 
-        for(int i = 1; i <= weaponContainer.Count; i++)
+        for (int i = 1; i <= weaponContainer.Count; i++)
         {
 
             weaponContainer[i - 1].OnRePosition();
-            weaponContainer[i - 1].transform.position 
+            weaponContainer[i - 1].transform.position
                 = transform.position + (Quaternion.Euler(0, 0, angle * i) * Vector2.right);
 
         }
-        
+
     }
 
     public Guid AddWeapon(Weapon weapon)
@@ -132,7 +132,7 @@ public class WeaponController : MonoBehaviour
     public void RemoveAllWeapon()
     {
 
-        foreach(var item in weaponContainer)
+        foreach (var item in weaponContainer)
         {
 
             Destroy(item.gameObject);
@@ -141,11 +141,6 @@ public class WeaponController : MonoBehaviour
 
         weaponContainer.Clear();
 
-    }
-
-    public void ExcuteSkill(Guid guid)
-    {
-        
     }
 
 }
