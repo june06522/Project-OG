@@ -23,11 +23,24 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     }
 
-    public virtual void Setting()
+    public virtual void Settings()
     {
 
+    }
 
+    public void Setting()
+    {
+        bool isControllerSetActive = GameManager.Instance.InventoryActive.inven.activeSelf == false;
 
+        if (isControllerSetActive)
+        {
+            GameManager.Instance.InventoryActive.inven.SetActive(true);
+        }
+
+        Settings();
+
+        if (isControllerSetActive)
+            GameManager.Instance.InventoryActive.inven.SetActive(false);
     }
 
     private void Update()
