@@ -1,18 +1,58 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class RoomTileMap : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    RoomGenarator roomGenarator;
+
+    [SerializeField] Tilemap tile;
+    [SerializeField] Tile wallTile;
+    [SerializeField] Tile loadtile;
+
+    private void Awake()
     {
-        
+        roomGenarator = GetComponent<RoomGenarator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetTileMap()
     {
-        
+        switch (roomGenarator.spawnType)
+        {
+            case MapSpawnType.Load:
+                {
+
+                }
+                break;
+            case MapSpawnType.Stuck:
+                StuckRoom();
+                break;
+            case MapSpawnType.Potal:
+                {
+
+                }
+                break;
+        }
+    }
+
+    private void StuckRoom()
+    {
+        for (int i = 0; i < roomGenarator.useRooms.Count(); ++i)
+        {
+            int x = roomGenarator.useRooms[i].x * roomGenarator.RoomWidth;
+            int y = roomGenarator.useRooms[i].y * roomGenarator.RoomHeight;
+            for (int j = y - roomGenarator.RoomHeight / 2; j < y + roomGenarator.RoomHeight / 2; ++j)
+            {
+                for(int k = x - roomGenarator.RoomWidth / 2; k < x + roomGenarator.RoomWidth / 2; ++k)
+                {
+                    tile.SetTile(new Vector3Int(k, j, 0), loadtile);
+                }
+            }
+
+
+
+        }
     }
 }
