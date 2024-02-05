@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-enum MapSpawnType
+public enum MapSpawnType
 {
     Load = 0,
     Potal = 1,
@@ -15,20 +15,33 @@ public class RoomGenarator : MonoBehaviour
     [SerializeField] int width;
     [SerializeField] int height;
 
+    [Header("방 사이즈")]
+    [SerializeField] int roomWidth;
+    [SerializeField] int roomHeight;
+
     [Header("방 갯수")]
     [SerializeField] int normalRoomCnt;
 
     [Header("맵 타입")]
-    [SerializeField] MapSpawnType spawnType = MapSpawnType.Load;
+    public MapSpawnType spawnType = MapSpawnType.Load;
 
+    [HideInInspector]
+    public List<RoomInfo> useRooms = new List<RoomInfo>();
     List<RoomInfo> roomInfos = new List<RoomInfo>();
-    List<RoomInfo> useRooms = new List<RoomInfo>();
+
+    RoomTileMap roomTilemap;
+
+    private void Awake()
+    {
+        roomTilemap = GetComponent<RoomTileMap>();
+    }
 
     private void Start()
     {
         CreateBoard();
         ShuffleAlgorithm();
         SelectBoard();
+        roomTilemap.SetTileMap();
     }
 
     void CreateBoard()
@@ -91,22 +104,8 @@ public class RoomGenarator : MonoBehaviour
             }
             else
             {
-                roomInfos.IndexOf(temp);
+                roomInfos.Add(temp);
             }
         }
-
-        string log = "";
-        for (int i = 0; i < height; i++)
-        {
-            for (int j = 0; j < width; j++)
-            {
-                if (checkRoom[i, j])
-                    log += 5;
-                else
-                    log += 0;
-            }
-            log += "\n";
-        }
-        Debug.Log(log);
     }
 }
