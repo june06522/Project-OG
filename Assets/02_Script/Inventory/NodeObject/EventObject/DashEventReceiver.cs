@@ -13,7 +13,7 @@ public class DashEventReceiver : InventoryEventReceiverBase
         if (PlayerController.EventController != null)
         {
 
-            Debug.Log("구독");
+            //Debug.Log("구독");
             PlayerController.EventController.OnDash += HandleDash;
 
         }

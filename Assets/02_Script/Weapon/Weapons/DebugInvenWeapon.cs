@@ -33,7 +33,7 @@ public class DebugInvenWeapon : InvenWeapon
     [BindExecuteType(typeof(float))]
     public override void GetSignal([BindParameterType(typeof(float))] object signal)
     {
-        Debug.Log(signal);
+        //Debug.Log(signal);
 
         if ((float)signal == 0f)
         {

@@ -74,7 +74,7 @@ public class PlayerDataSO : ScriptableObject
         foreach(var type in System.Enum.GetValues(typeof(PlayerCoolDownType))) 
         {
 
-            Debug.Log(type.ToString());
+            //Debug.Log(type.ToString());
             playerCoolDownContainer.Add(System.Enum.Parse<PlayerCoolDownType>(type.ToString()), false);
         
         }

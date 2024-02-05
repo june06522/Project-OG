@@ -36,7 +36,7 @@ public class WeaponBrick : InvenBrick
         }
 
         weapon = Instantiate(weaponPrefab);
-        Debug.Log("이건가");
+        //Debug.Log("이건가");
         InvenObject.OnSignalReceived -= HandleWeaponSiganl;
         InvenObject.OnSignalReceived += HandleWeaponSiganl;
 
