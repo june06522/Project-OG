@@ -18,6 +18,8 @@ public class RoomGenarator : MonoBehaviour
     [Header("방 사이즈")]
     [SerializeField] int roomWidth;
     [SerializeField] int roomHeight;
+    public int RoomWidth => roomWidth;
+    public int RoomHeight => roomHeight;
 
     [Header("방 갯수")]
     [SerializeField] int normalRoomCnt;
@@ -93,10 +95,18 @@ public class RoomGenarator : MonoBehaviour
             int x = temp.x + correctionX;
             int y = temp.y + correctionY;
 
-            if ((y < height - 1 && checkRoom[y + 1, x]) ||
-                (y > 0          && checkRoom[y - 1, x]) ||
-                (x < width - 1  && checkRoom[y, x + 1]) ||
-                (x > 0          && checkRoom[y, x - 1]))
+            int adjCnt = 0;
+
+            if (y < height - 1 && checkRoom[y + 1, x])
+                adjCnt++;
+            if (y > 0          && checkRoom[y - 1, x])
+                adjCnt++;
+            if (x < width - 1  && checkRoom[y, x + 1])
+                adjCnt++;
+            if (x > 0          && checkRoom[y, x - 1])
+                adjCnt++;
+
+            if(adjCnt < 4 && adjCnt > 0)
             {
                 checkRoom[y, x] = true;
                 useRooms.Add(temp);
