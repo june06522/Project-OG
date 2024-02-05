@@ -183,7 +183,7 @@ public class WeaponInventory : MonoBehaviour
         var c = viewer.slots.Find(x =>
         {
 
-            return Vector2Int.FloorToInt(x.transform.position  / 100) == Vector2Int.FloorToInt(Input.mousePosition / 100);
+            return Vector2Int.FloorToInt(x.transform.position  / 100) == Vector2Int.FloorToInt(localPoint);
 
         });
 
