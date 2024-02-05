@@ -95,6 +95,7 @@ public class RoomGenarator : MonoBehaviour
             int x = temp.x + correctionX;
             int y = temp.y + correctionY;
 
+            //인접하는 방
             int adjCnt = 0;
 
             if (y < height - 1 && checkRoom[y + 1, x])
@@ -106,7 +107,7 @@ public class RoomGenarator : MonoBehaviour
             if (x > 0          && checkRoom[y, x - 1])
                 adjCnt++;
 
-            if(adjCnt < 4 && adjCnt > 0)
+            if(adjCnt == 1)
             {
                 checkRoom[y, x] = true;
                 useRooms.Add(temp);
