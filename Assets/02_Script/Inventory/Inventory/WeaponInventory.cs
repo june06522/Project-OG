@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class SlotData
 {
@@ -102,7 +103,6 @@ public class WeaponInventory : MonoBehaviour
 
     public bool CheckFills(List<Vector2Int> points, Vector2Int origin)
     {
-
         foreach (var point in points)
         {
 
@@ -116,10 +116,13 @@ public class WeaponInventory : MonoBehaviour
 
     public bool AddItem(InventoryObjectData item, Vector2Int origin)
     {
+        Debug.Log("시도 함");
+        Debug.Log(origin);
 
         if(CheckFills(item.bricks, origin))
         {
 
+            Debug.Log("아이템 추가 됌");
             container.Add(item);
             item.originPos = origin;
             FillSlots(item.bricks, origin, true);
