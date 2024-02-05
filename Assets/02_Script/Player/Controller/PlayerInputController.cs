@@ -30,7 +30,7 @@ public class PlayerInputController : IDisposable
 
         MoveDir = new Vector2(x, y).normalized;
 
-        if(MoveDir != Vector2.zero)
+        if (MoveDir != Vector2.zero)
         {
 
             LastMoveDir = MoveDir;

@@ -10,10 +10,11 @@ public class DashEventReceiver : InventoryEventReceiverBase
     protected override void OnInit()
     {
 
-        if(PlayerController.EventController != null)
+        if (PlayerController.EventController != null)
         {
 
-            PlayerController.EventController.OnDash += HandleDash;    
+            Debug.Log("구독");
+            PlayerController.EventController.OnDash += HandleDash;
 
         }
 
@@ -22,7 +23,7 @@ public class DashEventReceiver : InventoryEventReceiverBase
     [BindExecuteType(typeof(float))]
     public override void GetSignal(object parm)
     {
-        
+
         base.GetSignal(parm);
 
     }
@@ -39,6 +40,7 @@ public class DashEventReceiver : InventoryEventReceiverBase
         if (PlayerController.EventController != null)
         {
 
+            Debug.Log("해제");
             PlayerController.EventController.OnDash -= HandleDash;
 
         }
