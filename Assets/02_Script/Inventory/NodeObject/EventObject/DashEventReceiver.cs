@@ -20,7 +20,7 @@ public class DashEventReceiver : InventoryEventReceiverBase
 
     }
 
-    [BindExecuteType(typeof(float))]
+    [BindExecuteType(typeof(Skill))]
     public override void GetSignal(object parm)
     {
 

@@ -30,9 +30,10 @@ public class DebugInvenWeapon : InvenWeapon
         transform.DOShakePosition(0.1f, 0.25f);
     }
 
-    [BindExecuteType(typeof(float))]
-    public override void GetSignal([BindParameterType(typeof(float))] object signal)
+    [BindExecuteType(typeof(Skill))]
+    public override void GetSignal([BindParameterType(typeof(Skill))] object signal)
     {
+        // 여기 바꿔야함
         //Debug.Log(signal);
 
         if ((float)signal == 0f)
