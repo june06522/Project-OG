@@ -15,7 +15,7 @@ public class Item : MonoBehaviour
     private void Awake()
     {
         
-        inventory = FindObjectOfType<WeaponInventory>();
+        inventory = GameManager.Instance.Inventory;
         parent = FindObjectOfType<WeaponInventoryViewer>().parent;
 
     }

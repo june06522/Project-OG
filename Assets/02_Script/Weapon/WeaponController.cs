@@ -17,7 +17,6 @@ public class WeaponController : MonoBehaviour
 
     private void Awake()
     {
-
         enemyArr = new Collider2D[maxCheckCount];
 
     }

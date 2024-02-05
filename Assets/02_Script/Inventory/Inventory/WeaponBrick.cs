@@ -4,10 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-// 인벤토리에 들어오는 아이템 이미지
-// 여기서 플레이어한테 달린 아이템 찾아서 스킬 작동시켜야함
-
-
 public class WeaponBrick : InvenBrick
 {
     [SerializeField] private InvenWeapon weaponPrefab;
@@ -21,18 +17,30 @@ public class WeaponBrick : InvenBrick
 
         base.Awake();
 
-        weaponController = FindObjectOfType<WeaponController>();
+        weaponController = GameManager.Instance.WeaponController;
 
     }
 
     public override void Setting()
     {
+        Debug.Log(GameManager.Instance.InventoryActive);
+        bool isControllerSetActive = GameManager.Instance.InventoryActive.inven.activeSelf == false;
+        
+        if(isControllerSetActive)
+        {
+            GameManager.Instance.InventoryActive.inven.SetActive(true);
+            Debug.Log("1");
+        }
 
         weapon = Instantiate(weaponPrefab);
         InvenObject.OnSignalReceived += HandleWeaponSiganl;
 
+        Debug.Log($"{weaponController}----");
+
         weaponGuid = weaponController.AddWeapon(weapon);
 
+        if(isControllerSetActive)
+            GameManager.Instance.InventoryActive.inven.SetActive(false);
     }
 
     private void HandleWeaponSiganl(object obj)

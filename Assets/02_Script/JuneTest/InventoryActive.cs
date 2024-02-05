@@ -2,9 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryActiveFalse : MonoBehaviour
+public class InventoryActive : MonoBehaviour
 {
-    [SerializeField] private GameObject inven;
+    [HideInInspector]
+    public GameObject inven;
+
+    private void Awake()
+    {
+        inven = transform.GetChild(0).gameObject;
+    }
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.E))

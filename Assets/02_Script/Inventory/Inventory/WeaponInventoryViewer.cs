@@ -11,8 +11,8 @@ public class WeaponInventoryViewer : MonoBehaviour
 
     [field:Space]
     [field:Header("Setting")]
-    [field:SerializeField] public Transform point { get; protected set; } //인벤토리의 중앙지점
-    [field:SerializeField] public Transform parent { get; protected set; } //인벤토리 슬롯들의 부모 오브젝트
+    [field:SerializeField] public Transform point { get; protected set; }
+    [field:SerializeField] public Transform parent { get; protected set; }
 
     private WeaponInventory inventory;
 
@@ -21,7 +21,7 @@ public class WeaponInventoryViewer : MonoBehaviour
     private void Awake()
     {
         
-        inventory = FindObjectOfType<WeaponInventory>();
+        inventory = GameManager.Instance.Inventory; 
         inventory.OnSlotAddEvent += HandleSlotAdded;
 
     }
