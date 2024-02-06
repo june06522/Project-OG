@@ -12,6 +12,8 @@ public class MapManager : MonoBehaviour
 
     [SerializeField] private MovePortal _portalPrefab;
 
+    [SerializeField] PolygonCollider2D _vcamConfiner;
+
     int curIdxX;
     int curIdxY;
 
@@ -28,6 +30,11 @@ public class MapManager : MonoBehaviour
         }   
         else
             Instance = this;
+
+        if(_vcamConfiner == null)
+        {
+            Debug.LogError($"{transform} : _vcamConfiner is null");
+        }
 
         if(roomGenarator == null )
             roomGenarator = GetComponent<RoomGenarator>();
