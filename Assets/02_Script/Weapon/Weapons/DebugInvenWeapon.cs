@@ -13,26 +13,33 @@ public class DebugInvenWeapon : InvenWeapon
 
     protected override void Awake()
     {
+
         base.Awake();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+
     }
 
     protected override void Attack(Transform target)
     {
+
         Shoot(target, _bullet);
+
     }
 
     private void Shoot(Transform target, Bullet prefab)
     {
+
         var blt = Instantiate(prefab, _shootPos.position, transform.rotation);
         blt.Shoot(prefab.Data.Damage);
 
         transform.DOShakePosition(0.1f, 0.25f);
+
     }
 
     [BindExecuteType(typeof(Skill))]
     public override void GetSignal([BindParameterType(typeof(Skill))] object signal)
     {
+
         // 여기 바꿔야함
         //Debug.Log(signal);
 
@@ -44,7 +51,9 @@ public class DebugInvenWeapon : InvenWeapon
         {
             Shoot(target, skill2);
         }
+
     }
+
 
     protected override void RotateWeapon(Transform target)
     {
