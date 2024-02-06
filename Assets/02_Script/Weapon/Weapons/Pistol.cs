@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Pistol : InvenWeapon
 {
@@ -20,9 +21,9 @@ public class Pistol : InvenWeapon
     [BindExecuteType(typeof(int))]
     public override void GetSignal([BindParameterType(typeof(int))] object signal)
     {
-        Debug.Log(1);
 
-        SkillManager.Instance.GetSKill((int)id, (int)signal).Excute(transform, target);
+        var a = (int)signal;
+        SkillManager.Instance.GetSKill((int)id, a).Excute(transform, target);
 
     }
 

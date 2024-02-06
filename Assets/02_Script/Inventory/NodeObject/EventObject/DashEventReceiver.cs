@@ -19,7 +19,7 @@ public class DashEventReceiver : InventoryEventReceiverBase
 
     }
 
-    [BindExecuteType(typeof(Skill))]
+    [BindExecuteType(typeof(int))]
     public override void GetSignal(object parm)
     {
 
