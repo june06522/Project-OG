@@ -4915,9 +4915,9 @@ GameObject:
   - component: {fileID: 1748739492}
   - component: {fileID: 1748739491}
   - component: {fileID: 1748739490}
-  - component: {fileID: 1748739489}
   - component: {fileID: 1748739488}
   - component: {fileID: 1748739487}
+  - component: {fileID: 1748739495}
   m_Layer: 3
   m_Name: Enemy
   m_TagString: HitAble
@@ -4993,18 +4993,6 @@ MonoBehaviour:
   dpsText: {fileID: 301928447}
   maxDamageText: {fileID: 1894629538}
   maxDPSText: {fileID: 902742709}
---- !u!114 &1748739489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1748739486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4960b4df340561a4b85d1496fe98921b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1748739490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5134,6 +5122,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1748739495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1748739486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57c8a194ad4c9b140b75817be472a7d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <EnemyData>k__BackingField: {fileID: 11400000, guid: b6eb78df6c91ab94590fae25e184f076, type: 2}
+  grid: {fileID: 6246323163108542239, guid: 425b95e43d37e474c8edc0b7ea2b6c53, type: 3}
+  bullet: {fileID: 8299640922602903309, guid: 0be16fc4bc182ee4da726eb2dd90f23e, type: 3}
 --- !u!1 &1823373852
 GameObject:
   m_ObjectHideFlags: 0

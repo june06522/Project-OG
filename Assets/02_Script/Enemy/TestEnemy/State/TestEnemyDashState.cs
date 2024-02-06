@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class TestEnemyDashState : TestEnemyRootState
 {
+    EnemyDataSO enemyDataSO;
     public TestEnemyDashState(TestEnemyController controller) : base(controller)
     {
         

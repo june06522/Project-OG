@@ -29,7 +29,7 @@ public class Transitions : MonoBehaviour
     /// </summary>
     public static bool CheckObstacleBetweenTarget(Transform targetTrm, Transform trm, EObstacleType type)
     {
-        return true;
+        return false;
         //if(type == ) 
         //return Physics2D.Raycast(trm.position, (targetTrm.position-trm.position), Mathf.Infinity, LayerMask.type);
     }

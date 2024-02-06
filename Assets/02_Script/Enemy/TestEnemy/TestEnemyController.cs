@@ -15,6 +15,9 @@ public class TestEnemyController : FSM_Controller<ETestEnemyState>
 {
     [field: SerializeField] public TestEnemyDataSO EnemyData { get; protected set; }
 
+    [SerializeField] public GameObject grid;
+    [SerializeField] public EnemyBullet bullet;
+
     protected override void Awake()
     {
         EnemyData = Instantiate(EnemyData);
@@ -32,15 +35,26 @@ public class TestEnemyController : FSM_Controller<ETestEnemyState>
 
         moveState
             .AddTransition<ETestEnemyState>(moveToIdle)
-            .AddTransition<ETestEnemyState>(goToJump)
-            .AddTransition<ETestEnemyState>(goToDash);
+            .AddTransition<ETestEnemyState>(goToJump);
+            //.AddTransition<ETestEnemyState>(goToDash);
 
         var dashState = new TestEnemyDashState(this);
         var jumpState = new TestEnemyJumpState(this);
         
         AddState(idleState, ETestEnemyState.Idle);
         AddState(moveState, ETestEnemyState.Move);
-        AddState(dashState, ETestEnemyState.Dash);
+        //AddState(dashState, ETestEnemyState.Dash);
         AddState(jumpState, ETestEnemyState.Jump);
+    }
+
+    //Debug
+    public void InstantiateDebugGrid(Vector2 pos)
+    {
+        Destroy(Instantiate(grid, pos, Quaternion.identity), 2);
+    }
+
+    public void InstantiateBullet(Vector2 dir)
+    {
+        Instantiate(bullet, transform.position, Quaternion.identity).Shoot(dir);
     }
 }
