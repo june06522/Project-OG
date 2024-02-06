@@ -41,8 +41,8 @@ public class RoomTileMap : MonoBehaviour
     {
         for (int i = 0; i < roomGenarator.useRooms.Count(); ++i)
         {
-            int x = roomGenarator.useRooms[i].x * roomGenarator.RoomWidth;
-            int y = roomGenarator.useRooms[i].y * roomGenarator.RoomHeight;
+            int x = roomGenarator.useRooms[i].x * (roomGenarator.RoomWidth + roomGenarator.BGLenth * 2);
+            int y = roomGenarator.useRooms[i].y * (roomGenarator.RoomHeight + roomGenarator.BGLenth * 2);
             for (int j = y - roomGenarator.RoomHeight / 2; j < y + roomGenarator.RoomHeight / 2; ++j)
             {
                 for(int k = x - roomGenarator.RoomWidth / 2; k < x + roomGenarator.RoomWidth / 2; ++k)
