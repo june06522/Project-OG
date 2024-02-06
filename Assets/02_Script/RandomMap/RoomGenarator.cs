@@ -50,7 +50,7 @@ public class RoomGenarator : MonoBehaviour
     {
         roomTilemap = GetComponent<RoomTileMap>();
 
-        if(RoomWidth % 2 != 0)
+        if (RoomWidth % 2 != 0)
         {
             Debug.LogError($"RoomWidth is odd number : {RoomWidth}, You should change Even number");
             roomWidth++;
@@ -78,13 +78,18 @@ public class RoomGenarator : MonoBehaviour
         {
             for (int j = -(width / 2); j < (width / 2); j++)
             {
-                if (i == 0 && j == 0)
-                    continue;
-
                 RoomInfo temproom = new RoomInfo();
                 temproom.x = j; // 가로
                 temproom.y = i; // 세로
-                roomInfos.Add(temproom);
+
+                if (i == 0 && j == 0)
+                {
+                    useRooms.Add(temproom);
+                }
+                else
+                {
+                    roomInfos.Add(temproom);
+                }
             }
         }
     }
@@ -126,14 +131,14 @@ public class RoomGenarator : MonoBehaviour
 
             if (y < height - 1 && checkRoom[y + 1, x])
                 adjCnt++;
-            if (y > 0          && checkRoom[y - 1, x])
+            if (y > 0 && checkRoom[y - 1, x])
                 adjCnt++;
-            if (x < width - 1  && checkRoom[y, x + 1])
+            if (x < width - 1 && checkRoom[y, x + 1])
                 adjCnt++;
-            if (x > 0          && checkRoom[y, x - 1])
+            if (x > 0 && checkRoom[y, x - 1])
                 adjCnt++;
 
-            if(adjCnt == 1)
+            if (adjCnt == 1)
             {
                 checkRoom[y, x] = true;
                 useRooms.Add(temp);
