@@ -13,26 +13,35 @@ public class MovePortal : MonoBehaviour
 
     private Transform playerTrm;
 
+    bool isContact = false;
+
     private void Start()
     {
         playerTrm = GameManager.Instance.player;
         Debug.Log(playerTrm);
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void Update()
+    {
+        if (isContact && Input.GetKeyDown(KeyCode.F))
+            Move();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
-        {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                Move();
-            }
-        }
+            isContact = true;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+            isContact = false;
     }
 
     private void Move()
     {
-        int len = (MapManager.Instance.roomGenarator.PortalLenth + 
+        int len = (MapManager.Instance.roomGenarator.PortalLenth +
             MapManager.Instance.roomGenarator.BGLenth) * 2;
         switch (dir)
         {
@@ -45,13 +54,13 @@ public class MovePortal : MonoBehaviour
                 playerTrm.position = new Vector3(transform.position.x + len,
                     transform.position.y, transform.position.z);
                 MapManager.Instance.RoomMove(MoveDir.right);
-                break; 
+                break;
             case MoveDir.up:
                 playerTrm.position = new Vector3(transform.position.x,
                     transform.position.y + len
                     , transform.position.z);
                 MapManager.Instance.RoomMove(MoveDir.up);
-                break; 
+                break;
             case MoveDir.down:
                 playerTrm.position = new Vector3(transform.position.x,
                     transform.position.y - len
