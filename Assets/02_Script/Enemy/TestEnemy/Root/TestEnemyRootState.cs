@@ -8,7 +8,7 @@ public class TestEnemyRootState : FSM_State<ETestEnemyState>
     public TestEnemyDataSO DataSO => _dataSo;
     private TestEnemyDataSO _dataSo;
 
-    public TestEnemyRootState(TestEnemyController controller) : base(controller)
+    public TestEnemyRootState(TestEnemyFSMController controller) : base(controller)
     {
         _dataSo = controller.EnemyData;
     }

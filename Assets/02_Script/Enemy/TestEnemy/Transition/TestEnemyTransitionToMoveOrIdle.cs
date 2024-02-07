@@ -9,7 +9,7 @@ public class TestEnemyTransitionToMoveOrIdle : FSM_Transition<ETestEnemyState>
     private TestEnemyDataSO _data;
     private ETestEnemyState _nextState;
 
-    public TestEnemyTransitionToMoveOrIdle(TestEnemyController controller, ETestEnemyState nextState) : base(controller, nextState)
+    public TestEnemyTransitionToMoveOrIdle(TestEnemyFSMController controller, ETestEnemyState nextState) : base(controller, nextState)
     {
         playerTrm = controller.transform;
         _data = controller.EnemyData;

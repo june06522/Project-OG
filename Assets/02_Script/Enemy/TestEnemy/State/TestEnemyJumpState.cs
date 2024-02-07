@@ -12,9 +12,9 @@ public class TestEnemyJumpState : TestEnemyRootState
     Vector2Int jumpGridRange = new(3, 3); // 홀수 범위여야 함
 
     //Debug
-    TestEnemyController con; 
+    TestEnemyFSMController con; 
 
-    public TestEnemyJumpState(TestEnemyController controller) : base(controller)
+    public TestEnemyJumpState(TestEnemyFSMController controller) : base(controller)
     {
         data = controller.EnemyData;
         targetTrm = GameObject.Find("Player").transform;

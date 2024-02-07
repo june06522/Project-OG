@@ -7,6 +7,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "SO/Enemy/EnemyData")]
 public class EnemyDataSO : ScriptableObject
 {
+    
+    [field: SerializeField] public int MaxHP { get; set; }
     [field: SerializeField] public float Speed { get; set; }
     [field: SerializeField] public float AttackPower { get; set; }
     [field: SerializeField] public float AttackAbleRange { get; set; }

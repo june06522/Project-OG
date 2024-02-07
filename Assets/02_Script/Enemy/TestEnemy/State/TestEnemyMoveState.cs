@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TestEnemyMoveState : TestEnemyRootState
 {
-    public TestEnemyMoveState(TestEnemyController controller) : base(controller)
+    public TestEnemyMoveState(TestEnemyFSMController controller) : base(controller)
     {
 
     }

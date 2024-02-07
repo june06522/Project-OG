@@ -10,8 +10,8 @@ public class TestEnemyDashState : TestEnemyRootState
     TestEnemyDataSO data;
     Transform targetTrm;
 
-    TestEnemyController con;
-    public TestEnemyDashState(TestEnemyController controller) : base(controller)
+    TestEnemyFSMController con;
+    public TestEnemyDashState(TestEnemyFSMController controller) : base(controller)
     {
         data = controller.EnemyData;
         targetTrm = GameObject.Find("Player").transform;
@@ -66,7 +66,7 @@ public class TestEnemyDashState : TestEnemyRootState
 
     private void SpawnBullet()
     {
-        int cnt = (int)data.LandBulletCount;
+        int cnt = (int)data.DashBulletCount;
         float angle = 360 / cnt;
         Debug.Log("Angle " + angle);
         for (int i = 0; i < cnt; i++)

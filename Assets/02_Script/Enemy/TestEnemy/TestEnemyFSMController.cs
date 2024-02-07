@@ -11,15 +11,18 @@ public enum ETestEnemyState
     Dash,
 }
 
-public class TestEnemyController : FSM_Controller<ETestEnemyState>
+public class TestEnemyFSMController : FSM_Controller<ETestEnemyState>
 {
     [field: SerializeField] public TestEnemyDataSO EnemyData { get; protected set; }
 
     [SerializeField] public GameObject grid;
     [SerializeField] public EnemyBullet bullet;
 
+    Enemy enemy;
+
     protected override void Awake()
     {
+        enemy = GetComponent<Enemy>();
         EnemyData = Instantiate(EnemyData);
 
         var idleState = new TestEnemyRootState(this);
@@ -31,20 +34,26 @@ public class TestEnemyController : FSM_Controller<ETestEnemyState>
         var moveState = new TestEnemyMoveState(this);
         var moveToIdle = new TestEnemyTransitionToMoveOrIdle(this, ETestEnemyState.Idle);
         var goToDash = new TestEnemyDashTransition(this, ETestEnemyState.Dash);
-        //var goToJump = new TestEnemyJumpTransition(this, ETestEnemyState.Jump);
+        var goToJump = new TestEnemyJumpTransition(this, ETestEnemyState.Jump);
 
         moveState
             .AddTransition<ETestEnemyState>(moveToIdle)
-            .AddTransition<ETestEnemyState>(goToDash);
-            //.AddTransition<ETestEnemyState>(goToJump);
+            .AddTransition<ETestEnemyState>(goToDash)
+            .AddTransition<ETestEnemyState>(goToJump);
 
         var dashState = new TestEnemyDashState(this);
-        //var jumpState = new TestEnemyJumpState(this);
+        var jumpState = new TestEnemyJumpState(this);
         
         AddState(idleState, ETestEnemyState.Idle);
         AddState(moveState, ETestEnemyState.Move);
         AddState(dashState, ETestEnemyState.Dash);
-        //AddState(dashState, ETestEnemyState.Jump);
+        AddState(jumpState, ETestEnemyState.Jump);
+    }
+
+    protected override void Update()
+    {
+        if (enemy.Dead) return;
+        base.Update();
     }
 
     //Debug

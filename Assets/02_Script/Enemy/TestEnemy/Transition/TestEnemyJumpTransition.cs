@@ -6,7 +6,7 @@ using UnityEngine;
 public class TestEnemyJumpTransition : FSM_Transition<ETestEnemyState>
 {
     TestEnemyDataSO data;
-    public TestEnemyJumpTransition(TestEnemyController controller, ETestEnemyState nextState) : base(controller, nextState)
+    public TestEnemyJumpTransition(TestEnemyFSMController controller, ETestEnemyState nextState) : base(controller, nextState)
     {
         data = controller.EnemyData;
     }

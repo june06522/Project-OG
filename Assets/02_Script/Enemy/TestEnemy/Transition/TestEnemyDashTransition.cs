@@ -6,13 +6,13 @@ using UnityEngine;
 public class TestEnemyDashTransition : FSM_Transition<ETestEnemyState>
 {
     TestEnemyDataSO data;
-    public TestEnemyDashTransition(TestEnemyController controller, ETestEnemyState nextState) : base(controller, nextState)
+    public TestEnemyDashTransition(TestEnemyFSMController controller, ETestEnemyState nextState) : base(controller, nextState)
     {
         data = controller.EnemyData;
     }
 
     protected override bool CheckTransition()
     {
-        return !data.IsDashCoolDown;// && data.IsJumpCoolDown;
+        return !data.IsDashCoolDown && data.IsJumpCoolDown;
     }
 }
