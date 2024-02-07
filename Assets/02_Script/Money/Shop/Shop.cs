@@ -31,6 +31,8 @@ public class Shop : MonoBehaviour
         _playerMoney = FindObjectOfType<Money>();
         if (_playerMoney == null)
             Debug.LogError("Money Object is not found");
+
+        SetRandomItem();
     }
 
     public void OpenShop()
@@ -40,6 +42,8 @@ public class Shop : MonoBehaviour
         _isOpened = true;
         _playerMoney.GoldChangedEvent += UpdatePlayerGoldUI;
         _shopUIObject.SetActive(true);
+
+        UpdatePlayerGoldUI(_playerMoney.Gold);
     }
 
     public void CloseShop()
@@ -60,12 +64,16 @@ public class Shop : MonoBehaviour
     {
         if(_playerMoney.SpendGold(_reRollGold) == false) return;
 
-        // 아이템 SO List 필요할 듯
-
-
+        SetRandomItem();
 
         // 리롤마다 비용 증가
         _reRollGold += _reRollIncreaseGoldValue;
         _reRollGoldText.text = $"{_reRollGold}G";
+    }
+
+    private void SetRandomItem()
+    {
+        // 아이템 SO List 필요할 듯
+
     }
 }
