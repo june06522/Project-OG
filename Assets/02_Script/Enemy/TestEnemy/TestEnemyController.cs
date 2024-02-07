@@ -31,20 +31,20 @@ public class TestEnemyController : FSM_Controller<ETestEnemyState>
         var moveState = new TestEnemyMoveState(this);
         var moveToIdle = new TestEnemyTransitionToMoveOrIdle(this, ETestEnemyState.Idle);
         var goToDash = new TestEnemyDashTransition(this, ETestEnemyState.Dash);
-        var goToJump = new TestEnemyJumpTransition(this, ETestEnemyState.Jump);
+        //var goToJump = new TestEnemyJumpTransition(this, ETestEnemyState.Jump);
 
         moveState
             .AddTransition<ETestEnemyState>(moveToIdle)
-            .AddTransition<ETestEnemyState>(goToJump);
-            //.AddTransition<ETestEnemyState>(goToDash);
+            .AddTransition<ETestEnemyState>(goToDash);
+            //.AddTransition<ETestEnemyState>(goToJump);
 
         var dashState = new TestEnemyDashState(this);
-        var jumpState = new TestEnemyJumpState(this);
+        //var jumpState = new TestEnemyJumpState(this);
         
         AddState(idleState, ETestEnemyState.Idle);
         AddState(moveState, ETestEnemyState.Move);
-        //AddState(dashState, ETestEnemyState.Dash);
-        AddState(jumpState, ETestEnemyState.Jump);
+        AddState(dashState, ETestEnemyState.Dash);
+        //AddState(dashState, ETestEnemyState.Jump);
     }
 
     //Debug
@@ -53,8 +53,8 @@ public class TestEnemyController : FSM_Controller<ETestEnemyState>
         Destroy(Instantiate(grid, pos, Quaternion.identity), 2);
     }
 
-    public void InstantiateBullet(Vector2 dir)
+    public void InstantiateBullet(Vector2 dir, EEnemyBulletSpeedType speedType, EEnemyBulletCurveType curveType = EEnemyBulletCurveType.None)
     {
-        Instantiate(bullet, transform.position, Quaternion.identity).Shoot(dir);
+        Instantiate(bullet, transform.position, Quaternion.identity).Shoot(dir, speedType, curveType);
     }
 }

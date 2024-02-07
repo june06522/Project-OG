@@ -19,6 +19,8 @@ public class TestEnemyDataSO : EnemyDataSO
     [field: Header("´ë½¬")]
     [field: SerializeField] public float DashCoolDown { get; private set; }
     [field: SerializeField] public float DashRange { get; private set; }
+    [field: SerializeField] public float DashSpeed { get; private set; }
+    [field: SerializeField] public float DashBulletCount { get; private set; }
 
 
     public bool IsJumpCoolDown { get; private set; }

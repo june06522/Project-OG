@@ -60,10 +60,10 @@ public class TestEnemyJumpState : TestEnemyRootState
         int cnt = (int)data.LandBulletCount;
         float angle = 360 / cnt;
         Debug.Log("Angle " + angle);
-        for(int i = 0; i < cnt; i++)
+        for (int i = 0; i < cnt; i++)
         {
             float curAngle = angle * i * Mathf.Deg2Rad;
-            con.InstantiateBullet(new Vector2(Mathf.Cos(curAngle), Mathf.Sin(curAngle)));
+            con.InstantiateBullet(new Vector2(Mathf.Cos(curAngle), Mathf.Sin(curAngle)), EEnemyBulletSpeedType.Linear);
         }
     }
 

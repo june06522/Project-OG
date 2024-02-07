@@ -13,6 +13,6 @@ public class TestEnemyDashTransition : FSM_Transition<ETestEnemyState>
 
     protected override bool CheckTransition()
     {
-        return !data.IsDashCoolDown && data.IsJumpCoolDown;
+        return !data.IsDashCoolDown;// && data.IsJumpCoolDown;
     }
 }
