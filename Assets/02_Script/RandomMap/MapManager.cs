@@ -17,7 +17,9 @@ public class MapManager : MonoBehaviour
     Vector2 centerPos;
 
     int curIdxX;
+    public int CurIdxX => curIdxX;
     int curIdxY;
+    public int CurIdxY => curIdxY;
 
     int correctX;
     int correctY;

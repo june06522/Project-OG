@@ -68,6 +68,7 @@ public class RoomGenarator : MonoBehaviour
         CreateBoard();
         ShuffleAlgorithm();
         SelectBoard();
+        MonsterSpawnManager.Instance.DecideWave(useRooms,height,width);
         roomTilemap.SetTileMap();
     }
 
