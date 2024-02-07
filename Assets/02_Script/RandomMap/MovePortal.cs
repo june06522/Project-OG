@@ -18,7 +18,6 @@ public class MovePortal : MonoBehaviour
     private void Start()
     {
         playerTrm = GameManager.Instance.player;
-        Debug.Log(playerTrm);
     }
 
     private void Update()
