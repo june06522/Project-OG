@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,8 @@ public class GameManager : MonoBehaviour
     public WeaponController WeaponController => weaponController;
     #endregion
 
+    [NonSerialized] public Transform player;
+
     private void Awake()
     {
         #region 싱글톤
@@ -32,6 +35,8 @@ public class GameManager : MonoBehaviour
         #endregion
 
         #region 객체 할당
+        player = GameObject.Find("Player").GetComponent<Transform>();
+
         if (inventory == null)
         {
             inventory = FindObjectOfType<WeaponInventory>();

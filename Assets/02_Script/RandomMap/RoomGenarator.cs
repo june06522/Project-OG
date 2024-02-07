@@ -14,6 +14,8 @@ public class RoomGenarator : MonoBehaviour
     [Header("보드 사이즈")]
     [SerializeField] int width;
     [SerializeField] int height;
+    public int Width => width;
+    public int Height => height;
 
     [Header("방 사이즈")]
     [SerializeField] int roomWidth;
@@ -21,14 +23,25 @@ public class RoomGenarator : MonoBehaviour
     public int RoomWidth => roomWidth;
     public int RoomHeight => roomHeight;
 
+    [Header("길 길이")]
+    [SerializeField] int loadLength = 15;
+
+    [Header("포탈 - 벽 길이")]
+    [SerializeField] int portalLenth = 2;
+    public int PortalLenth => portalLenth;
+
+    [Header("뒷배경 길이")]
+    [SerializeField] int bgLenth = 2;
+    public int BGLenth => bgLenth;
+
     [Header("방 갯수")]
     [SerializeField] int normalRoomCnt;
 
     [Header("맵 타입")]
     public MapSpawnType spawnType = MapSpawnType.Load;
 
-    [HideInInspector]
-    public List<RoomInfo> useRooms = new List<RoomInfo>();
+    [HideInInspector] public List<RoomInfo> useRooms = new List<RoomInfo>();
+    [HideInInspector] public bool[,] checkRoom;
     List<RoomInfo> roomInfos = new List<RoomInfo>();
 
     RoomTileMap roomTilemap;
@@ -36,6 +49,18 @@ public class RoomGenarator : MonoBehaviour
     private void Awake()
     {
         roomTilemap = GetComponent<RoomTileMap>();
+
+        if (RoomWidth % 2 != 0)
+        {
+            Debug.LogError($"RoomWidth is odd number : {RoomWidth}, You should change Even number");
+            roomWidth++;
+        }
+
+        if (RoomHeight % 2 != 0)
+        {
+            Debug.LogError($"RoomHeight is odd number : {RoomHeight}, You should change Even number");
+            roomHeight++;
+        }
     }
 
     private void Start()
@@ -43,6 +68,7 @@ public class RoomGenarator : MonoBehaviour
         CreateBoard();
         ShuffleAlgorithm();
         SelectBoard();
+        MonsterSpawnManager.Instance.DecideWave(useRooms,height,width);
         roomTilemap.SetTileMap();
     }
 
@@ -53,13 +79,18 @@ public class RoomGenarator : MonoBehaviour
         {
             for (int j = -(width / 2); j < (width / 2); j++)
             {
-                if (i == 0 && j == 0)
-                    continue;
-
                 RoomInfo temproom = new RoomInfo();
                 temproom.x = j; // 가로
                 temproom.y = i; // 세로
-                roomInfos.Add(temproom);
+
+                if (i == 0 && j == 0)
+                {
+                    useRooms.Add(temproom);
+                }
+                else
+                {
+                    roomInfos.Add(temproom);
+                }
             }
         }
     }
@@ -80,9 +111,10 @@ public class RoomGenarator : MonoBehaviour
 
     void SelectBoard()
     {
+        checkRoom = new bool[height, width];
+
         int correctionX = width / 2;
         int correctionY = height / 2;
-        bool[,] checkRoom = new bool[height, width];
         int cnt = 0;
 
         checkRoom[correctionY, correctionX] = true;
@@ -95,18 +127,19 @@ public class RoomGenarator : MonoBehaviour
             int x = temp.x + correctionX;
             int y = temp.y + correctionY;
 
+            //인접하는 방
             int adjCnt = 0;
 
             if (y < height - 1 && checkRoom[y + 1, x])
                 adjCnt++;
-            if (y > 0          && checkRoom[y - 1, x])
+            if (y > 0 && checkRoom[y - 1, x])
                 adjCnt++;
-            if (x < width - 1  && checkRoom[y, x + 1])
+            if (x < width - 1 && checkRoom[y, x + 1])
                 adjCnt++;
-            if (x > 0          && checkRoom[y, x - 1])
+            if (x > 0 && checkRoom[y, x - 1])
                 adjCnt++;
 
-            if(adjCnt < 4 && adjCnt > 0)
+            if (adjCnt == 1)
             {
                 checkRoom[y, x] = true;
                 useRooms.Add(temp);
