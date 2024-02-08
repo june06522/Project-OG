@@ -19,12 +19,12 @@ public class Pistol : InvenWeapon
     }
 
 
-    [BindExecuteType(typeof(int))]
-    public override void GetSignal([BindParameterType(typeof(int))] object signal)
+    [BindExecuteType(typeof(SendDataSO))]
+    public override void GetSignal([BindParameterType(typeof(SendDataSO))] object signal)
     {
 
-        var a = (int)signal;
-        SkillManager.Instance.GetSKill((int)id, a)?.Excute(transform, target);
+        var data = (SendDataSO)signal;
+        SkillManager.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target,data.Power);
 
     }
 

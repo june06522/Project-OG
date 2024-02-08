@@ -32,11 +32,12 @@ public class Spear : InvenWeapon
 
     }
 
-    public override void GetSignal(object signal)
+    [BindExecuteType(typeof(SendDataSO))]
+    public override void GetSignal([BindParameterType(typeof(SendDataSO))] object signal)
     {
 
-        var a = (int)signal;
-        SkillManager.Instance.GetSKill((int)id, a)?.Excute(visual.transform, target);
+        var data = (SendDataSO)signal;
+        SkillManager.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
 
     }
 
@@ -100,7 +101,7 @@ public class Spear : InvenWeapon
 
         if (collision.CompareTag("HitAble"))
         {
-
+            Debug.Log(1);
             collision.GetComponent<IHitAble>().Hit(Data.AttackDamage.GetValue());
 
         }

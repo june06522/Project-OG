@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class DashEventReceiver : InventoryEventReceiverBase
 {
-
     public int chargeValue;
+    public WeaponType targetType;
+    public GeneratorID generatorID;
 
+    [SerializeField] SendDataSO sendData;
+    
     protected override void OnInit()
     {
 
@@ -19,7 +22,7 @@ public class DashEventReceiver : InventoryEventReceiverBase
 
     }
 
-    [BindExecuteType(typeof(int))]
+    [BindExecuteType(typeof(SendDataSO))]
     public override void GetSignal(object parm)
     {
 
@@ -29,8 +32,8 @@ public class DashEventReceiver : InventoryEventReceiverBase
 
     private void HandleDash()
     {
-
-        GetSignal(chargeValue);
+        
+        GetSignal(sendData);
 
     }
 
