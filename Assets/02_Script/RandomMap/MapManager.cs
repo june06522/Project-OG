@@ -124,6 +124,8 @@ public class MapManager : MonoBehaviour
         centerPos = new Vector2((roomGenarator.RoomWidth + roomGenarator.BGLenth * 2) * (curIdxX - correctX),
             (roomGenarator.RoomHeight + roomGenarator.BGLenth * 2) * (curIdxY - correctY));
 
+        MonsterSpawnManager.Instance.monsterSpawn.StartSpawn();
+
         SetConfiner();
     }
 

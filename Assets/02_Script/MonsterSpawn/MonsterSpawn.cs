@@ -7,7 +7,13 @@ public class MonsterSpawn : MonoBehaviour
     WaveSO curSO = null;
     int curMonsterCnt = 0;
 
-    void StartSpawn()
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+            curMonsterCnt = 0;
+    }
+
+    public void StartSpawn()
     {
         curSO = MonsterSpawnManager.Instance.selectWave[MapManager.Instance.CurIdxY, MapManager.Instance.CurIdxX];
         if (curSO != null)
@@ -29,8 +35,12 @@ public class MonsterSpawn : MonoBehaviour
             yield return null;
         }    
 
+
+        while(curMonsterCnt > 0)
+        {
+            yield return null;
+        }
         MapManager.Instance.RoomClear();
-        yield return null;
     }
 
     private void Spawn()
@@ -51,12 +61,14 @@ public class MonsterSpawn : MonoBehaviour
             randomVal = Random.Range(0, maxVal);
             int tempVal = 0;
 
+
             for (int j = 0; j < tempList.Count; j++)
             {
                 tempVal += tempList[j].percentage;
                 if(tempVal >randomVal)
                 {
                     SpawnMonster(tempList[j].monsterObj);
+                    break;
                 }
             }
         }
