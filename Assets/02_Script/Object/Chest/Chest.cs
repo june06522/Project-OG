@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,12 +13,16 @@ public class Chest : MonoBehaviour
     [Header("Info")]
     [SerializeField]
     private ItemInfoListSO _itemList;
+    public Item test;
 
     private Dictionary<ItemRate, List<ItemInfoSO>> _rateItems = new Dictionary<ItemRate, List<ItemInfoSO>>();
 
-    [Header("Chest Sprite")]
+    [Header("Chest Info")]
     [SerializeField] private Sprite _openSprite;
     private SpriteRenderer _spriteRenderer;
+
+    [SerializeField] private Transform _itemSpawnPos;
+    [SerializeField] private ParticleSystem _openEffect;
 
     private void Awake()
     {
@@ -30,6 +35,13 @@ public class Chest : MonoBehaviour
         }
 
         SetRateItems(_itemList.ItemInfoList.ToArray());
+    }
+
+    // test code
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+            Open();
     }
 
     private void SetRateItems(ItemInfoSO[] itemInfoSOs)
@@ -53,6 +65,40 @@ public class Chest : MonoBehaviour
 
         ItemInfoSO item = RandomItem();
         // 아이템 소환인데.. 아이템 프리팹이 없는데?
+        if(item.ItemObject != null || true) // 여기 true 빼야되고 밑에 테스트 코드 지워야함
+        {
+            //Item itemObject = Instantiate(item.ItemObject, transform.position, Quaternion.identity);
+            Item itemObject = Instantiate(test, _itemSpawnPos.position, Quaternion.identity);
+
+            // 애니메이션 연출
+            itemObject.transform.DOJump(_itemSpawnPos.position, 1.5f, 1, 0.7f);
+        }
+
+        // 이펙트
+        PlayOpenEffect(item.Rate);
+    }
+
+    private void PlayOpenEffect(ItemRate rate)
+    {
+        _openEffect.Stop();
+
+        // 등급에 따른 이펙트 색 변화
+        var main = _openEffect.main;
+        main.startColor = Color.white;
+        switch (rate)
+        {
+            case ItemRate.RARE:
+                main.startColor = Color.cyan;
+                break;
+            case ItemRate.EPIC:
+                main.startColor = Color.magenta;
+                break;
+            case ItemRate.LEGEND:
+                main.startColor = Color.yellow;
+                break;
+        }
+
+        _openEffect.Play();
     }
 
     private ItemInfoSO RandomItem()
