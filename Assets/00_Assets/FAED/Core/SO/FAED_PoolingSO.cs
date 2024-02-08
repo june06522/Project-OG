@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace FD.Core
 {
-
+    
     public class FAED_PoolingSO : ScriptableObject
     {
 

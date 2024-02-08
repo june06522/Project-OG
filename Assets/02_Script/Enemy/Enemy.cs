@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour, IHitAble
     private void Awake()
     {
         curHp = enemyDataSO.MaxHP;
+        DeadEvent += DieEvent;
     }
 
     public void Hit(float damage)
@@ -39,5 +40,19 @@ public class Enemy : MonoBehaviour, IHitAble
         Debug.Log("Die");
 
         DeadEvent?.Invoke();
+    }
+
+    private void DieEvent()
+    {
+        if(MonsterSpawnManager.Instance != null)
+        {
+            MonsterSpawnManager.Instance.monsterSpawn.curMonsterCnt--;
+        }
+        else
+        {
+            Debug.LogError($"MonsterSpawnManager is not created!");
+        }
+
+        Destroy(gameObject);
     }
 }

@@ -21,8 +21,11 @@ public class MapManager : MonoBehaviour
     int curIdxY;
     public int CurIdxY => curIdxY;
 
+
     int correctX;
+    public int CorrectX => correctX;
     int correctY;
+    public int CorrectY => correctY;
 
     private void Awake()
     {
@@ -123,6 +126,8 @@ public class MapManager : MonoBehaviour
 
         centerPos = new Vector2((roomGenarator.RoomWidth + roomGenarator.BGLenth * 2) * (curIdxX - correctX),
             (roomGenarator.RoomHeight + roomGenarator.BGLenth * 2) * (curIdxY - correctY));
+
+        MonsterSpawnManager.Instance.monsterSpawn.StartSpawn();
 
         SetConfiner();
     }

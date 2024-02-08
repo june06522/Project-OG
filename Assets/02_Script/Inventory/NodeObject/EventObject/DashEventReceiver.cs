@@ -5,7 +5,7 @@ using UnityEngine;
 public class DashEventReceiver : InventoryEventReceiverBase
 {
 
-    public float chargeValue;
+    public int chargeValue;
 
     protected override void OnInit()
     {
@@ -13,14 +13,13 @@ public class DashEventReceiver : InventoryEventReceiverBase
         if (PlayerController.EventController != null)
         {
 
-            //Debug.Log("구독");
             PlayerController.EventController.OnDash += HandleDash;
 
         }
 
     }
 
-    [BindExecuteType(typeof(float))]
+    [BindExecuteType(typeof(int))]
     public override void GetSignal(object parm)
     {
 
@@ -37,10 +36,10 @@ public class DashEventReceiver : InventoryEventReceiverBase
 
     public override void Dispose()
     {
+
         if (PlayerController.EventController != null)
         {
 
-            Debug.Log("해제");
             PlayerController.EventController.OnDash -= HandleDash;
 
         }

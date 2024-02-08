@@ -66,8 +66,6 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         Vector3Int p = Vector3Int.FloorToInt(transform.position / 100);
         var point = inventory.FindInvenPoint(Vector2Int.FloorToInt(transform.position / 100));
 
-        //Debug.Log(point);
-
         if (point == null)
         {
 
@@ -83,7 +81,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (inventory.CheckFills(InvenObject.bricks, point.Value))
         {
-            Debug.Log("그냥 놓음");
+
             inventory.AddItem(InvenObject, point.Value);
             InvenPoint = point.Value;
 
@@ -93,7 +91,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         }
         else
         {
-            Debug.Log("겹쳐서 놓음");
+
             Vector3Int prevP = Vector3Int.FloorToInt(prevPos / 100);
             var prev = inventory.FindInvenPoint(Vector2Int.FloorToInt(prevPos / 100));
 
@@ -105,13 +103,13 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             Setting();
         }
 
-        Debug.Log(2);
+
 
     }
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log(1);
+
         prevPos = transform.position;
 
         isDrag = true;
