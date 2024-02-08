@@ -1,12 +1,12 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
 public class Shop : MonoBehaviour
 {
     private Money _playerMoney;
+    public Money PlayerMoney => _playerMoney;
 
     [Header("UI Info")]
     // value
@@ -23,8 +23,16 @@ public class Shop : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _reRollGoldText;
 
+    [SerializeField]
+    private List<ShopItem> _shopItemList = new List<ShopItem>();
+
     // open
     private bool _isOpened = false;
+
+    [Header("Item Info")]
+    [SerializeField]
+    private ItemInfoListSO _itemInfoListSO;
+    private List<ItemInfoSO> _items = new List<ItemInfoSO>();
 
     private void Awake()
     {
@@ -74,6 +82,27 @@ public class Shop : MonoBehaviour
     private void SetRandomItem()
     {
         // 아이템 SO List 필요할 듯
+        _items.Clear();
+        _items = _itemInfoListSO.ItemInfoList.ToList<ItemInfoSO>();
 
+        for(int i = 0; i < 4; i++)
+        {
+            int randomIndex = Random.Range(i, _items.Count);
+
+            ItemInfoSO temp = _items[randomIndex];
+            _items[randomIndex] = _items[i];
+            _items[i] = temp;
+        }
+
+        if(_shopItemList.Count < 4)
+        {
+            Debug.LogError("ShopItem size is less than 4");
+            return;
+        }
+
+        for(int i = 0; i < 4; ++i)
+        {
+            _shopItemList[i].SetShopItem(_items[i]);
+        }
     }
 }
