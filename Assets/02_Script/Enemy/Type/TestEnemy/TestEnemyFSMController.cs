@@ -5,34 +5,28 @@ using UnityEngine;
 
 public enum ETestEnemyState
 {
-    Idle,
-    Move,
-    Jump,
-    Dash,
+    Idle = 0,
+    Move = 1,
+    Jump = 2,
+    Dash = 3,
 }
 
-public class TestEnemyFSMController : FSM_Controller<ETestEnemyState>
+public class TestEnemyFSMController : BaseFSM_Controller<ETestEnemyState>
 {
-    [field: SerializeField] public TestEnemyDataSO EnemyData { get; protected set; }
-
     [SerializeField] public GameObject grid;
     [SerializeField] public EnemyBullet bullet;
 
-    Enemy enemy;
-
     protected override void Awake()
     {
-        enemy = GetComponent<Enemy>();
-        EnemyData = Instantiate(EnemyData);
-
+        base.Awake();
         var idleState = new TestEnemyRootState(this);
-        var idleToMove = new TestEnemyTransitionToMoveOrIdle(this, ETestEnemyState.Move);
+        var idleToMove = new TransitionIdleOrMove<ETestEnemyState>(this, ETestEnemyState.Move);
         
         idleState
             .AddTransition<ETestEnemyState>(idleToMove);
         
         var moveState = new TestEnemyMoveState(this);
-        var moveToIdle = new TestEnemyTransitionToMoveOrIdle(this, ETestEnemyState.Idle);
+        var moveToIdle = new TransitionIdleOrMove<ETestEnemyState>(this, ETestEnemyState.Idle);
         var goToDash = new TestEnemyDashTransition(this, ETestEnemyState.Dash);
         var goToJump = new TestEnemyJumpTransition(this, ETestEnemyState.Jump);
 
@@ -48,12 +42,6 @@ public class TestEnemyFSMController : FSM_Controller<ETestEnemyState>
         AddState(moveState, ETestEnemyState.Move);
         AddState(dashState, ETestEnemyState.Dash);
         AddState(jumpState, ETestEnemyState.Jump);
-    }
-
-    protected override void Update()
-    {
-        if (enemy.Dead) return;
-        base.Update();
     }
 
     //Debug

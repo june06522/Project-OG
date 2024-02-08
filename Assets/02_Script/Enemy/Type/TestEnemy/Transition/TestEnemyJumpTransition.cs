@@ -8,7 +8,7 @@ public class TestEnemyJumpTransition : FSM_Transition<ETestEnemyState>
     TestEnemyDataSO data;
     public TestEnemyJumpTransition(TestEnemyFSMController controller, ETestEnemyState nextState) : base(controller, nextState)
     {
-        data = controller.EnemyData;
+        data = controller.EnemyData as TestEnemyDataSO;
     }
 
     protected override bool CheckTransition()
