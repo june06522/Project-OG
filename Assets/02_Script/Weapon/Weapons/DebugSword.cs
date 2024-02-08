@@ -4,15 +4,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+// 테스트용
 public class DebugSword : InvenWeapon
 {
 
     SpriteRenderer _spriteRenderer;
 
-    [SerializeField] private Bullet attack;
-
-    [SerializeField] private Bullet skill1;
-    [SerializeField] private Bullet skill2;
+    [SerializeField] private Bullet _bullet;
 
     private bool isAttack = false;
 
@@ -26,38 +24,32 @@ public class DebugSword : InvenWeapon
     [BindExecuteType(typeof(float))]
     public override void GetSignal([BindParameterType(typeof(float))] object signal)
     {
-        if ((float)signal == 0)
-        {
-            Shoot(target, skill1);
-        }
-        else if ((float)signal == 1)
-        {
-            Shoot(target, skill2);
-        }
-    }
 
-    private void Shoot(Transform target, Bullet prefab)
-    {
-        RotateWeapon(target);
-        var blt = Instantiate(prefab, transform.position, transform.rotation);
-        blt.Shoot(prefab.Data.Damage);
+        var a = (int)signal;
+        SkillManager.Instance.GetSKill((int)id, a)?.Excute(transform, target);
 
-        //transform.DOShakePosition(0.1f, 0.25f);
-        transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z - 60), 0);
-        transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + 60), 0.25f);
-        AttackTween();
-    }
-
-    private IEnumerator AttackTween()
-    {
-        isAttack = true;
-        yield return new WaitForSeconds(0.35f);
-        isAttack = false;
     }
 
     protected override void Attack(Transform target)
     {
-        Shoot(target, attack);
+
+        RotateWeapon(target);
+        var blt = Instantiate(_bullet, transform.position, transform.rotation);
+        blt.Shoot(_bullet.Data.Damage);
+
+        transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z - 60), 0);
+        transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + 60), 0.25f);
+        AttackTween();
+
+    }
+
+    private IEnumerator AttackTween()
+    {
+
+        isAttack = true;
+        yield return new WaitForSeconds(0.35f);
+        isAttack = false;
+
     }
 
     protected override void RotateWeapon(Transform target)

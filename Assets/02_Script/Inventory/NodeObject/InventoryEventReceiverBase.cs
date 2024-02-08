@@ -6,6 +6,7 @@ using UnityEngine;
 
 public delegate void ReceiveEvent(object parm = null);
 
+// 이벤트가 실행 됐을떄 작동하는 애 ex) 대쉬
 public abstract class InventoryEventReceiverBase : InventoryObjectRoot, IDisposable
 {
 

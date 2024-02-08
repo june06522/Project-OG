@@ -18,8 +18,8 @@ public class RandomConverter : InventoryConverterBase
     public float min, max;
     public RandomConverterRunningType runningType;
 
-    [BindExecuteType(typeof(float))]
-    public override void GetSignal([BindParameterType(typeof(float))]object signal)
+    [BindExecuteType(typeof(int))]
+    public override void GetSignal([BindParameterType(typeof(int))]object signal)
     {
 
         float value = runningType switch

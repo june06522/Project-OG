@@ -6,8 +6,9 @@ using UnityEngine;
 public class WeaponDataSO : ScriptableObject
 {
 
-    [field:SerializeField] public Stats AttackCoolDown { get; protected set; }
-    [field:SerializeField] public Stats AttackRange { get; protected set; }
+    [field: SerializeField] public Stats AttackCoolDown { get; protected set; }
+    [field: SerializeField] public Stats AttackRange { get; protected set; }
+    [field: SerializeField] public Stats AttackDamage { get; protected set; }
     //[field:SerializeField] public Stats WeaponValue { get; protected set; }
     //[field:SerializeField] public Stats ChangeGauge { get; protected set; }
 
