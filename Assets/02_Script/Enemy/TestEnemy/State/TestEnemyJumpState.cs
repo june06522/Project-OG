@@ -1,12 +1,10 @@
 using UnityEngine;
 using DG.Tweening;
-using System;
 using System.Collections;
 using System.Linq;
 
 public class TestEnemyJumpState : TestEnemyRootState
 {
-    TestEnemyDataSO data;
     Transform targetTrm;
 
     Vector2Int jumpGridRange = new(3, 3); // 홀수 범위여야 함
@@ -16,8 +14,7 @@ public class TestEnemyJumpState : TestEnemyRootState
 
     public TestEnemyJumpState(TestEnemyFSMController controller) : base(controller)
     {
-        data = controller.EnemyData;
-        targetTrm = GameObject.Find("Player").transform;
+        targetTrm = GameManager.Instance.player.transform;
         con = controller;
     }
 
@@ -33,7 +30,7 @@ public class TestEnemyJumpState : TestEnemyRootState
 
         con.InstantiateDebugGrid(landPos);
 
-        con.transform.DOJump(landPos, data.JumpPower, 1, data.JumpDuration)
+        con.transform.DOJump(landPos, DataSO.JumpPower, 1, DataSO.JumpDuration)
              .SetEase(Ease.InSine)
              .OnComplete(() =>
              {
@@ -51,13 +48,13 @@ public class TestEnemyJumpState : TestEnemyRootState
         Fire();
         yield return new WaitForSeconds(0.5f);
         Debug.Log("gang");
-        data.SetJumpCoolDown();
+        DataSO.SetJumpCoolDown();
         con.ChangeState(ETestEnemyState.Idle);
     }
 
     private void Fire()
     {
-        int cnt = (int)data.LandBulletCount;
+        int cnt = (int)DataSO.LandBulletCount;
         float angle = 360 / cnt;
         Debug.Log("Angle " + angle);
         for (int i = 0; i < cnt; i++)

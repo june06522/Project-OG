@@ -1,20 +1,14 @@
-using FSM_System;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
 public class TestEnemyDashState : TestEnemyRootState
 {
-    TestEnemyDataSO data;
     Transform targetTrm;
-
     TestEnemyFSMController con;
+
     public TestEnemyDashState(TestEnemyFSMController controller) : base(controller)
     {
-        data = controller.EnemyData;
-        targetTrm = GameObject.Find("Player").transform;
+        targetTrm = GameManager.Instance.player.transform;
         con = controller;
     }
 
@@ -31,7 +25,7 @@ public class TestEnemyDashState : TestEnemyRootState
         float duration = Mathf.Lerp(1.5f, 3f, distance / 10f);
 
         float t = 0;
-        int bulletCnt = (int)data.DashBulletCount;
+        int bulletCnt = (int)DataSO.DashBulletCount;
         float shootCycle = 0.5f;
 
         Tween moveT = controller.transform.DOMove(targetPos, duration).SetEase(Ease.InOutExpo);
@@ -60,13 +54,13 @@ public class TestEnemyDashState : TestEnemyRootState
 
     private void DashEndEvent()
     {
-        data.SetDashCoolDown();
+        DataSO.SetDashCoolDown();
         con.ChangeState(ETestEnemyState.Idle);
     }
 
     private void SpawnBullet()
     {
-        int cnt = (int)data.DashBulletCount;
+        int cnt = (int)DataSO.DashBulletCount;
         float angle = 360 / cnt;
         Debug.Log("Angle " + angle);
         for (int i = 0; i < cnt; i++)
