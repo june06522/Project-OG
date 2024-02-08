@@ -21,8 +21,11 @@ public class MapManager : MonoBehaviour
     int curIdxY;
     public int CurIdxY => curIdxY;
 
+
     int correctX;
+    public int CorrectX => correctX;
     int correctY;
+    public int CorrectY => correctY;
 
     private void Awake()
     {

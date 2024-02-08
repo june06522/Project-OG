@@ -11,6 +11,7 @@ public class MonsterSpawnManager : MonoBehaviour
     [SerializeField] List<WaveSO> essentialWaves; // 필수로 들어갈 wave 엘리트 wave같은거
     [SerializeField] List<WaveSO> waves;
 
+    [HideInInspector]
     public WaveSO[,] selectWave;
     [HideInInspector]
     public MonsterSpawn monsterSpawn;
