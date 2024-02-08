@@ -5,9 +5,16 @@ using UnityEngine;
 public class MonsterSpawn : MonoBehaviour
 {
     WaveSO curSO = null;
-    int curMonsterCnt = 0;
+    [HideInInspector]
+    public int curMonsterCnt = 0;
 
-    void StartSpawn()
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+            curMonsterCnt = 0;
+    }
+
+    public void StartSpawn()
     {
         curSO = MonsterSpawnManager.Instance.selectWave[MapManager.Instance.CurIdxY, MapManager.Instance.CurIdxX];
         if (curSO != null)
@@ -19,7 +26,7 @@ public class MonsterSpawn : MonoBehaviour
     IEnumerator StartWave()
     {
         int curIdx = 0;
-        while(curIdx <= curSO.waveCnt)
+        while(curIdx < curSO.waveCnt)
         {
             if(curMonsterCnt == 0)
             {
@@ -29,8 +36,14 @@ public class MonsterSpawn : MonoBehaviour
             yield return null;
         }    
 
+
+        while(curMonsterCnt > 0)
+        {
+            yield return null;
+        }
+
+        MonsterSpawnManager.Instance.selectWave[MapManager.Instance.CurIdxY, MapManager.Instance.CurIdxX] = null;
         MapManager.Instance.RoomClear();
-        yield return null;
     }
 
     private void Spawn()
@@ -51,12 +64,14 @@ public class MonsterSpawn : MonoBehaviour
             randomVal = Random.Range(0, maxVal);
             int tempVal = 0;
 
+
             for (int j = 0; j < tempList.Count; j++)
             {
                 tempVal += tempList[j].percentage;
                 if(tempVal >randomVal)
                 {
                     SpawnMonster(tempList[j].monsterObj);
+                    break;
                 }
             }
         }
@@ -64,7 +79,19 @@ public class MonsterSpawn : MonoBehaviour
 
     private void SpawnMonster(GameObject monsterobj)
     {
+        int x = (MapManager.Instance.CurIdxX - MapManager.Instance.CorrectX) * (MapManager.Instance.roomGenarator.RoomWidth + MapManager.Instance.roomGenarator.BGLenth * 2);
+        int y = (MapManager.Instance.CurIdxY - MapManager.Instance.CorrectY) * (MapManager.Instance.roomGenarator.RoomHeight + MapManager.Instance.roomGenarator.BGLenth * 2);
         GameObject obj = Instantiate(monsterobj);
-        obj.transform.position = new Vector2(Random.Range(-7f, 7f), Random.Range(-7f, 7f));
+
+        //공중인지 아닌지확인
+
+        //공중이면 몬스터 곂치는것만
+
+        //지상몹이면 곂치는거 + wall 타일맵
+        while(true)
+        {
+            obj.transform.position = new Vector2(Random.Range(x - 5, x + 5), Random.Range(y - 5, y + 5));
+            break;
+        }
     }
 }

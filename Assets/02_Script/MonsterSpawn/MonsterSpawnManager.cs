@@ -11,9 +11,10 @@ public class MonsterSpawnManager : MonoBehaviour
     [SerializeField] List<WaveSO> essentialWaves; // 필수로 들어갈 wave 엘리트 wave같은거
     [SerializeField] List<WaveSO> waves;
 
+    [HideInInspector]
     public WaveSO[,] selectWave;
     [HideInInspector]
-    public MonsterSpawn monsterSpawn = new MonsterSpawn();
+    public MonsterSpawn monsterSpawn;
 
     public void Awake()
     {
@@ -23,6 +24,8 @@ public class MonsterSpawnManager : MonoBehaviour
         else
             Debug.LogError($"{transform} : MonsterSpawnManager is Multiple running!");
         #endregion
+
+        monsterSpawn = gameObject.AddComponent<MonsterSpawn>();
     }
 
     public void DecideWave(List<RoomInfo> useRooms, int height, int width)
@@ -31,6 +34,9 @@ public class MonsterSpawnManager : MonoBehaviour
         if (essentialWaves.Count + waves.Count < useRooms.Count - 1)
             Debug.LogError($"{transform} : You should add wave");
         #endregion
+
+        int correctX = width / 2;
+        int correctY = height / 2;
 
         selectWave = new WaveSO[height, width];
 
@@ -41,13 +47,13 @@ public class MonsterSpawnManager : MonoBehaviour
 
             if (essentialWaves.Count > 0)
             {
-                selectWave[useRooms[i].y, useRooms[i].x] = essentialWaves[0];
+                selectWave[useRooms[i].y + correctY, useRooms[i].x + correctX] = essentialWaves[0];
                 essentialWaves.Remove(essentialWaves[0]);
             }
             else
             {
                 WaveSO tempWave = RandomSelect();
-                selectWave[useRooms[i].y, useRooms[i].x] = tempWave;
+                selectWave[useRooms[i].y + correctY, useRooms[i].x + correctX] = tempWave;
                 waves.Remove(tempWave);
             }
         }
@@ -57,22 +63,22 @@ public class MonsterSpawnManager : MonoBehaviour
     {
         int maxVal = 0;
         int randomVal;
-        for(int i = 0; i < waves.Count; ++i)
+        for (int i = 0; i < waves.Count; ++i)
         {
             maxVal += waves[i].percentage;
         }
 
         randomVal = Random.Range(0, maxVal);
         maxVal = 0;
-        for(int i = 0;i < waves.Count; ++i)
+        for (int i = 0; i < waves.Count; ++i)
         {
             maxVal += waves[i].percentage;
 
-            if (randomVal > maxVal)
+            if (randomVal < maxVal)
                 return waves[i];
         }
 
-        Debug.LogError($"{transform} : Random Select System is error");
+        Debug.LogError($"{transform} : Random Select System is error. randomVal : {randomVal}, maxVal : {maxVal}");
         return null;
     }
 }
