@@ -12,7 +12,7 @@ public class MonsterSpawnManager : MonoBehaviour
     [SerializeField] List<WaveSO> waves;
 
     public WaveSO[,] selectWave;
-
+    [HideInInspector]
     public MonsterSpawn monsterSpawn = new MonsterSpawn();
 
     public void Awake()
