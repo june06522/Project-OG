@@ -72,7 +72,6 @@ public class SkillManager : MonoBehaviour
     private void Awake()
     {
 
-        Debug.Log("Skill Manager Awake");
         if (instance != null)
         {
 
@@ -82,7 +81,6 @@ public class SkillManager : MonoBehaviour
         }
 
         instance = this;
-        Debug.Log(instance);
 
     }
 

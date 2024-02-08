@@ -16,7 +16,7 @@ namespace FD.Core
 
         public static FAED_PoolManager PoolManager 
         {
-
+            
             get 
             {
 
@@ -80,7 +80,7 @@ namespace FD.Core
                 {
 
                     poolManager = new FAED_PoolManager(res.poolingSO, go.transform);
-                    SceneManager.sceneLoaded += CreateScenePool;
+                    SceneManager.sceneLoaded += CreateScenePool;    
 
                 }
 
