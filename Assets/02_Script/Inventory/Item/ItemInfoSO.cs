@@ -15,6 +15,7 @@ public enum ItemRate
 [CreateAssetMenu(menuName = "SO/Inventory/ItemInfoSO")]
 public class ItemInfoSO : ScriptableObject
 {
+    public Item ItemObject = null;
     public InvenBrick Brick = null;
     public ItemRate Rate = ItemRate.NORMAL;
     public string ItemName = string.Empty;
