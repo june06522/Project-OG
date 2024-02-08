@@ -6,9 +6,9 @@ using UnityEngine;
 public class BatAttackState : BatEnemyRootState
 {
     Transform targetTrm;
-    BatFSMController con;
+    BatStateController con;
 
-    public BatAttackState(BatFSMController controller) : base(controller)
+    public BatAttackState(BatStateController controller) : base(controller)
     {
         targetTrm = GameManager.Instance.player.transform;
         con = controller;
