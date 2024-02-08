@@ -12,7 +12,7 @@ public class TestEnemyTransitionToMoveOrIdle : FSM_Transition<ETestEnemyState>
     public TestEnemyTransitionToMoveOrIdle(TestEnemyFSMController controller, ETestEnemyState nextState) : base(controller, nextState)
     {
         playerTrm = GameManager.Instance.player.transform;
-        _data = controller.EnemyData;
+        _data = controller.EnemyData as TestEnemyDataSO;
         _nextState = nextState;
     }
 
