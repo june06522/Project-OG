@@ -19,6 +19,7 @@ public enum WeaponType
 // ¹«±âº° ID
 public enum WeaponID
 {
+    None,       // ¾Æ¹«°Íµµ ¾Æ´Ô
     Shotgun,    // ¼¦°Ç
     Pistol,     // ÇÇ½ºÅç
     Crossbow,   // ¼®±Ã
@@ -31,7 +32,7 @@ public enum WeaponID
     WaterBang,  // ¹°Ç³¼±
     Katana,     // Ä«Å¸³ª
     Branch,     // ³ª¹µ°¡Áö
-    Chopsticks, // Á£°¡¶ô
+    Spear,      // Ã¢
     Scratcher,  // È¿ÀÚ¼Õ
     Golfclub,   // °ñÇÁÃ¤
     Sickle,     // ³´
@@ -60,8 +61,8 @@ public class Shell
 public class SkillManager : MonoBehaviour
 {
 
-    private static SkillManager instance = null;
-    public static SkillManager Instance;
+    private static SkillManager instance;
+    public static SkillManager Instance => instance;
 
     [SerializeField] List<Shell> weaponList;
 
@@ -71,6 +72,7 @@ public class SkillManager : MonoBehaviour
     private void Awake()
     {
 
+        Debug.Log("Skill Manager Awake");
         if (instance != null)
         {
 
@@ -80,6 +82,7 @@ public class SkillManager : MonoBehaviour
         }
 
         instance = this;
+        Debug.Log(instance);
 
     }
 

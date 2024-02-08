@@ -5,7 +5,7 @@ using UnityEngine;
 public class DashEventReceiver : InventoryEventReceiverBase
 {
 
-    public float chargeValue;
+    public int chargeValue;
 
     protected override void OnInit()
     {
