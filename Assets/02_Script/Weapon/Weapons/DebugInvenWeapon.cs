@@ -19,7 +19,7 @@ public class DebugInvenWeapon : InvenWeapon
 
     }
 
-    protected override void Attack(Transform target)
+    public override void Attack(Transform target)
     {
 
         Shoot(target, _bullet);
