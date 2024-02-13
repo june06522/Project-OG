@@ -26,8 +26,8 @@ public class MummyStateController : BaseFSM_Controller<EMummyState>
         var patrolState = new MummyRootState(this);
         var patrolToMove = new TransitionIdleOrMove<EMummyState>(this, EMummyState.Move);
 
-        //patrolState
-          //  .AddTransition<EMummyState>(patrolToMove);
+        patrolState
+             .AddTransition<EMummyState>(patrolToMove);
 
         var moveState = new MummyMoveState(this);
         var moveToIdle = new TransitionIdleOrMove<EMummyState>(this, EMummyState.Idle);

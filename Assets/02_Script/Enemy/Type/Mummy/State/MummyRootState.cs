@@ -13,6 +13,8 @@ public class MummyRootState : FSM_State<EMummyState>
     bool idle = false;
     float idleTime = 1f;
 
+    Coroutine idleCor = null;
+
     public MummyRootState(MummyStateController controller) : base(controller)
     {
         this.controller = controller;
@@ -22,13 +24,16 @@ public class MummyRootState : FSM_State<EMummyState>
 
     protected override void EnterState()
     {
+        idle = true;
         controller.ChangeColor(Color.white);
-        targetPos = FindRandomPoint(controller.transform.position);
+        idleCor = StartCoroutine(IdleCor(idleTime));
     }
 
     protected override void ExitState()
     {
         idle = false;
+        if(idleCor != null)
+            StopCoroutine(idleCor);
     }
 
     protected override void UpdateState()
@@ -43,7 +48,9 @@ public class MummyRootState : FSM_State<EMummyState>
         {
             idle = true;
             float idleTime = Random.Range(this.idleTime - 0.3f, this.idleTime + 0.3f);
-            StartCoroutine(IdleCor(idleTime));
+            if (idleCor != null)
+                StopCoroutine(idleCor);
+            idleCor = StartCoroutine(IdleCor(idleTime));
         }
     }
 
