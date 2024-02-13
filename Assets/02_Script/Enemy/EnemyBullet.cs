@@ -26,6 +26,7 @@ public class EnemyBullet : MonoBehaviour
     float curSpeed = 0;
     float duration = 0.75f;
     Vector3 dir;
+
     //юс╫ц
     public void Shoot(Vector2 dir, EEnemyBulletSpeedType speedType = EEnemyBulletSpeedType.Linear, EEnemyBulletCurveType curveType = EEnemyBulletCurveType.None)
     {
@@ -51,11 +52,9 @@ public class EnemyBullet : MonoBehaviour
                 float angle = float.Parse(curveType.ToString().Substring(5))
                      + Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + 180;
 
-                Debug.Log("ParseAngle : " + angle);
                 Vector3 rotateValue = new Vector3(0, 0, angle);
 
                 transform.DORotate(rotateValue, duration, RotateMode.Fast).SetLoops(-1);
-                //Debug.Log($"rotateValue : " + rotateValue);
                 break;
         }
 

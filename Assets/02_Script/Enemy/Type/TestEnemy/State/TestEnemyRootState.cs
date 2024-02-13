@@ -10,6 +10,6 @@ public class TestEnemyRootState : FSM_State<ETestEnemyState>
 
     public TestEnemyRootState(TestEnemyFSMController controller) : base(controller)
     {
-        _dataSo = controller.EnemyData;
+        _dataSo = controller.EnemyData as TestEnemyDataSO;
     }
 }
