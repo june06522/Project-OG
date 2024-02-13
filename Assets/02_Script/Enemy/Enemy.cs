@@ -7,6 +7,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IHitAble
 {
     [SerializeField] EnemyDataSO enemyDataSO;
+    public EnemyDataSO EnemyDataSO => enemyDataSO;
     public FeedbackPlayer feedbackPlayer { get; set; }
     public bool Dead { get; private set; } = false;
     private int curHp;
@@ -17,6 +18,11 @@ public class Enemy : MonoBehaviour, IHitAble
     {
         curHp = enemyDataSO.MaxHP;
         DeadEvent += DieEvent;
+    }
+
+    private void Update()
+    {
+        Debug.DrawRay(transform.position, Vector3.up * 2f,Color.red);
     }
 
     public void Hit(float damage)

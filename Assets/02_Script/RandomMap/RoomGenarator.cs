@@ -44,7 +44,7 @@ public class RoomGenarator : MonoBehaviour
     [HideInInspector] public bool[,] checkRoom;
     List<RoomInfo> roomInfos = new List<RoomInfo>();
 
-    RoomTileMap roomTilemap;
+    [HideInInspector] public RoomTileMap roomTilemap;
 
     private void Awake()
     {
@@ -70,6 +70,7 @@ public class RoomGenarator : MonoBehaviour
         SelectBoard();
         MonsterSpawnManager.Instance.DecideWave(useRooms,height,width);
         roomTilemap.SetTileMap();
+        MapManager.Instance.RoomClear();
     }
 
     void CreateBoard()

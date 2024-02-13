@@ -1,12 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class MonsterSpawn : MonoBehaviour
 {
     WaveSO curSO = null;
     [HideInInspector]
     public int curMonsterCnt = 0;
+
+    int[] distx = new int[] {
+        -1,0,1,
+        -1,0,1,
+        -1,0,1
+    };
+    int[] disty = new int[] {
+        1,1,1,
+        0,0,0,
+        -1,-1,-1
+    };
+
 
     private void Update()
     {
@@ -26,18 +40,18 @@ public class MonsterSpawn : MonoBehaviour
     IEnumerator StartWave()
     {
         int curIdx = 0;
-        while(curIdx < curSO.waveCnt)
+        while (curIdx < curSO.waveCnt)
         {
-            if(curMonsterCnt == 0)
+            if (curMonsterCnt == 0)
             {
                 curIdx++;
                 Spawn();
             }
             yield return null;
-        }    
+        }
 
 
-        while(curMonsterCnt > 0)
+        while (curMonsterCnt > 0)
         {
             yield return null;
         }
@@ -48,18 +62,18 @@ public class MonsterSpawn : MonoBehaviour
 
     private void Spawn()
     {
-        int cnt = Random.Range(curSO.minCnt,curSO.maxCnt);
+        int cnt = Random.Range(curSO.minCnt, curSO.maxCnt + 1);
         curMonsterCnt += cnt;
         int maxVal = 0;
         int randomVal = 0;
         List<MonsterWaveInfo> tempList = curSO.monsterWaveInfo;
 
-        for(int i = 0; i < tempList.Count; i++)
+        for (int i = 0; i < tempList.Count; i++)
         {
             maxVal += tempList[i].percentage;
         }
 
-        for(int i = 0; i <  cnt; i++)
+        for (int i = 0; i < cnt; i++)
         {
             randomVal = Random.Range(0, maxVal);
             int tempVal = 0;
@@ -68,7 +82,7 @@ public class MonsterSpawn : MonoBehaviour
             for (int j = 0; j < tempList.Count; j++)
             {
                 tempVal += tempList[j].percentage;
-                if(tempVal >randomVal)
+                if (tempVal > randomVal)
                 {
                     SpawnMonster(tempList[j].monsterObj);
                     break;
@@ -77,21 +91,63 @@ public class MonsterSpawn : MonoBehaviour
         }
     }
 
-    private void SpawnMonster(GameObject monsterobj)
+    private void SpawnMonster(Enemy monsterobj)
     {
+        int cnt = 0;
+
         int x = (MapManager.Instance.CurIdxX - MapManager.Instance.CorrectX) * (MapManager.Instance.roomGenarator.RoomWidth + MapManager.Instance.roomGenarator.BGLenth * 2);
         int y = (MapManager.Instance.CurIdxY - MapManager.Instance.CorrectY) * (MapManager.Instance.roomGenarator.RoomHeight + MapManager.Instance.roomGenarator.BGLenth * 2);
-        GameObject obj = Instantiate(monsterobj);
+        Enemy obj = Instantiate(monsterobj, transform);
+        obj.name = Random.Range(0,100).ToString();
 
-        //공중인지 아닌지확인
-
-        //공중이면 몬스터 곂치는것만
-
-        //지상몹이면 곂치는거 + wall 타일맵
-        while(true)
+        while (true)
         {
-            obj.transform.position = new Vector2(Random.Range(x - 5, x + 5), Random.Range(y - 5, y + 5));
-            break;
+            if (cnt++ > 100)
+            {
+                Debug.LogError($"Too many try spawn");
+                break;
+            }
+            
+            Vector3 pos = new Vector3(Random.Range(x - 9f, x + 9f), Random.Range(y - 6f, y + 6f));
+            obj.transform.position = pos;
+
+            //wall 타일맵확인
+            if (obj.EnemyDataSO.CheckObstacle)
+            {
+                if (CheckWall(pos))
+                    continue;
+            }
+
+            if (!CheckCollider(obj))
+                break;
+
         }
+    }
+
+    private bool CheckWall(Vector3 pos)
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            Vector3Int tempPos = new Vector3Int((int)pos.x + distx[i], (int)pos.y + disty[i], 0);
+            if (MapManager.Instance.roomGenarator.roomTilemap.WallTile.GetTile(tempPos) != null)
+                return true;
+        }
+        return false;
+    }
+
+    private bool CheckCollider(Enemy obj)
+    {
+        Vector3 pos = obj.transform.position;
+        Collider[] colliders = Physics.OverlapSphere(pos, 2f);
+
+        foreach (Collider col in colliders)
+        {
+            if (col.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -62,12 +62,6 @@ public class MapManager : MonoBehaviour
         SetConfiner();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.V))
-            RoomClear();
-    }
-
     public void RoomClear()
     {
         centerPos = new Vector2((roomGenarator.RoomWidth + roomGenarator.BGLenth * 2) * (curIdxX - correctX),

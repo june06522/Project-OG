@@ -8,6 +8,7 @@ public class RoomTileMap : MonoBehaviour
 
     [SerializeField] Tilemap tile;
     [SerializeField] Tilemap walltile;
+    public Tilemap WallTile => walltile;
 
     [SerializeField] Tile[] wall;
     [SerializeField] Tile[] round;
