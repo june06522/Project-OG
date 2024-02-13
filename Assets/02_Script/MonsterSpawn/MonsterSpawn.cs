@@ -109,10 +109,10 @@ public class MonsterSpawn : MonoBehaviour
             }
             
             Vector3 pos = new Vector3(
-                Random.Range(x - MapManager.Instance.roomGenarator.Width / 2,
-                x + MapManager.Instance.roomGenarator.Width / 2),
-                Random.Range(y - MapManager.Instance.roomGenarator.Height / 2,
-                y + MapManager.Instance.roomGenarator.Height / 2));
+                Random.Range(x - MapManager.Instance.roomGenarator.RoomWidth / 2,
+                x + MapManager.Instance.roomGenarator.RoomWidth / 2),
+                Random.Range(y - MapManager.Instance.roomGenarator.RoomHeight / 2,
+                y + MapManager.Instance.roomGenarator.RoomHeight / 2));
             obj.transform.position = pos;
 
             //wall 타일맵확인

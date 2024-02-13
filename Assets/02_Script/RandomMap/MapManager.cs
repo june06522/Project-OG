@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] private MovePortal _portalPrefab;
     [SerializeField] PolygonCollider2D _vcamConfiner;
     [SerializeField] private float plusValue = 1.5f;
+    [SerializeField] CinemachineConfiner2D _cmConfiner;
 
     Vector2 centerPos;
 
@@ -164,5 +166,6 @@ public class MapManager : MonoBehaviour
             //    break;
         //}
         _vcamConfiner.points = newpoints;
+        _cmConfiner.InvalidateCache();
     }
 }

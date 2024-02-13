@@ -11,6 +11,12 @@ public class InventoryActive : MonoBehaviour
     {
         inven = transform.GetChild(0).gameObject;
     }
+
+    private void Start()
+    {
+        inven.SetActive(false);
+    }
+
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.E))
