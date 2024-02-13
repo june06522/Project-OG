@@ -32,12 +32,12 @@ public class Spear : InvenWeapon
 
     }
 
-    [BindExecuteType(typeof(SendDataSO))]
-    public override void GetSignal([BindParameterType(typeof(SendDataSO))] object signal)
+    [BindExecuteType(typeof(SendData))]
+    public override void GetSignal([BindParameterType(typeof(SendData))] object signal)
     {
 
-        var data = (SendDataSO)signal;
-        SkillManager.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
+        var data = (SendData)signal;
+        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
 
     }
 

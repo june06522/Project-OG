@@ -25,8 +25,8 @@ public class Sword : InvenWeapon
     public override void GetSignal([BindParameterType(typeof(float))] object signal)
     {
 
-        var data = (SendDataSO)signal;
-        SkillManager.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
+        var data = (SendData)signal;
+        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
 
     }
 

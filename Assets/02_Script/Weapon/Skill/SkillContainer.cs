@@ -35,11 +35,11 @@ public enum WeaponID
     Slongshot,  // 새총
     Stone,      // 짱돌
     Kunai,      // 쿠나이
-    Dagger,     // 단검
     Monkey,     // 몽키스패너
     WaterBang,  // 물풍선
     Katana,     // 카타나
     Branch,     // 나뭇가지
+    Tennis,     // 테니스라켓
     Spear,      // 창
     Scratcher,  // 효자손
     Golfclub,   // 골프채
@@ -48,7 +48,6 @@ public enum WeaponID
     Pickaxe,    // 곡괭이
     Bat,        // 빠따
     Brick,      // 벽돌
-    Tennis,     // 테니스라켓
     Rope,       // 로프
     Chain,      // 쇠사슬
 }
@@ -57,9 +56,10 @@ public enum WeaponID
 [Serializable]
 public enum GeneratorID
 {
-    None,
-    Addtional,
-
+    None,       // 없음
+    Double,     // 따블
+    Fire,       // 불
+    Water,      // 물
 }
 
 // Skill 2차원 리스트는 인스펙터에서 안보임 이렇게 해야함
@@ -69,11 +69,11 @@ public class Shell
     public List<Skill> skillList;
 }
 
-public class SkillManager : MonoBehaviour
+public class SkillContainer : MonoBehaviour
 {
 
-    private static SkillManager instance;
-    public static SkillManager Instance => instance;
+    private static SkillContainer instance;
+    public static SkillContainer Instance => instance;
 
     [SerializeField] List<Shell> weaponList;
 
