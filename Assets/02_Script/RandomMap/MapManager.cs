@@ -62,12 +62,6 @@ public class MapManager : MonoBehaviour
         SetConfiner();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.V))
-            RoomClear();
-    }
-
     public void RoomClear()
     {
         centerPos = new Vector2((roomGenarator.RoomWidth + roomGenarator.BGLenth * 2) * (curIdxX - correctX),
@@ -135,22 +129,22 @@ public class MapManager : MonoBehaviour
     void SetConfiner()
     {
         Vector2[] newpoints = { };
-        switch (roomGenarator.spawnType)
-        {
-            case MapSpawnType.Load:
-            {
-                 newpoints = new Vector2[]
-                 {
-                     new Vector2(100000, 100000),
-                     new Vector2(-100000, 100000),
-                     new Vector2(-100000, -100000),
-                     new Vector2(100000, -100000)
-                 };
+        //switch (roomGenarator.spawnType)
+        //{
+        //    case MapSpawnType.Load:
+        //    {
+        //         newpoints = new Vector2[]
+        //         {
+        //             new Vector2(100000, 100000),
+        //             new Vector2(-100000, 100000),
+        //             new Vector2(-100000, -100000),
+        //             new Vector2(100000, -100000)
+        //         };
 
-            }
-                break;
-            case MapSpawnType.Potal:
-            case MapSpawnType.Stuck:
+        //    }
+        //        break;
+        //    case MapSpawnType.Potal:
+        //    case MapSpawnType.Stuck:
                 {
                     newpoints = new Vector2[]
                     {
@@ -164,11 +158,11 @@ public class MapManager : MonoBehaviour
                         (centerPos.y - roomGenarator.RoomHeight / 2) - 2 - plusValue)
                     };
                 }
-                break;
-            default:
-                Debug.LogError($"{roomGenarator.transform} : MapSpawnType is not defined");
-                break;
-        }
+            //    break;
+            //default:
+            //    Debug.LogError($"{roomGenarator.transform} : MapSpawnType is not defined");
+            //    break;
+        //}
         _vcamConfiner.points = newpoints;
     }
 }

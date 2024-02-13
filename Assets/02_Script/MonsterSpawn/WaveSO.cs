@@ -12,7 +12,7 @@ public enum RoomSize
 [System.Serializable]
 public struct MonsterWaveInfo
 {
-    public GameObject monsterObj; // 나중에 몬스터 공통 스크립트로
+    public Enemy monsterObj;
     [Header("등장 몬스터 확률")]
     [Range(0, 100)] public int percentage;
 }

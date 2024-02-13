@@ -8,6 +8,7 @@ public class RoomTileMap : MonoBehaviour
 
     [SerializeField] Tilemap tile;
     [SerializeField] Tilemap walltile;
+    public Tilemap WallTile => walltile;
 
     [SerializeField] Tile[] wall;
     [SerializeField] Tile[] round;
@@ -42,25 +43,26 @@ public class RoomTileMap : MonoBehaviour
 
     public void SetTileMap()
     {
-        switch (roomGenarator.spawnType)
-        {
-            case MapSpawnType.Load:
-                {
+                PoltarRoom();
+        //switch (roomGenarator.spawnType)
+        //{
+        //    case MapSpawnType.Load:
+        //        {
 
-                }
-                break;
-            case MapSpawnType.Stuck:
-                StuckRoom();
-                break;
-            case MapSpawnType.Potal:
-                {
+        //        }
+        //        break;
+        //    case MapSpawnType.Stuck:
+        //        StuckRoom();
+        //        break;
+        //    case MapSpawnType.Potal:
+        //        {
 
-                }
-                break;
-        }
+        //        }
+        //        break;
+        //}
     }
 
-    private void StuckRoom()
+    private void PoltarRoom()
     {
         for (int i = 0; i < roomGenarator.useRooms.Count(); ++i)
         {
