@@ -37,11 +37,12 @@ public enum WeaponID
     Kunai,      // 쿠나이
     Monkey,     // 몽키스패너
     WaterBang,  // 물풍선
+    Bomb,       // 폭탄
     Katana,     // 카타나
     Branch,     // 나뭇가지
     Tennis,     // 테니스라켓
     Spear,      // 창
-    Scratcher,  // 효자손
+    Cane,       // 지팡이
     Golfclub,   // 골프채
     Sickle,     // 낫
     Hammer,     // 망치

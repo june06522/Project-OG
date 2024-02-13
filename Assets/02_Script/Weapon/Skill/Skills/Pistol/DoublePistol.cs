@@ -5,6 +5,7 @@ public class DoublePistol : Skill
 {
 
     [SerializeField] private Bullet bullet;
+    [SerializeField] float damage;
 
     public override void Excute(Transform weaponTrm, Transform target, int power)
     {
@@ -17,13 +18,13 @@ public class DoublePistol : Skill
     {
         var a = Instantiate(bullet, weaponTrm.position, weaponTrm.rotation);
         Debug.Log(power);
-        a.Shoot(power * 10);
+        a.Shoot(power * damage);
 
         yield return new WaitForSeconds(0.1f);
 
         var b = Instantiate(bullet, weaponTrm.position, weaponTrm.rotation);
         Debug.Log(power);
-        b.Shoot(power * 10);
+        b.Shoot(power * damage * 2);
     }
 
 }

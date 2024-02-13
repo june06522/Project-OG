@@ -5,6 +5,7 @@ using UnityEngine;
 public class FirePistol : Skill
 {
     [SerializeField] Bullet fireBullet;
+    [SerializeField] float damage;
 
     public override void Excute(Transform weaponTrm, Transform target, int power)
     {
@@ -12,7 +13,7 @@ public class FirePistol : Skill
 
         var a = Instantiate(fireBullet, weaponTrm.position, weaponTrm.rotation);
 
-        a.Shoot(power * 25);
+        a.Shoot(power * power * damage);
 
 
     }
