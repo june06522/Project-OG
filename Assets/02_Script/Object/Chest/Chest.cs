@@ -13,7 +13,6 @@ public class Chest : MonoBehaviour
     [Header("Info")]
     [SerializeField]
     private ItemInfoListSO _itemList;
-    public Item test;
 
     private Dictionary<ItemRate, List<ItemInfoSO>> _rateItems = new Dictionary<ItemRate, List<ItemInfoSO>>();
 
@@ -65,17 +64,17 @@ public class Chest : MonoBehaviour
 
         ItemInfoSO item = RandomItem();
         // 아이템 소환인데.. 아이템 프리팹이 없는데?
-        if(item.ItemObject != null || true) // 여기 true 빼야되고 밑에 테스트 코드 지워야함
+        if(item.ItemObject != null) // 여기 true 빼야되고 밑에 테스트 코드 지워야함
         {
-            //Item itemObject = Instantiate(item.ItemObject, transform.position, Quaternion.identity);
-            Item itemObject = Instantiate(test, _itemSpawnPos.position, Quaternion.identity);
+            Item itemObject = Instantiate(item.ItemObject, transform.position, Quaternion.identity);
 
             // 애니메이션 연출
             itemObject.transform.DOJump(_itemSpawnPos.position, 1.5f, 1, 0.7f);
         }
 
         // 이펙트
-        PlayOpenEffect(item.Rate);
+        if(_openEffect != null)
+            PlayOpenEffect(item.Rate);
     }
 
     private void PlayOpenEffect(ItemRate rate)
