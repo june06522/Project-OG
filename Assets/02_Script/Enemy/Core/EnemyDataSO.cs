@@ -16,6 +16,7 @@ public class EnemyDataSO : ScriptableObject
     [field: SerializeField] public float Range { get; set; }
     [field: SerializeField] public float AttackCoolDown { get; set; }
     [field: SerializeField] public LayerMask TargetAbleLayer { get; private set; }
+    [field: SerializeField] public LayerMask ObstacleLayer { get; private set; }
 
     public bool IsAttackCoolDown { get; private set; }
 

@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum

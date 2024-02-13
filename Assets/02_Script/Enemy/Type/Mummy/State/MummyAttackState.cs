@@ -1,14 +1,12 @@
-
 using DG.Tweening;
-using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class BatAttackState : BatEnemyRootState
+public class MummyAttackState : MummyRootState
 {
     Transform targetTrm;
-
-    public BatAttackState(BatStateController controller) : base(controller)
+    public MummyAttackState(MummyStateController controller) : base(controller)
     {
         targetTrm = GameManager.Instance.player.transform;
     }
@@ -33,7 +31,7 @@ public class BatAttackState : BatEnemyRootState
         yield return new WaitForSeconds(0.3f);
 
         _data.SetCoolDown();
-        controller.ChangeState(EBatState.Move);
+        controller.ChangeState(EMummyState.Move);
     }
 
     private void CheckHit()

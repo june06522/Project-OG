@@ -6,56 +6,50 @@ using UnityEngine;
 
 public enum EBatState
 {
-    Idle,
-    Chase,
+    Idle = 0,
+    Move = 1,
     Attack
 }
 
-public class BatStateController : FSM_Controller<EBatState>
+public class BatStateController : BaseFSM_Controller<EBatState>
 {
-    [field: SerializeField] public EnemyDataSO EnemyData { get; protected set; }
     [SerializeField] public Transform attackPoint;
-    public SpriteRenderer spriteRender;
-
-    Enemy enemy;
+    private SpriteRenderer spriteRender;
 
     protected override void Awake()
     {
-        //spriteRender = GetComponent<SpriteRenderer>();
+        base.Awake();
+        spriteRender = GetComponent<SpriteRenderer>();
 
-        //enemy = GetComponent<Enemy>();
-        //EnemyData = Instantiate(EnemyData);
+        var idleState = new BatEnemyRootState(this);
+        var idleToMove = new TransitionIdleOrMove<EBatState>(this, EBatState.Move);
 
-        //var idleState = new BatEnemyRootState(this);
-        //var idleToChase = new TransitionIdleOrChase(this, EBatState.Chase);
+        idleState
+            .AddTransition<EBatState>(idleToMove);
 
-        //idleState
-        //    .AddTransition<EBatState>(idleToChase);
+        var moveState = new BatMoveState(this);
+        var moveToIdle = new TransitionIdleOrMove<EBatState>(this, EBatState.Idle);
+        var moveToAttack = new MoveToAttackTransition<EBatState>(this, EBatState.Attack, false);
 
-        //var chaseState = new BatChaseState(this);
-        //var chaseToIdle = new TransitionIdleOrChase(this, EBatState.Idle);
-        //var chaseToAttack = new BatChaseToAttackTransition(this, EBatState.Attack);
+        moveState
+            .AddTransition<EBatState>(moveToIdle)
+            .AddTransition<EBatState>(moveToAttack);
 
-        //chaseState
-        //    .AddTransition<EBatState>(chaseToIdle)
-        //    .AddTransition<EBatState>(chaseToAttack);
+        var attackState = new BatAttackState(this);
 
-        //var attackState = new BatAttackState(this);
-
-        //AddState(idleState, EBatState.Idle);
-        //AddState(chaseState, EBatState.Chase);
-        //AddState(attackState, EBatState.Attack);
-    }
-
-    protected override void Update()
-    {
-        if (enemy.Dead) return;
-        base.Update();
+        AddState(idleState, EBatState.Idle);
+        AddState(moveState, EBatState.Move);
+        AddState(attackState, EBatState.Attack);
     }
 
     //Debug
     public void ChangeColor(Color color)
     {
         spriteRender.DOColor(color, 0.5f);
+    }
+
+    public void Flip(bool left)
+    {
+        transform.rotation = left ? Quaternion.identity : Quaternion.Euler(0,180,0);
     }
 }
