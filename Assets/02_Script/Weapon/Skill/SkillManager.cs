@@ -2,8 +2,15 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 생성기가 가지고 있는거
+// 표적 타입, 생성기 ID(스킬 종류)
+
+// 무기가 가지고 있는거
+// 자기 타입, 자기 ID
+
 // 무기 타입
 [Flags]
+[Serializable]
 public enum WeaponType
 {
     Gun = 1 << 0,       // 총기류
@@ -17,6 +24,7 @@ public enum WeaponType
 }
 
 // 무기별 ID
+[Serializable]
 public enum WeaponID
 {
     None,       // 아무것도 아님
@@ -46,8 +54,11 @@ public enum WeaponID
 }
 
 // 생성기별 ID
+[Serializable]
 public enum GeneratorID
 {
+    None,
+    Addtional,
 
 }
 
