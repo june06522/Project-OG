@@ -57,7 +57,7 @@ public class WeaponController : MonoBehaviour
 
     }
 
-    private Transform FindCloseEnemy(int enemyCount)
+    public Transform FindCloseEnemy(int enemyCount)
     {
 
         float minDist = float.MaxValue;
@@ -127,6 +127,8 @@ public class WeaponController : MonoBehaviour
         RePosition();
 
     }
+
+    public Weapon FindWeapon(Guid guid) => weaponContainer.Find(x => x.WeaponGuid == guid);
 
     public void RemoveAllWeapon()
     {

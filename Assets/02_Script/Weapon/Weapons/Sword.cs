@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 테스트용
+// 나중에 공격한번에 타격 1회로 고쳐야함
 public class Sword : InvenWeapon
 {
 
@@ -16,7 +17,7 @@ public class Sword : InvenWeapon
 
         base.Awake();
         _spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        _col = transform.GetChild(0).GetComponent<Collider2D>();
+        _col = transform.GetComponent<Collider2D>();
 
     }
 
@@ -26,11 +27,11 @@ public class Sword : InvenWeapon
     {
 
         var data = (SendData)signal;
-        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
+        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power, WeaponGuid);
 
     }
 
-    protected override void Attack(Transform target)
+    public override void Attack(Transform target)
     {
 
         //RotateWeapon(target);
@@ -51,8 +52,9 @@ public class Sword : InvenWeapon
 
         isAttack = true;
         _col.enabled = true;
-        yield return new WaitForSeconds(0.35f);
+        yield return new WaitForSeconds(0.2f);
         _col.enabled = false;
+        yield return new WaitForSeconds(0.15f);
         isAttack = false;
 
     }
@@ -95,14 +97,12 @@ public class Sword : InvenWeapon
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
-        if (collision.CompareTag("HitAble"))
+        if (collision.TryGetComponent<IHitAble>(out var hitAble))
         {
-
-            collision.GetComponent<IHitAble>().Hit(Data.AttackDamage.GetValue());
+            Debug.Log(1);
+            hitAble.Hit(Data.AttackDamage.GetValue());
 
         }
-
     }
 
 }

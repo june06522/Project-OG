@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class FirePistol : Skill
@@ -7,7 +6,7 @@ public class FirePistol : Skill
     [SerializeField] Bullet fireBullet;
     [SerializeField] float damage;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, Guid guid)
     {
         Debug.Log(12);
 

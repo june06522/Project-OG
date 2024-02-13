@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ public class DoublePistol : Skill
     [SerializeField] private Bullet bullet;
     [SerializeField] float damage;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, Guid guid)
     {
 
         StartCoroutine(Shooting(weaponTrm, target, power));

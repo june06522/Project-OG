@@ -24,14 +24,14 @@ public class Pistol : InvenWeapon
     {
 
         var data = (SendData)signal;
-        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
+        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power, WeaponGuid);
 
         //var skill = Instantiate(SkillManager.Instance.GetSKill((int)id, (int)data.GeneratorID));
 
         //skill.Excute(transform, target, data.Power);
     }
 
-    protected override void Attack(Transform target)
+    public override void Attack(Transform target)
     {
 
         var blt = Instantiate(bullet, shootPos.position, transform.rotation);

@@ -37,11 +37,11 @@ public class Spear : InvenWeapon
     {
 
         var data = (SendData)signal;
-        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
+        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power, WeaponGuid);
 
     }
 
-    protected override void Attack(Transform target)
+    public override void Attack(Transform target)
     {
 
         if (!_isAttack)
