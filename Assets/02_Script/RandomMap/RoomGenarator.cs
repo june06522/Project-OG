@@ -2,13 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum MapSpawnType
-{
-    Load = 0,
-    Potal = 1,
-    Stuck = 2
-}
-
 public class RoomGenarator : MonoBehaviour
 {
     [Header("보드 사이즈")]
@@ -37,8 +30,8 @@ public class RoomGenarator : MonoBehaviour
     [Header("방 갯수")]
     [SerializeField] int normalRoomCnt;
 
-    [Header("맵 타입")]
-    public MapSpawnType spawnType = MapSpawnType.Load;
+    //[Header("맵 타입")]
+    //public MapSpawnType spawnType = MapSpawnType.Load;
 
     [HideInInspector] public List<RoomInfo> useRooms = new List<RoomInfo>();
     [HideInInspector] public bool[,] checkRoom;
