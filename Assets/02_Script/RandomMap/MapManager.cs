@@ -17,6 +17,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] CinemachineConfiner2D _cmConfiner;
 
     Vector2 centerPos;
+    public Vector2 CenterPos => centerPos;
 
     int curIdxX;
     public int CurIdxX => curIdxX;

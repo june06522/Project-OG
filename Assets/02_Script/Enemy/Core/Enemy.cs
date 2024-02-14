@@ -50,15 +50,5 @@ public class Enemy : MonoBehaviour, IHitAble
 
     private void DieEvent()
     {
-        if(MonsterSpawnManager.Instance != null)
-        {
-            MonsterSpawnManager.Instance.monsterSpawn.curMonsterCnt--;
-        }
-        else
-        {
-            Debug.LogError($"MonsterSpawnManager is not created!");
-        }
-
-        Destroy(gameObject);
     }
 }

@@ -10,6 +10,8 @@ public class MonsterSpawn : MonoBehaviour
     [HideInInspector]
     public int curMonsterCnt = 0;
 
+    private WaitForSeconds wfs = new WaitForSeconds(0.3f);
+
     int[] distx = new int[] {
         -1,0,1,
         -1,0,1,
@@ -20,13 +22,6 @@ public class MonsterSpawn : MonoBehaviour
         0,0,0,
         -1,-1,-1
     };
-
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.C))
-            curMonsterCnt = 0;
-    }
 
     public void StartSpawn()
     {
@@ -40,20 +35,32 @@ public class MonsterSpawn : MonoBehaviour
     IEnumerator StartWave()
     {
         int curIdx = 0;
+        Collider2D colliders;
+
+        float roomRadius = Mathf.Sqrt(Mathf.Pow(MapManager.Instance.GetRoomSize().width / 2, 2)
+                + Mathf.Pow(MapManager.Instance.GetRoomSize().height / 2, 2));
+
         while (curIdx < curSO.waveCnt)
         {
-            if (curMonsterCnt == 0)
+            colliders = Physics2D.OverlapCircle(MapManager.Instance.CenterPos,
+               roomRadius , LayerMask.GetMask("Enemy"));
+
+            if (colliders == null)
             {
                 curIdx++;
                 Spawn();
             }
-            yield return null;
+            yield return wfs;
         }
 
+        colliders = Physics2D.OverlapCircle(MapManager.Instance.CenterPos,
+               roomRadius, LayerMask.GetMask("Enemy"));
 
-        while (curMonsterCnt > 0)
+        while (colliders != null)
         {
-            yield return null;
+            colliders = Physics2D.OverlapCircle(MapManager.Instance.CenterPos,
+               roomRadius, LayerMask.GetMask("Enemy"));
+            yield return wfs;
         }
 
         MonsterSpawnManager.Instance.selectWave[MapManager.Instance.CurIdxY, MapManager.Instance.CurIdxX] = null;
