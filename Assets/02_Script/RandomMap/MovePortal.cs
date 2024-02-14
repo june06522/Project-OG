@@ -14,6 +14,7 @@ public class MovePortal : MonoBehaviour
     private Transform playerTrm;
 
     bool isContact = false;
+    Vector2 centerpos;
 
     private void Start()
     {
@@ -40,31 +41,43 @@ public class MovePortal : MonoBehaviour
 
     private void Move()
     {
-        int len = (MapManager.Instance.roomGenarator.PortalLenth +
-            MapManager.Instance.roomGenarator.BGLenth) * 2;
+        int len = MapManager.Instance.roomGenarator.PortalLenth;
+
         switch (dir)
         {
             case MoveDir.left:
-                playerTrm.position = new Vector3(transform.position.x - len,
-                    transform.position.y, transform.position.z);
                 MapManager.Instance.RoomMove(MoveDir.left);
+                centerpos = new Vector2(
+                    MapManager.Instance.roomGenarator.WidthLength * (MapManager.Instance.CurIdxX - MapManager.Instance.CorrectX),
+                    MapManager.Instance.roomGenarator.HeightLength * (MapManager.Instance.CurIdxY - MapManager.Instance.CorrectY));
+                playerTrm.position = new Vector3(centerpos.x + MapManager.Instance.GetRoomSize().width / 2 - len,
+                    transform.position.y, transform.position.z);
                 break;
             case MoveDir.right:
-                playerTrm.position = new Vector3(transform.position.x + len,
-                    transform.position.y, transform.position.z);
                 MapManager.Instance.RoomMove(MoveDir.right);
+                centerpos = new Vector2(
+                    MapManager.Instance.roomGenarator.WidthLength * (MapManager.Instance.CurIdxX - MapManager.Instance.CorrectX),
+                    MapManager.Instance.roomGenarator.HeightLength * (MapManager.Instance.CurIdxY - MapManager.Instance.CorrectY));
+                playerTrm.position = new Vector3(centerpos.x - MapManager.Instance.GetRoomSize().width / 2 + len,
+                    transform.position.y, transform.position.z);
                 break;
             case MoveDir.up:
-                playerTrm.position = new Vector3(transform.position.x,
-                    transform.position.y + len
-                    , transform.position.z);
                 MapManager.Instance.RoomMove(MoveDir.up);
+                centerpos = new Vector2(
+                    MapManager.Instance.roomGenarator.WidthLength * (MapManager.Instance.CurIdxX - MapManager.Instance.CorrectX),
+                    MapManager.Instance.roomGenarator.HeightLength * (MapManager.Instance.CurIdxY - MapManager.Instance.CorrectY));
+                playerTrm.position = new Vector3(transform.position.x,
+                   centerpos.y - MapManager.Instance.GetRoomSize().height / 2+ len
+                    , transform.position.z);
                 break;
             case MoveDir.down:
-                playerTrm.position = new Vector3(transform.position.x,
-                    transform.position.y - len
-                    , transform.position.z);
                 MapManager.Instance.RoomMove(MoveDir.down);
+                centerpos = new Vector2(
+                    MapManager.Instance.roomGenarator.WidthLength * (MapManager.Instance.CurIdxX - MapManager.Instance.CorrectX),
+                    MapManager.Instance.roomGenarator.HeightLength * (MapManager.Instance.CurIdxY - MapManager.Instance.CorrectY));
+                playerTrm.position = new Vector3(transform.position.x,
+                   centerpos.y + MapManager.Instance.GetRoomSize().height / 2 - len
+                    , transform.position.z);
                 break;
         }
     }

@@ -94,9 +94,13 @@ public class MonsterSpawn : MonoBehaviour
     private void SpawnMonster(Enemy monsterobj)
     {
         int cnt = 0;
+        int xidx = MapManager.Instance.CurIdxX;
+        int yidx = MapManager.Instance.CurIdxY;
 
-        int x = (MapManager.Instance.CurIdxX - MapManager.Instance.CorrectX) * (MapManager.Instance.roomGenarator.RoomWidth + MapManager.Instance.roomGenarator.BGLenth * 2);
-        int y = (MapManager.Instance.CurIdxY - MapManager.Instance.CorrectY) * (MapManager.Instance.roomGenarator.RoomHeight + MapManager.Instance.roomGenarator.BGLenth * 2);
+        int x = (xidx - MapManager.Instance.CorrectX) * 
+            (MapManager.Instance.roomGenarator.WidthLength);
+        int y = (yidx - MapManager.Instance.CorrectY) * 
+            (MapManager.Instance.roomGenarator.HeightLength);
         Enemy obj = Instantiate(monsterobj, transform);
         obj.name = Random.Range(0,100).ToString();
 
@@ -109,12 +113,12 @@ public class MonsterSpawn : MonoBehaviour
             }
             
             Vector3 pos = new Vector3(
-                Random.Range(x - MapManager.Instance.roomGenarator.RoomWidth / 2,
-                x + MapManager.Instance.roomGenarator.RoomWidth / 2),
-                Random.Range(y - MapManager.Instance.roomGenarator.RoomHeight / 2,
-                y + MapManager.Instance.roomGenarator.RoomHeight / 2));
+                Random.Range(x - MapManager.Instance.roomGenarator.checkRoom[yidx,xidx].width / 2,
+                x + MapManager.Instance.roomGenarator.checkRoom[yidx, xidx].width / 2),
+                Random.Range(y - MapManager.Instance.roomGenarator.checkRoom[yidx, xidx].height / 2,
+                y + MapManager.Instance.roomGenarator.checkRoom[yidx, xidx].height / 2));
             obj.transform.position = pos;
-
+             
             //wall 타일맵확인
             if (obj.EnemyDataSO.CheckObstacle)
             {

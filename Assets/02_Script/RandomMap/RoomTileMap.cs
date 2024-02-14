@@ -66,11 +66,13 @@ public class RoomTileMap : MonoBehaviour
     {
         for (int i = 0; i < roomGenarator.useRooms.Count(); ++i)
         {
-            int x = roomGenarator.useRooms[i].x * (roomGenarator.RoomWidth + roomGenarator.BGLenth * 2);
-            int y = roomGenarator.useRooms[i].y * (roomGenarator.RoomHeight + roomGenarator.BGLenth * 2);
-            for (int j = y - roomGenarator.RoomHeight / 2; j < y + roomGenarator.RoomHeight / 2; ++j)
+            int xLen = roomGenarator.checkRoom[roomGenarator.useRooms[i].y + roomGenarator.Height / 2, roomGenarator.useRooms[i].x + roomGenarator.Width / 2].width / 2;
+            int yLen = roomGenarator.checkRoom[roomGenarator.useRooms[i].y + roomGenarator.Height / 2, roomGenarator.useRooms[i].x + roomGenarator.Width / 2].height / 2;
+            int x = roomGenarator.useRooms[i].x * (roomGenarator.WidthLength);
+            int y = roomGenarator.useRooms[i].y * (roomGenarator.HeightLength);
+            for (int j = y - yLen; j < y + yLen; ++j)
             {
-                for (int k = x - roomGenarator.RoomWidth / 2; k < x + roomGenarator.RoomWidth / 2; ++k)
+                for (int k = x - xLen; k < x + xLen; ++k)
                 {
                     Vector3Int pos = new Vector3Int(k, j, 0);
                     //기본타일
@@ -78,11 +80,11 @@ public class RoomTileMap : MonoBehaviour
 
                     #region 벽
                     //위
-                    if (j == y + roomGenarator.RoomHeight / 2 - 1)
+                    if (j == y + yLen - 1)
                         walltile.SetTile(pos, wall[0]);
 
                     //아래
-                    if (j == y - roomGenarator.RoomHeight / 2)
+                    if (j == y - yLen)
                     {
                         walltile.SetTile(pos, wall[3]);
                         walltile.SetTile(new Vector3Int(pos.x, pos.y - 1, pos.z),
@@ -92,23 +94,23 @@ public class RoomTileMap : MonoBehaviour
                     }
 
                     //왼쪽
-                    if (k == x - roomGenarator.RoomWidth / 2)
+                    if (k == x - xLen)
                         walltile.SetTile(pos, wall[1]);
 
                     //오른쪽
-                    if (k == x + roomGenarator.RoomWidth / 2 - 1)
+                    if (k == x + xLen - 1)
                         walltile.SetTile(pos, wall[2]);
                     #endregion
 
                     #region 모서리
                     //왼위
-                    if (j == y + roomGenarator.RoomHeight / 2 - 1 && k == x - roomGenarator.RoomWidth / 2)
+                    if (j == y + yLen - 1 && k == x - xLen)
                         walltile.SetTile(pos, round[0]);
                     //오위
-                    if (j == y + roomGenarator.RoomHeight / 2 - 1 && k == x + roomGenarator.RoomWidth / 2 - 1)
+                    if (j == y + yLen - 1 && k == x + xLen - 1)
                         walltile.SetTile(pos, round[1]);
                     //왼아래
-                    if (j == y - roomGenarator.RoomHeight / 2 && k == x - roomGenarator.RoomWidth / 2)
+                    if (j == y - yLen && k == x - xLen)
                     {
                         walltile.SetTile(pos, round[2]);
                         walltile.SetTile(new Vector3Int(pos.x, pos.y - 1, pos.z),
@@ -117,7 +119,7 @@ public class RoomTileMap : MonoBehaviour
                             bottomWall[4]);
                     }
                     //오아래
-                    if (j == y - roomGenarator.RoomHeight / 2 && k == x + roomGenarator.RoomWidth / 2 - 1)
+                    if (j == y - yLen && k == x + xLen - 1)
                     {
                         walltile.SetTile(pos, round[3]);
                         walltile.SetTile(new Vector3Int(pos.x, pos.y - 1, pos.z),

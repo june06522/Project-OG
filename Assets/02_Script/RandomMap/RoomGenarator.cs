@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class Roomsize
+{
+    public int width;
+    public int height;
+}
+
 public class RoomGenarator : MonoBehaviour
 {
     [Header("보드 사이즈")]
@@ -9,12 +16,18 @@ public class RoomGenarator : MonoBehaviour
     [SerializeField] int height;
     public int Width => width;
     public int Height => height;
+    [SerializeField] int widthLength;
+    [SerializeField] int heightLength;
+    public int WidthLength => widthLength;
+    public int HeightLength => heightLength;
 
-    [Header("방 사이즈")]
-    [SerializeField] int roomWidth;
-    [SerializeField] int roomHeight;
-    public int RoomWidth => roomWidth;
-    public int RoomHeight => roomHeight;
+
+    [Header("사이즈")]
+    public Roomsize smallRoom;
+    public Roomsize normalRoom;
+    public Roomsize bigRoom;
+
+    
 
     [Header("길 길이")]
     [SerializeField] int loadLength = 15;
@@ -28,13 +41,13 @@ public class RoomGenarator : MonoBehaviour
     public int BGLenth => bgLenth;
 
     [Header("방 갯수")]
-    [SerializeField] int normalRoomCnt;
+    [SerializeField] int normalRoomCnt = 5;
 
     //[Header("맵 타입")]
     //public MapSpawnType spawnType = MapSpawnType.Load;
 
     [HideInInspector] public List<RoomInfo> useRooms = new List<RoomInfo>();
-    [HideInInspector] public bool[,] checkRoom;
+    [HideInInspector] public Roomsize[,] checkRoom;
     List<RoomInfo> roomInfos = new List<RoomInfo>();
 
     [HideInInspector] public RoomTileMap roomTilemap;
@@ -43,17 +56,45 @@ public class RoomGenarator : MonoBehaviour
     {
         roomTilemap = GetComponent<RoomTileMap>();
 
-        if (RoomWidth % 2 != 0)
+        #region 예외처리
+
+        if (smallRoom.width % 2 != 0)
         {
-            Debug.LogError($"RoomWidth is odd number : {RoomWidth}, You should change Even number");
-            roomWidth++;
+            Debug.LogWarning($"Small Room width Size is odd number : {smallRoom.width}, You should change Even number");
+            smallRoom.width++;
         }
 
-        if (RoomHeight % 2 != 0)
+        if (smallRoom.height % 2 != 0)
         {
-            Debug.LogError($"RoomHeight is odd number : {RoomHeight}, You should change Even number");
-            roomHeight++;
+            Debug.LogWarning($"Small Room height Size is odd number : {smallRoom.height}, You should change Even number");
+            smallRoom.height++;
         }
+
+        if (normalRoom.width % 2 != 0)
+        {
+            Debug.LogWarning($"Normal Room width Size is odd number : {normalRoom.width}, You should change Even number");
+            normalRoom.width++;
+        }
+
+        if (normalRoom.height % 2 != 0)
+        {
+            Debug.LogWarning($"Normal Room height Size is odd number : {normalRoom.height}, You should change Even number");
+            normalRoom.height++;
+        }
+
+        if (bigRoom.width % 2 != 0)
+        {
+            Debug.LogWarning($"Big Room width Size is odd number : {bigRoom.width}, You should change Even number");
+            bigRoom.width++;
+        }
+
+        if (bigRoom.height % 2 != 0)
+        {
+            Debug.LogWarning($"Big Room height Size is odd number : {bigRoom.height}, You should change Even number");
+            bigRoom.height++;
+        }
+
+        #endregion
     }
 
     private void Start()
@@ -105,13 +146,13 @@ public class RoomGenarator : MonoBehaviour
 
     void SelectBoard()
     {
-        checkRoom = new bool[height, width];
+        checkRoom = new Roomsize[height, width];
 
         int correctionX = width / 2;
         int correctionY = height / 2;
         int cnt = 0;
 
-        checkRoom[correctionY, correctionX] = true;
+        checkRoom[correctionY, correctionX] = bigRoom;
 
         while (cnt < normalRoomCnt)
         {
@@ -124,18 +165,35 @@ public class RoomGenarator : MonoBehaviour
             //인접하는 방
             int adjCnt = 0;
 
-            if (y < height - 1 && checkRoom[y + 1, x])
+            if (y < height - 1 && checkRoom[y + 1, x] != null)
                 adjCnt++;
-            if (y > 0 && checkRoom[y - 1, x])
+            if (y > 0 && checkRoom[y - 1, x] != null)
                 adjCnt++;
-            if (x < width - 1 && checkRoom[y, x + 1])
+            if (x < width - 1 && checkRoom[y, x + 1] != null)
                 adjCnt++;
-            if (x > 0 && checkRoom[y, x - 1])
+            if (x > 0 && checkRoom[y, x - 1] != null)
                 adjCnt++;
 
             if (adjCnt == 1)
             {
-                checkRoom[y, x] = true;
+                int ranVal = Random.Range(0, 3);
+
+                if(ranVal == 0)
+                {
+                    checkRoom[y, x] = smallRoom;
+
+                }
+                else if(ranVal == 1)
+                {
+                    checkRoom[y, x] = normalRoom;
+
+                }
+                else if(ranVal == 2)
+                {
+                    checkRoom[y, x] = bigRoom;
+
+                }
+
                 useRooms.Add(temp);
                 cnt++;
             }

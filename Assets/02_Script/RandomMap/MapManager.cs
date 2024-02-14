@@ -29,6 +29,11 @@ public class MapManager : MonoBehaviour
     int correctY;
     public int CorrectY => correctY;
 
+    public Roomsize GetRoomSize()
+    {
+        return roomGenarator.checkRoom[curIdxY, curIdxX];
+    }
+
     private void Awake()
     {
         #region 예외처리
@@ -59,47 +64,57 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
-        centerPos = new Vector2((roomGenarator.RoomWidth + roomGenarator.BGLenth * 2) * (curIdxX - correctX),
-          (roomGenarator.RoomHeight + roomGenarator.BGLenth * 2) * (curIdxY - correctY));
+        centerPos = new Vector2((roomGenarator.checkRoom[curIdxY, curIdxX].width / 2
+            + roomGenarator.WidthLength) * (curIdxX - correctX),
+          (roomGenarator.checkRoom[curIdxY, curIdxX].height / 2
+            + roomGenarator.HeightLength) * (curIdxY - correctY));
+
+        centerPos = new Vector2(roomGenarator.WidthLength * (curIdxX - correctX),
+            roomGenarator.HeightLength * (curIdxY - correctY));
+
         SetConfiner();
     }
 
     public void RoomClear()
     {
-        centerPos = new Vector2((roomGenarator.RoomWidth + roomGenarator.BGLenth * 2) * (curIdxX - correctX),
-            (roomGenarator.RoomHeight + roomGenarator.BGLenth * 2) * (curIdxY - correctY));
+        centerPos = new Vector2((roomGenarator.checkRoom[curIdxY, curIdxX].width / 2
+            + roomGenarator.WidthLength) * (curIdxX - correctX),
+          (roomGenarator.checkRoom[curIdxY, curIdxX].height / 2
+            + roomGenarator.HeightLength) * (curIdxY - correctY));
 
-        int x = roomGenarator.RoomWidth / 2 - roomGenarator.PortalLenth;
-        int y = roomGenarator.RoomHeight / 2 - roomGenarator.PortalLenth;
+        centerPos = new Vector2(roomGenarator.WidthLength * (curIdxX - correctX),
+            roomGenarator.HeightLength * (curIdxY - correctY));
 
-        if (roomGenarator.checkRoom[curIdxY + 1, curIdxX])
+        int x = roomGenarator.checkRoom[curIdxY, curIdxX].width / 2 - roomGenarator.PortalLenth;
+        int y = roomGenarator.checkRoom[curIdxY, curIdxX].height / 2 - roomGenarator.PortalLenth;
+
+        if (roomGenarator.checkRoom[curIdxY + 1, curIdxX] != null)
         {
             MovePortal obj = Instantiate(_portalPrefab);
             obj.dir = MoveDir.up;
             obj.transform.position = new Vector2(centerPos.x, centerPos.y + y);
         }
 
-        if (roomGenarator.checkRoom[curIdxY - 1, curIdxX])
+        if (roomGenarator.checkRoom[curIdxY - 1, curIdxX] != null)
         {
             MovePortal obj = Instantiate(_portalPrefab);
             obj.dir = MoveDir.down;
             obj.transform.position = new Vector2(centerPos.x, centerPos.y - y);
         }
 
-        if (roomGenarator.checkRoom[curIdxY, curIdxX + 1])
+        if (roomGenarator.checkRoom[curIdxY, curIdxX + 1] != null)
         {
             MovePortal obj = Instantiate(_portalPrefab);
             obj.dir = MoveDir.right;
             obj.transform.position = new Vector2(centerPos.x + x, centerPos.y);
         }
 
-        if (roomGenarator.checkRoom[curIdxY, curIdxX - 1])
+        if (roomGenarator.checkRoom[curIdxY, curIdxX - 1] != null)
         {
             MovePortal obj = Instantiate(_portalPrefab);
             obj.dir = MoveDir.left;
             obj.transform.position = new Vector2(centerPos.x - x, centerPos.y);
         }
-
     }
 
     public void RoomMove(MoveDir dir)
@@ -120,16 +135,23 @@ public class MapManager : MonoBehaviour
                 break;
         }
 
-        centerPos = new Vector2((roomGenarator.RoomWidth + roomGenarator.BGLenth * 2) * (curIdxX - correctX),
-            (roomGenarator.RoomHeight + roomGenarator.BGLenth * 2) * (curIdxY - correctY));
+        centerPos = new Vector2((roomGenarator.checkRoom[curIdxY, curIdxX].width / 2
+            + roomGenarator.WidthLength) * (curIdxX - correctX),
+          (roomGenarator.checkRoom[curIdxY, curIdxX].height / 2
+            + roomGenarator.HeightLength) * (curIdxY - correctY));
 
-        MonsterSpawnManager.Instance.monsterSpawn.StartSpawn();
+        centerPos = new Vector2(roomGenarator.WidthLength * (curIdxX - correctX),
+            roomGenarator.HeightLength * (curIdxY - correctY));
+
+        MonsterSpawnManager.Instance.monsterSpawn.StartSpawn(); 
 
         SetConfiner();
     }
 
     void SetConfiner()
     {
+        int wid = roomGenarator.checkRoom[curIdxY, curIdxX].width / 2;
+        int hei = roomGenarator.checkRoom[curIdxY, curIdxX].height / 2;
         Vector2[] newpoints = { };
         //switch (roomGenarator.spawnType)
         //{
@@ -147,23 +169,23 @@ public class MapManager : MonoBehaviour
         //        break;
         //    case MapSpawnType.Potal:
         //    case MapSpawnType.Stuck:
-                {
-                    newpoints = new Vector2[]
-                    {
-                        new Vector2((centerPos.x + roomGenarator.RoomWidth / 2) + plusValue,
-                        (centerPos.y + roomGenarator.RoomHeight / 2) + plusValue),
-                        new Vector2((centerPos.x - roomGenarator.RoomWidth / 2) - plusValue,
-                        (centerPos.y + roomGenarator.RoomHeight / 2) + plusValue),
-                        new Vector2((centerPos.x - roomGenarator.RoomWidth / 2) - plusValue,
-                        (centerPos.y - roomGenarator.RoomHeight / 2) - 2 - plusValue),
-                        new Vector2((centerPos.x + roomGenarator.RoomWidth / 2) + plusValue,
-                        (centerPos.y - roomGenarator.RoomHeight / 2) - 2 - plusValue)
-                    };
-                }
-            //    break;
-            //default:
-            //    Debug.LogError($"{roomGenarator.transform} : MapSpawnType is not defined");
-            //    break;
+        {
+            newpoints = new Vector2[]
+            {
+                  new Vector2((centerPos.x + wid) + plusValue,
+                  (centerPos.y + hei) + plusValue),
+                  new Vector2((centerPos.x - wid) - plusValue,
+                  (centerPos.y + hei) + plusValue),
+                  new Vector2((centerPos.x - wid) - plusValue,
+                  (centerPos.y - hei) - 2 - plusValue),
+                  new Vector2((centerPos.x + wid) + plusValue,
+                  (centerPos.y - hei) - 2 - plusValue)
+            };
+        }
+        //    break;
+        //default:
+        //    Debug.LogError($"{roomGenarator.transform} : MapSpawnType is not defined");
+        //    break;
         //}
         _vcamConfiner.points = newpoints;
         _cmConfiner.InvalidateCache();
