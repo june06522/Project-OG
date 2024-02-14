@@ -25,12 +25,9 @@ public class EnemyBullet : MonoBehaviour
     float endSpeed = 15;
     float curSpeed = 0;
     float duration = 0.75f;
-    Vector3 dir;
-
     //юс╫ц
     public void Shoot(Vector2 dir, EEnemyBulletSpeedType speedType = EEnemyBulletSpeedType.Linear, EEnemyBulletCurveType curveType = EEnemyBulletCurveType.None)
     {
-        dir = dir.normalized;
         RotateBullet(dir);
 
         switch (speedType)
@@ -73,7 +70,7 @@ public class EnemyBullet : MonoBehaviour
 
     public void Update()
     {
-        transform.position += transform.right * curSpeed * Time.deltaTime;
+        transform.position += transform.up * curSpeed * Time.deltaTime;
     }
 
 

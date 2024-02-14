@@ -5,38 +5,24 @@ using UnityEngine;
 
 public class BatMoveState : BatEnemyRootState
 {
-    Transform targetTrm;
+    ChaseAction<EBatState> chaseAct;
     public BatMoveState(BatStateController controller) : base(controller)
     {
-        targetTrm = GameManager.Instance.player;
+        chaseAct = new ChaseAction<EBatState>( controller, GameManager.Instance.player);
     }
 
     protected override void EnterState()
     {
-        //Debug
-        controller.ChangeColor(Color.blue);
+        chaseAct.OnEnter();
     }
 
     protected override void ExitState()
     {
-        
+        chaseAct.OnExit();
     }
 
     protected override void UpdateState()
     {
-        Vector3 dir = (targetTrm.position - controller.transform.position);
-        dir.z = 0;
-        float speed = _data.Speed;
-
-        if(dir.magnitude < _data.AttackAbleRange)
-        {
-            
-        }
-        else
-        {
-            controller.transform.position += dir.normalized * speed * Time.deltaTime;
-        }
-
-        controller.Flip(dir.x < 0);
+        chaseAct.OnUpdate();
     }
 }

@@ -1,4 +1,3 @@
-using DG.Tweening;
 using FSM_System;
 using UnityEngine;
 
@@ -11,17 +10,15 @@ public enum EMummyState
 
 public class MummyStateController : BaseFSM_Controller<EMummyState>
 {
-    private SpriteRenderer spriteRender;
-    [SerializeField]
-    private Transform target;
+
+    public Transform target;
+    
     [SerializeField]
     public Transform attackPoint;
-
 
     protected override void Awake()
     {
         base.Awake();
-        spriteRender = GetComponent<SpriteRenderer>();
 
         var patrolState = new MummyRootState(this);
         var patrolToMove = new TransitionIdleOrMove<EMummyState>(this, EMummyState.Move);
@@ -43,21 +40,4 @@ public class MummyStateController : BaseFSM_Controller<EMummyState>
         AddState(moveState, EMummyState.Move);
         AddState(attackState, EMummyState.Attack);
     }
-
-    //Debug
-    public void ChangeColor(Color color)
-    {
-        spriteRender.DOColor(color, 0.5f);
-    }
-
-    public void Flip(bool left)
-    {
-        transform.rotation = left ? Quaternion.identity : Quaternion.Euler(0, 180, 0);
-    }
-
-    public void SetTarget(Vector2 targetPos)
-    {
-        target.position = targetPos;
-    }
-
 }

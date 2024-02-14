@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MummyMoveState : MummyRootState
+public class MummyGunMoveState : MummyGunRootState
 {
-    ChaseAction<EMummyState> chaseAct;
-    public MummyMoveState(MummyStateController controller) : base(controller)
+    ChaseAction<EMummyGunState> chaseAct;
+    public MummyGunMoveState(MummyGunStateController controller) : base(controller)
     {
-        chaseAct = new ChaseAction<EMummyState>(controller, GameManager.Instance.player);
+        chaseAct = new ChaseAction<EMummyGunState>(controller, GameManager.Instance.player);
     }
 
     protected override void EnterState()
@@ -24,5 +24,4 @@ public class MummyMoveState : MummyRootState
     {
         chaseAct.OnUpdate();
     }
-
 }

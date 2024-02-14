@@ -14,13 +14,10 @@ public enum EBatState
 public class BatStateController : BaseFSM_Controller<EBatState>
 {
     [SerializeField] public Transform attackPoint;
-    private SpriteRenderer spriteRender;
 
     protected override void Awake()
     {
         base.Awake();
-        spriteRender = GetComponent<SpriteRenderer>();
-
         var idleState = new BatEnemyRootState(this);
         var idleToMove = new TransitionIdleOrMove<EBatState>(this, EBatState.Move);
 
@@ -40,16 +37,5 @@ public class BatStateController : BaseFSM_Controller<EBatState>
         AddState(idleState, EBatState.Idle);
         AddState(moveState, EBatState.Move);
         AddState(attackState, EBatState.Attack);
-    }
-
-    //Debug
-    public void ChangeColor(Color color)
-    {
-        spriteRender.DOColor(color, 0.5f);
-    }
-
-    public void Flip(bool left)
-    {
-        transform.rotation = left ? Quaternion.identity : Quaternion.Euler(0,180,0);
     }
 }
