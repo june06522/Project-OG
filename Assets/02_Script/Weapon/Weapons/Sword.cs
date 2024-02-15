@@ -34,7 +34,6 @@ public class Sword : InvenWeapon
     public override void Attack(Transform target)
     {
 
-        //RotateWeapon(target);
 
         DOTween.Sequence().
             Append(transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z - 60), 0)).
@@ -99,7 +98,7 @@ public class Sword : InvenWeapon
     {
         if (collision.TryGetComponent<IHitAble>(out var hitAble))
         {
-            Debug.Log(1);
+            //Debug.Log(1);
             hitAble.Hit(Data.AttackDamage.GetValue());
 
         }
