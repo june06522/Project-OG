@@ -87,10 +87,12 @@ public class RoomTileMap : MonoBehaviour
         CustomRoom select = rooms[0];
         rooms.Remove(select);
 
+        Roomsize tempRoom = new Roomsize();
+        tempRoom.width = select.width;
+        tempRoom.height = select.height;
+
         roomGenarator.checkRoom[roomGenarator.useRooms[i].y + roomGenarator.Height / 2,
-            roomGenarator.useRooms[i].x + roomGenarator.Width / 2].width = select.width;
-        roomGenarator.checkRoom[roomGenarator.useRooms[i].y + roomGenarator.Height / 2,
-            roomGenarator.useRooms[i].x + roomGenarator.Width / 2].height = select.height;
+            roomGenarator.useRooms[i].x + roomGenarator.Width / 2] = tempRoom;
 
         int x = roomGenarator.useRooms[i].x * (roomGenarator.WidthLength);
         int y = roomGenarator.useRooms[i].y * (roomGenarator.HeightLength);
@@ -107,13 +109,21 @@ public class RoomTileMap : MonoBehaviour
                 if (select.wallTilemap.GetTile(new Vector3Int(j, k, 0)) != null)
                 {
                     walltile.SetTile(new Vector3Int(j + x, k + y, 0), select.wallTilemap.GetTile(new Vector3Int(j, k, 0)));
-                    if(k == -select.height / 2)
+                    if (k == -select.height / 2)
                     {
                         walltile.SetTile(new Vector3Int(j + x, k + y - 1, 0), select.wallTilemap.GetTile(new Vector3Int(j, k - 1, 0)));
                         walltile.SetTile(new Vector3Int(j + x, k + y - 2, 0), select.wallTilemap.GetTile(new Vector3Int(j, k - 2, 0)));
                     }
                 }
             }
+        }
+
+        Transform trm = select.obstacleParent.transform;
+        for (int j = 0; j < trm.childCount; j++)
+        {
+            Transform t = trm.GetChild(j);
+            Transform obj = Instantiate(t,
+                new Vector3(t.position.x + x, t.position.y + y, 0), Quaternion.identity);
         }
     }
 

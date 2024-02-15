@@ -65,11 +65,6 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
-        centerPos = new Vector2((roomGenarator.checkRoom[curIdxY, curIdxX].width / 2
-            + roomGenarator.WidthLength) * (curIdxX - correctX),
-          (roomGenarator.checkRoom[curIdxY, curIdxX].height / 2
-            + roomGenarator.HeightLength) * (curIdxY - correctY));
-
         centerPos = new Vector2(roomGenarator.WidthLength * (curIdxX - correctX),
             roomGenarator.HeightLength * (curIdxY - correctY));
 
@@ -78,11 +73,6 @@ public class MapManager : MonoBehaviour
 
     public void RoomClear()
     {
-        centerPos = new Vector2((roomGenarator.checkRoom[curIdxY, curIdxX].width / 2
-            + roomGenarator.WidthLength) * (curIdxX - correctX),
-          (roomGenarator.checkRoom[curIdxY, curIdxX].height / 2
-            + roomGenarator.HeightLength) * (curIdxY - correctY));
-
         centerPos = new Vector2(roomGenarator.WidthLength * (curIdxX - correctX),
             roomGenarator.HeightLength * (curIdxY - correctY));
 
@@ -135,11 +125,6 @@ public class MapManager : MonoBehaviour
                 curIdxY--;
                 break;
         }
-
-        centerPos = new Vector2((roomGenarator.checkRoom[curIdxY, curIdxX].width / 2
-            + roomGenarator.WidthLength) * (curIdxX - correctX),
-          (roomGenarator.checkRoom[curIdxY, curIdxX].height / 2
-            + roomGenarator.HeightLength) * (curIdxY - correctY));
 
         centerPos = new Vector2(roomGenarator.WidthLength * (curIdxX - correctX),
             roomGenarator.HeightLength * (curIdxY - correctY));
