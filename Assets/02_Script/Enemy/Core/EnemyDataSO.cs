@@ -18,6 +18,7 @@ public class EnemyDataSO : ScriptableObject
     [field: SerializeField] public float IdleTime { get; set; }  //PatrolAction 사용하는 애들만 // 도착하고 얼마나 쉴지
     [field: SerializeField] public LayerMask TargetAbleLayer { get; private set; }
     [field: SerializeField] public LayerMask ObstacleLayer { get; private set; }
+    [field: SerializeField] public LayerMask RestrictMovementLayer { get; private set; } //아예 못지나가는 layer만.
 
     public bool IsAttackCoolDown { get; private set; }
 

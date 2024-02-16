@@ -7,16 +7,24 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IHitAble
 {
     [SerializeField] EnemyDataSO enemyDataSO;
+    public EnemyDataSO EnemyDataSO => enemyDataSO;
     public FeedbackPlayer feedbackPlayer { get; set; }
     public bool Dead { get; private set; } = false;
     private int curHp;
 
     public event Action DeadEvent;
 
+
+    private new Collider2D collider;
+    public Collider2D Collider => collider;
+
+    public Transform TargetTrm { get; set; }
+
     private void Awake()
     {
         curHp = enemyDataSO.MaxHP;
         DeadEvent += DieEvent;
+        collider = GetComponent<Collider2D>();
     }
 
     public void Hit(float damage)

@@ -1,7 +1,3 @@
-
-
-
-using System;
 using UnityEngine;
 
 namespace Astar
@@ -12,17 +8,15 @@ namespace Astar
         Open,
     }
 
-    public class Node : IComparable<Node>
+    public class Node : System.IComparable<Node>
     {
-        public Node parent;
+        public Node Parent;
         public Vector3Int Pos;
         public int Weight; // °¡ÁßÄ¡
         public int F;
         public int G;
         public int H;
 
-
-        //public NodeType Type;
         public int CompareTo(Node other)
         {
             if (other.F == this.F) return 0;
@@ -57,7 +51,7 @@ namespace Astar
 
         public void Reset()
         {
-            parent = null;
+            Parent = null;
             Pos = default(Vector3Int);
             Weight = default(int);
             F = default(int);

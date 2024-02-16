@@ -14,6 +14,11 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
         spriteRender = GetComponent<SpriteRenderer>();
     }
 
+    private void Start()
+    {
+        enemy.TargetTrm = GameManager.Instance.player;   
+    }
+
     protected override void Update()
     {
         if (enemy.Dead) return;
