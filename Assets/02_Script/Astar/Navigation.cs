@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -23,6 +24,7 @@ namespace Astar
         Vector3Int currentPos;
         Vector3Int targetPos;
 
+        public bool IsBaking { get; private set; }
         public Navigation(Enemy enemy)
         {
             this.roomWorldPos = TilemapManager.Instance.GetTilePos(enemy.RoomInfo.pos);
@@ -40,37 +42,54 @@ namespace Astar
         }
 
         //맵에 노드 할당
-        public void Bake(BoundsInt roomBounds)
+        public async void Bake(BoundsInt roomBounds)
         {
-            roomNodes = NodeGenerator.MakeNode(this.roomWorldPos, roomBounds, out roomWallNodes);
-            openNodes = new Heap(100);
+            IsBaking = true;
+
+            NodeGenerator nodeGenerator = GameObject.Find("NodeGenerator").GetComponent<NodeGenerator>();
+            roomNodes = await nodeGenerator.MakeNode(this.roomWorldPos, roomBounds);
+            openNodes = new Heap(roomNodes.Count);
             closeNodes = new();
+
+            IsBaking = false;
         }
 
         public Vector3 GetRandomPos()
         {
-            return Random.Range(0, roomNodes.Count);
+            List<Node> moveAbleNodes = (from node in roomNodes
+                                        where node.Weight == 0 // 장애물, 벽 x
+                                        select node).ToList();
+
+            Vector3Int randomTilePos = moveAbleNodes[Random.Range(0, moveAbleNodes.Count)].Pos;
+            Vector3 randomPos = TilemapManager.Instance.GetWorldPos(randomTilePos);
+            return randomPos;
         }
 
         public List<Vector3Int> UpdateNav(Vector3 target)
         {
+            if (IsBaking) return null;
             openNodes.Clear();
             closeNodes.Clear();
-            //roomNodes.ForEach((node) => node.Reset());
+            roomNodes.ForEach((node) => node.Reset());
 
             currentPos = TilemapManager.Instance.GetTilePos(conTrm.position);
             targetPos = TilemapManager.Instance.GetTilePos(target);
 
-            //Node firstNode =
-            //    roomNodes.Find((node) => node.Pos == currentPos);
+            Node firstNode =
+                roomNodes.Find((node) => node.Pos == currentPos);
 
-            openNodes.Push(new Node
-            { 
-                Pos = currentPos,
-                Parent = null,
-                G = 0,
-                F = CalcH(currentPos)
-            });
+            if(firstNode == null)
+            {
+                firstNode = new Node
+                {
+                    Pos = currentPos,
+                    Parent = null,
+                    G = 0,
+                    F = CalcH(currentPos)
+                };
+            }
+
+            openNodes.Push(firstNode);
 
             bool result = false;
             while (openNodes.Count > 0)
@@ -122,13 +141,12 @@ namespace Astar
                     {
                         int g = Mathf.RoundToInt((n.Pos - nextPos).magnitude) + n.G;
 
-                        Node nextOpenNode = new Node
-                        {
-                            Pos = nextPos,
-                            Parent = n,
-                            G = g,
-                            F = g + CalcH(nextPos)
-                        };
+                        Node nextOpenNode = roomNodes.Find((node)=> node.Pos == nextPos);
+                        if (nextOpenNode == null) continue;
+
+                        nextOpenNode.Parent = n;
+                        nextOpenNode.G = g;
+                        nextOpenNode.F = g + CalcH(nextPos) + nextOpenNode.Weight;
 
                         Node exist = openNodes.Contains(nextOpenNode);
 
@@ -170,10 +188,10 @@ namespace Astar
             if(restrictLayer != default(LayerMask))
             {
                 // 아예 못지나가는 장애물 체크
-                if (Physics2D.OverlapBox(nPos, conCol.bounds.size, 0, restrictLayer) != null)
-                {
-                    return false;
-                }
+                //if (Physics2D.OverlapBox(nPos, conCol.bounds.size, 0, restrictLayer) != null)
+                //{
+                //    return false;
+                //}
             }
 
             return TilemapManager.Instance.HasWallTile(pos) == false;

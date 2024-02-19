@@ -46,6 +46,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     #region UseNav
     public void UseNavChase()
     {
+        isMove = !controller.Nav.IsBaking;
         if (!isMove) return;
       
         if (resetRoute == true || (Time.time > beforeTime + resetTime && moveIdx >= route.Count))

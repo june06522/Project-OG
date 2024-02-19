@@ -99,21 +99,9 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     }
     private Vector2 FindRandomPoint(Vector2 pos)
     {
-        //Vector2 randomPointOnCircle = UnityEngine.Random.insideUnitSphere;
-        //randomPointOnCircle.Normalize();
-        //randomPointOnCircle *= patrolRadius;
-
-        //Vector2 targetTrm = randomPointOnCircle + pos;
-        //Vector2 dir = (targetTrm - pos).normalized;
-
-
-        //RaycastHit2D hit = Physics2D.Raycast(pos, dir, patrolRadius, _data.ObstacleLayer);
-
-        //if (hit.collider != null)
-        //    targetTrm = hit.point - dir;
-
-        //SetTarget(targetTrm);
-        //return targetTrm;
+        Vector2 randomPos = controller.Nav.GetRandomPos();
+        SetTarget(randomPos);
+        return randomPos;
     }
     public void SetTarget(Vector2 target)
     {

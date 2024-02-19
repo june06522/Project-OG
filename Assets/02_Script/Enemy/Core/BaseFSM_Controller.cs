@@ -9,23 +9,33 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
 {
     [field: SerializeField] public EnemyDataSO EnemyData { get; protected set; }
     protected Enemy enemy;
+
+    [ContextMenuItem("BakeMap", "BakeMap")]
     public Navigation Nav;
 
     protected override void Awake()
     {
         enemy = GetComponent<Enemy>();
-        EnemyData = Instantiate(EnemyData);
-        Nav = new(enemy);
-
         spriteRender = GetComponent<SpriteRenderer>();
         lineRenderer = GetComponent<LineRenderer>();
-        
+    }
+
+    protected virtual void Start()
+    {
+        EnemyData = Instantiate(EnemyData);
+        Nav = new(enemy);
     }
 
     protected override void Update()
     {
         if (enemy.Dead) return;
         base.Update();
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(1, 0, 0, 0.5f);
+        Gizmos.DrawCube(transform.position, enemy.Collider.bounds.size);
     }
 
     public void Flip(bool left)
@@ -43,9 +53,15 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
     private LineRenderer lineRenderer;
     public void PrintRoute(List<Vector3Int> route)
     {
-        if (route.Count < 2 || route == null) return;
+        if (route == null) return;
+        if (route.Count < 2) return;
         lineRenderer.positionCount = route.Count;
 
         lineRenderer.SetPositions(route.Select(p => TilemapManager.Instance.GetWorldPos(p)).ToArray());
+    }
+
+    public void BakeMap()
+    {
+        Nav.Bake(enemy.RoomInfo.bound);
     }
 }

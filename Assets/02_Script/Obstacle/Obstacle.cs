@@ -15,4 +15,13 @@ public class Obstacle : MonoBehaviour
     [SerializeField] EObstacleType _type;
     public int Weight = 0;
     public EObstacleType Type => _type;
+
+    Collider2D collider;
+
+    void OnDrawGizmosSelected()
+    {
+        // Draw a semitransparent red cube at the transforms position
+        Gizmos.color = new Color(1, 0, 0, 0.5f);
+        Gizmos.DrawCube(transform.position, GetComponent<Collider2D>().bounds.size);
+    }
 }

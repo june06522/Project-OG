@@ -33,13 +33,17 @@ public class Enemy : MonoBehaviour, IHitAble
         DeadEvent += DieEvent;
         collider = GetComponent<Collider2D>();
         TargetTrm = GameObject.Find("Player").GetComponent<Transform>();
-        
+
         //Debug 나중에 한곳에서 할당해줘야함.
-        SetRoomInfo(new RoomInfo()
+        Debug.Log(_mainMap.cellBounds);
+
+        RoomInfo roomInfo = new RoomInfo()
         {
             bound = _mainMap.cellBounds,
             pos = _mainMap.transform.position,
-        });
+        };
+        
+        SetRoomInfo(roomInfo);
     }
 
     public void SetRoomInfo(RoomInfo curRoom)
