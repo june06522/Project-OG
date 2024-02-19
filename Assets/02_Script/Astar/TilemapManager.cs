@@ -1,19 +1,20 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class TilemapManager
+public class TilemapManager : MonoBehaviour
 {
     public static TilemapManager Instance;
 
+    [SerializeField]
     private Tilemap _mainMap;
+    [SerializeField]
     private Tilemap _wallMap;
     public Tilemap MainMap => _mainMap;
     public Tilemap WallMap => _wallMap;
 
-    public TilemapManager(Transform tilemapObject)
+    private void Awake()
     {
-        _wallMap = tilemapObject.Find("Wall").GetComponent<Tilemap>();
-        _mainMap = tilemapObject.Find("Ground").GetComponent<Tilemap>();
+        Instance = this;
         _mainMap.CompressBounds();
     }
 

@@ -1,22 +1,25 @@
+using Astar;
 using DG.Tweening;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
 {
     [field: SerializeField] public EnemyDataSO EnemyData { get; protected set; }
-    Enemy enemy;
+    protected Enemy enemy;
+    public Navigation Nav;
 
     protected override void Awake()
     {
         enemy = GetComponent<Enemy>();
         EnemyData = Instantiate(EnemyData);
-        spriteRender = GetComponent<SpriteRenderer>();
-    }
+        Nav = new(enemy);
 
-    private void Start()
-    {
-        enemy.TargetTrm = GameManager.Instance.player;   
+        spriteRender = GetComponent<SpriteRenderer>();
+        lineRenderer = GetComponent<LineRenderer>();
+        
     }
 
     protected override void Update()
@@ -35,5 +38,14 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
     public void ChangeColor(Color color)
     {
         spriteRender.DOColor(color, 0.25f);
+    }
+
+    private LineRenderer lineRenderer;
+    public void PrintRoute(List<Vector3Int> route)
+    {
+        if (route.Count < 2 || route == null) return;
+        lineRenderer.positionCount = route.Count;
+
+        lineRenderer.SetPositions(route.Select(p => TilemapManager.Instance.GetWorldPos(p)).ToArray());
     }
 }

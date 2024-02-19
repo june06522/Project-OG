@@ -14,4 +14,6 @@ public class RoomInfo
     public int x; // 위치인덱스X
     public int y; // 위치인덱스Y
     public RoomType roomType = RoomType.normalRoom;
+    public BoundsInt bound;
+    public Vector3 pos;
 }

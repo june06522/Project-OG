@@ -4,18 +4,18 @@ namespace Astar
 {
     public enum NodeType
     {
-        Close,
-        Open,
+        MoveAble, //이동할 수 있는
+        Locomobile, //이동할 수 없는
     }
 
     public class Node : System.IComparable<Node>
     {
         public Node Parent;
         public Vector3Int Pos;
+        public NodeType Type;
         public int Weight; // 가중치
         public int F;
         public int G;
-        public int H;
 
         public int CompareTo(Node other)
         {
@@ -52,11 +52,8 @@ namespace Astar
         public void Reset()
         {
             Parent = null;
-            Pos = default(Vector3Int);
-            Weight = default(int);
             F = default(int);
             G = default(int);
-            H = default(int);
         }
 
     }

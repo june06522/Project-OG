@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Enemy : MonoBehaviour, IHitAble
 {
@@ -13,18 +14,37 @@ public class Enemy : MonoBehaviour, IHitAble
     private int curHp;
 
     public event Action DeadEvent;
-
-
     private new Collider2D collider;
+
     public Collider2D Collider => collider;
 
     public Transform TargetTrm { get; set; }
+    public RoomInfo RoomInfo { get; private set; } //내가 지금 위치해있는 room정보;
+
+    //Debug
+    [SerializeField]
+    private Tilemap _mainMap;
+    [SerializeField]
+    private Tilemap _wallMap;
 
     private void Awake()
     {
         curHp = enemyDataSO.MaxHP;
         DeadEvent += DieEvent;
         collider = GetComponent<Collider2D>();
+        TargetTrm = GameObject.Find("Player").GetComponent<Transform>();
+        
+        //Debug 나중에 한곳에서 할당해줘야함.
+        SetRoomInfo(new RoomInfo()
+        {
+            bound = _mainMap.cellBounds,
+            pos = _mainMap.transform.position,
+        });
+    }
+
+    public void SetRoomInfo(RoomInfo curRoom)
+    {
+        RoomInfo = curRoom;
     }
 
     public void Hit(float damage)

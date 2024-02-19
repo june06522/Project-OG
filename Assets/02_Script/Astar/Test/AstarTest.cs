@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Astar;
 using UnityEngine.Tilemaps;
+using System.Linq;
 
 public class AstarTest : MonoBehaviour
 {
@@ -13,35 +14,34 @@ public class AstarTest : MonoBehaviour
     Transform controllerTrm;
     [SerializeField]
     Transform playerTrm;
+    [SerializeField]
+    LineRenderer lineRenderer;
 
     Navigation manager;
+    List<Vector3Int> route;
+    int moveIdx;
 
-    List<int> list = new List<int>() { 5,2,1,3,4,6,8,9,0, 10};
-    private void Awake()
+    private void Start()
     {
-        Heap heap = new Heap(10);
-        for(int i = 0; i< 10; i++)
-        {
-            Node node = new Node();
-            node.F = list[i];
-            heap.Push(node);
-        }
-        
-        Debug.Log($"heapCOunt : {heap.Count}");
-        Debug.Log($"heapRoot : {heap.Root.F}");
+        manager = new Navigation(testEnemy);
+        route = manager.UpdateNav(testEnemy.TargetTrm.position);
+        PrintRoute();
+    }
 
-        for(int i = 0; i < 10; i++)
-        {
-            Node node = heap.Pop();
-            Debug.Log($"heapRoot : {node.F}");
-        }
+    private void PrintRoute()
+    {
+        if (route.Count < 2 || route == null) return;
+        lineRenderer.positionCount = route.Count;
 
-        manager = new Navigation(Vector3.zero, tilemap.cellBounds, testEnemy);
+        lineRenderer.SetPositions(route.Select(p => TilemapManager.Instance.GetWorldPos(p)).ToArray());
     }
 
     private void Update()
     {
-        manager.UpdateNav();
+        route = manager.UpdateNav(testEnemy.TargetTrm.position);
+        Debug.Log(route);
+        PrintRoute();
+
     }
 
 

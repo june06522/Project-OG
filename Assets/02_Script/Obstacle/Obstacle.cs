@@ -13,5 +13,6 @@ public class Obstacle : MonoBehaviour
 {
     [SerializeField] LayerMask layer;
     [SerializeField] EObstacleType _type;
+    public int Weight = 0;
     public EObstacleType Type => _type;
 }

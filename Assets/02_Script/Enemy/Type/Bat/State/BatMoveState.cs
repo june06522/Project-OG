@@ -8,7 +8,7 @@ public class BatMoveState : BatEnemyRootState
     ChaseAction<EBatState> chaseAct;
     public BatMoveState(BatStateController controller) : base(controller)
     {
-        chaseAct = new ChaseAction<EBatState>( controller, GameManager.Instance.player);
+        chaseAct = new ChaseAction<EBatState>( controller, GameManager.Instance.player, false);
     }
 
     protected override void EnterState()

@@ -1,10 +1,10 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class PatrolAction<T> : BaseAction<T> where T : Enum
 {
-
     Vector3 targetPos;
     float patrolRadius;
     bool idle;
@@ -14,6 +14,12 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
 
     Transform debuggingTrm;
 
+    //Find Route
+    int moveIdx;
+    Vector3 nextPos;
+    Vector3Int currentPos;
+    List<Vector3Int> route;
+
     public PatrolAction(BaseFSM_Controller<T> controller, Transform debugTarget) : base(controller)
     {
         debuggingTrm = debugTarget;
@@ -22,11 +28,14 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
         idle = false;
         idleTime = controller.EnemyData.IdleTime;
         idleCor = null;
+        route = new();
     }
 
     public override void OnEnter()
     {
         idle = true;
+        moveIdx = 0;
+        route.Clear();
         StartIdleCor(idleTime);
   
         controller.ChangeColor(Color.white);
@@ -42,19 +51,41 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     {
         if (idle) return;
 
-        Vector3 dir = (targetPos - controller.transform.position).normalized;
-        controller.transform.position += dir * _data.Speed * Time.deltaTime;
-
-        //목적지에 도착
-        if (Vector3.Distance(targetPos, controller.transform.position) < 0.05f)
+        Vector3 dir = nextPos - controller.transform.position;
+        controller.transform.position += dir.normalized * _data.Speed * Time.deltaTime;
+        if (dir.magnitude <= 0.05f)
         {
+            SetNextTarget();
+        }
+
+        controller.PrintRoute(route);
+    }
+
+    private void SetNextTarget()
+    {
+        if (moveIdx >= route.Count)
+        {
+            //목적지에 도착
+
             idle = true;
             float idleTime = Random.Range(this.idleTime - 0.3f, this.idleTime + 0.3f);
 
             StartIdleCor(idleTime);
+
+            return;
         }
+        currentPos = route[moveIdx];
+        nextPos = TilemapManager.Instance.GetWorldPos(currentPos);
+        moveIdx++;
     }
 
+    private void SetToMove()
+    {
+        targetPos = FindRandomPoint(controller.transform.position);
+        route = controller.Nav.UpdateNav(targetPos); //경로 검색
+        moveIdx = 0;
+        idle = false;
+    }
     private void StartIdleCor(float idleTime)
     {
         StopCoroutine(idleCor);
@@ -66,34 +97,27 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
                       () => SetToMove())
               );
     }
-
     private Vector2 FindRandomPoint(Vector2 pos)
     {
-        Vector2 randomPointOnCircle = UnityEngine.Random.insideUnitSphere;
-        randomPointOnCircle.Normalize();
-        randomPointOnCircle *= patrolRadius;
+        //Vector2 randomPointOnCircle = UnityEngine.Random.insideUnitSphere;
+        //randomPointOnCircle.Normalize();
+        //randomPointOnCircle *= patrolRadius;
 
-        Vector2 targetTrm = randomPointOnCircle + pos;
-        Vector2 dir = (targetTrm - pos).normalized;
+        //Vector2 targetTrm = randomPointOnCircle + pos;
+        //Vector2 dir = (targetTrm - pos).normalized;
 
 
-        RaycastHit2D hit = Physics2D.Raycast(pos, dir, patrolRadius, _data.ObstacleLayer);
+        //RaycastHit2D hit = Physics2D.Raycast(pos, dir, patrolRadius, _data.ObstacleLayer);
 
-        if (hit.collider != null)
-            targetTrm = hit.point - dir;
+        //if (hit.collider != null)
+        //    targetTrm = hit.point - dir;
 
-        SetTarget(targetTrm);
-        return targetTrm;
+        //SetTarget(targetTrm);
+        //return targetTrm;
     }
-
-    private void SetToMove()
-    {
-        targetPos = FindRandomPoint(controller.transform.position);
-        idle = false;
-    }
-
     public void SetTarget(Vector2 target)
     {
         this.debuggingTrm.position = target;
     }
+
 }

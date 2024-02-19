@@ -1,16 +1,14 @@
-
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 
 namespace Astar
 {
     public class Navigation
     {
-        List<Node> roomNodes;
+        List<Node> roomNodes; // 맵에 미리 구워놓고 그걸로 판단하려면 얘 살려야함. 나중에 최적화용.
+        List<Node> roomWallNodes;
+
         List<Node> closeNodes;
         Heap openNodes;
 
@@ -19,73 +17,92 @@ namespace Astar
         
         Collider2D conCol;
         Transform conTrm;
-        Transform targetTrm;
+        //Transform targetTrm;
         LayerMask restrictLayer;
 
         Vector3Int currentPos;
         Vector3Int targetPos;
 
-        List<Vector3Int> route;
-
-
-        public Navigation(Vector3 roomWorldPos, BoundsInt roomBounds, Enemy enemy)
+        public Navigation(Enemy enemy)
         {
-            this.roomWorldPos = TilemapManager.Instance.GetTilePos(roomWorldPos);
-            this.roomBounds = roomBounds;
+            this.roomWorldPos = TilemapManager.Instance.GetTilePos(enemy.RoomInfo.pos);
+            this.roomBounds = enemy.RoomInfo.bound;
 
             this.conCol = enemy.Collider;
             this.conTrm = enemy.transform;
-            this.targetTrm = enemy.TargetTrm;
+            //this.targetTrm = enemy.TargetTrm;
             this.restrictLayer = enemy.EnemyDataSO.RestrictMovementLayer;
 
             currentPos = TilemapManager.Instance.GetTilePos(conTrm.position);
-            targetPos = TilemapManager.Instance.GetTilePos(targetTrm.position);
+            //targetPos = TilemapManager.Instance.GetTilePos(targetTrm.position);
 
+            Bake(roomBounds);
+        }
 
-            roomNodes = NodeGenerator.MakeNode(this.roomWorldPos, roomBounds);
-            openNodes = new Heap(roomNodes.Count);
+        //맵에 노드 할당
+        public void Bake(BoundsInt roomBounds)
+        {
+            roomNodes = NodeGenerator.MakeNode(this.roomWorldPos, roomBounds, out roomWallNodes);
+            openNodes = new Heap(100);
             closeNodes = new();
         }
 
+        public Vector3 GetRandomPos()
+        {
+            return Random.Range(0, roomNodes.Count);
+        }
 
-        public void UpdateNav()
+        public List<Vector3Int> UpdateNav(Vector3 target)
         {
             openNodes.Clear();
             closeNodes.Clear();
-            roomNodes.ForEach(node => { node.Reset(); });
+            //roomNodes.ForEach((node) => node.Reset());
 
             currentPos = TilemapManager.Instance.GetTilePos(conTrm.position);
-            targetPos = TilemapManager.Instance.GetTilePos(targetTrm.position);
+            targetPos = TilemapManager.Instance.GetTilePos(target);
 
-            Node firstNode = roomNodes.Find((node) => node.Pos == currentPos);
-            openNodes.Push(firstNode);
+            //Node firstNode =
+            //    roomNodes.Find((node) => node.Pos == currentPos);
 
-            Node targetNode = roomNodes.Find((node) => node.Pos == targetPos);
-
+            openNodes.Push(new Node
+            { 
+                Pos = currentPos,
+                Parent = null,
+                G = 0,
+                F = CalcH(currentPos)
+            });
 
             bool result = false;
-            while (openNodes.Count != 0)
+            while (openNodes.Count > 0)
             {
                 Node openNode = openNodes.Pop();
-                closeNodes.Add(openNode);
                 FindOpenList(openNode);
+                closeNodes.Add(openNode);
 
-                if (openNodes.Root == targetNode)
+                if (openNode.Pos == targetPos)
                 {
                     result = true;
                     break;
                 }
             }
 
-            if(result)
+            List<Vector3Int> route = new();
+            if (result)
             {
-                closeNodes.Reverse();
-                closeNodes.ForEach((node) => route.Add(node.Pos));
+                Node last = closeNodes[closeNodes.Count - 1];
+                while (last.Parent != null)
+                {
+                    route.Add(last.Pos);
+                    last = last.Parent;
+                }
+                route.Reverse();
             }
             else
             {
                 Debug.Log("길이 없음");
             }
+            return route;
+
         }
 
         private void FindOpenList(Node n)
@@ -161,6 +178,11 @@ namespace Astar
 
             return TilemapManager.Instance.HasWallTile(pos) == false;
         }
+
+        //public Node GetNode(Vector3Int pos)
+        //{
+        //    return roomNodes.Find((node) => node.Pos == pos);
+        //}
     }
 }
 

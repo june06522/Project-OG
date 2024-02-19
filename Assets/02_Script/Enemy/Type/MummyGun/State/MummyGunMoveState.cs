@@ -7,7 +7,7 @@ public class MummyGunMoveState : MummyGunRootState
     ChaseAction<EMummyGunState> chaseAct;
     public MummyGunMoveState(MummyGunStateController controller) : base(controller)
     {
-        chaseAct = new ChaseAction<EMummyGunState>(controller, GameManager.Instance.player);
+        chaseAct = new ChaseAction<EMummyGunState>(controller, GameManager.Instance.player, true);
     }
 
     protected override void EnterState()
