@@ -105,7 +105,6 @@ public class SkillContainer : MonoBehaviour
     public Skill GetSKill(int i, int j)
     {
 
-        Debug.Log(2);
         if (weaponList.Count > i && weaponList[i].skillList.Count > j)
         {
 

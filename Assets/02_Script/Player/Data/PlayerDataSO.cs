@@ -102,6 +102,7 @@ public class PlayerDataSO : ScriptableObject
     private IEnumerator ApplyModiyfyCo(PlayerStatsType type, float modifyValue, float duration)
     {
 
+        Debug.Log(modifyValue);
         playerStatsContainer[type].AddModify(modifyValue);
         yield return new WaitForSeconds(duration);
         playerStatsContainer[type].RemoveModify(modifyValue);

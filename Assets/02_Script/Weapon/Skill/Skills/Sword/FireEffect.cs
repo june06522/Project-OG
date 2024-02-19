@@ -17,10 +17,18 @@ public class FireEffect : MonoBehaviour
 
     private void Init(float value)
     {
-        _renderer = GetComponent<SpriteRenderer>();
+
         Data = data.CreateBulletData();
-        Destroy(gameObject, value);
-        _renderer.DOFade(0, value);
+
+        _renderer = GetComponent<SpriteRenderer>();
+        _renderer.DOFade(1, 0.3f);
+
+        Destroy(gameObject, value + 0.1f);
+
+        DOTween.Sequence().
+            AppendInterval(value - 0.2f).
+            Append(_renderer.DOFade(0, 0.3f));
+
 
     }
 
@@ -34,18 +42,28 @@ public class FireEffect : MonoBehaviour
 
     private void Tick(float damage, float time, Transform hitable)
     {
+
         var a = hitable.AddComponent<DamageOverTick>();
+        a.Init(damage, time);
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
 
+        Debug.Log(collision.name);
+
         if (collision.TryGetComponent<IHitAble>(out var hitable))
         {
 
-
-            if (!hitAbles.Contains(hitable))
+            if (collision.CompareTag("Player"))
             {
+
+            }
+            else
+            {
+
+                Debug.Log("tick");
                 Tick(damage, 3, collision.transform);
 
             }
@@ -53,4 +71,5 @@ public class FireEffect : MonoBehaviour
         }
 
     }
+
 }

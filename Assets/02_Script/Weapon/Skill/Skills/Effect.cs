@@ -15,6 +15,7 @@ public class Effect : MonoBehaviour
 
     private void Init(float value)
     {
+
         _renderer = GetComponent<SpriteRenderer>();
         Data = data.CreateBulletData();
         Destroy(gameObject, value);
@@ -22,7 +23,7 @@ public class Effect : MonoBehaviour
 
     }
 
-    public void Shoot(float damage, float  lifeTime)
+    public void Shoot(float damage, float lifeTime)
     {
 
         this.damage = damage;
@@ -36,9 +37,19 @@ public class Effect : MonoBehaviour
         if (collision.TryGetComponent<IHitAble>(out var hitable))
         {
 
-            hitable.Hit(damage);
+            if (collision.CompareTag("Player"))
+            {
+
+            }
+            else
+            {
+
+                hitable.Hit(damage);
+
+            }
 
         }
 
     }
+
 }
