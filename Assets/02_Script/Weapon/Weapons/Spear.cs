@@ -5,9 +5,11 @@ using UnityEngine;
 public class Spear : InvenWeapon
 {
     GameObject visual;
+    [SerializeField] ExtraSpear extra;
     [SerializeField] private float _stingBackTime = 0.2f;
-    public bool _isAttack = false;
 
+    public bool _isAttack = false;
+    float elapsedTime = 0;
     SpriteRenderer _spriteRenderer;
 
     protected override void Awake()
@@ -53,6 +55,11 @@ public class Spear : InvenWeapon
 
     }
 
+    public void AttackImmediately()
+    {
+        elapsedTime = float.MaxValue;
+        Attack(target);
+    }
 
     private IEnumerator Sting(Transform trm)
     {
@@ -60,7 +67,7 @@ public class Spear : InvenWeapon
         Vector3 startPosition = visual.transform.position;
         Vector3 endPosition = trm.position;
 
-        float elapsedTime = 0f;
+        elapsedTime = 0f;
 
         while (elapsedTime < _stingBackTime)
         {
