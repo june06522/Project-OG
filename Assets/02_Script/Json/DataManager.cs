@@ -9,11 +9,13 @@ public class DataManager : MonoBehaviour
 
     #region 데이터 생성
     public SoundData soundData = new SoundData();
+    public KeyData keyData = new KeyData();
     #endregion
 
     #region 경로 지정
     private string _path;
     private string _soundFileName = "/SoundData.json";
+    private string _keyFileName = "/KeyData.json";
     #endregion
 
     private void Awake()
@@ -45,12 +47,23 @@ public class DataManager : MonoBehaviour
             soundData.BGMSoundVal = 0.5f;
             soundData.SFXSoundVal = 0.5f;
             SaveOption();
+
+            keyData.up = KeyCode.W;
+            keyData.down = KeyCode.S;
+            keyData.left = KeyCode.A;
+            keyData.right = KeyCode.D;
+            keyData.dash = KeyCode.Space;
+            keyData.inven = KeyCode.E;
+            keyData.action = KeyCode.F;
+            keyData.map = KeyCode.M;
+            SaveKey();
         }
         #endregion
         #region 있으면 불러오기
         else
         {
             LoadOption();
+            LoadKey();
         }
         #endregion
     }
@@ -70,10 +83,26 @@ public class DataManager : MonoBehaviour
     }
     #endregion
 
+    #region 키 데이터
+    public void SaveKey()
+    {
+        string data = JsonUtility.ToJson(keyData);
+        File.WriteAllText(_path + _keyFileName, data);
+    }
+
+    public void LoadKey()
+    {
+        string data = File.ReadAllText(_path + _keyFileName);
+        keyData = JsonUtility.FromJson<KeyData>(data);
+    }
+    #endregion
+
     public void DataClear()
     {
         soundData = new SoundData();
+        keyData = new KeyData();
         SaveOption();
+        SaveKey();
     }
 
     public bool GetDir()
