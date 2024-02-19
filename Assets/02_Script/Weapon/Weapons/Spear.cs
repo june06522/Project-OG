@@ -57,12 +57,16 @@ public class Spear : InvenWeapon
 
     public void AttackImmediately()
     {
+
         elapsedTime = float.MaxValue;
-        Attack(target);
+        if (target != null)
+            Attack(target);
+
     }
 
     private IEnumerator Sting(Transform trm)
     {
+
         _isAttack = true;
         Vector3 startPosition = visual.transform.position;
         Vector3 endPosition = trm.position;
@@ -71,15 +75,18 @@ public class Spear : InvenWeapon
 
         while (elapsedTime < _stingBackTime)
         {
+
             visual.transform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / _stingBackTime);
             elapsedTime += Time.deltaTime;
             yield return null;
+
         }
 
         trm.GetComponent<IHitAble>().Hit(Data.AttackDamage.GetValue());
         visual.transform.position = endPosition;
         _isAttack = false;
         //visual.transform.localPosition = this.startPosition;
+
     }
 
     protected override void RotateWeapon(Transform target)
