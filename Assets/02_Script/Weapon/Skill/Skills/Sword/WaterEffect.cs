@@ -34,7 +34,7 @@ public class WaterEffect : MonoBehaviour
         target = parent;
         Init(lifeTime);
 
-        GameManager.Instance.player.GetComponent<PlayerController>().playerData.AddModify(PlayerStatsType.MoveSpeed, damage, lifeTime);
+        GameManager.Instance.player.GetComponent<PlayerController>().playerData.AddModify(PlayerStatsType.MoveSpeed, Data.Damage, lifeTime);
 
     }
 

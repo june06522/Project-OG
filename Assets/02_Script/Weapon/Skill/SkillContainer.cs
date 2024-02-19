@@ -32,7 +32,7 @@ public enum WeaponID
     Pistol,     // ÇÇ½ºÅç
     Crossbow,   // ¼®±Ã
     Bow,        // È°
-    Slongshot,  // »õÃÑ
+    Slingshot,  // »õÃÑ
     Stone,      // Â¯µ¹
     Kunai,      // Äí³ªÀÌ
     Monkey,     // ¸ùÅ°½ºÆÐ³Ê
@@ -48,7 +48,6 @@ public enum WeaponID
     Hammer,     // ¸ÁÄ¡
     Pickaxe,    // °î±ªÀÌ
     Bat,        // ºüµû
-    Brick,      // º®µ¹
     Rope,       // ·ÎÇÁ
     Chain,      // ¼è»ç½½
 }

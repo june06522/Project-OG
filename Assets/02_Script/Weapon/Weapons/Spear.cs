@@ -69,6 +69,7 @@ public class Spear : InvenWeapon
             yield return null;
         }
 
+        trm.GetComponent<IHitAble>().Hit(Data.AttackDamage.GetValue());
         visual.transform.position = endPosition;
         _isAttack = false;
         //visual.transform.localPosition = this.startPosition;

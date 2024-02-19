@@ -13,6 +13,7 @@ public class FireSword : Skill
     {
 
         var f = Instantiate(fire, weaponTrm.position, quaternion.identity);
+        Debug.Log(power);
 
         f.Shoot(power * 5, power);
 
