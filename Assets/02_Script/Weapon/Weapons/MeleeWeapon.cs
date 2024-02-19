@@ -72,7 +72,7 @@ public class MeleeWeapon : Weapon
     //    _playerController.OnDashEvent -= DashSting;
     //}
 
-    protected override void Attack(Transform target)
+    public override void Attack(Transform target)
     {
         if (_doAttack)
         {

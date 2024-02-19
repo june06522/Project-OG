@@ -51,7 +51,7 @@ public abstract class Weapon : MonoBehaviour
 
     }
 
-    protected abstract void Attack(Transform target);
+    public abstract void Attack(Transform target);
 
     public virtual void OnRePosition() { }
 

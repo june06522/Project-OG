@@ -7,9 +7,9 @@ using UnityEngine;
 public class Skill : MonoBehaviour
 {
 
-    public virtual void Excute(Transform weaponTrm, Transform target, int power)
+    public virtual void Excute(Transform weaponTrm, Transform target, int power, Guid guid)
     {
-        Debug.Log($"{weaponTrm} 아직 스킬 안만들어짐");
+
     }
 
 }

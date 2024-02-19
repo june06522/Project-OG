@@ -4,12 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-[CreateAssetMenu(menuName = "SendData")]
-public class SendDataSO : ScriptableObject
+public class SendData : MonoBehaviour
 {
-    [SerializeField]
+    public SendData(WeaponType wepaonType, GeneratorID generatorID)
+    {
+        this.weaponType = wepaonType;
+        this.generatorID = generatorID;
+        power = 1;
+    }
+
     private WeaponType weaponType;
-    [SerializeField]
     private GeneratorID generatorID;
     private int power;
 

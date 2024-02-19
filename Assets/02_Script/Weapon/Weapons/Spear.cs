@@ -5,9 +5,11 @@ using UnityEngine;
 public class Spear : InvenWeapon
 {
     GameObject visual;
+    [SerializeField] ExtraSpear extra;
     [SerializeField] private float _stingBackTime = 0.2f;
-    public bool _isAttack = false;
 
+    public bool _isAttack = false;
+    float elapsedTime = 0;
     SpriteRenderer _spriteRenderer;
 
     protected override void Awake()
@@ -32,16 +34,16 @@ public class Spear : InvenWeapon
 
     }
 
-    [BindExecuteType(typeof(SendDataSO))]
-    public override void GetSignal([BindParameterType(typeof(SendDataSO))] object signal)
+    [BindExecuteType(typeof(SendData))]
+    public override void GetSignal([BindParameterType(typeof(SendData))] object signal)
     {
 
-        var data = (SendDataSO)signal;
-        SkillManager.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
+        var data = (SendData)signal;
+        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power, WeaponGuid);
 
     }
 
-    protected override void Attack(Transform target)
+    public override void Attack(Transform target)
     {
 
         if (!_isAttack)
@@ -53,6 +55,11 @@ public class Spear : InvenWeapon
 
     }
 
+    public void AttackImmediately()
+    {
+        elapsedTime = float.MaxValue;
+        Attack(target);
+    }
 
     private IEnumerator Sting(Transform trm)
     {
@@ -60,7 +67,7 @@ public class Spear : InvenWeapon
         Vector3 startPosition = visual.transform.position;
         Vector3 endPosition = trm.position;
 
-        float elapsedTime = 0f;
+        elapsedTime = 0f;
 
         while (elapsedTime < _stingBackTime)
         {
@@ -69,6 +76,7 @@ public class Spear : InvenWeapon
             yield return null;
         }
 
+        trm.GetComponent<IHitAble>().Hit(Data.AttackDamage.GetValue());
         visual.transform.position = endPosition;
         _isAttack = false;
         //visual.transform.localPosition = this.startPosition;
