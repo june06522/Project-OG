@@ -24,9 +24,17 @@ public class PlayerInputController : IDisposable
 
     private void CheckMovementKeyInput()
     {
+        float x = 0;// = Input.GetAxisRaw("Horizontal");
+        float y = 0;// = Input.GetAxisRaw("Vertical");
+        if(Input.GetKey(KeyCode.W))
+            y += 1;
+        if (Input.GetKey(KeyCode.S))
+            y -= 1;
+        if (Input.GetKey(KeyCode.D))
+            x += 1;
+        if (Input.GetKey(KeyCode.A))
+            x -= 1;
 
-        float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
 
         MoveDir = new Vector2(x, y).normalized;
 

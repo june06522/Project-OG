@@ -73,7 +73,6 @@ public class SoundManager : MonoBehaviour
         _data.MasterSoundVal = val;
         DataManager.Instance.soundData = _data;
         DataManager.Instance.SaveOption();
-        Debug.Log("가무짭짭");
     }
 
     public void BGSoundVolume(float val)
