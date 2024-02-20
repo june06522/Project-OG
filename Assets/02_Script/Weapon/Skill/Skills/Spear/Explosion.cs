@@ -7,10 +7,10 @@ public class Explosion : Skill
 {
 
 
-    public override void Excute(Transform weaponTrm, Transform target, int power, Guid guid)
+    public override void Excute(Transform weaponTrm, Transform target, int power, InvenWeapon weapon)
     {
 
-            
+
 
     }
 

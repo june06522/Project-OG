@@ -8,7 +8,7 @@ public class SwordWater : Skill
 
     [SerializeField] WaterEffect water;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power, Guid guid)
+    public override void Excute(Transform weaponTrm, Transform target, int power, InvenWeapon weapon)
     {
         
         var w = Instantiate(water, weaponTrm.position, Quaternion.identity);

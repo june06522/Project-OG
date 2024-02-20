@@ -8,7 +8,7 @@ public class DoublePistol : Skill
     [SerializeField] private Bullet bullet;
     [SerializeField] float damage;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power, Guid guid)
+    public override void Excute(Transform weaponTrm, Transform target, int power, InvenWeapon weapon)
     {
 
         StartCoroutine(Shooting(weaponTrm, target, power));

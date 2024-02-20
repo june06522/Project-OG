@@ -7,8 +7,10 @@ using UnityEngine;
 public class Skill : MonoBehaviour
 {
 
-    public virtual void Excute(Transform weaponTrm, Transform target, int power, Guid guid)
+    public virtual void Excute(Transform weaponTrm, Transform target, int power)
     {
+
+
 
     }
 
