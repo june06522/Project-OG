@@ -13,14 +13,14 @@ public class SwordDouble : Skill
 
     [SerializeField] GameObject sword;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power, Guid guid)
+    public override void Excute(Transform weaponTrm, Transform target, int power)
     {
 
-        StartCoroutine(SkillCo(weaponTrm, target, power, guid));
+        StartCoroutine(SkillCo(weaponTrm, target, power));
 
     }
 
-    IEnumerator SkillCo(Transform weaponTrm, Transform target, int power, Guid guid)
+    IEnumerator SkillCo(Transform weaponTrm, Transform target, int power)
     {
 
         var a = Instantiate(sword, weaponTrm.position, weaponTrm.rotation);
