@@ -121,8 +121,8 @@ public class WeaponInventory : MonoBehaviour
         if(CheckFills(item.bricks, origin))
         {
 
-            container.Add(item);
             item.originPos = origin;
+            container.Add(item);
             FillSlots(item.bricks, origin, true);
             return true;
 

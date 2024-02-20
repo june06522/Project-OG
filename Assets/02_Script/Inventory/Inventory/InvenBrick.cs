@@ -33,17 +33,17 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void Setting()
     {
-        bool isControllerSetActive = GameManager.Instance.InventoryActive.inven.activeSelf == false;
+        //bool isControllerSetActive = GameManager.Instance.InventoryActive.inven.activeSelf == false;
 
-        if (isControllerSetActive)
-        {
-            GameManager.Instance.InventoryActive.inven.SetActive(true);
-        }
+        //if (isControllerSetActive)
+        //{
+        //    GameManager.Instance.InventoryActive.inven.SetActive(true);
+        //}
 
         Settings();
 
-        if (isControllerSetActive)
-            GameManager.Instance.InventoryActive.inven.SetActive(false);
+        //if (isControllerSetActive)
+        //    GameManager.Instance.InventoryActive.inven.SetActive(false);
     }
 
     private void Update()
@@ -53,7 +53,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
 
             transform.position = Input.mousePosition;
-
+             
         }
 
     }
@@ -73,11 +73,6 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             return;
 
         }
-
-        // 잘못 설치 후 돌아갈떄
-        // 아이템이 추가가 안됌(addItem에서 걸림)
-        // 와이라노...
-        // 
 
         if (inventory.CheckFills(InvenObject.bricks, point.Value))
         {
@@ -114,6 +109,6 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         isDrag = true;
         inventory.RemoveItem(InvenObject, InvenObject.originPos);
-
+        Debug.Log(InvenObject.originPos); 
     }
 }

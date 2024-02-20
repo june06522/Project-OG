@@ -1,27 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryActive : MonoBehaviour
 {
     [HideInInspector]
-    public GameObject inven;
+    public Image[] images;
 
-    private void Awake()
-    {
-        inven = transform.GetChild(0).gameObject;
-    }
-
-    private void Start()
-    {
-        inven.SetActive(false);
-    }
+    bool isOn = false;
 
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.E))
         {
-            inven.SetActive(!inven.activeSelf);
+            isOn = !isOn;
+        }
+
+        images = GetComponentsInChildren<Image>();
+        foreach (var image in images)
+        {
+
+            image.enabled = isOn;
         }
     }
 }
