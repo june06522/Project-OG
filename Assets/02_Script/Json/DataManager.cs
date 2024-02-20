@@ -13,8 +13,9 @@ public class DataManager : MonoBehaviour
     #endregion
 
     #region 경로 지정
-    private string _path;
+    private string _savePath;
     private string _soundFileName = "/SoundData.json";
+    private string _keyPath;
     private string _keyFileName = "/KeyData.json";
     #endregion
 
@@ -31,7 +32,8 @@ public class DataManager : MonoBehaviour
 
         #endregion
 
-        _path = Path.Combine(Application.persistentDataPath, "save");
+        _savePath = Path.Combine(Application.persistentDataPath, "save");
+        _keyPath = Path.Combine(Application.persistentDataPath, "key");
 
         JsonLoad();
     }
@@ -40,14 +42,24 @@ public class DataManager : MonoBehaviour
     public void JsonLoad()
     {
         #region 경로가 없으면 생성
-        if (!GetDir())
+        if (!GetDirOption())
         {
-            Directory.CreateDirectory(_path);
+            Directory.CreateDirectory(_savePath);
             soundData.MasterSoundVal = 0.5f;
             soundData.BGMSoundVal = 0.5f;
             soundData.SFXSoundVal = 0.5f;
             SaveOption();
+        }
+        #endregion
+        #region 있으면 불러오기
+        else
+            LoadOption();
+        #endregion
 
+        #region 키
+        if (!GetDirKey())
+        {
+            Directory.CreateDirectory(_keyPath);
             keyData.up = KeyCode.W;
             keyData.down = KeyCode.S;
             keyData.left = KeyCode.A;
@@ -58,13 +70,8 @@ public class DataManager : MonoBehaviour
             keyData.map = KeyCode.M;
             SaveKey();
         }
-        #endregion
-        #region 있으면 불러오기
         else
-        {
-            LoadOption();
             LoadKey();
-        }
         #endregion
     }
     #endregion
@@ -73,12 +80,12 @@ public class DataManager : MonoBehaviour
     public void SaveOption()
     {
         string data = JsonUtility.ToJson(soundData);
-        File.WriteAllText(_path + _soundFileName, data);
+        File.WriteAllText(_savePath + _soundFileName, data);
     }
 
     public void LoadOption()
     {
-        string data = File.ReadAllText(_path + _soundFileName);
+        string data = File.ReadAllText(_savePath + _soundFileName);
         soundData = JsonUtility.FromJson<SoundData>(data);
     }
     #endregion
@@ -87,12 +94,12 @@ public class DataManager : MonoBehaviour
     public void SaveKey()
     {
         string data = JsonUtility.ToJson(keyData);
-        File.WriteAllText(_path + _keyFileName, data);
+        File.WriteAllText(_keyPath + _keyFileName, data);
     }
 
     public void LoadKey()
     {
-        string data = File.ReadAllText(_path + _keyFileName);
+        string data = File.ReadAllText(_keyPath + _keyFileName);
         keyData = JsonUtility.FromJson<KeyData>(data);
     }
     #endregion
@@ -105,8 +112,13 @@ public class DataManager : MonoBehaviour
         SaveKey();
     }
 
-    public bool GetDir()
+    public bool GetDirOption()
     {
-        return Directory.Exists(_path);
+        return Directory.Exists(_savePath);
+    }
+
+    public bool GetDirKey()
+    {
+        return Directory.Exists(_keyPath);
     }
 }

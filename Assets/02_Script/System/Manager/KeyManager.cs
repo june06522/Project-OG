@@ -47,14 +47,30 @@ public class KeyManager : MonoBehaviour
                 {
                     switch (curType)
                     {
-                        case KeyType.Up: up = k; break;
-                        case KeyType.Down: down = k; break;
-                        case KeyType.Left: left = k; break;
-                        case KeyType.Right: right = k; break;
-                        case KeyType.Dash: dash = k; break;
-                        case KeyType.Inven: inven = k; break;
-                        case KeyType.Action: action = k; break;
-                        case KeyType.Map: map = k; break;
+                        case KeyType.Up:
+                            up = k;
+                            DataManager.Instance.keyData.up = k; break;
+                        case KeyType.Down:
+                            down = k;
+                            DataManager.Instance.keyData.down = k; break;
+                        case KeyType.Left:
+                            left = k;
+                            DataManager.Instance.keyData.left = k; break;
+                        case KeyType.Right:
+                            right = k;
+                            DataManager.Instance.keyData.right = k; break;
+                        case KeyType.Dash:
+                            dash = k;
+                            DataManager.Instance.keyData.dash = k; break;
+                        case KeyType.Inven:
+                            inven = k;
+                            DataManager.Instance.keyData.inven = k; break;
+                        case KeyType.Action:
+                            action = k;
+                            DataManager.Instance.keyData.action = k; break;
+                        case KeyType.Map:
+                            map = k;
+                            DataManager.Instance.keyData.map = k; break;
                     }
                     isEncoding = false;
                     select.GetComponent<TextMeshProUGUI>().text = k.ToString();
@@ -65,11 +81,11 @@ public class KeyManager : MonoBehaviour
         }
     }
 
-    public void KeyChange(KeyType type,GameObject obj)
+    public void KeyChange(KeyType type, GameObject obj)
     {
         isEncoding = true;
         select = obj;
-        curType = KeyType.End;
+        curType = type;
     }
 
     public void KeyChange(GameObject obj)
