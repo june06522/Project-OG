@@ -1,15 +1,15 @@
-using UnityEditor;
 using System;
-using UnityEngine;
+using UnityEditor;
+
 
 public class WeaponItem
 {
-    public GUID guid;
+    public Guid guid;
 
     public WeaponItem()
     {
 
-        guid = GUID.Generate();
+        guid = Guid.NewGuid();
 
     }
 

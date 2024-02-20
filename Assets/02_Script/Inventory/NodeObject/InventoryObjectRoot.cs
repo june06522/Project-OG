@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public enum ConnectType
@@ -33,7 +31,7 @@ public abstract class InventoryObjectRoot : ScriptableObject
     public void OnCreated()
     {
 
-        guid = GUID.Generate().ToString();
+        guid = Guid.NewGuid().ToString();
 
     }
 
