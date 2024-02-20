@@ -6,7 +6,7 @@ public class FirePistol : Skill
     [SerializeField] Bullet fireBullet;
     [SerializeField] float damage;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power, InvenWeapon weapon)
+    public override void Excute(Transform weaponTrm, Transform target, int power)
     {
         Debug.Log(12);
 

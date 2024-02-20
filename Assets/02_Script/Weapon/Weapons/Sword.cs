@@ -27,7 +27,7 @@ public class Sword : InvenWeapon
     {
 
         var data = (SendData)signal;
-        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power, this);
+        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
 
     }
 

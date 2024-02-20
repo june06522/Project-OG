@@ -5,8 +5,8 @@ using UnityEngine;
 public class Spear : InvenWeapon
 {
     GameObject visual;
-    [SerializeField] ExtraSpear extra;
     [SerializeField] private float _stingBackTime = 0.2f;
+    //[SerializeField] private 
 
     public bool _isAttack = false;
     float elapsedTime = 0;
@@ -39,7 +39,7 @@ public class Spear : InvenWeapon
     {
 
         var data = (SendData)signal;
-        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power, this);
+        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
 
     }
 

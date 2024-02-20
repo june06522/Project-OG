@@ -9,7 +9,7 @@ public class FireSword : Skill
 
     [SerializeField] FireEffect fire;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power, InvenWeapon weapon)
+    public override void Excute(Transform weaponTrm, Transform target, int power)
     {
 
         var f = Instantiate(fire, weaponTrm.position, quaternion.identity);

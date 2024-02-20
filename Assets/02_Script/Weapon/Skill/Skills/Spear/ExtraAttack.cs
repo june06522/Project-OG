@@ -8,7 +8,7 @@ public class ExtraAttack : Skill
 
     [SerializeField] ExtraSpear extra;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power, InvenWeapon guid)
+    public override void Excute(Transform weaponTrm, Transform target, int power)
     {
 
         weaponTrm.GetComponent<Spear>().AttackImmediately();
