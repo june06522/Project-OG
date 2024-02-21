@@ -13,6 +13,7 @@ public abstract class Weapon : MonoBehaviour
 
     [field: SerializeField] public WeaponDataSO Data { get; protected set; }
     public Guid WeaponGuid { get; protected set; }
+    protected List<SkillFeedback> skillFeedbackContainter;
 
     protected virtual void Awake()
     {

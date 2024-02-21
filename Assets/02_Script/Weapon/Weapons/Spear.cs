@@ -49,6 +49,14 @@ public class Spear : InvenWeapon
         if (!_isAttack)
         {
 
+            foreach (var item in skillFeedbackContainter)
+            {
+                
+                item.Excute();
+                Destroy(item);
+
+            }
+
             StartCoroutine(Sting(target));
 
         }
