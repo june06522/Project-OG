@@ -18,6 +18,7 @@ public class RoomTileMap : MonoBehaviour
     [SerializeField] Tile[] round;
     [SerializeField] Tile[] bottomWall;
     [SerializeField] Tile loadtile;
+    [SerializeField] Tile bgTile;
 
     [Header("커스텀 방")]
     [SerializeField] List<CustomRoom> rooms;
@@ -46,6 +47,20 @@ public class RoomTileMap : MonoBehaviour
         roomGenarator = GetComponent<RoomGenarator>();
     }
 
+    private void BGTileSetting()
+    {
+        int x = roomGenarator.Width * roomGenarator.WidthLength / 2;
+        int y = roomGenarator.Height * roomGenarator.HeightLength / 2;
+        for(int i = -x; i < x; i++)
+        {
+            for(int j = -y; j < y; j++)
+            {
+                tile.SetTile(new Vector3Int(i, j, 0), bgTile);
+            }
+        }
+
+    }
+
     public void SetTileMap()
     {
         Shuffle();
@@ -69,6 +84,7 @@ public class RoomTileMap : MonoBehaviour
 
     private void PoltarRoom()
     {
+        BGTileSetting();
         for (int i = 0; i < roomGenarator.useRooms.Count(); ++i)
         {
             if (rooms.Count > 0 && i != 0)
@@ -102,16 +118,12 @@ public class RoomTileMap : MonoBehaviour
             for (int j = -select.width / 2; j < select.width / 2; j++)
             {
                 
-                tile.SetTile(new Vector3Int(j + x, k + y, 0), select.tilemap.GetTile(new Vector3Int(j, k, 0)));
+                if (select.tilemap.GetTile(new Vector3Int(j, k, 0)) != null)
+                    tile.SetTile(new Vector3Int(j + x, k + y, 0), select.tilemap.GetTile(new Vector3Int(j, k, 0)));
 
                 if (select.wallTilemap.GetTile(new Vector3Int(j, k, 0)) != null)
                 {
                     walltile.SetTile(new Vector3Int(j + x, k + y, 0), select.wallTilemap.GetTile(new Vector3Int(j, k, 0)));
-                    if (k == -select.height / 2)
-                    {
-                        walltile.SetTile(new Vector3Int(j + x, k + y - 1, 0), select.wallTilemap.GetTile(new Vector3Int(j, k - 1, 0)));
-                        walltile.SetTile(new Vector3Int(j + x, k + y - 2, 0), select.wallTilemap.GetTile(new Vector3Int(j, k - 2, 0)));
-                    }
                 }
             }
         }
