@@ -24,7 +24,7 @@ public class AstarTest : MonoBehaviour
     private void Start()
     {
         manager = new Navigation(testEnemy);
-        route = manager.UpdateNav(testEnemy.TargetTrm.position);
+        route = manager.GetRoute(testEnemy.TargetTrm.position);
         PrintRoute();
     }
 
@@ -38,7 +38,7 @@ public class AstarTest : MonoBehaviour
 
     private void Update()
     {
-        route = manager.UpdateNav(testEnemy.TargetTrm.position);
+        route = manager.GetRoute(testEnemy.TargetTrm.position);
         Debug.Log(route);
         PrintRoute();
 

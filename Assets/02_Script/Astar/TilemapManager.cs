@@ -14,8 +14,10 @@ public class TilemapManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null)
+            Destroy(Instance);
+
         Instance = this;
-        _mainMap.CompressBounds();
     }
 
     public bool HasWallTile(Vector3Int pos)
@@ -32,6 +34,5 @@ public class TilemapManager : MonoBehaviour
     {
         return _mainMap.GetCellCenterWorld(cellPos);
     }
-
 
 }

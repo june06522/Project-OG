@@ -8,66 +8,75 @@ namespace Astar
     public class Navigation
     {
         List<Node> roomNodes; // 맵에 미리 구워놓고 그걸로 판단하려면 얘 살려야함. 나중에 최적화용.
-        List<Node> roomWallNodes;
-
         List<Node> closeNodes;
         Heap openNodes;
 
         BoundsInt roomBounds;
-        Vector3Int roomWorldPos;
-        
+
         Collider2D conCol;
         Transform conTrm;
-        //Transform targetTrm;
+
         LayerMask restrictLayer;
 
         Vector3Int currentPos;
         Vector3Int targetPos;
 
-        public bool IsBaking { get; private set; }
+        public bool IsNavActive;
+
         public Navigation(Enemy enemy)
         {
-            this.roomWorldPos = TilemapManager.Instance.GetTilePos(enemy.RoomInfo.pos);
             this.roomBounds = enemy.RoomInfo.bound;
 
             this.conCol = enemy.Collider;
             this.conTrm = enemy.transform;
-            //this.targetTrm = enemy.TargetTrm;
+
             this.restrictLayer = enemy.EnemyDataSO.RestrictMovementLayer;
 
-            currentPos = TilemapManager.Instance.GetTilePos(conTrm.position);
-            //targetPos = TilemapManager.Instance.GetTilePos(targetTrm.position);
+           
+            int capacity = enemy.RoomInfo.bound.size.x * enemy.RoomInfo.bound.size.y;
+            openNodes = new Heap(capacity);
+            closeNodes = new List<Node>(capacity);
+            roomNodes = new List<Node>(capacity);
 
-            Bake(roomBounds);
+
+            NodeManager.Instance.BakeStartEvent += BakeStartEvent;
+            NodeManager.Instance.BakeEndEvent += BakeEndEvent;
         }
 
-        //맵에 노드 할당
-        public async void Bake(BoundsInt roomBounds)
+        ~Navigation()
         {
-            IsBaking = true;
-
-            NodeGenerator nodeGenerator = GameObject.Find("NodeGenerator").GetComponent<NodeGenerator>();
-            roomNodes = await nodeGenerator.MakeNode(this.roomWorldPos, roomBounds);
-            openNodes = new Heap(roomNodes.Count);
-            closeNodes = new();
-
-            IsBaking = false;
+            NodeManager.Instance.BakeEndEvent -= BakeEndEvent;
         }
 
-        public Vector3 GetRandomPos()
+        public void BakeStartEvent()
         {
+            IsNavActive = false;
+        }
+
+        public void BakeEndEvent()
+        {
+            roomNodes.Clear();
+            roomNodes = NodeManager.Instance.GetRoomNode(roomBounds);
+            IsNavActive = true;
+        }
+
+        public Vector3 GetRandomPos(Vector3 curPos, float distance)
+        {
+            Vector3Int pos = TilemapManager.Instance.GetTilePos(curPos);
             List<Node> moveAbleNodes = (from node in roomNodes
-                                        where node.Weight == 0 // 장애물, 벽 x
+                                        where node.Weight == 0 && (Vector3Int.Distance(node.Pos, pos) < distance) // 장애물, 벽 x
                                         select node).ToList();
 
+            Debug.Log(moveAbleNodes.Count);
             Vector3Int randomTilePos = moveAbleNodes[Random.Range(0, moveAbleNodes.Count)].Pos;
             Vector3 randomPos = TilemapManager.Instance.GetWorldPos(randomTilePos);
             return randomPos;
         }
 
-        public List<Vector3Int> UpdateNav(Vector3 target)
+        public List<Vector3Int> GetRoute(Vector3 target)
         {
-            if (IsBaking) return null;
+            if (IsNavActive == false) return null;
+            
             openNodes.Clear();
             closeNodes.Clear();
             roomNodes.ForEach((node) => node.Reset());
@@ -91,6 +100,9 @@ namespace Astar
 
             openNodes.Push(firstNode);
 
+            //FindOpenList(firstNode);
+
+
             bool result = false;
             while (openNodes.Count > 0)
             {
@@ -109,11 +121,21 @@ namespace Astar
             if (result)
             {
                 Node last = closeNodes[closeNodes.Count - 1];
+                route.Add(last.Pos);
                 while (last.Parent != null)
                 {
-                    route.Add(last.Pos);
+                    // 노드와 다음 노드 사이에 벽이 없으면 그냥 넣지 않는다
+                    Vector3 pos = TilemapManager.Instance.GetWorldPos(last.Pos);
+                    Vector3 dir = TilemapManager.Instance.GetWorldPos(targetPos) - pos;
+                    Vector2 size = conCol.bounds.size;
+                    float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                    if (Physics2D.BoxCast(pos, size, angle, dir.normalized, dir.magnitude, restrictLayer))
+                    {
+                        route.Add(last.Pos);
+                    }
                     last = last.Parent;
                 }
+                route.Add(last.Pos);
                 route.Reverse();
             }
             else
@@ -122,6 +144,38 @@ namespace Astar
             }
             return route;
 
+        }
+
+        public Vector3 GetNextPos(Vector3 target)
+        {
+            if (IsNavActive == false) return Vector3.positiveInfinity;
+
+            openNodes.Clear();
+            closeNodes.Clear();
+            roomNodes.ForEach((node) => node.Reset());
+
+            currentPos = TilemapManager.Instance.GetTilePos(conTrm.position);
+            targetPos = TilemapManager.Instance.GetTilePos(target);
+
+            Node firstNode =
+                roomNodes.Find((node) => node.Pos == currentPos);
+
+            if (firstNode == null)
+            {
+                firstNode = new Node
+                {
+                    Pos = currentPos,
+                    Parent = null,
+                    G = 0,
+                    F = CalcH(currentPos)
+                };
+            }
+
+            FindOpenList(firstNode);
+
+            Node openNode = openNodes.Pop();
+
+            return TilemapManager.Instance.GetWorldPos(openNode.Pos);
         }
 
         private void FindOpenList(Node n)
@@ -139,7 +193,7 @@ namespace Astar
 
                     if (CanMove(nextPos))
                     {
-                        int g = Mathf.RoundToInt((n.Pos - nextPos).magnitude) + n.G;
+                        float g = (n.Pos - nextPos).magnitude + n.G;
 
                         Node nextOpenNode = roomNodes.Find((node)=> node.Pos == nextPos);
                         if (nextOpenNode == null) continue;
@@ -152,6 +206,7 @@ namespace Astar
 
                         if (exist != null)
                         {
+                            
                             if (nextOpenNode.G < exist.G)
                             {
                                 exist.G = nextOpenNode.G;
@@ -168,10 +223,10 @@ namespace Astar
             }
         }
 
-        private int CalcH(Vector3Int pos)
+        private float CalcH(Vector3Int pos)
         {
             Vector3Int distance = targetPos - pos;
-            return Mathf.RoundToInt(distance.magnitude);
+            return distance.magnitude;
         }
 
         public bool CanMove(Vector3Int pos)
@@ -183,24 +238,20 @@ namespace Astar
                 return false;
             }
 
-            Vector2 nPos = new Vector2(pos.x, pos.y);
+            Vector3 nPos = TilemapManager.Instance.GetWorldPos(pos);
 
             if(restrictLayer != default(LayerMask))
             {
-                // 아예 못지나가는 장애물 체크
-                //if (Physics2D.OverlapBox(nPos, conCol.bounds.size, 0, restrictLayer) != null)
-                //{
-                //    return false;
-                //}
+                //아예 못지나가는 장애물 체크
+                if (Physics2D.OverlapBox(nPos, conCol.bounds.size / 2, 0, restrictLayer) != null)
+                {
+                    return false;
+                }
             }
 
+           
             return TilemapManager.Instance.HasWallTile(pos) == false;
         }
-
-        //public Node GetNode(Vector3Int pos)
-        //{
-        //    return roomNodes.Find((node) => node.Pos == pos);
-        //}
     }
 }
 

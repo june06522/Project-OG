@@ -29,7 +29,6 @@ public class MummyGunRootState : BaseFSM_State<EMummyGunState>
 
     protected override void UpdateState()
     {
-        Debug.Log("Update");
         patrolAct.OnUpdate();
     }
 }

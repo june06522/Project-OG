@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Astar
@@ -8,14 +9,15 @@ namespace Astar
         Locomobile, //이동할 수 없는
     }
 
+    [Serializable]
     public class Node : System.IComparable<Node>
     {
         public Node Parent;
         public Vector3Int Pos;
         public NodeType Type;
         public int Weight; // 가중치
-        public int F;
-        public int G;
+        public float F;
+        public float G;
 
         public int CompareTo(Node other)
         {
@@ -31,6 +33,10 @@ namespace Astar
         {
             if (node is null)
                 return false;
+            if (this.GetType() != node.GetType())
+                return false;
+
+            //return node.Pos == Pos;
             return GetHashCode() == node.GetHashCode();
         }
 

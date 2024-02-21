@@ -33,6 +33,7 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
 
     public override void OnEnter()
     {
+        currentPos = TilemapManager.Instance.GetTilePos(controller.transform.position);
         idle = true;
         moveIdx = 0;
         route.Clear();
@@ -49,8 +50,14 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
 
     public override void OnUpdate()
     {
+        if (!controller.Nav.IsNavActive) return;
+
+        if (idle == false && (route == null || route.Count == 0))
+            SetToMove();
+
         if (idle) return;
 
+        Debug.Log("Patrol");
         Vector3 dir = nextPos - controller.transform.position;
         controller.transform.position += dir.normalized * _data.Speed * Time.deltaTime;
         if (dir.magnitude <= 0.05f)
@@ -66,9 +73,9 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
         if (moveIdx >= route.Count)
         {
             //목적지에 도착
-
+            route.Clear();
             idle = true;
-            float idleTime = Random.Range(this.idleTime - 0.3f, this.idleTime + 0.3f);
+            float idleTime = Random.Range(this.idleTime, this.idleTime + 0.5f);
 
             StartIdleCor(idleTime);
 
@@ -81,8 +88,13 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
 
     private void SetToMove()
     {
+        Debug.Log("SetTarget");
+        nextPos = currentPos;
         targetPos = FindRandomPoint(controller.transform.position);
-        route = controller.Nav.UpdateNav(targetPos); //경로 검색
+        route = controller.Nav.GetRoute(targetPos); //경로 검색
+
+        if (route != null || route.Count != 0)
+            route.ForEach((v) => Debug.Log(v));
         moveIdx = 0;
         idle = false;
     }
@@ -99,7 +111,7 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     }
     private Vector2 FindRandomPoint(Vector2 pos)
     {
-        Vector2 randomPos = controller.Nav.GetRandomPos();
+        Vector2 randomPos = controller.Nav.GetRandomPos(pos, patrolRadius);
         SetTarget(randomPos);
         return randomPos;
     }

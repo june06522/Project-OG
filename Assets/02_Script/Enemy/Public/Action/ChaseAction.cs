@@ -9,8 +9,9 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     Action updateAction;
 
     int moveIdx;
-    bool resetRoute;
+    bool isArrived;
     bool isMove;
+
     Vector3 nextPos;
     Vector3Int currentPos;
     List<Vector3Int> route;
@@ -21,7 +22,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     public ChaseAction(BaseFSM_Controller<T> controller, Transform targetTrm, bool useNav) : base(controller)
     {
         this.targetTrm = GameManager.Instance.player;
-        route = new();
+        //route = new();
 
         updateAction = useNav == true ? UseNavChase : NormalChase;
         isMove = true;
@@ -41,47 +42,11 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     public override void OnUpdate()
     {
         updateAction.Invoke();
-    }
-    
-    #region UseNav
-    public void UseNavChase()
-    {
-        isMove = !controller.Nav.IsBaking;
-        if (!isMove) return;
-      
-        if (resetRoute == true || (Time.time > beforeTime + resetTime && moveIdx >= route.Count))
-            ResetRoute();
+        
+        //º® °Ë»ç
 
-        Vector3 dir = nextPos - controller.transform.position;
-        controller.transform.position += dir.normalized * _data.Speed * Time.deltaTime;
-        if (dir.magnitude <= 0.05f)
-        {
-            SetNextTarget();
-        }
 
-        controller.PrintRoute(route);
     }
-
-    private void SetNextTarget()
-    {
-        if (moveIdx >= route.Count)
-        {
-            resetRoute = true;
-            return;
-        }
-        currentPos = route[moveIdx];
-        nextPos = TilemapManager.Instance.GetWorldPos(currentPos);
-        moveIdx++;
-    }
-
-    private void ResetRoute()
-    {
-        route = controller.Nav.UpdateNav(targetTrm.position);
-        moveIdx = 0;
-        resetRoute = false;
-        beforeTime = Time.time;
-    }
-    #endregion
 
     private void NormalChase()
     {
@@ -96,5 +61,79 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
         controller.Flip(dir.x < 0);
     }
+
+    #region UseNav
+    public void UseNavChase()
+    {
+        Vector3 origin = controller.transform.position;
+        Vector3 dir = (targetTrm.position - origin);
+        dir.z = 0;
+
+        Debug.DrawRay(origin, dir);
+
+        Vector2 size = controller.Enemy.Collider.bounds.size;
+        float radius = Math.Max(size.x, size.y) * 0.5f;
+        RaycastHit2D hit = Physics2D.CircleCast(origin, radius,
+                                        dir.normalized, dir.magnitude, LayerMask.GetMask("Wall"));
+        if (!hit)
+        {
+          
+            Debug.Log("NavChase");
+            NavAction();
+        }
+        else
+        {
+            Debug.Log("NormalChase");
+            NormalChase();
+        }
+    }
+
+    private void NavAction()
+    {
+
+        if (route == null || route.Count == 0)
+        {
+            ResetRoute();
+            return;
+        }
+
+        Debug.Log("Chasing");
+
+        Vector3 dir = nextPos - controller.transform.position;
+        controller.transform.position += dir.normalized * _data.Speed * Time.deltaTime;
+        if (dir.magnitude <= 0.05f)
+        {
+            SetNextTarget();
+        }
+
+        controller.PrintRoute(route);
+        controller.Flip(dir.x < 0);
+    }
+
+    private void SetNextTarget()
+    {
+
+        if (moveIdx >= route.Count / 2)
+        {
+            ResetRoute();
+            isArrived = true;
+            return;
+        }
+        currentPos = route[moveIdx];
+        nextPos = TilemapManager.Instance.GetWorldPos(currentPos);
+        moveIdx++;
+    }
+
+    private void ResetRoute()
+    {
+        //currentPos = TilemapManager.Instance.GetTilePos(controller.transform.position);
+        //nextPos = TilemapManager.Instance.GetWorldPos(currentPos);
+        route = controller.Nav.GetRoute(targetTrm.position);
+        moveIdx = 0;
+        isArrived = false;
+        beforeTime = Time.time;
+    }
+
+    #endregion
 
 }
