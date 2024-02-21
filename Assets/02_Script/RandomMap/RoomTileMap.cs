@@ -101,10 +101,8 @@ public class RoomTileMap : MonoBehaviour
         {
             for (int j = -select.width / 2; j < select.width / 2; j++)
             {
-                if (select.tilemap.GetTile(new Vector3Int(j, k, 0)) == null)
-                    Debug.LogError($"{select.name} : Wrong width or height Value!");
-                else
-                    tile.SetTile(new Vector3Int(j + x, k + y, 0), select.tilemap.GetTile(new Vector3Int(j, k, 0)));
+                
+                tile.SetTile(new Vector3Int(j + x, k + y, 0), select.tilemap.GetTile(new Vector3Int(j, k, 0)));
 
                 if (select.wallTilemap.GetTile(new Vector3Int(j, k, 0)) != null)
                 {
