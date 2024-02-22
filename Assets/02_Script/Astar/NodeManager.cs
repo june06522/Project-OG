@@ -85,7 +85,7 @@ public class NodeManager : MonoBehaviour
             node.Type = NodeType.MoveAble;
 
             Vector2 worldPos = GetWorldPos(pos);
-            Vector2 size = new Vector2(0.9f, 0.9f);
+            Vector2 size = new Vector2(0.1f, 0.1f);
 
             int wallLayer = LayerMask.NameToLayer("Wall");
             int obstacleLayer = LayerMask.NameToLayer("Obstacle");
@@ -109,7 +109,8 @@ public class NodeManager : MonoBehaviour
                     Obstacle obstacle;
                     if (collider.TryGetComponent<Obstacle>(out obstacle))
                     {
-                        node.Weight = obstacle.Weight;
+                        //node.Weight = obstacle.Weight;
+                        node.Weight = 9999;
                     }
 
                     ObstacleNodes.Add(node);

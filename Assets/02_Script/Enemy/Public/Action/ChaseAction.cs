@@ -76,9 +76,9 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
         Debug.DrawRay(origin, dir);
 
         Vector2 size = controller.Enemy.Collider.bounds.size;
-        float radius = Math.Max(size.x, size.y) * 0.5f;
-        RaycastHit2D hit = Physics2D.CircleCast(origin, radius,
-                                        dir.normalized, dir.magnitude, LayerMask.GetMask("Wall", "Obstacle"));
+        float angle = Vector3.Angle(targetTrm.position, origin);
+        RaycastHit2D hit = Physics2D.BoxCast(origin, size, 
+                                        angle, dir.normalized, dir.magnitude, LayerMask.GetMask("Wall", "Obstacle"));
         if (hit)
         {
             Debug.Log("NavChase");

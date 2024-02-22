@@ -47,24 +47,21 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     {
         idle = false;
         StopCoroutine(idleCor);
-
-
     }
 
     public override void OnUpdate()
     {
         if (!controller.Nav.IsNavActive) return;
-
-        if (idle == false && (route == null || route.Count == 0))
-            SetToMove();
-
         if (idle) return;
 
-        Debug.Log("Patrol : " + nextPos);
-        
+        if (route == null || route.Count == 0)
+        {
+            SetToMove();
+            return;
+        }
+
         Vector2 dir = nextPos - controller.transform.position;
-        Vector3 position = controller.Enemy.Rigidbody.position
-                             + (dir.normalized * _data.Speed * Time.deltaTime);
+        Vector2 position = _rigidbody.position + (dir.normalized * _data.Speed * Time.deltaTime);
         controller.Enemy.Rigidbody.MovePosition(position);
         
         if (dir.magnitude <= 0.05f)
@@ -98,9 +95,9 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
         Debug.Log("SetTarget");
         targetPos = FindRandomPoint(controller.transform.position);
         route = controller.Nav.GetRoute(targetPos); //경로 검색
+        if (route != null && route.Count != 0)
+            nextPos = route[0];
 
-        if (route != null || route.Count != 0)
-            route.ForEach((v) => Debug.Log(v));
         moveIdx = 0;
         idle = false;
     }

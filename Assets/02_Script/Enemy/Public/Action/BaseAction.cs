@@ -7,6 +7,7 @@ public abstract class BaseAction<T> where T : Enum
 
     protected BaseFSM_Controller<T> controller;
     protected EnemyDataSO _data => controller.EnemyData;
+    protected Rigidbody2D _rigidbody => controller.Enemy.Rigidbody;
 
     protected BaseAction(BaseFSM_Controller<T> controller)
     {
