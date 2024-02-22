@@ -17,7 +17,6 @@ public class TransitionIdleOrMove<T> : BaseFSM_Transition<T> where T : Enum
     }
 
     Transform playerTrm;
-    EnemyDataSO _data;
     CheckType _myType;
 
     public TransitionIdleOrMove(BaseFSM_Controller<T> controller, T nextState) : base(controller, nextState)
@@ -33,8 +32,6 @@ public class TransitionIdleOrMove<T> : BaseFSM_Transition<T> where T : Enum
         
         playerTrm = GameManager.Instance.player;
 
-        _data = controller.EnemyData;
-        
         #region enum이름으로 데이터 할당
         //string className = $"{nextState.GetType().Name.Remove(1,1)}Controller";
         //Debug.Log("ClassName : " + className);
@@ -57,7 +54,7 @@ public class TransitionIdleOrMove<T> : BaseFSM_Transition<T> where T : Enum
 
     protected override bool CheckTransition()
     {
-        Debug.Log($"nextState : {nextState}");
+        //Debug.Log($"nextState : {nextState}");
         //_nextState = _nextState;
         if(_myType == CheckType.Idle) // case: idle로.
         {
@@ -66,7 +63,7 @@ public class TransitionIdleOrMove<T> : BaseFSM_Transition<T> where T : Enum
             {
                 //감지거리 밖에 있거나 장애물이 있으면 전환.
                 return !Transitions.CheckDistance(playerTrm, this.transform, _data.Range) ||
-                    Transitions.CheckObstacleBetweenTarget(playerTrm, this.transform, EObstacleType.Wall);
+                    !Transitions.CheckObstacleBetweenTarget(playerTrm, this.transform, _data.ObstacleLayer);
             }
             else // 공중
             {
@@ -81,7 +78,7 @@ public class TransitionIdleOrMove<T> : BaseFSM_Transition<T> where T : Enum
             {
                 //감지거리 안에 있고 사이에 장애물이 없으면 전환
                 return Transitions.CheckDistance(playerTrm, this.transform, _data.Range) &&
-                        !Transitions.CheckObstacleBetweenTarget(playerTrm, this.transform, EObstacleType.Wall);
+                        Transitions.CheckObstacleBetweenTarget(playerTrm, this.transform, _data.ObstacleLayer);
             }
             else // 공중
             {

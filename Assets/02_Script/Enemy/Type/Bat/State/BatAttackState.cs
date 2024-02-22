@@ -1,22 +1,21 @@
 
 using DG.Tweening;
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class BatAttackState : BatEnemyRootState
 {
     Transform targetTrm;
-    BatStateController con;
 
     public BatAttackState(BatStateController controller) : base(controller)
     {
         targetTrm = GameManager.Instance.player.transform;
-        con = controller;
     }
 
     protected override void EnterState()
     {
-        con.ChangeColor(Color.red);
+        controller.ChangeColor(Color.red);
         Attack();
     }
 
@@ -25,22 +24,24 @@ public class BatAttackState : BatEnemyRootState
         CheckHit();
         controller.transform.DOMove(targetTrm.position, 0.25f).SetEase(Ease.InSine).SetLoops(2, LoopType.Yoyo).OnComplete(() =>
         {
-            AttackEndEvt();
+            StartCoroutine(AttackEndEvt());
         });
     }
 
-    private void AttackEndEvt()
+    private IEnumerator AttackEndEvt()
     {
-        DataSO.SetCoolDown();
-        controller.ChangeState(EBatState.Chase);
+        yield return new WaitForSeconds(0.3f);
+
+        _data.SetCoolDown();
+        controller.ChangeState(EBatState.Move);
     }
 
     private void CheckHit()
     {
-        Collider2D col = Physics2D.OverlapCircle(con.attackPoint.position, 0.25f, LayerMask.GetMask("Player"));
+        Collider2D col = Physics2D.OverlapCircle(controller.attackPoint.position, 0.25f, LayerMask.GetMask("Player"));
         if (col)
         {
-            col.GetComponent<IHitAble>().Hit(DataSO.AttackPower);
+            col.GetComponent<IHitAble>().Hit(_data.AttackPower);
         }
     }
 
