@@ -14,9 +14,12 @@ public class Enemy : MonoBehaviour, IHitAble
     private int curHp;
 
     public event Action DeadEvent;
-    private new Collider2D collider;
 
+    private new Collider2D collider;
+    private new Rigidbody2D rigidbody;
     public Collider2D Collider => collider;
+    public Rigidbody2D Rigidbody => rigidbody;
+
 
     public Transform TargetTrm { get; set; }
     public RoomInfo RoomInfo { get; private set; } //내가 지금 위치해있는 room정보;
@@ -32,6 +35,7 @@ public class Enemy : MonoBehaviour, IHitAble
         curHp = enemyDataSO.MaxHP;
         DeadEvent += DieEvent;
         collider = GetComponent<Collider2D>();
+        rigidbody = GetComponent<Rigidbody2D>();
         TargetTrm = GameObject.Find("Player").GetComponent<Transform>();
 
         //Debug 나중에 한곳에서 할당해줘야함.

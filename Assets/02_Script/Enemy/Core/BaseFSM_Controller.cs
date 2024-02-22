@@ -50,12 +50,12 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
     }
 
     private LineRenderer lineRenderer;
-    public void PrintRoute(List<Vector3Int> route)
+    public void PrintRoute(List<Vector3> route)
     {
         if (route == null) return;
         if (route.Count < 2) return;
         lineRenderer.positionCount = route.Count;
 
-        lineRenderer.SetPositions(route.Select(p => TilemapManager.Instance.GetWorldPos(p)).ToArray());
+        lineRenderer.SetPositions(route.ToArray());
     }
 }

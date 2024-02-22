@@ -12,9 +12,11 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     bool isArrived;
     bool isMove;
 
+    bool useNav;
+
     Vector3 nextPos;
-    Vector3Int currentPos;
-    List<Vector3Int> route;
+    Vector3 currentPos;
+    List<Vector3> route;
 
     float beforeTime;
     float resetTime = 0.5f;
@@ -31,6 +33,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     public override void OnEnter()
     {
         //Debug
+        Debug.Log("EnterChase");
         ResetRoute();
         controller.ChangeColor(Color.blue);
     }
@@ -50,13 +53,14 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
     private void NormalChase()
     {
-        Vector3 dir = (targetTrm.position - controller.transform.position);
-        dir.z = 0;
+        Vector2 dir = (targetTrm.position - controller.transform.position);
         float speed = _data.Speed;
 
         if (dir.magnitude > _data.AttackAbleRange)
         {
-            controller.transform.position += dir.normalized * speed * Time.deltaTime;
+            Vector3 position = controller.Enemy.Rigidbody.position 
+                                + (dir.normalized * speed * Time.deltaTime);
+            controller.Enemy.Rigidbody.MovePosition(position);
         }
 
         controller.Flip(dir.x < 0);
@@ -74,16 +78,20 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
         Vector2 size = controller.Enemy.Collider.bounds.size;
         float radius = Math.Max(size.x, size.y) * 0.5f;
         RaycastHit2D hit = Physics2D.CircleCast(origin, radius,
-                                        dir.normalized, dir.magnitude, LayerMask.GetMask("Wall"));
-        if (!hit)
+                                        dir.normalized, dir.magnitude, LayerMask.GetMask("Wall", "Obstacle"));
+        if (hit)
         {
-          
             Debug.Log("NavChase");
             NavAction();
+            useNav = true;
         }
         else
         {
+            if(useNav == true)
+                ResetRoute();
+
             Debug.Log("NormalChase");
+            useNav = false;
             NormalChase();
         }
     }
@@ -91,16 +99,22 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     private void NavAction()
     {
 
+        if (useNav == false)
+            ResetRoute();
+
         if (route == null || route.Count == 0)
         {
             ResetRoute();
             return;
         }
 
-        Debug.Log("Chasing");
+        Vector2 dir = nextPos - controller.transform.position;
+  
+        Vector3 position = controller.Enemy.Rigidbody.position
+                             + (dir.normalized * _data.Speed * Time.deltaTime);
 
-        Vector3 dir = nextPos - controller.transform.position;
-        controller.transform.position += dir.normalized * _data.Speed * Time.deltaTime;
+        controller.Enemy.Rigidbody.MovePosition(position);
+
         if (dir.magnitude <= 0.05f)
         {
             SetNextTarget();
@@ -113,21 +127,21 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     private void SetNextTarget()
     {
 
-        if (moveIdx >= route.Count / 2)
+        if (moveIdx >= route.Count)
         {
             ResetRoute();
             isArrived = true;
             return;
         }
         currentPos = route[moveIdx];
-        nextPos = TilemapManager.Instance.GetWorldPos(currentPos);
+        nextPos = currentPos;
         moveIdx++;
     }
 
     private void ResetRoute()
     {
-        //currentPos = TilemapManager.Instance.GetTilePos(controller.transform.position);
-        //nextPos = TilemapManager.Instance.GetWorldPos(currentPos);
+        currentPos = controller.transform.position;
+        nextPos = currentPos;
         route = controller.Nav.GetRoute(targetTrm.position);
         moveIdx = 0;
         isArrived = false;

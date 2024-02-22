@@ -18,7 +18,7 @@ public class AstarTest : MonoBehaviour
     LineRenderer lineRenderer;
 
     Navigation manager;
-    List<Vector3Int> route;
+    List<Vector3> route;
     int moveIdx;
 
     private void Start()
@@ -33,7 +33,7 @@ public class AstarTest : MonoBehaviour
         if (route.Count < 2 || route == null) return;
         lineRenderer.positionCount = route.Count;
 
-        lineRenderer.SetPositions(route.Select(p => TilemapManager.Instance.GetWorldPos(p)).ToArray());
+        lineRenderer.SetPositions(route.ToArray());
     }
 
     private void Update()

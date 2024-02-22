@@ -17,8 +17,8 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     //Find Route
     int moveIdx;
     Vector3 nextPos;
-    Vector3Int currentPos;
-    List<Vector3Int> route;
+    Vector3 currentPos;
+    List<Vector3> route;
 
     public PatrolAction(BaseFSM_Controller<T> controller, Transform debugTarget) : base(controller)
     {
@@ -47,6 +47,8 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     {
         idle = false;
         StopCoroutine(idleCor);
+
+
     }
 
     public override void OnUpdate()
@@ -59,8 +61,12 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
         if (idle) return;
 
         Debug.Log("Patrol : " + nextPos);
-        Vector3 dir = nextPos - controller.transform.position;
-        controller.transform.position += dir.normalized * _data.Speed * Time.deltaTime;
+        
+        Vector2 dir = nextPos - controller.transform.position;
+        Vector3 position = controller.Enemy.Rigidbody.position
+                             + (dir.normalized * _data.Speed * Time.deltaTime);
+        controller.Enemy.Rigidbody.MovePosition(position);
+        
         if (dir.magnitude <= 0.05f)
         {
             SetNextTarget();
@@ -83,7 +89,7 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
             return;
         }
         currentPos = route[moveIdx];
-        nextPos = TilemapManager.Instance.GetWorldPos(currentPos);
+        nextPos = currentPos;
         moveIdx++;
     }
 

@@ -54,7 +54,7 @@ public class TransitionIdleOrMove<T> : BaseFSM_Transition<T> where T : Enum
 
     protected override bool CheckTransition()
     {
-        Debug.Log($"nextState : {nextState}");
+        //Debug.Log($"nextState : {nextState}");
         //_nextState = _nextState;
         if(_myType == CheckType.Idle) // case: idle·Î.
         {

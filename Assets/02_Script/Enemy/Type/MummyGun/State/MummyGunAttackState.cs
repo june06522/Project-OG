@@ -24,16 +24,11 @@ public class MummyGunAttackState : MummyGunRootState
         yield return new WaitForSeconds(0.3f);
 
         Sequence seq = DOTween.Sequence();
-        Tween scaleTween =
-            controller.transform.DOScale(Vector3.one * 2, 0.5f).SetEase(Ease.InSine);
+      
         Tween shakeTween =
             controller.transform.DOShakeScale(0.2f);
-        Tween rescaleTween =
-            controller.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.InSine);
 
-        seq.Append(scaleTween);
         seq.Append(shakeTween).AppendCallback(()=> Shoot());
-        seq.Append(rescaleTween);
         seq.OnComplete(() =>
         {
             StartCoroutine(AttackEndEvt());

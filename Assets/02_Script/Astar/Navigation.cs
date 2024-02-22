@@ -16,7 +16,7 @@ namespace Astar
         Collider2D conCol;
         Transform conTrm;
 
-        LayerMask restrictLayer;
+        LayerMask obstacleLayer;
 
         Vector3Int currentPos;
         Vector3Int targetPos;
@@ -30,7 +30,7 @@ namespace Astar
             this.conCol = enemy.Collider;
             this.conTrm = enemy.transform;
 
-            this.restrictLayer = enemy.EnemyDataSO.RestrictMovementLayer;
+            this.obstacleLayer = enemy.EnemyDataSO.ObstacleLayer;
 
            
             int capacity = enemy.RoomInfo.bound.size.x * enemy.RoomInfo.bound.size.y;
@@ -73,7 +73,7 @@ namespace Astar
             return randomPos;
         }
 
-        public List<Vector3Int> GetRoute(Vector3 target)
+        public List<Vector3> GetRoute(Vector3 target)
         {
             if (IsNavActive == false) return null;
             
@@ -117,11 +117,11 @@ namespace Astar
                 }
             }
 
-            List<Vector3Int> route = new();
+            List<Vector3> route = new();
             if (result)
             {
                 Node last = closeNodes[closeNodes.Count - 1];
-                route.Add(last.Pos);
+                route.Add(TilemapManager.Instance.GetWorldPos(last.Pos));
                 while (last.Parent != null)
                 {
                     // 노드와 다음 노드 사이에 벽이 없으면 그냥 넣지 않는다
@@ -129,13 +129,13 @@ namespace Astar
                     Vector3 dir = TilemapManager.Instance.GetWorldPos(targetPos) - pos;
                     Vector2 size = conCol.bounds.size;
                     float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                    if (Physics2D.BoxCast(pos, size, angle, dir.normalized, dir.magnitude, restrictLayer))
+                    if (Physics2D.BoxCast(pos, size, angle, dir.normalized, dir.magnitude, obstacleLayer))
                     {
-                        route.Add(last.Pos);
+                        route.Add(pos);
                     }
                     last = last.Parent;
                 }
-                route.Add(last.Pos);
+                route.Add(conTrm.position);
                 route.Reverse();
             }
             else
@@ -240,10 +240,10 @@ namespace Astar
 
             Vector3 nPos = TilemapManager.Instance.GetWorldPos(pos);
 
-            if(restrictLayer != default(LayerMask))
+            if(obstacleLayer != default(LayerMask))
             {
                 //아예 못지나가는 장애물 체크
-                if (Physics2D.OverlapBox(nPos, conCol.bounds.size / 2, 0, restrictLayer) != null)
+                if (Physics2D.OverlapBox(nPos, conCol.bounds.size, 0, obstacleLayer) != null)
                 {
                     return false;
                 }
