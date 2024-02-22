@@ -23,7 +23,8 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     public PatrolAction(BaseFSM_Controller<T> controller, Transform debugTarget) : base(controller)
     {
         debuggingTrm = debugTarget;
-        targetPos = Vector2.zero;
+        nextPos = controller.transform.position;
+        targetPos = currentPos;
         patrolRadius = _data.Range;
         idle = false;
         idleTime = controller.EnemyData.IdleTime;
@@ -57,7 +58,7 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
 
         if (idle) return;
 
-        Debug.Log("Patrol");
+        Debug.Log("Patrol : " + nextPos);
         Vector3 dir = nextPos - controller.transform.position;
         controller.transform.position += dir.normalized * _data.Speed * Time.deltaTime;
         if (dir.magnitude <= 0.05f)
@@ -89,7 +90,6 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     private void SetToMove()
     {
         Debug.Log("SetTarget");
-        nextPos = currentPos;
         targetPos = FindRandomPoint(controller.transform.position);
         route = controller.Nav.GetRoute(targetPos); //경로 검색
 
