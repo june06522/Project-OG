@@ -64,8 +64,13 @@ public class RoomTileMap : MonoBehaviour
     public void SetTileMap()
     {
         Shuffle();
-        PoltarRoom();
+
+        if (roomGenarator.spawnType == MapSpawnType.TP)
+            PoltarRoom();
+        else
+            LoadRoom();
     }
+
 
     private void Shuffle()
     {
@@ -81,7 +86,7 @@ public class RoomTileMap : MonoBehaviour
             rooms[randB] = temp;
         }
     }
-
+         
     private void PoltarRoom()
     {
         BGTileSetting();
@@ -110,8 +115,15 @@ public class RoomTileMap : MonoBehaviour
         roomGenarator.checkRoom[roomGenarator.useRooms[i].y + roomGenarator.Height / 2,
             roomGenarator.useRooms[i].x + roomGenarator.Width / 2] = tempRoom;
 
+
         int x = roomGenarator.useRooms[i].x * (roomGenarator.WidthLength);
         int y = roomGenarator.useRooms[i].y * (roomGenarator.HeightLength);
+        if(roomGenarator.spawnType == MapSpawnType.Load)
+        {
+            x += Random.Range(-(roomGenarator.WidthLength - select.width) / 2, (roomGenarator.WidthLength - select.width) / 2);
+            y += Random.Range(-(roomGenarator.HeightLength - select.height) / 2, (roomGenarator.HeightLength - select.height) / 2);
+        }
+        select.centerPos = new Vector2(x, y);
 
         for (int k = -select.height / 2; k < select.height / 2; k++)
         {
@@ -135,6 +147,11 @@ public class RoomTileMap : MonoBehaviour
             Transform obj = Instantiate(t,
                 new Vector3(t.position.x + x, t.position.y + y, 0), Quaternion.identity);
         }
+    }
+
+    private void LoadGenerator()
+    {
+
     }
 
     private void SetDefaultMap(int i)
@@ -203,5 +220,23 @@ public class RoomTileMap : MonoBehaviour
                 #endregion
             }
         }
+    }
+    
+    private void LoadRoom()
+    {
+        BGTileSetting();
+
+        for (int i = 0; i < roomGenarator.useRooms.Count(); ++i)
+        {
+            if (rooms.Count > 0 && i != 0)
+            {
+                 SetCustomRoom(i);
+            }
+            else
+            {
+                SetDefaultMap(i);
+            }
+        }
+        LoadGenerator();
     }
 }

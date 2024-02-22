@@ -9,9 +9,9 @@ public class IntroUIManager : MonoBehaviour
     [SerializeField] GameObject _controlPanel;
     [SerializeField] GameObject _audioPanel;
 
-    public void StartBtn()
+    public void StartBtn(string s)
     {
-        SceneManager.LoadScene("LobbyScene");
+        SceneManager.LoadScene(s);
     }
 
     public void SettingBtn()

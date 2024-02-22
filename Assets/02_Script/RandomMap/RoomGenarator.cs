@@ -9,6 +9,13 @@ public class Roomsize
     public int height;
 }
 
+public enum MapSpawnType
+{ 
+    TP,
+    Load
+}
+
+
 public class RoomGenarator : MonoBehaviour
 {
     [Header("보드 사이즈")]
@@ -43,8 +50,8 @@ public class RoomGenarator : MonoBehaviour
     [Header("방 갯수")]
     [SerializeField] int normalRoomCnt = 5;
 
-    //[Header("맵 타입")]
-    //public MapSpawnType spawnType = MapSpawnType.Load;
+    [Header("맵 타입")]
+    public MapSpawnType spawnType = MapSpawnType.Load;
 
     [HideInInspector] public List<RoomInfo> useRooms = new List<RoomInfo>();
     [HideInInspector] public Roomsize[,] checkRoom;
