@@ -129,7 +129,7 @@ public class MapManager : MonoBehaviour
         centerPos = new Vector2(roomGenarator.WidthLength * (curIdxX - correctX),
             roomGenarator.HeightLength * (curIdxY - correctY));
 
-        MonsterSpawnManager.Instance.monsterSpawn.StartSpawn(); 
+        MonsterSpawnManager.Instance.monsterSpawn.StartSpawn();
 
         SetConfiner();
     }
@@ -139,25 +139,23 @@ public class MapManager : MonoBehaviour
         int wid = roomGenarator.checkRoom[curIdxY, curIdxX].width / 2;
         int hei = roomGenarator.checkRoom[curIdxY, curIdxX].height / 2;
         Vector2[] newpoints = { };
-        //switch (roomGenarator.spawnType)
-        //{
-        //    case MapSpawnType.Load:
-        //    {
-        //         newpoints = new Vector2[]
-        //         {
-        //             new Vector2(100000, 100000),
-        //             new Vector2(-100000, 100000),
-        //             new Vector2(-100000, -100000),
-        //             new Vector2(100000, -100000)
-        //         };
-
-        //    }
-        //        break;
-        //    case MapSpawnType.Potal:
-        //    case MapSpawnType.Stuck:
+        switch (roomGenarator.spawnType)
         {
-            newpoints = new Vector2[]
-            {
+            case MapSpawnType.Load:
+                {
+                    newpoints = new Vector2[]
+                    {
+                     new Vector2(100000, 100000),
+                     new Vector2(-100000, 100000),
+                     new Vector2(-100000, -100000),
+                     new Vector2(100000, -100000)
+                    };
+                }
+                break;
+            case MapSpawnType.TP:
+                {
+                    newpoints = new Vector2[]
+                    {
                   new Vector2((centerPos.x + wid) + plusValue,
                   (centerPos.y + hei) + plusValue),
                   new Vector2((centerPos.x - wid) - plusValue,
@@ -166,13 +164,10 @@ public class MapManager : MonoBehaviour
                   (centerPos.y - hei) - 2 - plusValue),
                   new Vector2((centerPos.x + wid) + plusValue,
                   (centerPos.y - hei) - 2 - plusValue)
-            };
+                    };
+                }
+                break;
         }
-        //    break;
-        //default:
-        //    Debug.LogError($"{roomGenarator.transform} : MapSpawnType is not defined");
-        //    break;
-        //}
         _vcamConfiner.points = newpoints;
         _cmConfiner.InvalidateCache();
     }

@@ -4,6 +4,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+public class LoadInfo
+{
+    public int x;
+    public int y;
+    public int targetX = -1;
+    public int targetY;
+}
+
 public class RoomTileMap : MonoBehaviour
 {
     RoomGenarator roomGenarator;
@@ -22,6 +30,9 @@ public class RoomTileMap : MonoBehaviour
 
     [Header("커스텀 방")]
     [SerializeField] List<CustomRoom> rooms;
+
+    public List<LoadInfo> loadsInfo = new List<LoadInfo>();
+    private Vector2[,] centerPos;
 
     private void Awake()
     {
@@ -45,15 +56,16 @@ public class RoomTileMap : MonoBehaviour
         #endregion
 
         roomGenarator = GetComponent<RoomGenarator>();
+        centerPos = new Vector2[roomGenarator.Width, roomGenarator.Height];
     }
 
     private void BGTileSetting()
     {
         int x = roomGenarator.Width * roomGenarator.WidthLength / 2;
         int y = roomGenarator.Height * roomGenarator.HeightLength / 2;
-        for(int i = -x; i < x; i++)
+        for (int i = -x; i < x; i++)
         {
-            for(int j = -y; j < y; j++)
+            for (int j = -y; j < y; j++)
             {
                 tile.SetTile(new Vector3Int(i, j, 0), bgTile);
             }
@@ -86,7 +98,7 @@ public class RoomTileMap : MonoBehaviour
             rooms[randB] = temp;
         }
     }
-         
+
     private void PoltarRoom()
     {
         BGTileSetting();
@@ -118,18 +130,21 @@ public class RoomTileMap : MonoBehaviour
 
         int x = roomGenarator.useRooms[i].x * (roomGenarator.WidthLength);
         int y = roomGenarator.useRooms[i].y * (roomGenarator.HeightLength);
-        if(roomGenarator.spawnType == MapSpawnType.Load)
+        if (roomGenarator.spawnType == MapSpawnType.Load)
         {
-            x += Random.Range(-(roomGenarator.WidthLength - select.width) / 2, (roomGenarator.WidthLength - select.width) / 2);
-            y += Random.Range(-(roomGenarator.HeightLength - select.height) / 2, (roomGenarator.HeightLength - select.height) / 2);
+            x += Random.Range(-((roomGenarator.WidthLength - select.width) / 2 - 3), (roomGenarator.WidthLength - select.width) / 2 - 3);
+            y += Random.Range(-((roomGenarator.HeightLength - select.height) / 2 - 3), (roomGenarator.HeightLength - select.height) / 2 - 3);
         }
+
+        centerPos[roomGenarator.useRooms[i].y + MapManager.Instance.CorrectY,
+            roomGenarator.useRooms[i].x + MapManager.Instance.CorrectX] = new Vector2(x, y);
         select.centerPos = new Vector2(x, y);
 
         for (int k = -select.height / 2; k < select.height / 2; k++)
         {
             for (int j = -select.width / 2; j < select.width / 2; j++)
             {
-                
+
                 if (select.tilemap.GetTile(new Vector3Int(j, k, 0)) != null)
                     tile.SetTile(new Vector3Int(j + x, k + y, 0), select.tilemap.GetTile(new Vector3Int(j, k, 0)));
 
@@ -151,7 +166,66 @@ public class RoomTileMap : MonoBehaviour
 
     private void LoadGenerator()
     {
+        for (int i = 0; i < loadsInfo.Count; i++)
+        {
+            Vector2 pos = centerPos[loadsInfo[i].y, loadsInfo[i].x];
+            Vector2 targetpos = centerPos[loadsInfo[i].targetY, loadsInfo[i].targetX];
 
+            int x = Random.Range(0, 2);
+
+            if(x == 0)
+            {
+                WidthLoad(pos, targetpos);
+            }
+            else
+            {
+                HeightLoad(pos, targetpos);
+            }
+        }
+    }
+
+    private void WidthLoad(Vector2 pos, Vector2 targetpos)
+    {
+        for (float j = Mathf.Min(pos.x, targetpos.x); j < Mathf.Max(pos.x, targetpos.x); j++)
+        {
+            for (int k = -1; k <= 1; k++)
+            {
+                tile.SetTile(new Vector3Int((int)j, (int)pos.y + k, 0), loadtile);
+                if (walltile.GetTile(new Vector3Int((int)j, (int)pos.y + k, 0)) != null)
+                    walltile.SetTile(new Vector3Int((int)j, (int)pos.y + k, 0), null);
+            }
+        }
+        for (float j = Mathf.Min(pos.y, targetpos.y); j < Mathf.Max(pos.y, targetpos.y); j++)
+        {
+            for (int k = -1; k <= 1; k++)
+            {
+                tile.SetTile(new Vector3Int((int)targetpos.x + k, (int)j, 0), loadtile);
+                if (walltile.GetTile(new Vector3Int((int)targetpos.x + k, (int)j, 0)) != null)
+                    walltile.SetTile(new Vector3Int((int)targetpos.x + k, (int)j, 0), null);
+            }
+        }
+    }
+
+    private void HeightLoad(Vector2 pos, Vector2 targetpos)
+    {
+        for (float j = Mathf.Min(pos.y, targetpos.y); j < Mathf.Max(pos.y, targetpos.y); j++)
+        {
+            for (int k = -1; k <= 1; k++)
+            {
+                tile.SetTile(new Vector3Int((int)pos.x + k, (int)j, 0), loadtile);
+                if (walltile.GetTile(new Vector3Int((int)pos.x + k, (int)j, 0)) != null)
+                    walltile.SetTile(new Vector3Int((int)pos.x + k, (int)j, 0), null);
+            }
+        }
+        for (float j = Mathf.Min(pos.x, targetpos.x); j < Mathf.Max(pos.x, targetpos.x); j++)
+        {
+            for (int k = -1; k <= 1; k++)
+            {
+                tile.SetTile(new Vector3Int((int)j, (int)targetpos.y + k, 0), loadtile);
+                if (walltile.GetTile(new Vector3Int((int)j, (int)targetpos.y + k, 0)) != null)
+                    walltile.SetTile(new Vector3Int((int)j, (int)targetpos.y + k, 0), null);
+            }
+        }
     }
 
     private void SetDefaultMap(int i)
@@ -221,7 +295,7 @@ public class RoomTileMap : MonoBehaviour
             }
         }
     }
-    
+
     private void LoadRoom()
     {
         BGTileSetting();
@@ -230,7 +304,7 @@ public class RoomTileMap : MonoBehaviour
         {
             if (rooms.Count > 0 && i != 0)
             {
-                 SetCustomRoom(i);
+                SetCustomRoom(i);
             }
             else
             {

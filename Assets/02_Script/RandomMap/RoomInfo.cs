@@ -16,4 +16,5 @@ public class RoomInfo
     public RoomType roomType = RoomType.normalRoom;
     public BoundsInt bound;
     public Vector3 pos;
+    public int index;
 }

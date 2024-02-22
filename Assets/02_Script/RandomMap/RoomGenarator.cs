@@ -10,7 +10,7 @@ public class Roomsize
 }
 
 public enum MapSpawnType
-{ 
+{
     TP,
     Load
 }
@@ -34,7 +34,7 @@ public class RoomGenarator : MonoBehaviour
     public Roomsize normalRoom;
     public Roomsize bigRoom;
 
-    
+
 
     [Header("길 길이")]
     [SerializeField] int loadLength = 15;
@@ -108,8 +108,12 @@ public class RoomGenarator : MonoBehaviour
     {
         CreateBoard();
         ShuffleAlgorithm();
-        SelectBoard();
-        MonsterSpawnManager.Instance.DecideWave(useRooms,height,width);
+
+        if (spawnType == MapSpawnType.Load)
+            SelectBoardLoad ();
+        else
+            SelectBoardPotal();
+        MonsterSpawnManager.Instance.DecideWave(useRooms, height, width);
         roomTilemap.SetTileMap();
         MapManager.Instance.RoomClear();
     }
@@ -151,7 +155,7 @@ public class RoomGenarator : MonoBehaviour
         }
     }
 
-    void SelectBoard()
+    void SelectBoardPotal()
     {
         checkRoom = new Roomsize[height, width];
 
@@ -185,21 +189,112 @@ public class RoomGenarator : MonoBehaviour
             {
                 int ranVal = Random.Range(0, 3);
 
-                if(ranVal == 0)
+                if (ranVal == 0)
                 {
                     checkRoom[y, x] = smallRoom;
 
                 }
-                else if(ranVal == 1)
+                else if (ranVal == 1)
                 {
                     checkRoom[y, x] = normalRoom;
 
                 }
-                else if(ranVal == 2)
+                else if (ranVal == 2)
                 {
                     checkRoom[y, x] = bigRoom;
 
                 }
+
+                useRooms.Add(temp);
+                cnt++;
+            }
+            else
+            {
+                roomInfos.Add(temp);
+            }
+        }
+    }
+
+    void SelectBoardLoad()
+    {
+        checkRoom = new Roomsize[height, width];
+
+        int correctionX = width / 2;
+        int correctionY = height / 2;
+        int cnt = 0;
+
+        checkRoom[correctionY, correctionX] = bigRoom;
+
+        while (cnt < normalRoomCnt)
+        {
+            RoomInfo temp = roomInfos[0];
+            roomInfos.Remove(temp);
+
+            int x = temp.x + correctionX;
+            int y = temp.y + correctionY;
+
+            //인접하는 방
+            int adjCnt = 0;
+            
+            if (y < height - 1 && checkRoom[y + 1, x] != null)
+                adjCnt++;
+            if (y > 0 && checkRoom[y - 1, x] != null)
+                adjCnt++;
+            if (x < width - 1 && checkRoom[y, x + 1] != null)
+                adjCnt++;
+            if (x > 0 && checkRoom[y, x - 1] != null)
+                adjCnt++;
+
+            if (adjCnt >= 1)
+            {
+                int ranVal = Random.Range(0, 3);
+
+                if (ranVal == 0)
+                {
+                    checkRoom[y, x] = smallRoom;
+
+                }
+                else if (ranVal == 1)
+                {
+                    checkRoom[y, x] = normalRoom;
+
+                }
+                else if (ranVal == 2)
+                {
+                    checkRoom[y, x] = bigRoom;
+                }
+
+                #region 길 셋팅
+                LoadInfo loadInfo = new LoadInfo();
+                loadInfo.x = x;
+                loadInfo.y = y;
+
+                if (y < height - 1 && checkRoom[y + 1, x] != null)
+                {
+                    loadInfo.targetX = x;
+                    loadInfo.targetY = y + 1;
+                }
+                ranVal = Random.Range(0, 2);
+                if (y > 0 && checkRoom[y - 1, x] != null && (loadInfo.targetX == -1 || ranVal == 1))
+                {
+                    loadInfo.targetX = x;
+                    loadInfo.targetY = y - 1;
+                }
+                ranVal = Random.Range(0, 2);
+                if (x < width - 1 && checkRoom[y, x + 1] != null && (loadInfo.targetX == -1 || ranVal == 1))
+                {
+                    loadInfo.targetX = x + 1;
+                    loadInfo.targetY = y;
+                }
+                ranVal = Random.Range(0, 2);
+                if (x > 0 && checkRoom[y, x - 1] != null && (loadInfo.targetX == -1 || ranVal == 1))
+                {
+                    loadInfo.targetX = x - 1;
+                    loadInfo.targetY = y;
+                }
+
+                roomTilemap.loadsInfo.Add(loadInfo);
+                #endregion
 
                 useRooms.Add(temp);
                 cnt++;
