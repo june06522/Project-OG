@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class CustomRoom
+public class CustomRoom : MonoBehaviour
 {
     public Tilemap wallTilemap;
     public Tilemap tilemap;
