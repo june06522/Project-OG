@@ -7,7 +7,12 @@ using UnityEngine;
 public enum Abillity
 {
     Piercing,
+<<<<<<< Updated upstream
 
+=======
+    Explosion,
+    Thunder,
+>>>>>>> Stashed changes
 }
 
 public class WeaponAbilityManager : MonoBehaviour
