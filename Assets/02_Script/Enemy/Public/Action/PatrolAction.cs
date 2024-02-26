@@ -123,4 +123,7 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
         this.debuggingTrm.position = target;
     }
 
+    public override void OnFixedUpdate()
+    {
+    }
 }

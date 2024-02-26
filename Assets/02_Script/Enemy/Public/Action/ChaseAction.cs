@@ -26,7 +26,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
         this.targetTrm = GameManager.Instance.player;
         //route = new();
 
-        updateAction = useNav == true ? UseNavChase : NormalChase;
+        //updateAction = useNav == true ? UseNavChase : NormalChase;
         isMove = true;
     }
 
@@ -34,21 +34,25 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     {
         //Debug
         Debug.Log("EnterChase");
-        ResetRoute();
+        //ResetRoute();
         controller.ChangeColor(Color.blue);
+        controller.FixedUpdateAction += OnFixedUpdate;  
     }
 
     public override void OnExit()
     {
+        controller.FixedUpdateAction -= OnFixedUpdate;
+    }
+
+    public override void OnFixedUpdate()
+    {
+        
     }
 
     public override void OnUpdate()
     {
-        updateAction.Invoke();
-        
+        //updateAction.Invoke();
         //º® °Ë»ç
-
-
     }
 
     private void NormalChase()
@@ -67,86 +71,86 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     }
 
     #region UseNav
-    public void UseNavChase()
-    {
-        Vector3 origin = controller.transform.position;
-        Vector3 dir = (targetTrm.position - origin);
-        dir.z = 0;
+    //public void UseNavChase()
+    //{
+    //    Vector3 origin = controller.transform.position;
+    //    Vector3 dir = (targetTrm.position - origin);
+    //    dir.z = 0;
 
-        Debug.DrawRay(origin, dir);
+    //    Debug.DrawRay(origin, dir);
 
-        Vector2 size = controller.Enemy.Collider.bounds.size;
-        float angle = Vector3.Angle(targetTrm.position, origin);
-        RaycastHit2D hit = Physics2D.BoxCast(origin, size, 
-                                        angle, dir.normalized, dir.magnitude, LayerMask.GetMask("Wall", "Obstacle"));
-        if (hit)
-        {
-            Debug.Log("NavChase");
-            NavAction();
-            useNav = true;
-        }
-        else
-        {
-            if(useNav == true)
-                ResetRoute();
+    //    Vector2 size = controller.Enemy.Collider.bounds.size;
+    //    float angle = Vector3.Angle(targetTrm.position, origin);
+    //    RaycastHit2D hit = Physics2D.BoxCast(origin, size, 
+    //                                    angle, dir.normalized, dir.magnitude, LayerMask.GetMask("Wall", "Obstacle"));
+    //    if (hit)
+    //    {
+    //        Debug.Log("NavChase");
+    //        NavAction();
+    //        useNav = true;
+    //    }
+    //    else
+    //    {
+    //        if(useNav == true)
+    //            ResetRoute();
 
-            Debug.Log("NormalChase");
-            useNav = false;
-            NormalChase();
-        }
-    }
+    //        Debug.Log("NormalChase");
+    //        useNav = false;
+    //        NormalChase();
+    //    }
+    //}
 
-    private void NavAction()
-    {
+    //private void NavAction()
+    //{
 
-        if (useNav == false)
-            ResetRoute();
+    //    if (useNav == false)
+    //        ResetRoute();
 
-        if (route == null || route.Count == 0)
-        {
-            ResetRoute();
-            return;
-        }
+    //    if (route == null || route.Count == 0)
+    //    {
+    //        ResetRoute();
+    //        return;
+    //    }
 
-        Vector2 dir = nextPos - controller.transform.position;
+    //    Vector2 dir = nextPos - controller.transform.position;
   
-        Vector3 position = controller.Enemy.Rigidbody.position
-                             + (dir.normalized * _data.Speed * Time.deltaTime);
+    //    Vector3 position = controller.Enemy.Rigidbody.position
+    //                         + (dir.normalized * _data.Speed * Time.deltaTime);
 
-        controller.Enemy.Rigidbody.MovePosition(position);
+    //    controller.Enemy.Rigidbody.MovePosition(position);
 
-        if (dir.magnitude <= 0.05f)
-        {
-            SetNextTarget();
-        }
+    //    if (dir.magnitude <= 0.05f)
+    //    {
+    //        SetNextTarget();
+    //    }
 
-        controller.PrintRoute(route);
-        controller.Flip(dir.x < 0);
-    }
+    //    controller.PrintRoute(route);
+    //    controller.Flip(dir.x < 0);
+    //}
 
-    private void SetNextTarget()
-    {
+    //private void SetNextTarget()
+    //{
 
-        if (moveIdx >= route.Count)
-        {
-            ResetRoute();
-            isArrived = true;
-            return;
-        }
-        currentPos = route[moveIdx];
-        nextPos = currentPos;
-        moveIdx++;
-    }
+    //    if (moveIdx >= route.Count)
+    //    {
+    //        ResetRoute();
+    //        isArrived = true;
+    //        return;
+    //    }
+    //    currentPos = route[moveIdx];
+    //    nextPos = currentPos;
+    //    moveIdx++;
+    //}
 
-    private void ResetRoute()
-    {
-        currentPos = controller.transform.position;
-        nextPos = currentPos;
-        route = controller.Nav.GetRoute(targetTrm.position);
-        moveIdx = 0;
-        isArrived = false;
-        beforeTime = Time.time;
-    }
+    //private void ResetRoute()
+    //{
+    //    currentPos = controller.transform.position;
+    //    nextPos = currentPos;
+    //    route = controller.Nav.GetRoute(targetTrm.position);
+    //    moveIdx = 0;
+    //    isArrived = false;
+    //    beforeTime = Time.time;
+    //}
 
     #endregion
 

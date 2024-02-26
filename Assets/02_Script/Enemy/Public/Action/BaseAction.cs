@@ -17,6 +17,7 @@ public abstract class BaseAction<T> where T : Enum
     public abstract void OnEnter();
     public abstract void OnExit();
     public abstract void OnUpdate();
+    public abstract void OnFixedUpdate();
 
  
     public Coroutine StartCoroutine(IEnumerator coroutine)

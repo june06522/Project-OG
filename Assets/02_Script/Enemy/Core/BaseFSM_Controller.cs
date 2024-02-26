@@ -10,7 +10,11 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
     [field: SerializeField] public EnemyDataSO EnemyData { get; protected set; }
     public Enemy Enemy { get; private set; }
     public Navigation Nav;
+    public ContextSolver Solver;
 
+    public event Action FixedUpdateAction;
+    public event Action GizmosAction;
+        
     protected override void Awake()
     {
         Enemy = GetComponent<Enemy>();
@@ -22,6 +26,8 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
     {
         EnemyData = Instantiate(EnemyData);
         Nav = new(Enemy);
+        Solver = new();
+        GizmosAction += DrawMyColSize;
     }
 
     protected override void Update()
@@ -30,12 +36,29 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
         base.Update();
     }
 
+    protected void FixedUpdate()
+    {
+        FixedUpdateAction?.Invoke();
+    }
+
     private void OnDrawGizmos()
     {
+        if(Application.isPlaying)
+            GizmosAction?.Invoke();
+    }
+
+    private void OnDestroy()
+    {
+        GizmosAction -= DrawMyColSize;
+    }
+
+    public void DrawMyColSize()
+    {
         Gizmos.color = new Color(1, 0, 0, 0.5f);
-        if(Enemy != null && Enemy.Collider != null)
+        if (Enemy != null && Enemy.Collider != null)
             Gizmos.DrawCube(transform.position, Enemy.Collider.bounds.size);
     }
+
 
     public void Flip(bool left)
     {

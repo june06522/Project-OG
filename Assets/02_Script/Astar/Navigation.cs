@@ -124,12 +124,12 @@ namespace Astar
                 route.Add(TilemapManager.Instance.GetWorldPos(last.Pos));
                 while (last.Parent != null)
                 {
-                    //// 노드와 다음 노드 사이에 벽이 없으면 그냥 넣지 않는다
+                    ////// 노드와 다음 노드 사이에 벽이 없으면 그냥 넣지 않는다
                     Vector3 pos = TilemapManager.Instance.GetWorldPos(last.Pos);
-                    Vector3 dir = TilemapManager.Instance.GetWorldPos(targetPos) - pos;
-                    Vector2 size = conCol.bounds.size;
-                    float angle = Vector3.Angle(targetPos, pos);
-                    if (!Physics2D.BoxCast(pos, size, angle, dir.normalized, dir.magnitude, obstacleLayer))
+                    //Vector3 dir = TilemapManager.Instance.GetWorldPos(targetPos) - pos;
+                    //Vector2 size = conCol.bounds.size;
+                    //float angle = Vector3.Angle(targetPos, pos);
+                    //if (!Physics2D.BoxCast(pos, size, angle, dir.normalized, dir.magnitude, obstacleLayer))
                     {
                         route.Add(pos);
                     }

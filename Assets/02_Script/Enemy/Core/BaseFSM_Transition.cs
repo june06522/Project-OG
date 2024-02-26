@@ -6,10 +6,11 @@ using UnityEngine;
 
 public class BaseFSM_Transition<T> : FSM_Transition<T> where T : Enum
 {
-    protected EnemyDataSO _data;
+    protected new BaseFSM_Controller<T> controller;
+    protected EnemyDataSO _data => controller.EnemyData;
     public BaseFSM_Transition(BaseFSM_Controller<T> controller, T nextState) : base(controller, nextState)
     {
-        _data = controller.EnemyData;
+        this.controller = controller;   
     }
 
     protected override bool CheckTransition()
