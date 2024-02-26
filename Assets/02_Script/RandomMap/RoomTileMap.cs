@@ -173,16 +173,24 @@ public class RoomTileMap : MonoBehaviour
 
             int x = Random.Range(0, 2);
 
-            if(x == 0)
+            if (x == 0)
             {
-                WidthLoad(pos, targetpos);
+                if (CheckWallRow(pos, targetpos))
+                    WidthLoad(pos, targetpos);
+                else
+                    HeightLoad(pos, targetpos);
             }
             else
             {
-                HeightLoad(pos, targetpos);
+                 
+                if (CheckWallCol(pos, targetpos))
+                    HeightLoad(pos, targetpos);
+                else
+                    WidthLoad(pos, targetpos);
             }
         }
     }
+
 
     private void WidthLoad(Vector2 pos, Vector2 targetpos)
     {
@@ -312,5 +320,34 @@ public class RoomTileMap : MonoBehaviour
             }
         }
         LoadGenerator();
+    }
+
+
+    bool CheckWallRow(Vector2 pos, Vector2 targetpos)
+    {
+        int cnt = 0;
+
+        for(int i = Mathf.Min((int)pos.x,(int)targetpos.x); i < Mathf.Max((int)pos.x, (int)targetpos.x); i++)
+        {
+            if (walltile.GetTile(new Vector3Int(i,(int)pos.y, 0)) != null)
+                cnt++;
+        }
+
+
+        return cnt < 3;
+    }
+
+    private bool CheckWallCol(Vector2 pos, Vector2 targetpos)
+    {
+        int cnt = 0;
+
+        for (int i = Mathf.Min((int)pos.y, (int)targetpos.y); i < Mathf.Max((int)pos.y, (int)targetpos.y); i++)
+        {
+            if (walltile.GetTile(new Vector3Int((int)pos.x, i, 0)) != null)
+                cnt++;
+        }
+
+
+        return cnt < 3;
     }
 }
