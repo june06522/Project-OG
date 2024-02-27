@@ -15,6 +15,11 @@ public class ObstacleDetector : Detector
 
     Collider2D[] colliders;
 
+    public ObstacleDetector(Transform ownerTrm, LayerMask obstacleLayer) : base(ownerTrm)
+    {
+        layerMask = obstacleLayer;
+    }
+
     public override void Detect(AIData aiData)
     {
         colliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius, layerMask);

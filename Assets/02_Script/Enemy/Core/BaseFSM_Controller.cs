@@ -7,10 +7,11 @@ using UnityEngine;
 
 public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
 {
-    [field: SerializeField] public EnemyDataSO EnemyData { get; protected set; }
+    [field: SerializeField] public EnemyDataSO EnemyDataSO { get; protected set; }
     public Enemy Enemy { get; private set; }
     public Navigation Nav;
     public ContextSolver Solver;
+    public AIData AIdata;
 
     public event Action FixedUpdateAction;
     public event Action GizmosAction;
@@ -18,13 +19,14 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
     protected override void Awake()
     {
         Enemy = GetComponent<Enemy>();
+        AIdata = GetComponent<AIData>();
         spriteRender = GetComponent<SpriteRenderer>();
         lineRenderer = GetComponent<LineRenderer>();
     }
 
     protected virtual void Start()
     {
-        EnemyData = Instantiate(EnemyData);
+        EnemyDataSO = Instantiate(EnemyDataSO);
         Nav = new(Enemy);
         Solver = new();
         GizmosAction += DrawMyColSize;

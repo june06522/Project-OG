@@ -7,7 +7,12 @@ public class MummyGunMoveState : MummyGunRootState
     ChaseAction<EMummyGunState> chaseAct;
     public MummyGunMoveState(MummyGunStateController controller) : base(controller)
     {
-        chaseAct = new ChaseAction<EMummyGunState>(controller, GameManager.Instance.player, true);
+        List<SteeringBehaviour> behaviourlist = new List<SteeringBehaviour>() 
+        {
+            new ObstacleAvoidanceBehaviour(controller.transform), new SeekBehaviour(controller.transform)
+        };
+        chaseAct = new ChaseAction<EMummyGunState>(controller, 
+                                        controller.AIdata.currentTarget, behaviourlist, true);
     }
 
     protected override void EnterState()
@@ -22,6 +27,7 @@ public class MummyGunMoveState : MummyGunRootState
 
     protected override void UpdateState()
     {
+        UpdateDetector();
         chaseAct.OnUpdate();
     }
 }

@@ -20,8 +20,6 @@ public class Enemy : MonoBehaviour, IHitAble
     public Collider2D Collider => collider;
     public Rigidbody2D Rigidbody => rigidbody;
 
-
-    public Transform TargetTrm { get; set; }
     public RoomInfo RoomInfo { get; private set; } //내가 지금 위치해있는 room정보;
 
     //Debug
@@ -36,7 +34,6 @@ public class Enemy : MonoBehaviour, IHitAble
         DeadEvent += DieEvent;
         collider = GetComponent<Collider2D>();
         rigidbody = GetComponent<Rigidbody2D>();
-        TargetTrm = GameObject.Find("Player").GetComponent<Transform>();
 
         //Debug 나중에 한곳에서 할당해줘야함.
         Debug.Log(_mainMap.cellBounds);

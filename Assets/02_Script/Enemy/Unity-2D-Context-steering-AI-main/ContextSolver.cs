@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ContextSolver : MonoBehaviour
+public class ContextSolver
 {
-    //gozmo parameters
-    float[] interestGizmo = new float[8];
     Vector2 resultDirection;
     private float rayLength = 2;
 
@@ -19,14 +17,12 @@ public class ContextSolver : MonoBehaviour
         {
             (danger, interest) = behaviour.GetSteering(danger, interest, aiData);
         }
-
+        
         //subtract danger values from interest array
         for (int i = 0; i < 8; i++)
         {
             interest[i] = Mathf.Clamp01(interest[i] - danger[i]);
         }
-
-        interestGizmo = interest;
 
         //get the average direction
         Vector2 outputDirection = Vector2.zero;

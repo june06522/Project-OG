@@ -22,7 +22,7 @@ public class Agent : MonoBehaviour
 
         agentMover.MovementInput = MovementInput;
         //weaponParent.PointerPosition = pointerInput;
-        AnimateCharacter();
+        //AnimateCharacter();
     }
 
     public void PerformAttack()
@@ -32,7 +32,7 @@ public class Agent : MonoBehaviour
 
     private void Awake()
     {
-        agentAnimations = GetComponentInChildren<AgentAnimations>();
+        //agentAnimations = GetComponentInChildren<AgentAnimations>();
         //weaponParent = GetComponentInChildren<WeaponParent>();
         agentMover = GetComponent<AgentMover>();
     }

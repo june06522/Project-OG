@@ -19,10 +19,13 @@ public class AgentMover : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
     }
 
+    public void MovementINput(Vector2 input) => MovementInput = input; 
     private void FixedUpdate()
     {
+        Debug.Log(MovementInput.magnitude);
         if (MovementInput.magnitude > 0 && currentSpeed >= 0)
         {
+            Debug.Log("1");
             oldMovementInput = MovementInput;
             currentSpeed += acceleration * maxSpeed * Time.deltaTime;
         }

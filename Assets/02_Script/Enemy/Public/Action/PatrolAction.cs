@@ -27,7 +27,7 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
         targetPos = currentPos;
         patrolRadius = _data.Range;
         idle = false;
-        idleTime = controller.EnemyData.IdleTime;
+        idleTime = controller.EnemyDataSO.IdleTime;
         idleCor = null;
         route = new();
     }

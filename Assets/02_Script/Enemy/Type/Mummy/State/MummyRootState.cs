@@ -3,7 +3,7 @@
 public class MummyRootState : BaseFSM_State<EMummyState>
 {
     protected new MummyStateController controller;
-    protected EnemyDataSO _data => controller.EnemyData;
+    protected EnemyDataSO _data => controller.EnemyDataSO;
 
     PatrolAction<EMummyState> patrolAct;
 

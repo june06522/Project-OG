@@ -10,11 +10,12 @@ public enum EMummyGunState
 
 public class MummyGunStateController : BaseFSM_Controller<EMummyGunState>
 {
-    public Transform Target;
+    public Transform DebugTile;
     [SerializeField]
     public Transform attackPoint;
     [SerializeField]
     public EnemyBullet bullet;
+
 
     protected override void Awake()
     {

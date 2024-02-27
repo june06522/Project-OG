@@ -7,7 +7,7 @@ using UnityEngine;
 public class BaseFSM_Transition<T> : FSM_Transition<T> where T : Enum
 {
     protected new BaseFSM_Controller<T> controller;
-    protected EnemyDataSO _data => controller.EnemyData;
+    protected EnemyDataSO _data => controller.EnemyDataSO;
     public BaseFSM_Transition(BaseFSM_Controller<T> controller, T nextState) : base(controller, nextState)
     {
         this.controller = controller;   

@@ -271,7 +271,7 @@ GameObject:
   - component: {fileID: 116912629}
   - component: {fileID: 116912628}
   - component: {fileID: 116912627}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -481,10 +481,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 67698770405232663, guid: f7522961360b28e47be7499cba1bdbb3, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2356515405765778977, guid: f7522961360b28e47be7499cba1bdbb3, type: 3}
       propertyPath: Target
       value: 
       objectReference: {fileID: 1047874831}
+    - target: {fileID: 2356515405765778977, guid: f7522961360b28e47be7499cba1bdbb3, type: 3}
+      propertyPath: <EnemyDataSO>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 16e35be596fdcd849b935211c69eeba6, type: 2}
     - target: {fileID: 2356515405765779027, guid: f7522961360b28e47be7499cba1bdbb3, type: 3}
       propertyPath: _mainMap
       value: 
@@ -549,8 +557,40 @@ PrefabInstance:
       propertyPath: m_Name
       value: MummyGunEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 2356515405765779046, guid: f7522961360b28e47be7499cba1bdbb3, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2356515405975365265, guid: f7522961360b28e47be7499cba1bdbb3, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2356515406447830139, guid: f7522961360b28e47be7499cba1bdbb3, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f7522961360b28e47be7499cba1bdbb3, type: 3}
+--- !u!1 &171642249 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2356515405765779046, guid: f7522961360b28e47be7499cba1bdbb3, type: 3}
+  m_PrefabInstance: {fileID: 171642248}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &171642250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171642249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf54fd38a17469d419bf943db4d063df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targets: []
+  obstacles: []
+  currentTarget: {fileID: 0}
 --- !u!1 &288685081
 GameObject:
   m_ObjectHideFlags: 0
@@ -3392,7 +3432,7 @@ GameObject:
   m_Component:
   - component: {fileID: 668993309}
   - component: {fileID: 668993310}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 'Player : shadowPivot'
   m_TagString: Shadow
   m_Icon: {fileID: 0}
@@ -4830,7 +4870,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1805176564}
   - component: {fileID: 1805176565}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 'Player : shadow'
   m_TagString: Untagged
   m_Icon: {fileID: 0}

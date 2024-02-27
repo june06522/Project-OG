@@ -16,6 +16,12 @@ public class TargetDetector : Detector
     //gizmo parameters
     private List<Transform> colliders;
 
+    public TargetDetector(Transform ownerTrm, LayerMask obstacleLayer, LayerMask playerLayerMask) : base(ownerTrm)
+    {
+        this.obstaclesLayerMask = obstacleLayer;
+        this.playerLayerMask = playerLayerMask;
+    }
+
     public override void Detect(AIData aiData)
     {
         //Find out if player is near
@@ -27,9 +33,10 @@ public class TargetDetector : Detector
             //Check if you see the player
             Vector2 direction = (playerCollider.transform.position - transform.position).normalized;
             RaycastHit2D hit = 
-                Physics2D.Raycast(transform.position, direction, targetDetectionRange, obstaclesLayerMask);
+                Physics2D.Raycast(transform.position, direction, targetDetectionRange, obstaclesLayerMask | playerLayerMask);
 
-            //Make sure that the collider we see is on the "Player" layer
+            ////Make sure that the collider we see is on the "Player" layer
+            //Debug.Log(playerCollider);
             if (hit.collider != null && (playerLayerMask & (1 << hit.collider.gameObject.layer)) != 0)
             {
                 Debug.DrawRay(transform.position, direction * targetDetectionRange, Color.magenta);

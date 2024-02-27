@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class ChaseAction<T> : BaseAction<T> where T : Enum
 {
+    bool following;
+
     Transform targetTrm;
     Action updateAction;
 
@@ -21,9 +23,13 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     float beforeTime;
     float resetTime = 0.5f;
 
-    public ChaseAction(BaseFSM_Controller<T> controller, Transform targetTrm, bool useNav) : base(controller)
+    List<SteeringBehaviour> behaviours;
+    Vector2 movementInput;
+
+    public ChaseAction(BaseFSM_Controller<T> controller, Transform targetTrm, List<SteeringBehaviour> behaviours, bool useNav) : base(controller)
     {
-        this.targetTrm = GameManager.Instance.player;
+        this.targetTrm = targetTrm;
+        this.behaviours = behaviours;
         //route = new();
 
         //updateAction = useNav == true ? UseNavChase : NormalChase;
@@ -46,11 +52,32 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
     public override void OnFixedUpdate()
     {
-        
+        float speed = _data.Speed;
+        Vector2 movementInput = controller.Solver.GetDirectionToMove(behaviours, controller.AIdata);
+        Vector3 position = controller.Enemy.Rigidbody.position
+                              + (movementInput * speed * Time.deltaTime);
+        Debug.Log(movementInput);
+        controller.Enemy.Rigidbody.MovePosition(position);
     }
 
     public override void OnUpdate()
     {
+        
+        //if (controller.AIdata.currentTarget != null)
+        //{
+        //    //Looking at the Target
+        //    //OnPointerInput?.Invoke(controller.AIdata.currentTarget.position);
+        //    if (following == false)
+        //    {
+        //        following = true;
+        //        StartCoroutine(ChaseAndAttack());
+        //    }
+        //}
+        //else if (aiData.GetTargetsCount() > 0)
+        //{
+        //    //Target acquisition logic
+        //    aiData.currentTarget = aiData.targets[0];
+        //}
         //updateAction.Invoke();
         //º® °Ë»ç
     }
