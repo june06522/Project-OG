@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class Spear : InvenWeapon
 {
+
+    /// <summary>
+    /// 0 : off
+    /// </summary>
+    public Dictionary<Abillity, int> abillity = new Dictionary<Abillity, int>();
+
     GameObject visual;
     [SerializeField] private float _stingBackTime = 0.2f;
     //[SerializeField] private 

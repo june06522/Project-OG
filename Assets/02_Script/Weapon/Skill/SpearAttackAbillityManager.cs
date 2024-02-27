@@ -6,12 +6,12 @@ using UnityEngine;
 [Flags]
 public enum Abillity
 {
-    Piercing,
-    Explosion,
-    Thunder,
+    Damage,
+    Shadow,
+
 }
 
-public class WeaponAbilityManager : MonoBehaviour
+public class SpearAttackAbillityManager : MonoBehaviour
 {
 
 }

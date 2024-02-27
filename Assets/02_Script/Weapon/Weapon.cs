@@ -14,10 +14,6 @@ public abstract class Weapon : MonoBehaviour
     [field: SerializeField] public WeaponDataSO Data { get; protected set; }
     public Guid WeaponGuid { get; protected set; }
 
-    /// <summary>
-    /// 0 : off
-    /// </summary>
-    public Dictionary<Abillity, int> abillity = new Dictionary<Abillity, int>();
 
     protected virtual void Awake()
     {

@@ -17,7 +17,7 @@ public enum EnumPlayerState
 [RequireComponent(typeof(BoxCollider2D))]
 public class PlayerController : FSM_Controller<EnumPlayerState>
 {
-
+    private Animator _animator;
     [field: SerializeField] public PlayerDataSO playerData { get; protected set; }
 
     private static PlayerInputController inputController;
@@ -25,6 +25,8 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
     public static PlayerInputController InputController => inputController;
     public static PlayerEventController EventController => eventController;
+
+    private readonly int idleHash = Animator.StringToHash("IsIdle");
 
     protected override void Awake()
     {
@@ -57,8 +59,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
         AddState(moveState, EnumPlayerState.Move);
         AddState(dashState, EnumPlayerState.Dash);
 
-
-
+        _animator = GetComponent<Animator>();
     }
 
     protected override void Update()
@@ -67,6 +68,8 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
         base.Update();
 
         inputController.Update();
+
+        _animator.SetBool(idleHash, InputController.MoveDir == Vector2.zero);
 
     }
 
