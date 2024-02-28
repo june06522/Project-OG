@@ -12,7 +12,8 @@ public class Roomsize
 public enum MapSpawnType
 {
     TP,
-    Load
+    Load,
+    BSP
 }
 
 
@@ -111,7 +112,7 @@ public class RoomGenarator : MonoBehaviour
 
         if (spawnType == MapSpawnType.Load)
             SelectBoardLoad ();
-        else
+        else if(spawnType == MapSpawnType.TP)
             SelectBoardPotal();
         MonsterSpawnManager.Instance.DecideWave(useRooms, height, width);
         roomTilemap.SetTileMap();

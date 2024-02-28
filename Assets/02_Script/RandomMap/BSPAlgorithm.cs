@@ -3,56 +3,91 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
-public class BSPNode
+public class BSPRoomInfo
 {
-    public BSPNode leftNode;
-    public BSPNode rightNode;
-    public BSPNode parNode;
-    public RectInt nodeRect; //분리된 공간의 rect정보
-    public BSPNode(RectInt rect)
+    public CustomRoom room;
+
+    public RectInt roomRect;
+
+    public BSPRoomInfo(CustomRoom _room, int xpos, int ypos)
     {
-        this.nodeRect = rect;
+        room = _room;
+        roomRect = new RectInt(xpos, ypos, _room.width, _room.height);
+    }
+
+    public Vector2Int GetCenterPos()
+    {
+        return new Vector2Int(roomRect.x + roomRect.width / 2, roomRect.y + roomRect.height / 2);
+    }
+
+    public bool CheckContain(RectInt r)
+    {
+        return ((roomRect.x > r.x && roomRect.x < r.x + r.width) ||
+                (roomRect.x + roomRect.width > r.x && roomRect.x + roomRect.width < r.x + r.width) ||
+                (roomRect.y > r.y && roomRect.y < r.y + r.height) ||
+                (roomRect.y + roomRect.height > r.y && roomRect.y + roomRect.height < r.y + r.height));
     }
 }
 
 public class BSPAlgorithm : MonoBehaviour
 {
-    [SerializeField] int maxDip = 10;
-    [SerializeField] int Maxdist = 10;
+    [SerializeField] int roomCnt;
 
-    RoomGenarator room;
-    BSPNode root;
+    [SerializeField] int xlen;
+    [SerializeField] int ylen;
+
+    [SerializeField] int minlen = 5;
+
+    RoomTileMap roomTilemap;
+    private List<BSPRoomInfo> roomList;
+
+
 
     private void Awake()
     {
-        room = GetComponent<RoomGenarator>();
-        int x, y;
-        x = room.Width * room.WidthLength;
-        y = room.Height * room.HeightLength;
-        root = new BSPNode(new RectInt(-x / 2, -y / 2, x / 2, y / 2));
-        Devide(root, 0);
+        roomTilemap = GetComponent<RoomTileMap>();
+        roomList = new List<BSPRoomInfo>();
     }
 
-    void Devide(BSPNode tree, int n)
+    private void Start()
     {
-        if (n >= maxDip)
-            return;
+        //랜덤 위치에 생성
+        for (int i = 0; i < roomCnt; i++)
+        {
+            roomList.Add(new BSPRoomInfo(roomTilemap.roomsList[i],
+                Random.Range(-xlen, xlen), Random.Range(-ylen, ylen)));
+        }
 
-        int devX = 0,devY = 0;
+        //안곂치게 방 밀어내기
+        for (int i = 0; i < roomCnt; i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                while (roomList[i].CheckContain(roomList[j].roomRect))
+                {
+                    if (roomList[i].roomRect.x > roomList[j].roomRect.x)
+                        roomList[i].roomRect.x += Random.Range(5, 15);
+                    else
+                        roomList[i].roomRect.x -= Random.Range(5, 15);
 
-        if(tree.nodeRect.width > tree.nodeRect.height)
-            devX = Random.Range(-Maxdist, Maxdist);
-        else
-            devY = Random.Range(-Maxdist, Maxdist);
+                    if (roomList[i].roomRect.y > roomList[j].roomRect.y)
+                        roomList[i].roomRect.y += Random.Range(5, 15);
+                    else
+                        roomList[i].roomRect.y -= Random.Range(5, 15);
+                }
+            }
+        }
 
-        tree.leftNode = new BSPNode(new RectInt(
-            tree.nodeRect.x, tree.nodeRect.y, tree.nodeRect.width, tree.nodeRect.height));
-        tree.rightNode = new BSPNode(new RectInt(
-             tree.nodeRect.x, tree.nodeRect.y, tree.nodeRect.width, tree.nodeRect.height));
-        tree.leftNode.parNode = tree;
-        tree.rightNode.parNode = tree;
+        // 방 그리기
+        for (int i = 0; i < roomCnt; i++)
+        {
+            roomTilemap.SetCustomRoom(roomList[i]);
+        }
 
-        Devide(tree.leftNode, n + 1);
-        Devide(tree.rightNode, n + 1);
+        //삼각형 그리기
+
+        //길 선택
+
+        //길 그리기
     }
 }
