@@ -18,6 +18,8 @@ public enum EnumPlayerState
 public class PlayerController : FSM_Controller<EnumPlayerState>
 {
     private Animator _animator;
+    private SpriteRenderer _spriteRenderer;
+
     [field: SerializeField] public PlayerDataSO playerData { get; protected set; }
 
     private static PlayerInputController inputController;
@@ -60,6 +62,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
         AddState(dashState, EnumPlayerState.Dash);
 
         _animator = GetComponent<Animator>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     protected override void Update()
@@ -70,7 +73,8 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
         inputController.Update();
 
         _animator.SetBool(idleHash, InputController.MoveDir == Vector2.zero);
-
+        if (InputController.LastMoveDir.x != 0)
+            _spriteRenderer.flipX = InputController.LastMoveDir.x > 0;
     }
 
     private void OnDestroy()
