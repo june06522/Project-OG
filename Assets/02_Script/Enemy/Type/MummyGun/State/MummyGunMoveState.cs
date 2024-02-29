@@ -9,7 +9,8 @@ public class MummyGunMoveState : MummyGunRootState
     {
         List<SteeringBehaviour> behaviourlist = new List<SteeringBehaviour>() 
         {
-            new ObstacleAvoidanceBehaviour(controller.transform), new SeekBehaviour(controller.transform)
+            new ObstacleAvoidanceBehaviour(controller.transform),
+            new SeekBehaviour(controller.transform)
         };
         chaseAct = new ChaseAction<EMummyGunState>(controller, 
                                         controller.AIdata.currentTarget, behaviourlist, true);

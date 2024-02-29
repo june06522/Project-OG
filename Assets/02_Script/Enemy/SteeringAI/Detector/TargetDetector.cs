@@ -20,6 +20,7 @@ public class TargetDetector : Detector
     {
         this.obstaclesLayerMask = obstacleLayer;
         this.playerLayerMask = playerLayerMask;
+        GizmoDrawer.Instance.Add(OnDrawGizmosSelected);
     }
 
     public override void Detect(AIData aiData)

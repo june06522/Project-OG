@@ -21,7 +21,14 @@ public class MummyGunRootState : BaseFSM_State<EMummyGunState>
             new TargetDetector( controller.transform, _data.ObstacleLayer, _data.TargetAbleLayer),
             new ObstacleDetector( controller.transform, _data.ObstacleLayer),
         };
-        patrolAct = new PatrolAction<EMummyGunState>(controller, controller.DebugTile);
+
+        List<SteeringBehaviour> behaviourlist = new List<SteeringBehaviour>()
+        {
+            new PatrolBehaviour(controller.transform, patrolRadius: _data.Range),
+            new ObstacleAvoidanceBehaviour(controller.transform)
+        };
+
+        patrolAct = new PatrolAction<EMummyGunState>(controller, behaviourlist, controller.DebugTile);
         
     }
 

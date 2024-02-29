@@ -17,9 +17,9 @@ public class MummyGunStateController : BaseFSM_Controller<EMummyGunState>
     public EnemyBullet bullet;
 
 
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        base.Start();
 
         var patrolState = new MummyGunRootState(this);
         var patrolToMove = new MummyGunPatrolToMoveTransition(this, EMummyGunState.Move);

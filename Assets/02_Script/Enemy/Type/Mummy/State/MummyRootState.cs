@@ -10,7 +10,7 @@ public class MummyRootState : BaseFSM_State<EMummyState>
     public MummyRootState(MummyStateController controller) : base(controller)
     {
         this.controller = controller;
-        patrolAct = new PatrolAction<EMummyState>(controller, controller.target);
+        //patrolAct = new PatrolAction<EMummyState>(controller, controller.target);
     }
 
     protected override void EnterState()

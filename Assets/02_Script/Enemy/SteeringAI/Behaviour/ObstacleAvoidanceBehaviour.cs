@@ -5,7 +5,7 @@ using UnityEngine;
 public class ObstacleAvoidanceBehaviour : SteeringBehaviour
 {
     [SerializeField]
-    private float radius = 2f, agentColliderSize = 0.6f;
+    private float radius = 2f, agentColliderSize = 0.8f;
 
     [SerializeField]
     private bool showGizmo = true;
@@ -15,6 +15,7 @@ public class ObstacleAvoidanceBehaviour : SteeringBehaviour
 
     public ObstacleAvoidanceBehaviour(Transform ownerTrm) : base(ownerTrm)
     {
+        GizmoDrawer.Instance.Add(OnDrawGizmos);
     }
 
     public override (float[] danger, float[] interest) GetSteering(float[] danger, float[] interest, AIData aiData)

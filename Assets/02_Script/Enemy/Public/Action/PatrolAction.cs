@@ -20,16 +20,20 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     Vector3 currentPos;
     List<Vector3> route;
 
-    public PatrolAction(BaseFSM_Controller<T> controller, Transform debugTarget) : base(controller)
+    List<SteeringBehaviour> behaviours;
+
+    public PatrolAction(BaseFSM_Controller<T> controller, List<SteeringBehaviour> behaviours, Transform debugTarget) : base(controller)
     {
         debuggingTrm = debugTarget;
         nextPos = controller.transform.position;
         targetPos = currentPos;
-        patrolRadius = _data.Range;
+        patrolRadius = controller.EnemyDataSO.Range;
         idle = false;
         idleTime = controller.EnemyDataSO.IdleTime;
         idleCor = null;
         route = new();
+        this.behaviours = behaviours;
+        OnEnter();
     }
 
     public override void OnEnter()
@@ -39,37 +43,51 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
         moveIdx = 0;
         route.Clear();
         StartIdleCor(idleTime);
-  
+
+        controller.FixedUpdateAction += OnFixedUpdate;
         controller.ChangeColor(Color.white);
     }
 
     public override void OnExit()
     {
+        controller.FixedUpdateAction -= OnFixedUpdate;
         idle = false;
         StopCoroutine(idleCor);
     }
 
     public override void OnUpdate()
     {
-        if (!controller.Nav.IsNavActive) return;
-        if (idle) return;
+     
+    }
 
-        if (route == null || route.Count == 0)
-        {
-            SetToMove();
-            return;
-        }
 
-        Vector2 dir = nextPos - controller.transform.position;
-        Vector2 position = _rigidbody.position + (dir.normalized * _data.Speed * Time.deltaTime);
-        controller.Enemy.Rigidbody.MovePosition(position);
-        
-        if (dir.magnitude <= 0.05f)
-        {
-            SetNextTarget();
-        }
+    public override void OnFixedUpdate()
+    {
+        Vector2 movementInput = controller.Solver.GetDirectionToMove(behaviours, controller.AIdata);
+        controller.Enemy.MovementInput = movementInput;
+        #region Route기반 Patrol
+        //if (!controller.Nav.IsNavActive) return;
+        //if (idle) return;
 
-        controller.PrintRoute(route);
+        //if (route == null || route.Count == 0)
+        //{
+        //    StartIdleCor(1f);
+        //    return;
+        //}
+
+        //Vector2 dir = nextPos - controller.transform.position;
+        //Vector2 position = _rigidbody.position + (dir.normalized * _data.Speed * Time.deltaTime);
+
+        //if (dir.magnitude <= 0.05f)
+        //{
+        //    SetNextTarget();
+        //}
+
+        //controller.PrintRoute(route);
+        ////Vector2 movementInput = controller.Solver.GetDirectionToMove( ,controller.AIdata);
+        //controller.Enemy.MovementInput = dir.normalized;
+
+        #endregion
     }
 
     private void SetNextTarget()
@@ -94,6 +112,7 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     {
         Debug.Log("SetTarget");
         targetPos = FindRandomPoint(controller.transform.position);
+        SetTarget(targetPos);
         route = controller.Nav.GetRoute(targetPos); //경로 검색
         if (route != null && route.Count != 0)
             nextPos = route[0];
@@ -121,9 +140,5 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     public void SetTarget(Vector2 target)
     {
         this.debuggingTrm.position = target;
-    }
-
-    public override void OnFixedUpdate()
-    {
     }
 }

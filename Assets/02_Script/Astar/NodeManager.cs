@@ -32,6 +32,11 @@ public class NodeManager : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        BakeMap();
+    }
+
     //맵에 노드 할당
     [ContextMenu("BakeMap")]
     public void BakeMap()

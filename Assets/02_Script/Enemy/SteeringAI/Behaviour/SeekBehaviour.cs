@@ -19,6 +19,7 @@ public class SeekBehaviour : SteeringBehaviour
 
     public SeekBehaviour(Transform ownerTrm) : base(ownerTrm)
     {
+        GizmoDrawer.Instance.Add(OnDrawGizmos);
     }
 
     public override (float[] danger, float[] interest) GetSteering(float[] danger, float[] interest, AIData aiData)

@@ -47,17 +47,14 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
     public override void OnExit()
     {
+        controller.StopImmediately();
         controller.FixedUpdateAction -= OnFixedUpdate;
     }
 
     public override void OnFixedUpdate()
     {
-        float speed = _data.Speed;
         Vector2 movementInput = controller.Solver.GetDirectionToMove(behaviours, controller.AIdata);
-        Vector3 position = controller.Enemy.Rigidbody.position
-                              + (movementInput * speed * Time.deltaTime);
-        Debug.Log(movementInput);
-        controller.Enemy.Rigidbody.MovePosition(position);
+        controller.Enemy.MovementInput = movementInput;
     }
 
     public override void OnUpdate()

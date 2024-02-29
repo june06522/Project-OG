@@ -201,7 +201,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 108298373}
   m_LocalRotation: {x: 0, y: -0, z: -0.0032389185, w: 0.99999475}
-  m_LocalPosition: {x: 1.5699148, y: 0.04784875, z: 0}
+  m_LocalPosition: {x: 1.13, y: 0.83, z: 0}
   m_LocalScale: {x: 2.1125, y: 1.24985, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -490,6 +490,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1047874831}
     - target: {fileID: 2356515405765778977, guid: f7522961360b28e47be7499cba1bdbb3, type: 3}
+      propertyPath: DebugTile
+      value: 
+      objectReference: {fileID: 1373531042}
+    - target: {fileID: 2356515405765778977, guid: f7522961360b28e47be7499cba1bdbb3, type: 3}
       propertyPath: <EnemyDataSO>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: 16e35be596fdcd849b935211c69eeba6, type: 2}
@@ -757,6 +761,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyDataSO: {fileID: 11400000, guid: ef8b75382a3b80042a309d5ebe936297, type: 2}
+  acceleration: 50
+  deacceleration: 100
+  currentSpeed: 0
   _mainMap: {fileID: 323926839}
   _wallMap: {fileID: 753547554}
 --- !u!212 &288685086
@@ -3203,7 +3210,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 496676766}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.03, y: -2.25, z: 0}
+  m_LocalPosition: {x: 0.16, y: -1.89, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4650,7 +4657,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1353543493}
   m_LocalRotation: {x: -0, y: -0, z: 0.7009661, w: 0.71319455}
-  m_LocalPosition: {x: -1.23, y: 0.17, z: 0}
+  m_LocalPosition: {x: -0.52, y: 0.71, z: 0}
   m_LocalScale: {x: 2.1125, y: 1.24985, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4779,6 +4786,50 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 442b50b729e74834ab37a2e39e9ca508, type: 3}
+--- !u!1 &1707473975
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1707473977}
+  - component: {fileID: 1707473976}
+  m_Layer: 0
+  m_Name: GizmoDrawer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1707473976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1707473975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a9efa8b0c1e5d34fae19fb7627eaf7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1707473977
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1707473975}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1744391001
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -64,10 +64,12 @@ namespace Astar
         {
             Vector3Int pos = TilemapManager.Instance.GetTilePos(curPos);
             List<Node> moveAbleNodes = (from node in roomNodes
-                                        where node.Weight == 0 && (Vector3Int.Distance(node.Pos, pos) < distance) // 장애물, 벽 x
+                                        where node.Weight == 0 && (Vector3Int.Distance(node.Pos, pos) < distance)// 장애물, 벽 x
                                         select node).ToList();
 
-            Debug.Log(moveAbleNodes.Count);
+            if (moveAbleNodes.Count == 0 || moveAbleNodes == null)
+                return curPos;
+            
             Vector3Int randomTilePos = moveAbleNodes[Random.Range(0, moveAbleNodes.Count)].Pos;
             Vector3 randomPos = TilemapManager.Instance.GetWorldPos(randomTilePos);
             return randomPos;

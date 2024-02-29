@@ -22,6 +22,16 @@ public class Enemy : MonoBehaviour, IHitAble
 
     public RoomInfo RoomInfo { get; private set; } //내가 지금 위치해있는 room정보;
 
+    [Header("Movement")]
+    
+    [SerializeField]
+    float acceleration = 50, deacceleration = 100;
+    [SerializeField]
+    private float currentSpeed = 0;
+    private Vector2 oldMovementInput;
+    Vector2 movementInput;
+    public Vector2 MovementInput { get => movementInput; set => movementInput = value; }
+
     //Debug
     [SerializeField]
     private Tilemap _mainMap;
@@ -45,6 +55,22 @@ public class Enemy : MonoBehaviour, IHitAble
         };
         
         SetRoomInfo(roomInfo);
+
+        //string seed = Time.time.ToString();
+
+        //float xCoord = UnityEngine.Random.Range(0f, 1f);
+        
+        //Debug.Log($"XCoord : {xCoord}");
+        //string debug = "";
+        //for (float i = 0; i < 1; i += 0.01f)
+        //{
+        //    float perlinValue = Mathf.PerlinNoise(xCoord ,i);
+        //    debug += perlinValue.ToString() + "\n";
+        //}
+
+        //Debug.Log(debug);
+
+        //InvokeRepeating("GetPerlin", 0, 0.1f);
     }
 
     public void SetRoomInfo(RoomInfo curRoom)
@@ -54,7 +80,29 @@ public class Enemy : MonoBehaviour, IHitAble
 
     private void Update()
     {
-        Debug.DrawRay(transform.position, Vector3.up * 2f,Color.red);
+        //Debug.DrawRay(transform.position, Vector3.up * 2f,Color.red);
+
+      
+    }
+
+    private void FixedUpdate()
+    {
+        float maxSpeed = EnemyDataSO.Speed;
+        if (MovementInput.magnitude > 0 && currentSpeed >= 0)
+        {
+            oldMovementInput = MovementInput;
+            currentSpeed += acceleration * maxSpeed * Time.deltaTime;
+        }
+        else
+        {
+            currentSpeed -= deacceleration * maxSpeed * Time.deltaTime;
+        }
+        currentSpeed = Mathf.Clamp(currentSpeed, 0, maxSpeed);
+       
+        //Debug.Log(movementInput);
+        Vector3 position = rigidbody.position
+                            + (oldMovementInput * currentSpeed * Time.deltaTime);
+        rigidbody.MovePosition(position);
     }
 
     public void Hit(float damage)

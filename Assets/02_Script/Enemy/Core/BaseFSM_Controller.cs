@@ -54,6 +54,11 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
         GizmosAction -= DrawMyColSize;
     }
 
+    public void StopImmediately()
+    {
+        Enemy.MovementInput = Vector2.zero;
+    }
+
     public void DrawMyColSize()
     {
         Gizmos.color = new Color(1, 0, 0, 0.5f);
