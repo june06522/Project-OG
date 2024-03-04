@@ -10,18 +10,22 @@ public class MummyGunRootState : BaseFSM_State<EMummyGunState>
     protected EnemyDataSO _data => controller.EnemyDataSO;
 
     PatrolAction<EMummyGunState> patrolAct;
+    PatrolBehaviour patrolbehaviour;
 
     protected List<Detector> detectors;
 
     public MummyGunRootState(MummyGunStateController controller) : base(controller)
     {
         this.controller = controller;
+        
+        //detector
         detectors = new List<Detector>() 
         { 
             new TargetDetector( controller.transform, _data.ObstacleLayer, _data.TargetAbleLayer),
             new ObstacleDetector( controller.transform, _data.ObstacleLayer),
         };
-
+        
+        //behaviour
         List<SteeringBehaviour> behaviourlist = new List<SteeringBehaviour>()
         {
             new PatrolBehaviour(controller.transform, patrolRadius: _data.Range),
@@ -29,7 +33,7 @@ public class MummyGunRootState : BaseFSM_State<EMummyGunState>
         };
 
         patrolAct = new PatrolAction<EMummyGunState>(controller, behaviourlist, controller.DebugTile);
-        
+        EnterState();
     }
 
     protected override void EnterState()

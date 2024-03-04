@@ -5,11 +5,14 @@ using Random = UnityEngine.Random;
 
 public class PatrolAction<T> : BaseAction<T> where T : Enum
 {
+    Vector2 startPos;
     Vector3 targetPos;
     float patrolRadius;
     bool idle;
     float idleTime;
-
+    float idleTimer;
+    float t;
+    Vector2 beforeStopPos;
     Coroutine idleCor;
 
     Transform debuggingTrm;
@@ -19,30 +22,56 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     Vector3 nextPos;
     Vector3 currentPos;
     List<Vector3> route;
+    Vector3 beforeDir;
+    Vector3 curDir;
 
     List<SteeringBehaviour> behaviours;
+    PatrolBehaviour patrolBehaviour;
+    AIData aiData;
 
     public PatrolAction(BaseFSM_Controller<T> controller, List<SteeringBehaviour> behaviours, Transform debugTarget) : base(controller)
     {
         debuggingTrm = debugTarget;
+
         nextPos = controller.transform.position;
-        targetPos = currentPos;
         patrolRadius = controller.EnemyDataSO.Range;
-        idle = false;
+        aiData = controller.AIdata;
         idleTime = controller.EnemyDataSO.IdleTime;
-        idleCor = null;
-        route = new();
+        idleTimer = 1f;
+
+        //idle = false;
+        //idleCor = null;
+        //route = new();
+        //currentPos = controller.transform.position;
+        //targetPos = currentPos;
+
+        startPos = controller.transform.position;
+        if (behaviours[0] is PatrolBehaviour)
+        {
+            patrolBehaviour = behaviours[0] as PatrolBehaviour;
+            patrolBehaviour.Setting(startPos, Random.Range(10, 25));
+            GizmoDrawer.Instance.Add(() => Gizmos.DrawWireSphere(currentPos, _data.Range));
+        }
+        else
+        {
+            //patrolBehaviour = new(ownerTrm: controller.transform, _data.Range);
+            //behaviours.Add(patrolBehaviour);
+            Debug.Log("error");
+        }
         this.behaviours = behaviours;
         OnEnter();
     }
 
     public override void OnEnter()
     {
-        currentPos = TilemapManager.Instance.GetTilePos(controller.transform.position);
-        idle = true;
-        moveIdx = 0;
-        route.Clear();
+        //moveIdx = 0;
+        //route.Clear();
+        //idle = true; 
+        //currentPos = TilemapManager.Instance.GetTilePos(controller.transform.position);
         StartIdleCor(idleTime);
+
+        startPos = controller.transform.position;
+        patrolBehaviour.Setting(startPos, Random.Range(10, 25));
 
         controller.FixedUpdateAction += OnFixedUpdate;
         controller.ChangeColor(Color.white);
@@ -57,14 +86,28 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
 
     public override void OnUpdate()
     {
-     
+
     }
 
 
     public override void OnFixedUpdate()
     {
+        if (idle) return;
+        beforeDir = curDir;
         Vector2 movementInput = controller.Solver.GetDirectionToMove(behaviours, controller.AIdata);
         controller.Enemy.MovementInput = movementInput;
+        curDir = movementInput;
+
+        if (Vector2.Distance(controller.transform.position, startPos) > patrolRadius - 0.5f && t > idleTimer)
+        {
+            t = 0;
+            //aiData.IsOutOfDistance = false;
+            idle = true;
+            controller.StopImmediately();
+            StartIdleCor(idleTime);
+        }
+
+        t += Time.deltaTime;
         #region Route기반 Patrol
         //if (!controller.Nav.IsNavActive) return;
         //if (idle) return;
@@ -111,13 +154,13 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     private void SetToMove()
     {
         Debug.Log("SetTarget");
-        targetPos = FindRandomPoint(controller.transform.position);
-        SetTarget(targetPos);
-        route = controller.Nav.GetRoute(targetPos); //경로 검색
-        if (route != null && route.Count != 0)
-            nextPos = route[0];
+        //targetPos = FindRandomPoint(controller.transform.position);
+        //SetTarget(targetPos);
+        //route = controller.Nav.GetRoute(targetPos); //경로 검색
+        //if (route != null && route.Count != 0)
+        //    nextPos = route[0];
 
-        moveIdx = 0;
+        //moveIdx = 0;
         idle = false;
     }
     private void StartIdleCor(float idleTime)

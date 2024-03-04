@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 67698770405232662}
   - component: {fileID: 67698770405232665}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: AttackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,8 @@ GameObject:
   - component: {fileID: 2356515405765779027}
   - component: {fileID: 2356515405765778977}
   - component: {fileID: 2356515405765778976}
-  m_Layer: 3
+  - component: {fileID: 171642250}
+  m_Layer: 7
   m_Name: MummyGunEnemy
   m_TagString: HitAble
   m_Icon: {fileID: 0}
@@ -197,7 +198,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Constraints: 4
 --- !u!114 &2356515405765779034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -303,6 +304,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyDataSO: {fileID: 11400000, guid: 16e35be596fdcd849b935211c69eeba6, type: 2}
+  acceleration: 50
+  deacceleration: 100
+  currentSpeed: 0
   _mainMap: {fileID: 0}
   _wallMap: {fileID: 0}
 --- !u!114 &2356515405765778977
@@ -317,8 +321,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b402d4bd19ac1f345a56fb51ec523181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <EnemyData>k__BackingField: {fileID: 11400000, guid: 16e35be596fdcd849b935211c69eeba6, type: 2}
-  Target: {fileID: 0}
+  <EnemyDataSO>k__BackingField: {fileID: 11400000, guid: 16e35be596fdcd849b935211c69eeba6, type: 2}
+  AIdata: {fileID: 0}
+  DebugTile: {fileID: 0}
   attackPoint: {fileID: 67698770405232662}
   bullet: {fileID: 8299640922602903309, guid: 0be16fc4bc182ee4da726eb2dd90f23e, type: 3}
 --- !u!120 &2356515405765778976
@@ -420,6 +425,21 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &171642250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2356515405765779046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf54fd38a17469d419bf943db4d063df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targets: []
+  obstacles: []
+  currentTarget: {fileID: 0}
 --- !u!1 &2356515405975365265
 GameObject:
   m_ObjectHideFlags: 0
@@ -430,7 +450,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2356515405975365266}
   - component: {fileID: 2356515405975365267}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 'Enemy : shadowPivot'
   m_TagString: Shadow
   m_Icon: {fileID: 0}
@@ -479,7 +499,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2356515406447830141}
   - component: {fileID: 2356515406447830140}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 'Enemy : shadow'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
