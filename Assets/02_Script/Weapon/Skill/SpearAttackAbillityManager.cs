@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Flags]
-public enum Abillity
+public enum SpearAbillity
 {
     Damage,
     Shadow,
