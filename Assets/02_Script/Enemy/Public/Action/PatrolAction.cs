@@ -50,7 +50,6 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
         {
             patrolBehaviour = behaviours[0] as PatrolBehaviour;
             patrolBehaviour.Setting(startPos, Random.Range(10, 25));
-            GizmoDrawer.Instance.Add(() => Gizmos.DrawWireSphere(currentPos, _data.Range));
         }
         else
         {
@@ -59,8 +58,9 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
             Debug.Log("error");
         }
         this.behaviours = behaviours;
-        OnEnter();
     }
+
+    private void GizmoDraw() => Gizmos.DrawWireSphere(startPos, _data.Range);
 
     public override void OnEnter()
     {
@@ -75,6 +75,8 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
 
         controller.FixedUpdateAction += OnFixedUpdate;
         controller.ChangeColor(Color.white);
+
+        GizmoDrawer.Instance.Add(GizmoDraw);
     }
 
     public override void OnExit()
@@ -82,6 +84,7 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
         controller.FixedUpdateAction -= OnFixedUpdate;
         idle = false;
         StopCoroutine(idleCor);
+        GizmoDrawer.Instance.Remove(GizmoDraw);
     }
 
     public override void OnUpdate()

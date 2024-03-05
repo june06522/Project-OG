@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1271857690570348407}
   - component: {fileID: 1271857690570348404}
+  - component: {fileID: 1271857690570348408}
   - component: {fileID: 1271857690570348402}
   - component: {fileID: 1271857690570348403}
   - component: {fileID: 1271857690570348366}
   - component: {fileID: 1271857690570348411}
-  - component: {fileID: 1271857690570348408}
   - component: {fileID: 1271857690570348410}
   m_Layer: 3
   m_Name: BatEnemy
@@ -92,6 +92,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &1271857690570348408
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271857690570348367}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.016492963, y: -0.016493082}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.7031257, y: 0.7690973}
+  m_EdgeRadius: 0
 --- !u!50 &1271857690570348402
 Rigidbody2D:
   serializedVersion: 4
@@ -191,34 +217,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32054c46fb2722c4bb3a01da5b1fed9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <EnemyData>k__BackingField: {fileID: 11400000, guid: 855214d2a1570994aa607b020e4f07d0, type: 2}
+  <EnemyDataSO>k__BackingField: {fileID: 0}
+  AIdata: {fileID: 0}
   attackPoint: {fileID: 1271857690984347623}
---- !u!61 &1271857690570348408
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1271857690570348367}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.016492963, y: -0.016493082}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.7031257, y: 0.7690973}
-  m_EdgeRadius: 0
 --- !u!114 &1271857690570348410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232,6 +233,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyDataSO: {fileID: 11400000, guid: 855214d2a1570994aa607b020e4f07d0, type: 2}
+  acceleration: 50
+  deacceleration: 100
+  currentSpeed: 0
+  _mainMap: {fileID: 0}
+  _wallMap: {fileID: 0}
 --- !u!1 &1271857690914156472
 GameObject:
   m_ObjectHideFlags: 0

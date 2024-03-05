@@ -19,8 +19,8 @@ public class PatrolBehaviour : SteeringBehaviour
         this.startPoint = startPoint;
         this.randomSeed = randomSeed;
         this.randomTime = Random.value;
-        Debug.Log("Setting : " + randomSeed);
-        Debug.Log(startPoint);
+        //Debug.Log("Setting : " + randomSeed);
+        //Debug.Log(startPoint);
     }
 
     public override (float[] danger, float[] interest) GetSteering(float[] danger, float[] interest, AIData aiData)
@@ -36,7 +36,7 @@ public class PatrolBehaviour : SteeringBehaviour
             float weight = 0;
             if (distance > patrolRadius)
             {
-                Debug.Log("OutOfRange");
+                //Debug.Log("OutOfRange");
                 weight = distance - patrolRadius;
             }
 

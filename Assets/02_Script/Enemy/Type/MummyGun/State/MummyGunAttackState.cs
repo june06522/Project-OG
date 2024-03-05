@@ -14,6 +14,7 @@ public class MummyGunAttackState : MummyGunRootState
 
     protected override void EnterState()
     {
+        controller.StopImmediately();
         controller.ChangeColor(Color.red);
         
         StartCoroutine(Attack());

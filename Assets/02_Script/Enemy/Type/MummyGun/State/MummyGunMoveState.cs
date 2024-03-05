@@ -13,17 +13,19 @@ public class MummyGunMoveState : MummyGunRootState
             new SeekBehaviour(controller.transform)
         };
         chaseAct = new ChaseAction<EMummyGunState>(controller, 
-                                        controller.AIdata.currentTarget, behaviourlist, true);
+                                        behaviourlist, true);
     }
 
     protected override void EnterState()
     {
+        Debug.Log("In");
         chaseAct.OnEnter();
     }
 
     protected override void ExitState()
     {
         chaseAct.OnExit();
+        controller.StopImmediately();
     }
 
     protected override void UpdateState()

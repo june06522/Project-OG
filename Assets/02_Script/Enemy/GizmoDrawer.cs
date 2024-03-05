@@ -18,7 +18,7 @@ public class GizmoDrawer : MonoBehaviour
     }
 
     public void Add(Action act) => GizmoAct += act;
-    public void Minus(Action act) => GizmoAct -= act;
+    public void Remove(Action act) => GizmoAct -= act;
     private void OnDrawGizmos()
     {
         GizmoAct?.Invoke();

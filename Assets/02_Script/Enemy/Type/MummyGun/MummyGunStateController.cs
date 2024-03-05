@@ -4,7 +4,8 @@ using UnityEngine;
 public enum EMummyGunState
 {
     Idle = 0,
-    Move = 1,
+    Patrol = 1,
+    Move = 2,
     Attack,
 }
 
@@ -21,24 +22,27 @@ public class MummyGunStateController : BaseFSM_Controller<EMummyGunState>
     {
         base.Start();
 
-        var patrolState = new MummyGunRootState(this);
+        var rootState = new MummyGunRootState(this);
+        var rootToPatrol = new RoomOpenTransitions<EMummyGunState>(this, EMummyGunState.Patrol);
+        rootState.
+            AddTransition<EMummyGunState>(rootToPatrol);
+        
+        var patrolState = new MummyGunPatrolState(this);
         var patrolToMove = new MummyGunPatrolToMoveTransition(this, EMummyGunState.Move);
-
-        //patrolState
-        //     .AddTransition<EMummyGunState>(patrolToMove);
+        patrolState
+             .AddTransition<EMummyGunState>(patrolToMove);
 
         var moveState = new MummyGunMoveState(this);
         var moveToAttack = new MoveToAttackTransition<EMummyGunState>(this, EMummyGunState.Attack, true);
-
         moveState
             .AddTransition<EMummyGunState>(moveToAttack);
 
         var attackState = new MummyGunAttackState(this);
 
-        AddState(patrolState, EMummyGunState.Idle);
+        AddState(rootState, EMummyGunState.Idle); 
+        AddState(patrolState, EMummyGunState.Patrol);
         AddState(moveState, EMummyGunState.Move);
         AddState(attackState, EMummyGunState.Attack);
-
     }
 
     public void InstantiateBullet(Vector2 dir, EEnemyBulletSpeedType speedType, EEnemyBulletCurveType curveType = EEnemyBulletCurveType.None)
