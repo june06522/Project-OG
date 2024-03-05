@@ -110,13 +110,14 @@ public class BSPAlgorithm : MonoBehaviour
         //로그 확인
         StartCoroutine(Debuging(triangles));
 
-        //선택되지 않은 방 삭제 <- 이건 나중에 들로네 삼각분할에 버그 못 고치면 최후의 수단
-
         //길 선택 최소스패닝 트리
-
+        List<TriEdge> edges = MinimumSpanningTree.FindLine(triangles);
 
         //길 그리기
+        for(int i = 0; i < edges.Count; i++)
+        {
 
+        }
     }
 
     IEnumerator Debuging(List<Triangle> triangles)

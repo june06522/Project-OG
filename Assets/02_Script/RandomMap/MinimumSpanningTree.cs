@@ -4,8 +4,18 @@ using UnityEngine;
 
 public class MinimumSpanningTree : MonoBehaviour
 {
-    public static Vector2[] FindLine(Vector2[] points)
+    public static List<TriEdge> FindLine(List<Triangle> triangles)
     {
-        return null;
+        int[] arr = new int[100];
+        List<TriEdge> list = new List<TriEdge>();
+
+        Dictionary<Vector2,Vector2> dic = new Dictionary<Vector2,Vector2>();
+        
+        for(int i = 0; i < triangles.Count; i++)
+        {
+
+        }
+
+        return list;
     }
 }
