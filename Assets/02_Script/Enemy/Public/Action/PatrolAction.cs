@@ -77,6 +77,8 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
         controller.ChangeColor(Color.white);
 
         GizmoDrawer.Instance.Add(GizmoDraw);
+
+        Debug.Log("Patrol");
     }
 
     public override void OnExit()

@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace Astar
 {
-    public class PriorityQueue
+    public class Heap
     {
         private List<Node> _heap;
 
         public int Count => _heap.Count;
         public Node Root => _heap[0];
 
-        public PriorityQueue(int roomNodeSize)
+        public Heap(int roomNodeSize)
         {
             _heap = new List<Node>(roomNodeSize);
         }

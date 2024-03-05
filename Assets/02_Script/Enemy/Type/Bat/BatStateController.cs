@@ -15,9 +15,9 @@ public class BatStateController : BaseFSM_Controller<EBatState>
 {
     [SerializeField] public Transform attackPoint;
 
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        base.Start();
         var idleState = new BatEnemyRootState(this);
         var idleToMove = new TransitionIdleOrMove<EBatState>(this, EBatState.Move);
 

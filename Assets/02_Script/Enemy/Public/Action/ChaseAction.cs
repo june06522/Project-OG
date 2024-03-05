@@ -28,7 +28,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
     public ChaseAction(BaseFSM_Controller<T> controller, List<SteeringBehaviour> behaviours, bool checkCollision) : base(controller)
     {
-        //this.targetTrm = targetTrm;
+        this.targetTrm = GameManager.Instance.player;
         this.behaviours = behaviours;
         //route = new();
 
@@ -53,9 +53,18 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
     public override void OnFixedUpdate()
     {
-        Debug.Log("Gang");
-        Vector2 movementInput = controller.Solver.GetDirectionToMove(behaviours, controller.AIdata);
-        controller.Enemy.MovementInput = movementInput;
+       // targetTrm = controller.AIdata.currentTarget;
+        //if (targetTrm == null) return;
+
+        Vector2 dir = (targetTrm.position - controller.transform.position);
+
+        if (dir.magnitude > _data.AttackAbleRange)
+        {
+            Vector2 movementInput = controller.Solver.GetDirectionToMove(behaviours, controller.AIdata);
+            controller.Enemy.MovementInput = movementInput;
+        }
+        else
+            controller.StopImmediately();
     }
 
     public override void OnUpdate()

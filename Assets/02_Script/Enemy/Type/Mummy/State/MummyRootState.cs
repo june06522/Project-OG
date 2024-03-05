@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+
 //root°â patrolState
 public class MummyRootState : BaseFSM_State<EMummyState>
 {
@@ -6,26 +8,31 @@ public class MummyRootState : BaseFSM_State<EMummyState>
     protected EnemyDataSO _data => controller.EnemyDataSO;
 
     PatrolAction<EMummyState> patrolAct;
+    protected List<Detector> detectors;
 
     public MummyRootState(MummyStateController controller) : base(controller)
     {
         this.controller = controller;
-        //patrolAct = new PatrolAction<EMummyState>(controller, controller.target);
-    }
 
-    protected override void EnterState()
-    {
-        patrolAct.OnEnter();
-    }
-
-    protected override void ExitState()
-    {
-        patrolAct.OnExit();
+        //detector
+        detectors = new List<Detector>()
+        {
+            new TargetDetector( controller.transform, _data.ObstacleLayer, _data.TargetAbleLayer),
+            new ObstacleDetector( controller.transform, _data.ObstacleLayer),
+        };
     }
 
     protected override void UpdateState()
     {
-        patrolAct.OnUpdate();
+        UpdateDetector();
+    }
+
+    public void UpdateDetector()
+    {
+        foreach (var detector in detectors)
+        {
+            detector.Detect(controller.AIdata);
+        }
     }
 }
     

@@ -44,6 +44,11 @@ public class TestEnemyFSMController : BaseFSM_Controller<ETestEnemyState>
         AddState(jumpState, ETestEnemyState.Jump);
     }
 
+    public void IgnoreCollision(bool value)
+    {
+        Physics2D.IgnoreCollision(Enemy.Collider, GameManager.Instance.player.GetComponent<Collider2D>());
+    }
+
     //Debug
     public void InstantiateDebugGrid(Vector2 pos)
     {

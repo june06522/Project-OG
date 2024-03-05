@@ -30,7 +30,7 @@ public class MummyGunMoveState : MummyGunRootState
 
     protected override void UpdateState()
     {
-        UpdateDetector();
+        base.UpdateState();
         chaseAct.OnUpdate();
     }
 }

@@ -24,7 +24,7 @@ public class MoveToAttackTransition<T> : BaseFSM_Transition<T> where T : Enum
 
         if (checkObstacle)
         {
-            result &= Transitions.CheckObstacleBetweenTarget(controller.transform, targetTrm, _data.ObstacleLayer);
+            //return result && Transitions.CheckObstacleBetweenTarget(controller.transform, targetTrm, _data.ObstacleLayer);
         }
 
         return result;

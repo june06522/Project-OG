@@ -41,7 +41,13 @@ public class BatAttackState : BatEnemyRootState
         Collider2D col = Physics2D.OverlapCircle(controller.attackPoint.position, 0.25f, LayerMask.GetMask("Player"));
         if (col)
         {
-            col.GetComponent<IHitAble>().Hit(_data.AttackPower);
+            IHitAble hitAble;
+            if (col.TryGetComponent<IHitAble>(out hitAble))
+            {
+                hitAble.Hit(_data.AttackPower);
+            }
+            else
+                Debug.Log(col.gameObject.name);
         }
     }
 
