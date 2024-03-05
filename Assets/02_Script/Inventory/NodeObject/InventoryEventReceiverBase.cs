@@ -12,6 +12,7 @@ public abstract class InventoryEventReceiverBase : InventoryObjectRoot, IDisposa
 
     public virtual void Dispose()
     {
+
     }
 
     public override void GetSignal(object parm)
@@ -25,6 +26,5 @@ public abstract class InventoryEventReceiverBase : InventoryObjectRoot, IDisposa
         }
 
     }
-
 
 }

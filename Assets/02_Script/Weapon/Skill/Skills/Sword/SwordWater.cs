@@ -12,7 +12,6 @@ public class SwordWater : Skill
     {
         
         var w = Instantiate(water, weaponTrm.position, Quaternion.identity);
-        Debug.Log(power);
         w.Shoot(water.Data.Damage * power, power * 2, GameManager.Instance.player);
 
     }

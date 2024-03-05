@@ -8,7 +8,7 @@ public class FirePistol : Skill
 
     public override void Excute(Transform weaponTrm, Transform target, int power)
     {
-        Debug.Log(12);
+        //Debug.Log(12);
 
         var a = Instantiate(fireBullet, weaponTrm.position, weaponTrm.rotation);
 

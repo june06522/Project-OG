@@ -109,6 +109,6 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         isDrag = true;
         inventory.RemoveItem(InvenObject, InvenObject.originPos);
-        Debug.Log(InvenObject.originPos); 
+
     }
 }

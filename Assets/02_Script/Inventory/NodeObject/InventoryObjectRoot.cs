@@ -55,7 +55,6 @@ public abstract class InventoryObjectRoot : ScriptableObject
 
         }
 
-
     }
 
     public void Disconnect(InventoryObjectRoot obj, ConnectType type)

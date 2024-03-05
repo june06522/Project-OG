@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -58,7 +57,6 @@ public class InventoryObjectData : ScriptableObject
     public void GetSignal(object signal)
     {
 
-        Debug.Log("w");
         OnSignalReceived?.Invoke(signal);
 
     }
