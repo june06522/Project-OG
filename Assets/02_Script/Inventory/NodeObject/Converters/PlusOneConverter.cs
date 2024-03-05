@@ -7,7 +7,7 @@ public class PlusOneConverter : InventoryConverterBase
     public override void GetSignal([BindParameterType(typeof(SendData))] object signal)
     {
 
-        Debug.Log("Connector");
+        //Debug.Log("Connector");
 
         var sendData = (SendData)signal;
         sendData.Power++;

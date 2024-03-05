@@ -10,7 +10,7 @@ public class InventorySignalGet : InventoryEventReceiverBase
 
         base.OnInit();
 
-        Debug.Log("GetSignal");
+        //Debug.Log("GetSignal");
 
         data.OnSignalReceived += GetSignal;
 

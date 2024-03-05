@@ -166,7 +166,7 @@ public class WeaponInventory : MonoBehaviour
 
         var c = container.Find(
             x => x.signalPoints.Count != 0 ? 
-            x.signalPoints.FindIndex(y => y.point + x.originPos == origin + (point + dir)) != -1 && dir == -dir
+            x.signalPoints.FindIndex(y => y.point + x.originPos == origin + (point + dir) && y.dir == -dir) != -1
             : x.bricks.FindIndex(y => y + x.originPos == origin + (point + dir)) != -1);
 
         if(c == null) return null;
