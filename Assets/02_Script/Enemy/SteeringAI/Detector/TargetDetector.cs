@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class TargetDetector : Detector
 {
-    [SerializeField]
-    private float targetDetectionRange = 5;
+    private float targetDetectionRange;
 
     [SerializeField]
     private LayerMask obstaclesLayerMask, playerLayerMask;
@@ -15,42 +14,51 @@ public class TargetDetector : Detector
 
     //gizmo parameters
     private List<Transform> colliders;
+    private bool checkObstacle;
 
-    public TargetDetector(Transform ownerTrm, LayerMask obstacleLayer, LayerMask playerLayerMask) : base(ownerTrm)
+    public TargetDetector(Transform ownerTrm, EnemyDataSO dataSO) : base(ownerTrm)
     {
-        this.obstaclesLayerMask = obstacleLayer;
-        this.playerLayerMask = playerLayerMask;
+        this.obstaclesLayerMask = dataSO.ObstacleLayer;
+        this.playerLayerMask = dataSO.TargetAbleLayer;
+        this.checkObstacle = dataSO.CheckObstacle;
+        this.targetDetectionRange = dataSO.Range;
         GizmoDrawer.Instance.Add(OnDrawGizmosSelected);
     }
 
     public override void Detect(AIData aiData)
     {
         //Find out if player is near
-        Collider2D playerCollider = 
+        Collider2D playerCollider =
             Physics2D.OverlapCircle(transform.position, targetDetectionRange, playerLayerMask);
 
         if (playerCollider != null)
         {
             //Check if you see the player
             Vector2 direction = (playerCollider.transform.position - transform.position).normalized;
-            RaycastHit2D hit = 
-                Physics2D.Raycast(transform.position, direction, targetDetectionRange, obstaclesLayerMask | playerLayerMask);
-
-            ////Make sure that the collider we see is on the "Player" layer
-            //Debug.Log(playerCollider);
-            if (hit.collider != null && (playerLayerMask & (1 << hit.collider.gameObject.layer)) != 0)
+            if (checkObstacle)
             {
-                Debug.DrawRay(transform.position, direction * targetDetectionRange, Color.magenta);
-                colliders = new List<Transform>() { playerCollider.transform };
+                RaycastHit2D hit = 
+                    Physics2D.Raycast(transform.position, direction, targetDetectionRange, obstaclesLayerMask | playerLayerMask);
+
+                ////Make sure that the collider we see is on the "Player" layer
+                //Debug.Log(playerCollider);
+                if (hit.collider != null && (playerLayerMask & (1 << hit.collider.gameObject.layer)) != 0)
+                {
+                    Debug.DrawRay(transform.position, direction * targetDetectionRange, Color.magenta);
+                    colliders = new List<Transform>() { playerCollider.transform };
+                }
+                else
+                {
+                    colliders = null;
+                }
             }
             else
             {
-                colliders = null;
+                colliders = new List<Transform>() { playerCollider.transform };
             }
         }
         else
         {
-            //Enemy doesn't see the player
             colliders = null;
         }
         aiData.targets = colliders;

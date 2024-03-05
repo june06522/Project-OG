@@ -16,10 +16,12 @@ public class SeekBehaviour : SteeringBehaviour
     //gizmo parameters
     private Vector2 targetPositionCached;
     private float[] interestsTemp;
+    private bool checkObstacle;
 
     public SeekBehaviour(Transform ownerTrm) : base(ownerTrm)
     {
         GizmoDrawer.Instance.Add(OnDrawGizmos);
+        //this.checkObstacle = checkObstacle;
     }
 
     public override (float[] danger, float[] interest) GetSteering(float[] danger, float[] interest, AIData aiData)

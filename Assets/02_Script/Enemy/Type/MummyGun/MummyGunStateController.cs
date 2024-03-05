@@ -28,7 +28,7 @@ public class MummyGunStateController : BaseFSM_Controller<EMummyGunState>
             AddTransition<EMummyGunState>(rootToPatrol);
         
         var patrolState = new MummyGunPatrolState(this);
-        var patrolToMove = new MummyGunPatrolToMoveTransition(this, EMummyGunState.Move);
+        var patrolToMove = new PatrolToChaseTransition<EMummyGunState>(this, EMummyGunState.Move);
         patrolState
              .AddTransition<EMummyGunState>(patrolToMove);
 

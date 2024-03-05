@@ -1,16 +1,16 @@
-
+using FSM_System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
-//root°â patrolState
-public class MummyRootState : BaseFSM_State<EMummyState>
+public class GlowyRootState : BaseFSM_State<EGlowyState>
 {
-    protected new MummyStateController controller;
+    protected new GlowyStateController controller;
     protected EnemyDataSO _data => controller.EnemyDataSO;
 
-    PatrolAction<EMummyState> patrolAct;
     protected List<Detector> detectors;
 
-    public MummyRootState(MummyStateController controller) : base(controller)
+    public GlowyRootState(GlowyStateController controller) : base(controller)
     {
         this.controller = controller;
 
@@ -34,5 +34,5 @@ public class MummyRootState : BaseFSM_State<EMummyState>
             detector.Detect(controller.AIdata);
         }
     }
+
 }
-    

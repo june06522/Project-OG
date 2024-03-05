@@ -9,8 +9,6 @@ public class MummyGunRootState : BaseFSM_State<EMummyGunState>
     protected new MummyGunStateController controller;
     protected EnemyDataSO _data => controller.EnemyDataSO;
 
-    PatrolAction<EMummyGunState> patrolAct;
-
     protected List<Detector> detectors;
 
     public MummyGunRootState(MummyGunStateController controller) : base(controller)
@@ -20,7 +18,7 @@ public class MummyGunRootState : BaseFSM_State<EMummyGunState>
         //detector
         detectors = new List<Detector>() 
         { 
-            new TargetDetector( controller.transform, _data.ObstacleLayer, _data.TargetAbleLayer),
+            new TargetDetector( controller.transform, _data),
             new ObstacleDetector( controller.transform, _data.ObstacleLayer),
         };
     }

@@ -17,8 +17,7 @@ public class MoveToAttackTransition<T> : BaseFSM_Transition<T> where T : Enum
     protected override bool CheckTransition()
     {
         //공격쿨이 다 돌았고, 공격범위 안에 있을때 
-
-        Debug.Log("IsCoolDown : " + _data.IsAttackCoolDown);
+        
         bool result = !_data.IsAttackCoolDown &&
                     Transitions.CheckDistance(controller.transform, targetTrm, _data.AttackAbleRange);
 

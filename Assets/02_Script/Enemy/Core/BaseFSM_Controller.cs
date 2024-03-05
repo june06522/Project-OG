@@ -15,7 +15,8 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
 
     public event Action FixedUpdateAction;
     public event Action GizmosAction;
-        
+
+    public Transform Target;
     protected override void Awake()
     {
         Enemy = GetComponent<Enemy>();
@@ -30,6 +31,7 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
         Nav = new(Enemy);
         Solver = new();
         GizmosAction += DrawMyColSize;
+        Target = GameManager.Instance.player;
     }
 
     protected override void Update()

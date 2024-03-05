@@ -9,7 +9,7 @@ public class BatEnemyRootState : FSM_State<EBatState>
     public BatEnemyRootState(BatStateController controller) : base(controller)
     {
         this.controller = controller;
-        detector = new TargetDetector(controller.transform, _data.ObstacleLayer, _data.TargetAbleLayer);
+        detector = new TargetDetector(controller.transform, _data);
     }
 
     protected override void UpdateState()
