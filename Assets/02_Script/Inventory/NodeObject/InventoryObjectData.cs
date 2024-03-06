@@ -16,7 +16,8 @@ public class InventoryObjectData : ScriptableObject
 {
 
     [field:SerializeField] public List<Vector2Int> bricks { get; protected set; } = new();
-    [field:SerializeField] public List<SignalPoint> signalPoints { get; protected set; } = new();
+    [field:SerializeField] public List<SignalPoint> inputPoints { get; protected set; } = new();
+    [field:SerializeField] public List<SignalPoint> sendPoints { get; protected set; } = new();
     [HideInInspector] public List<InventoryObjectRoot> includes = new();
 
     private WeaponInventory inventory;
@@ -66,7 +67,7 @@ public class InventoryObjectData : ScriptableObject
 
         List<InventoryObjectData> datas = new List<InventoryObjectData>();
 
-        foreach(var item in signalPoints)
+        foreach(var item in sendPoints)
         {
 
             var d = inventory.GetObjectData(item.point, item.dir, originPos);

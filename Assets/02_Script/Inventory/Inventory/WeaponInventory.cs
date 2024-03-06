@@ -164,64 +164,18 @@ public class WeaponInventory : MonoBehaviour
     public InventoryObjectData GetObjectData(Vector2Int point, Vector2Int dir, Vector2Int origin)
     {
 
-        var c = container.Find(x => x.signalPoints.Count != 0 ?
-        // 연결부분이 정해져 있을때
-        x.signalPoints.FindIndex(y => y.point + x.originPos == origin + (point + dir) && y.dir == -dir) != -1 : 
-        
-        
-        // 연결부분이 정해져 있지 않을 때
+        var c = container.Find(x => x.inputPoints.Count != 0 ?
+        // 진입점이 있는 블록을 탐색
+        x.sendPoints.FindIndex(y => y.point + x.originPos == origin + (point + dir) && y.dir == -dir) != -1 : 
+        // 진입점이 없을 때
         x.bricks.FindIndex(y => y + x.originPos == origin + (point + dir)) != -1);
-        // container에 들어있는 아이템의 위치가 파라미터의 point + dir 이랑 같으면
+        // container에 들어있는 아이템의 위치가 파라미터의 point + dir 이랑 같으면(sendPoint 쪽으로 있기만 하면)
 
         if (c == null) return null;
 
         return c;
 
     }
-
-
-    public InventoryObjectData GetObjectData2(Vector2Int point, Vector2Int dir, Vector2Int origin)
-    {
-        InventoryObjectData c = null;
-        foreach (var item in container)
-        {
-            if (item.signalPoints.Count != 0)
-            {
-                foreach (var signalPoint in item.signalPoints)
-                {
-                    if (signalPoint.point + item.originPos == origin + (point + dir) && signalPoint.dir == -dir)
-                    {
-                        c = item;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                foreach (var brick in item.bricks)
-                {
-                    if (brick + item.originPos == origin + (point + dir))
-                    {
-                        c = item;
-                        break;
-                    }
-                }
-            }
-
-            if (c != null)
-            {
-                break;
-            }
-        }
-
-        if (c == null)
-        {
-            return null;
-        }
-
-        return c;
-    }
-
 
 
     public Vector2Int? FindInvenPoint(Vector2Int localPoint)
