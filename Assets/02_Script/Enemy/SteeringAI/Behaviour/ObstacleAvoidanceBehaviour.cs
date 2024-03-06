@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Timeline;
 
 public class ObstacleAvoidanceBehaviour : SteeringBehaviour
 {
@@ -34,17 +35,23 @@ public class ObstacleAvoidanceBehaviour : SteeringBehaviour
 
             Vector2 directionToObstacleNormalized = directionToObstacle.normalized;
 
+            bool isWall = obstacleCollider.gameObject.layer == LayerMask.NameToLayer("Wall");
             //Add obstacle parameters to the danger array
             for (int i = 0; i < Directions.eightDirections.Count; i++)
             {
                 float result = Vector2.Dot(directionToObstacleNormalized, Directions.eightDirections[i]);
 
                 float valueToPutIn = result * weight;
-
+           
                 //override value only if it is higher than the current one stored in the danger array
                 if (valueToPutIn > danger[i])
                 {
                     danger[i] = valueToPutIn;
+                }
+                else
+                {
+                    //if (isWall)
+                    //    interest[i] = 1 - result;
                 }
             }
         }
