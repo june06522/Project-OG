@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+public enum Dir
+{
+    left, right, top, bottom
+}
 
 public class BSPRoomInfo
 {
@@ -171,15 +175,55 @@ public class BSPAlgorithm : MonoBehaviour
     {
         Vector2 midPos = new Vector2(start.x, end.y);
 
+        int idx = 1;
         if (start.x > end.x)
+        {
             midPos.x -= 7;
+        }
         else if (start.x < end.x)
+        {
             midPos.x += 7;
-
+        }
         if (start.y > end.y)
+        {
             midPos.y += 7;
+        }
         else if (start.y < end.y)
+        {
             midPos.y -= 7;
+        }
+
+        if (start.x > end.x)
+        {
+            while (!CanCreate(midPos, end.x, Dir.left))
+                if (idx % 2 == 0)
+                    midPos.y += idx++;
+                else
+                    midPos.y -= idx++;
+        }
+        else if (start.x < end.x)
+        {
+            while (!CanCreate(midPos, end.x, Dir.right))
+                if (idx % 2 == 0)
+                    midPos.y += idx++;
+                else
+                    midPos.y -= idx++;
+        }
+
+        idx = 1;
+        if (start.y > end.y)
+            while (!CanCreate(midPos, start.y, Dir.top))
+                if (idx % 2 == 0)
+                    midPos.x += idx++;
+                else
+                    midPos.x -= idx++;
+        else if (start.y < end.y)
+            while (!CanCreate(midPos, start.y, Dir.bottom))
+                if (idx % 2 == 0)
+                    midPos.x += idx++;
+                else
+                    midPos.x -= idx++;
+
 
         if (end.x > midPos.x)
         {
@@ -289,8 +333,16 @@ public class BSPAlgorithm : MonoBehaviour
                 {
                     if (isFirst)
                     {
-                        roomTilemap.WallTile.SetTile(new Vector3Int(i, (int)midPos.y + 2, 0), leftEndWall1);
-                        roomTilemap.WallTile.SetTile(new Vector3Int(i, (int)midPos.y + 3, 0), leftEndWall2);
+                        if (start.y < midPos.y)
+                        {
+                            roomTilemap.WallTile.SetTile(new Vector3Int(i, (int)midPos.y + 2, 0), top2tile);
+                            roomTilemap.WallTile.SetTile(new Vector3Int(i, (int)midPos.y + 3, 0), top1tile);
+                        }
+                        else
+                        {
+                            roomTilemap.WallTile.SetTile(new Vector3Int(i, (int)midPos.y + 2, 0), leftEndWall1);
+                            roomTilemap.WallTile.SetTile(new Vector3Int(i, (int)midPos.y + 3, 0), leftEndWall2);
+                        }
                         isFirst = false;
                     }
                     else
@@ -326,8 +378,16 @@ public class BSPAlgorithm : MonoBehaviour
                 {
                     if (isFirst)
                     {
-                        roomTilemap.WallTile.SetTile(new Vector3Int(i, (int)midPos.y + 2, 0), rightEndWall1);
-                        roomTilemap.WallTile.SetTile(new Vector3Int(i, (int)midPos.y + 3, 0), rightEndWall2);
+                        if (start.y < midPos.y)
+                        {
+                            roomTilemap.WallTile.SetTile(new Vector3Int(i, (int)midPos.y + 2, 0), top2tile);
+                            roomTilemap.WallTile.SetTile(new Vector3Int(i, (int)midPos.y + 3, 0), top1tile);
+                        }
+                        else
+                        {
+                            roomTilemap.WallTile.SetTile(new Vector3Int(i, (int)midPos.y + 2, 0), rightEndWall1);
+                            roomTilemap.WallTile.SetTile(new Vector3Int(i, (int)midPos.y + 3, 0), rightEndWall2);
+                        }
                         isFirst = false;
                     }
                     else
@@ -386,5 +446,112 @@ public class BSPAlgorithm : MonoBehaviour
                 roomTilemap.WallTile.SetTile(new Vector3Int((int)midPos.x + 2, (int)midPos.y - 2, 0), corner2);
             }
         }
+    }
+
+    bool CanCreate(Vector2 start, float end, Dir dir)
+    {
+        int cnt = 0;
+        switch (dir)
+        {
+            case Dir.left:
+                while (start.x > end)
+                {
+                    start.x--;
+                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 1, 0)) != null)
+                        if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 2, 0)) != null)
+                            if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y - 2, 0)) != null)
+                                if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y - 1, 0)) != null)
+                                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y - 3, 0)) != null)
+                                        if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 3, 0)) != null)
+                                            if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y, 0)) != null)
+                                                continue;
+                    cnt++;
+
+                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 1, 0)) != null ||
+                      roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 2, 0)) != null ||
+                      roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 3, 0)) != null ||
+                      roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y - 3, 0)) != null ||
+                      roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y - 2, 0)) != null ||
+                      roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y - 1, 0)) != null ||
+                      roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y, 0)) != null)
+                        return false;
+                }
+                break;
+            case Dir.right:
+                while (start.x < end)
+                {
+                    start.x++;
+                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 1, 0)) != null)
+                        if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y - 1, 0)) != null)
+                            if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y - 2, 0)) != null)
+                                if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y - 3, 0)) != null)
+                                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 2, 0)) != null)
+                                        if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 3, 0)) != null)
+                                            if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y, 0)) != null)
+                                                continue;
+                    cnt++;
+
+                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 1, 0)) != null ||
+                        roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y - 1, 0)) != null ||
+                        roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y - 2, 0)) != null ||
+                        roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y - 3, 0)) != null ||
+                        roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 3, 0)) != null ||
+                        roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 2, 0)) != null ||
+                        roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y, 0)) != null)
+                        return false;
+                }
+                break;
+            case Dir.top:
+                while (start.y < end)
+                {
+                    start.y++;
+                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x + 1, (int)start.y, 0)) != null)
+                        if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x - 1, (int)start.y, 0)) != null)
+                            if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x + 2, (int)start.y, 0)) != null)
+                                if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x - 2, (int)start.y, 0)) != null)
+                                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y, 0)) != null)
+                                        continue;
+                    cnt++;
+
+                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x + 1, (int)start.y, 0)) != null ||
+                        roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x - 1, (int)start.y, 0)) != null ||
+                        roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x - 2, (int)start.y, 0)) != null ||
+                        roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x + 2, (int)start.y, 0)) != null ||
+                        roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y, 0)) != null)
+                        return false;
+                }
+                break;
+            case Dir.bottom:
+                while (start.y > end)
+                {
+                    start.y--;
+                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x + 1, (int)start.y, 0)) != null)
+                        if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x - 2, (int)start.y, 0)) != null)
+                            if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x + 2, (int)start.y, 0)) != null)
+                                if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x - 1, (int)start.y, 0)) != null)
+                                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y, 0)) != null)
+                                        continue;
+                    cnt++;
+
+                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x + 1, (int)start.y, 0)) != null ||
+                        roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x - 2, (int)start.y, 0)) != null ||
+                        roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x + 2, (int)start.y, 0)) != null ||
+                        roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x - 1, (int)start.y, 0)) != null ||
+                        roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y, 0)) != null)
+                        return false;
+                }
+                break;
+        }
+        return true;
+        //if (cnt == 1 || cnt == 2)
+        //{
+        //    Debug.Log($"true : {cnt}");
+        //    return true;
+        //}
+        //else
+        //{
+        //    Debug.Log($"false : {cnt}");
+        //    return false;
+        //}
     }
 }
