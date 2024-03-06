@@ -25,8 +25,8 @@ public delegate void SlotChanged(Vector2Int point, bool fill);
 public class WeaponInventory : MonoBehaviour
 {
 
-    [field:SerializeField] public int Width { get; private set; }
-    [field:SerializeField] public int Height { get; private set; }
+    [field: SerializeField] public int Width { get; private set; }
+    [field: SerializeField] public int Height { get; private set; }
 
     private WeaponInventoryViewer viewer;
     private List<SlotData> invenslots = new();
@@ -37,18 +37,18 @@ public class WeaponInventory : MonoBehaviour
 
     private void Awake()
     {
-        
+
         viewer = FindObjectOfType<WeaponInventoryViewer>();
 
     }
 
     private void Start()
     {
-        
-        for(int x = 0; x < Width; x++)
+
+        for (int x = 0; x < Width; x++)
         {
 
-            for(int y = 0; y < Height; y++)
+            for (int y = 0; y < Height; y++)
             {
 
                 Vector2Int point = new Vector2Int(x, y);
@@ -69,7 +69,7 @@ public class WeaponInventory : MonoBehaviour
 
     }
 
-    public void FillSlot(Vector2Int point, bool value) 
+    public void FillSlot(Vector2Int point, bool value)
     {
 
         var slot = invenslots.Find(x => x.point == point);
@@ -83,7 +83,7 @@ public class WeaponInventory : MonoBehaviour
     public void FillSlots(List<Vector2Int> points, Vector2Int origin, bool value)
     {
 
-        foreach(var point in points)
+        foreach (var point in points)
         {
 
             FillSlot(point + origin, value);
@@ -107,7 +107,7 @@ public class WeaponInventory : MonoBehaviour
         foreach (var point in points)
         {
 
-            if(!CheckFill(point + origin)) return false;
+            if (!CheckFill(point + origin)) return false;
 
         }
 
@@ -118,7 +118,7 @@ public class WeaponInventory : MonoBehaviour
     public bool AddItem(InventoryObjectData item, Vector2Int origin)
     {
 
-        if(CheckFills(item.bricks, origin))
+        if (CheckFills(item.bricks, origin))
         {
 
             item.originPos = origin;
@@ -132,23 +132,23 @@ public class WeaponInventory : MonoBehaviour
 
     }
 
-    public void RemoveItem(InventoryObjectData item, Vector2Int origin) 
+    public void RemoveItem(InventoryObjectData item, Vector2Int origin)
     {
-        
+
         container.Remove(item);
         FillSlots(item.bricks, origin, false);
-    
+
     }
 
     public Vector2? CheckItemAuto(InventoryObjectData item)
     {
 
-        foreach(var slot in invenslots)
+        foreach (var slot in invenslots)
         {
 
             if (slot.isFilled) continue;
 
-            if(CheckFills(item.bricks, slot.point))
+            if (CheckFills(item.bricks, slot.point))
             {
 
                 return slot.point;
@@ -164,24 +164,73 @@ public class WeaponInventory : MonoBehaviour
     public InventoryObjectData GetObjectData(Vector2Int point, Vector2Int dir, Vector2Int origin)
     {
 
-        var c = container.Find(
-            x => x.signalPoints.Count != 0 ? 
-            x.signalPoints.FindIndex(y => y.point + x.originPos == origin + (point + dir) && y.dir == -dir) != -1
-            : x.bricks.FindIndex(y => y + x.originPos == origin + (point + dir)) != -1);
+        var c = container.Find(x => x.signalPoints.Count != 0 ?
+        // 연결부분이 정해져 있을때
+        x.signalPoints.FindIndex(y => y.point + x.originPos == origin + (point + dir) && y.dir == -dir) != -1 : 
+        
+        
+        // 연결부분이 정해져 있지 않을 때
+        x.bricks.FindIndex(y => y + x.originPos == origin + (point + dir)) != -1);
+        // container에 들어있는 아이템의 위치가 파라미터의 point + dir 이랑 같으면
 
-        if(c == null) return null;
+        if (c == null) return null;
 
         return c;
 
     }
 
+
+    public InventoryObjectData GetObjectData2(Vector2Int point, Vector2Int dir, Vector2Int origin)
+    {
+        InventoryObjectData c = null;
+        foreach (var item in container)
+        {
+            if (item.signalPoints.Count != 0)
+            {
+                foreach (var signalPoint in item.signalPoints)
+                {
+                    if (signalPoint.point + item.originPos == origin + (point + dir) && signalPoint.dir == -dir)
+                    {
+                        c = item;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var brick in item.bricks)
+                {
+                    if (brick + item.originPos == origin + (point + dir))
+                    {
+                        c = item;
+                        break;
+                    }
+                }
+            }
+
+            if (c != null)
+            {
+                break;
+            }
+        }
+
+        if (c == null)
+        {
+            return null;
+        }
+
+        return c;
+    }
+
+
+
     public Vector2Int? FindInvenPoint(Vector2Int localPoint)
     {
-        ///
+        //
         var c = viewer.slots.Find(x =>
         {
 
-            return Vector2Int.FloorToInt(x.transform.position  / 100) == Vector2Int.FloorToInt(localPoint);
+            return Vector2Int.FloorToInt(x.transform.position / 100) == Vector2Int.FloorToInt(localPoint);
 
         });
 

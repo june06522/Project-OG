@@ -19,16 +19,21 @@ public class Sickle : InvenWeapon
 
     public override void Attack(Transform target)
     {
+
         monsters.Clear();
-        Debug.Log(monsters.Capacity);
+
         monsters = Physics2D.OverlapCircleAll(transform.position, range, 1 << 3).ToList();
 
         foreach (var item in monsters)
         {
+
             if (item.TryGetComponent<IHitAble>(out var h))
             {
+
                 h.Hit(Data.AttackDamage.GetValue());
+
             }
+
         }
 
     }
