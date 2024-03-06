@@ -18,6 +18,7 @@ public class RoomTileMap : MonoBehaviour
 
     [Header("타일맵")]
     [SerializeField] Tilemap tile;
+    public Tilemap Tile => tile;
     [SerializeField] Tilemap walltile;
     public Tilemap WallTile => walltile;
 
@@ -62,10 +63,19 @@ public class RoomTileMap : MonoBehaviour
         Shuffle();
     }
 
+    private void Start()
+    {
+        //BGTileSetting();
+    }
+
     private void BGTileSetting()
     {
-        int x = roomGenarator.Width * roomGenarator.WidthLength / 2;
-        int y = roomGenarator.Height * roomGenarator.HeightLength / 2;
+        //int x = roomGenarator.Width * roomGenarator.WidthLength / 2;
+        //int y = roomGenarator.Height * roomGenarator.HeightLength / 2;
+
+        int x = 500;
+        int y = 500;
+
         for (int i = -x; i < x; i++)
         {
             for (int j = -y; j < y; j++)
@@ -102,7 +112,6 @@ public class RoomTileMap : MonoBehaviour
 
     private void PoltarRoom()
     {
-        BGTileSetting();
         for (int i = 0; i < roomGenarator.useRooms.Count(); ++i)
         {
             if (rooms.Count > 0 && i != 0)
@@ -341,8 +350,6 @@ public class RoomTileMap : MonoBehaviour
 
     private void LoadRoom()
     {
-        BGTileSetting();
-
         for (int i = 0; i < roomGenarator.useRooms.Count(); ++i)
         {
             if (rooms.Count > 0 && i != 0)
