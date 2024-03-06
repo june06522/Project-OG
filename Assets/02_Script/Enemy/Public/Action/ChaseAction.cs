@@ -26,6 +26,8 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     List<SteeringBehaviour> behaviours;
     Vector2 movementInput;
 
+    private bool firstDiscovered;
+
     public ChaseAction(BaseFSM_Controller<T> controller, List<SteeringBehaviour> behaviours, bool checkCollision) : base(controller)
     {
         this.targetTrm = GameManager.Instance.player;
@@ -34,14 +36,17 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
         //updateAction = useNav == true ? UseNavChase : NormalChase;
         isMove = true;
+        firstDiscovered = false;
     }
 
     public override void OnEnter()
     {
-        //Debug
-        Debug.Log("EnterChase");
-        //ResetRoute();
-        controller.ChangeColor(Color.blue);
+        if (!firstDiscovered)
+        {
+            firstDiscovered = true;
+            DiscoverEvent();
+            Debug.Log("DisCover");
+        }
         controller.FixedUpdateAction += OnFixedUpdate;  
     }
 
@@ -53,9 +58,6 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
     public override void OnFixedUpdate()
     {
-       // targetTrm = controller.AIdata.currentTarget;
-        //if (targetTrm == null) return;
-
         Vector2 dir = (targetTrm.position - controller.transform.position);
 
         if (dir.magnitude > _data.AttackAbleRange)
@@ -147,7 +149,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     //    }
 
     //    Vector2 dir = nextPos - controller.transform.position;
-  
+
     //    Vector3 position = controller.Enemy.Rigidbody.position
     //                         + (dir.normalized * _data.Speed * Time.deltaTime);
 
@@ -188,4 +190,9 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
     #endregion
 
+
+    private void DiscoverEvent()
+    {
+        controller.PlayDiscoverAnim();
+    }
 }

@@ -27,7 +27,7 @@ public class BombAttackState : BombRootState
         Color endColor = Color.red;
 
         Tween twinkleTween = 
-            DOTween.To(() => startColor, cur => controller.ChangeColor(cur), endColor, randomTime / 6).SetLoops(3, LoopType.Yoyo) ;
+            DOTween.To(() => startColor, cur => controller.ChangeColor(cur, false), endColor, randomTime / 6).SetLoops(3, LoopType.Yoyo) ;
 
         seq.Append(shakeTween);
         seq.Insert(0, twinkleTween);

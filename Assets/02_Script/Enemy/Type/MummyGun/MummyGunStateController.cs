@@ -7,6 +7,7 @@ public enum EMummyGunState
     Patrol = 1,
     Move = 2,
     Attack,
+    Dead,
 }
 
 public class MummyGunStateController : BaseFSM_Controller<EMummyGunState>

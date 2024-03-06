@@ -25,22 +25,22 @@ namespace Astar
 
         public Navigation(Enemy enemy)
         {
-            this.roomBounds = enemy.RoomInfo.bound;
+            //this.roomBounds = enemy.RoomInfo.bound;
 
-            this.conCol = enemy.Collider;
-            this.conTrm = enemy.transform;
+            //this.conCol = enemy.Collider;
+            //this.conTrm = enemy.transform;
 
-            this.obstacleLayer = enemy.EnemyDataSO.ObstacleLayer;
+            //this.obstacleLayer = enemy.EnemyDataSO.ObstacleLayer;
 
            
-            int capacity = enemy.RoomInfo.bound.size.x * enemy.RoomInfo.bound.size.y;
-            openNodes = new Heap(capacity);
-            closeNodes = new List<Node>(capacity);
-            roomNodes = new List<Node>(capacity);
+            //int capacity = enemy.RoomInfo.bound.size.x * enemy.RoomInfo.bound.size.y;
+            //openNodes = new Heap(capacity);
+            //closeNodes = new List<Node>(capacity);
+            //roomNodes = new List<Node>(capacity);
 
 
-            NodeManager.Instance.BakeStartEvent += BakeStartEvent;
-            NodeManager.Instance.BakeEndEvent += BakeEndEvent;
+            //NodeManager.Instance.BakeStartEvent += BakeStartEvent;
+            //NodeManager.Instance.BakeEndEvent += BakeEndEvent;
         }
 
         ~Navigation()
