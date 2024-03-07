@@ -37,6 +37,8 @@ public class BSPAlgorithm : MonoBehaviour
 
     [SerializeField] int minlen = 5;
 
+    [SerializeField] int shopCnt = 1;
+
     [SerializeField] Tile loadtile;
 
     [SerializeField] Tile leftWallTile;
@@ -66,6 +68,15 @@ public class BSPAlgorithm : MonoBehaviour
     private void Start()
     {
         //랜덤 위치에 생성
+
+        //시작방
+        roomList.Add(new BSPRoomInfo(roomTilemap.startMap, 0, 0));
+
+        //상점
+        for (int i = 0; i < shopCnt; i++)
+            roomList.Add(new BSPRoomInfo(roomTilemap.shopMap, 0, 0));
+
+        //몬스터 방
         for (int i = 0; i < roomCnt; i++)
         {
             roomList.Add(new BSPRoomInfo(roomTilemap.roomsList[i],
@@ -129,8 +140,12 @@ public class BSPAlgorithm : MonoBehaviour
         {
             GeneratorLoad(edges[i].a, edges[i].b);
         }
+
+        //플레이어 위치 할당
+        GameManager.Instance.player.position = centerPos[0];
     }
 
+    //들로네 삼각분할 디버그용
     IEnumerator Debuging(List<TriEdge> triangles)
     {
         while (true)
@@ -144,7 +159,6 @@ public class BSPAlgorithm : MonoBehaviour
             yield return null;
         }
     }
-
     IEnumerator Debuging(List<Triangle> triangles)
     {
         while (true)
@@ -172,6 +186,7 @@ public class BSPAlgorithm : MonoBehaviour
         return condition1 && condition2 && condition3 && condition4;
     }
 
+    //길 생성
     public void GeneratorLoad(Vector2 start, Vector2 end)
     {
         Vector2 midPos = new Vector2(start.x, end.y);
@@ -451,6 +466,7 @@ public class BSPAlgorithm : MonoBehaviour
         }
     }
 
+    //길 버그 해결용
     bool CanCreate(Vector2 start, float end, Dir dir)
     {
         int cnt = 0;

@@ -33,6 +33,10 @@ public class RoomTileMap : MonoBehaviour
     [SerializeField] List<CustomRoom> rooms;
     public List<CustomRoom> roomsList => rooms;
 
+    public CustomRoom startMap;
+    public CustomRoom shopMap;
+
+
     public List<LoadInfo> loadsInfo = new List<LoadInfo>();
     private Vector2[,] centerPos;
 
