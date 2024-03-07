@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WormBulletTest : MonoBehaviour
+public class WormBulletTest : BossBullet
 {
     [SerializeField]
     private float _speed;
@@ -33,5 +33,10 @@ public class WormBulletTest : MonoBehaviour
         {
             transform.Translate(new Vector3(_s, 0, 0));
         } 
+    }
+
+    protected override void OnTriggerEnter2D(Collider2D collision)
+    {
+        base.OnTriggerEnter2D(collision);
     }
 }
