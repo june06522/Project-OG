@@ -105,10 +105,10 @@ public class Boss : MonoBehaviour, IHitAble
 
     private void DieEvent()
     {
-        // Á×´Â ¾Ö´Ï¸ÞÀÌ¼Ç
+        // ï¿½×´ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
         StopAllCoroutines();
         ReturnAll();
-        Debug.Log("º¸½º »ç¸Á");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½");
         gameObject.SetActive(false);
     }
 
@@ -130,10 +130,10 @@ public class Boss : MonoBehaviour, IHitAble
     {
         if (collision.gameObject.tag == "Player")
         {
-            //Debug.Log("¸ö»§ µ© ³ÖÀ½");
+            //Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
             if (collision.gameObject.TryGetComponent<IHitAble>(out var IhitAble))
             {
-                Debug.Log("ÇÃ·¹ÀÌ¾î¿¡°Ô ¸ö»§À¸·Î µ¥¹ÌÁö ÁÜ");
+                Debug.Log("ï¿½Ã·ï¿½ï¿½Ì¾î¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½");
                 IhitAble.Hit(Mathf.Pow(bossSo.Damage, 2));
             }
         }

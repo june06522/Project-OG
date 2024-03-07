@@ -58,7 +58,6 @@ public class Bullet : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-
         if (!isAdd) return;
 
         foreach (var item in Data.HitAbleTag)

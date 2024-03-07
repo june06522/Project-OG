@@ -39,6 +39,12 @@ public class BSPAlgorithm : MonoBehaviour
 
     [SerializeField] int shopCnt = 1;
 
+    [Header("벽")]
+    [SerializeField] WallDoor sideWall;
+    [SerializeField] WallDoor topWall;
+    [SerializeField] WallDoor bottomWall;
+
+    [Header("타일")]
     [SerializeField] Tile loadtile;
 
     [SerializeField] Tile leftWallTile;
@@ -226,6 +232,7 @@ public class BSPAlgorithm : MonoBehaviour
                     midPos.y -= idx++;
         }
 
+        //길 보정
         idx = 1;
         if (start.y > end.y)
             while (!CanCreate(midPos, start.y, Dir.top))
@@ -247,6 +254,23 @@ public class BSPAlgorithm : MonoBehaviour
             {
                 if (roomTilemap.Tile.GetTile(new Vector3Int(i, (int)midPos.y, 0)) == null)
                 {
+                    if (roomTilemap.WallTile.GetTile(new Vector3Int(i, (int)midPos.y - 1, 0)) != null)
+                        if (roomTilemap.WallTile.GetTile(new Vector3Int(i, (int)midPos.y + 1, 0)) != null)
+                            if (roomTilemap.WallTile.GetTile(new Vector3Int(i, (int)midPos.y, 0)) != null)
+                            {
+                                if (roomTilemap.WallTile.GetTile(new Vector3Int(i, (int)midPos.y - 2, 0)) == leftWallTile)
+                                {
+                                    WallDoor obj = Instantiate(sideWall, new Vector3(i + 0.53f, midPos.y + 1.345f, 0), Quaternion.identity);
+                                    MapManager.Instance.door.Add(obj);
+                                }
+                                else
+                                {
+                                    WallDoor obj = Instantiate(sideWall, new Vector3(i + 0.53f, midPos.y + 1.345f, 0), Quaternion.identity);
+                                    obj.GetComponent<SpriteRenderer>().flipX = true;
+                                    MapManager.Instance.door.Add(obj);
+                                }
+                            }
+
                     if (roomTilemap.WallTile.GetTile(new Vector3Int(i, (int)midPos.y - 2, 0)) == leftWallTile)
                         roomTilemap.WallTile.SetTile(new Vector3Int(i, (int)midPos.y - 2, 0), corner1);
                     else if (roomTilemap.WallTile.GetTile(new Vector3Int(i, (int)midPos.y - 2, 0)) == righttWalltile)
@@ -259,6 +283,7 @@ public class BSPAlgorithm : MonoBehaviour
                         roomTilemap.WallTile.SetTile(new Vector3Int(i, (int)midPos.y + 1, 0), null);
                     if (roomTilemap.WallTile.GetTile(new Vector3Int(i, (int)midPos.y + 2, 0)) != null)
                         roomTilemap.WallTile.SetTile(new Vector3Int(i, (int)midPos.y + 2, 0), null);
+
                     roomTilemap.Tile.SetTile(new Vector3Int(i, (int)midPos.y - 1, 0), loadtile);
                     roomTilemap.Tile.SetTile(new Vector3Int(i, (int)midPos.y + 0, 0), loadtile);
                     roomTilemap.Tile.SetTile(new Vector3Int(i, (int)midPos.y + 1, 0), loadtile);
@@ -271,6 +296,23 @@ public class BSPAlgorithm : MonoBehaviour
             {
                 if (roomTilemap.Tile.GetTile(new Vector3Int(i, (int)midPos.y, 0)) == null)
                 {
+                    if (roomTilemap.WallTile.GetTile(new Vector3Int(i, (int)midPos.y - 1, 0)) != null)
+                        if (roomTilemap.WallTile.GetTile(new Vector3Int(i, (int)midPos.y + 1, 0)) != null)
+                            if (roomTilemap.WallTile.GetTile(new Vector3Int(i, (int)midPos.y, 0)) != null)
+                            {
+                                if (roomTilemap.WallTile.GetTile(new Vector3Int(i, (int)midPos.y - 2, 0)) == leftWallTile)
+                                {
+                                    WallDoor obj = Instantiate(sideWall, new Vector3(i + 0.53f, midPos.y + 1.345f, 0), Quaternion.identity);
+                                    MapManager.Instance.door.Add(obj);
+                                }
+                                else
+                                {
+                                    WallDoor obj = Instantiate(sideWall, new Vector3(i + 0.53f, midPos.y + 1.345f, 0), Quaternion.identity);
+                                    obj.GetComponent<SpriteRenderer>().flipX = true;
+                                    MapManager.Instance.door.Add(obj);
+                                }
+                            }
+
                     if (roomTilemap.WallTile.GetTile(new Vector3Int(i, (int)midPos.y - 2, 0)) == leftWallTile)
                         roomTilemap.WallTile.SetTile(new Vector3Int(i, (int)midPos.y - 2, 0), corner1);
                     else if (roomTilemap.WallTile.GetTile(new Vector3Int(i, (int)midPos.y - 2, 0)) == righttWalltile)
@@ -290,12 +332,37 @@ public class BSPAlgorithm : MonoBehaviour
             }
         }
 
+        bool isCreateTopWall = false;
+
         if (start.y > midPos.y)
         {
             for (int i = (int)midPos.y - 1; i < (int)start.y; i++)
             {
                 if (roomTilemap.Tile.GetTile(new Vector3Int((int)midPos.x, i, 0)) == null)
                 {
+                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x - 1, i, 0)) != null)
+                        if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x + 1, i, 0)) != null)
+                            if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x, i, 0)) != null)
+                            {
+                                if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x - 1, i, 0)) == bottomtile)
+                                {
+                                    WallDoor obj = Instantiate(bottomWall, new Vector3((int)midPos.x + 0.5f, i + 0.4687f, 0), Quaternion.identity);
+                                    MapManager.Instance.door.Add(obj);
+                                }
+                                else
+                                {
+                                    if(!isCreateTopWall)
+                                    {
+                                        WallDoor obj = Instantiate(topWall, new Vector3((int)midPos.x + 0.5f, i + 0.05f, 0), Quaternion.identity);
+                                        MapManager.Instance.door.Add(obj);
+                                        isCreateTopWall = true;
+                                    }
+
+                                }
+
+                            }
+
+
                     if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x - 2, i, 0)) == bottomtile)
                         roomTilemap.WallTile.SetTile(new Vector3Int((int)midPos.x - 2, i, 0), corner1);
                     if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x - 1, i, 0)) != null)
@@ -318,6 +385,26 @@ public class BSPAlgorithm : MonoBehaviour
             {
                 if (roomTilemap.Tile.GetTile(new Vector3Int((int)midPos.x, i, 0)) == null)
                 {
+                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x - 1, i, 0)) != null)
+                        if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x + 1, i, 0)) != null)
+                            if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x, i, 0)) != null)
+                            {
+                                if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x - 1, i, 0)) == bottomtile)
+                                {
+                                    WallDoor obj = Instantiate(bottomWall, new Vector3((int)midPos.x + 0.5f, i + 0.41f, 0), Quaternion.identity);
+                                    MapManager.Instance.door.Add(obj);
+                                }
+                                else
+                                {
+                                    if (!isCreateTopWall)
+                                    {
+                                        WallDoor obj = Instantiate(topWall, new Vector3((int)midPos.x + 0.5f, i + 0.05f, 0), Quaternion.identity);
+                                        MapManager.Instance.door.Add(obj);
+                                        isCreateTopWall = true;
+                                    }
+                                }
+                            }
+
                     if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x - 1, i, 0)) != null)
                         roomTilemap.WallTile.SetTile(new Vector3Int((int)midPos.x - 1, i, 0), null);
                     if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x + 0, i, 0)) != null)

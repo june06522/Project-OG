@@ -53,7 +53,6 @@ public class FeedbackPlayer : MonoBehaviour
 
     public void Play(float damage)
     {
-
         foreach(var feedback in feedbackContainer)
         {
 
