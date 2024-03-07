@@ -30,7 +30,7 @@ public class BSPRoomInfo
 
 public class BSPAlgorithm : MonoBehaviour
 {
-    public GameObject debugObject;
+    //public GameObject debugObject;
 
     [SerializeField] int roomCnt;
 
@@ -688,9 +688,7 @@ public class BSPAlgorithm : MonoBehaviour
         if (cnt > 3)
             return false;
 
-        Debug.Log(cnt);
         return true;
     }
 }
 
-//엔드포스에 겟타일 해보기
