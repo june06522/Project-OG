@@ -33,6 +33,10 @@ public class RoomTileMap : MonoBehaviour
     [SerializeField] List<CustomRoom> rooms;
     public List<CustomRoom> roomsList => rooms;
 
+    public CustomRoom startMap;
+    public CustomRoom shopMap;
+
+
     public List<LoadInfo> loadsInfo = new List<LoadInfo>();
     private Vector2[,] centerPos;
 
@@ -206,6 +210,17 @@ public class RoomTileMap : MonoBehaviour
             Transform t = trm.GetChild(j);
             Transform obj = Instantiate(t,
                 new Vector3(t.position.x + roomInfo.roomRect.x, t.position.y + roomInfo.roomRect.y, 0), Quaternion.identity);
+        }
+
+        if(select.monsterParent != null)
+        {
+            trm = select.monsterParent.transform;
+            for (int j = 0; j < trm.childCount; j++)
+            {
+                Transform t = trm.GetChild(j);
+                Transform obj = Instantiate(t,
+                    new Vector3(t.position.x + roomInfo.roomRect.x, t.position.y + roomInfo.roomRect.y, 0), Quaternion.identity);
+            }
         }
     }
 

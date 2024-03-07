@@ -9,6 +9,7 @@ public class CustomRoom : MonoBehaviour
     public Tilemap tilemap;
 
     public GameObject obstacleParent;
+    public GameObject monsterParent;
 
     public int width; // 벽포함 가로
     public int height; // 벽포함 세로
