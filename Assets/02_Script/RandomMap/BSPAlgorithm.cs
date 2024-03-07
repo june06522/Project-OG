@@ -30,6 +30,8 @@ public class BSPRoomInfo
 
 public class BSPAlgorithm : MonoBehaviour
 {
+    public GameObject debugObject;
+
     [SerializeField] int roomCnt;
 
     [SerializeField] int xlen;
@@ -94,9 +96,9 @@ public class BSPAlgorithm : MonoBehaviour
         while (!isClear)
         {
             isClear = true;
-            for (int i = 0; i < roomCnt; i++)
+            for (int i = 0; i < roomList.Count; i++)
             {
-                for (int j = 0; j < roomCnt; j++)
+                for (int j = 0; j < roomList.Count; j++)
                 {
                     if (i == j)
                         continue;
@@ -118,14 +120,14 @@ public class BSPAlgorithm : MonoBehaviour
         }
 
         // 방 그리기
-        for (int i = 0; i < roomCnt; i++)
+        for (int i = 0; i < roomList.Count; i++)
         {
             roomTilemap.SetCustomRoom(roomList[i]);
         }
 
         // 각 방의 가운데 점 정보 가져오기
         List<Vector2> centerPos = new List<Vector2>();
-        for (int i = 0; i < roomCnt; i++)
+        for (int i = 0; i < roomList.Count; i++)
         {
             centerPos.Add(roomList[i].GetCenterPos());
         }
@@ -139,7 +141,7 @@ public class BSPAlgorithm : MonoBehaviour
 
         //디버깅
         //StartCoroutine(Debuging(triangles));
-        //StartCoroutine(Debuging(edges));
+        StartCoroutine(Debuging(edges));
 
         //길 그리기
         for (int i = 0; i < edges.Count; i++)
@@ -200,19 +202,19 @@ public class BSPAlgorithm : MonoBehaviour
         int idx = 1;
         if (start.x > end.x)
         {
-            midPos.x -= 7;
+            midPos.x -= 3;
         }
         else if (start.x < end.x)
         {
-            midPos.x += 7;
+            midPos.x += 3;
         }
         if (start.y > end.y)
         {
-            midPos.y += 7;
+            midPos.y += 3;
         }
         else if (start.y < end.y)
         {
-            midPos.y -= 7;
+            midPos.y -= 3;
         }
 
         if (start.x > end.x)
@@ -235,17 +237,21 @@ public class BSPAlgorithm : MonoBehaviour
         //길 보정
         idx = 1;
         if (start.y > end.y)
+        {
             while (!CanCreate(midPos, start.y, Dir.top))
                 if (idx % 2 == 0)
                     midPos.x += idx++;
                 else
                     midPos.x -= idx++;
+        }
         else if (start.y < end.y)
+        {
             while (!CanCreate(midPos, start.y, Dir.bottom))
                 if (idx % 2 == 0)
                     midPos.x += idx++;
                 else
                     midPos.x -= idx++;
+        }
 
 
         if (end.x > midPos.x)
@@ -351,7 +357,7 @@ public class BSPAlgorithm : MonoBehaviour
                                 }
                                 else
                                 {
-                                    if(!isCreateTopWall)
+                                    if (!isCreateTopWall)
                                     {
                                         WallDoor obj = Instantiate(topWall, new Vector3((int)midPos.x + 0.5f, i + 0.05f, 0), Quaternion.identity);
                                         MapManager.Instance.door.Add(obj);
@@ -551,6 +557,8 @@ public class BSPAlgorithm : MonoBehaviour
                     roomTilemap.WallTile.SetTile(new Vector3Int((int)midPos.x + 2, (int)midPos.y - 2, 0), corner2);
             }
         }
+
+        Instantiate(debugObject, midPos, Quaternion.identity);
     }
 
     //길 버그 해결용
@@ -658,6 +666,8 @@ public class BSPAlgorithm : MonoBehaviour
         }
         if (cnt > 3)
             return false;
+
+        Debug.Log(cnt);
         return true;
     }
 }
