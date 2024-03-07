@@ -211,6 +211,17 @@ public class RoomTileMap : MonoBehaviour
             Transform obj = Instantiate(t,
                 new Vector3(t.position.x + roomInfo.roomRect.x, t.position.y + roomInfo.roomRect.y, 0), Quaternion.identity);
         }
+
+        if(select.monsterParent != null)
+        {
+            trm = select.monsterParent.transform;
+            for (int j = 0; j < trm.childCount; j++)
+            {
+                Transform t = trm.GetChild(j);
+                Transform obj = Instantiate(t,
+                    new Vector3(t.position.x + roomInfo.roomRect.x, t.position.y + roomInfo.roomRect.y, 0), Quaternion.identity);
+            }
+        }
     }
 
     private void LoadGenerator()
