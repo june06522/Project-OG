@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 // 생성기가 가지고 있는거
@@ -104,12 +105,14 @@ public class SkillContainer : MonoBehaviour
     public Skill GetSKill(int i, int j)
     {
 
+        // prevention Out of index
         if (weaponList.Count > i && weaponList[i].skillList.Count > j)
         {
 
-            if (weaponList[i] != null && weaponList[j] != null)
+            // Checks for existence of a value
+            if (weaponList[i] != null && weaponList[i].skillList[j] != null)
             {
-
+                
                 return weaponList[i].skillList[j];
 
             }

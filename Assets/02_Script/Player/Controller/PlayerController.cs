@@ -63,6 +63,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+
     }
 
     protected override void Update()
@@ -75,6 +76,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
         _animator?.SetBool(idleHash, InputController.MoveDir == Vector2.zero);
         if (InputController.LastMoveDir.x != 0)
             _spriteRenderer.flipX = InputController.LastMoveDir.x > 0;
+
     }
 
     private void OnDestroy()
