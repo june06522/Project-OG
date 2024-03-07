@@ -37,6 +37,8 @@ public class Enemy : MonoBehaviour, IHitAble
     public Collider2D Collider => collider;
     public Rigidbody2D Rigidbody => rigidbody;
 
+    public DetectZone myzone;
+
     //public RoomInfo RoomInfo { get; private set; }
     
     private void Awake()

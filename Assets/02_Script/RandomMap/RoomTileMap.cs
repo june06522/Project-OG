@@ -187,7 +187,7 @@ public class RoomTileMap : MonoBehaviour
         tempRoom.width = select.width;
         tempRoom.height = select.height;
 
-        
+        DetectZone detectZone = select.detectZone;
 
         for (int k = -select.height / 2; k < select.height / 2; k++)
         {
@@ -220,6 +220,8 @@ public class RoomTileMap : MonoBehaviour
                 Transform t = trm.GetChild(j);
                 Transform obj = Instantiate(t,
                     new Vector3(t.position.x + roomInfo.roomRect.x, t.position.y + roomInfo.roomRect.y, 0), Quaternion.identity);
+
+                obj.GetComponent<Enemy>().myzone = detectZone;
             }
         }
 
