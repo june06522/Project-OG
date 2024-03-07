@@ -70,7 +70,7 @@ public class BSPAlgorithm : MonoBehaviour
     {
         roomTilemap = GetComponent<RoomTileMap>();
         roomList = new List<BSPRoomInfo>();
-        delaunayTriangulation = new DelaunayTriangulation();
+        delaunayTriangulation = GetComponent<DelaunayTriangulation>();
     }
 
     private void Start()
