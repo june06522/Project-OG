@@ -34,7 +34,7 @@ public class NodeManager : MonoBehaviour
 
     private void Start()
     {
-        BakeMap();
+        //BakeMap();
     }
 
     //맵에 노드 할당

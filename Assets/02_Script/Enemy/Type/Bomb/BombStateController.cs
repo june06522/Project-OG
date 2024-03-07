@@ -49,11 +49,13 @@ public class BombStateController : BaseFSM_Controller<EBombState>
                 Debug.Log("Hit");
                 hitAble.Hit(EnemyDataSO.AttackPower);
             }
+            collider.gameObject.GetComponent<Rigidbody2D>().
+                AddForce((collider.transform.position- instShowRangeObj.transform.position).normalized * 100, ForceMode2D.Impulse) ;
         }
 
-        Destroy(this.gameObject);
         if(instShowRangeObj != null)
             Destroy(instShowRangeObj);
+        Destroy(this.gameObject);
     }
 
     public void InstantiateRange()

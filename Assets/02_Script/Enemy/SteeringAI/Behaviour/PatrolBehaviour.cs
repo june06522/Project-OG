@@ -19,8 +19,6 @@ public class PatrolBehaviour : SteeringBehaviour
         this.startPoint = startPoint;
         this.randomSeed = randomSeed;
         this.randomTime = Random.value;
-        //Debug.Log("Setting : " + randomSeed);
-        //Debug.Log(startPoint);
     }
 
     public override (float[] danger, float[] interest) GetSteering(float[] danger, float[] interest, AIData aiData)
@@ -36,21 +34,11 @@ public class PatrolBehaviour : SteeringBehaviour
             float weight = 0;
             if (distance > patrolRadius)
             {
-                //Debug.Log("OutOfRange");
                 weight = distance - patrolRadius;
             }
 
             float result = Vector2.Dot(directionToTarget, Directions.eightDirections[i]) - weight;
             result = Mathf.Clamp(result, 0, 1);
-            //accept only directions at the less than 90 degrees to the target direction
-            //if (result > 0)
-            //{
-            //    float valueToPutIn = result;
-            //    if (valueToPutIn > interest[i])
-            //    {
-            //    }
-
-            //}
             interest[i] = result;
         }
         return (danger, interest);
@@ -58,6 +46,6 @@ public class PatrolBehaviour : SteeringBehaviour
 
     public override void OnDestroy()
     {
-       // throw new System.NotImplementedException();
+        
     }
 }
