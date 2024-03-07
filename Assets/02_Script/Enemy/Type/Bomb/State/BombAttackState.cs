@@ -17,7 +17,7 @@ public class BombAttackState : BombRootState
     {
         act.Invoke();
         controller.StopImmediately();
-        float randomTime = 1f;
+        float randomTime = 0.5f;
         Attack(randomTime);
     }
 
@@ -26,7 +26,7 @@ public class BombAttackState : BombRootState
         DG.Tweening.Sequence seq = DOTween.Sequence();
 
         Tween shakeTween =
-            controller.transform.DOShakeScale(randomTime, strength:0.3f, vibrato:20, randomness: 40, false);
+            controller.transform.DOShakeScale(randomTime + 0.1f, strength:0.4f, vibrato:20, randomness: 40, false, ShakeRandomnessMode.Harmonic);
         Color startColor = Color.white;
         Color endColor = Color.red;
 
@@ -37,7 +37,7 @@ public class BombAttackState : BombRootState
 
         seq.Append(shakeTween);
         seq.Insert(0, twinkleTween);
-        seq.Insert(0.75f, bombTween);
+        seq.Insert(0f, bombTween);
         seq.OnComplete(() =>
         {
             controller.Boom();
