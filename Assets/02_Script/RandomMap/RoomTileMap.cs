@@ -18,6 +18,7 @@ public class RoomTileMap : MonoBehaviour
 
     [Header("타일맵")]
     [SerializeField] Tilemap tile;
+    public Tilemap Tile => tile;
     [SerializeField] Tilemap walltile;
     public Tilemap WallTile => walltile;
 
@@ -30,6 +31,7 @@ public class RoomTileMap : MonoBehaviour
 
     [Header("커스텀 방")]
     [SerializeField] List<CustomRoom> rooms;
+    public List<CustomRoom> roomsList => rooms;
 
     public List<LoadInfo> loadsInfo = new List<LoadInfo>();
     private Vector2[,] centerPos;
@@ -57,12 +59,23 @@ public class RoomTileMap : MonoBehaviour
 
         roomGenarator = GetComponent<RoomGenarator>();
         centerPos = new Vector2[roomGenarator.Width, roomGenarator.Height];
+
+        Shuffle();
+    }
+
+    private void Start()
+    {
+        //BGTileSetting();
     }
 
     private void BGTileSetting()
     {
-        int x = roomGenarator.Width * roomGenarator.WidthLength / 2;
-        int y = roomGenarator.Height * roomGenarator.HeightLength / 2;
+        //int x = roomGenarator.Width * roomGenarator.WidthLength / 2;
+        //int y = roomGenarator.Height * roomGenarator.HeightLength / 2;
+
+        int x = 500;
+        int y = 500;
+
         for (int i = -x; i < x; i++)
         {
             for (int j = -y; j < y; j++)
@@ -75,11 +88,9 @@ public class RoomTileMap : MonoBehaviour
 
     public void SetTileMap()
     {
-        Shuffle();
-
         if (roomGenarator.spawnType == MapSpawnType.TP)
             PoltarRoom();
-        else
+        else if(roomGenarator.spawnType == MapSpawnType.Load)
             LoadRoom();
     }
 
@@ -101,7 +112,6 @@ public class RoomTileMap : MonoBehaviour
 
     private void PoltarRoom()
     {
-        BGTileSetting();
         for (int i = 0; i < roomGenarator.useRooms.Count(); ++i)
         {
             if (rooms.Count > 0 && i != 0)
@@ -164,6 +174,41 @@ public class RoomTileMap : MonoBehaviour
         }
     }
 
+    public void SetCustomRoom(BSPRoomInfo roomInfo)
+    {
+        CustomRoom select = roomInfo.room;
+        rooms.Remove(select);
+
+        Roomsize tempRoom = new Roomsize();
+        tempRoom.width = select.width;
+        tempRoom.height = select.height;
+
+        
+
+        for (int k = -select.height / 2; k < select.height / 2; k++)
+        {
+            for (int j = -select.width / 2; j < select.width / 2; j++)
+            {
+
+                if (select.tilemap.GetTile(new Vector3Int(j, k, 0)) != null)
+                    tile.SetTile(new Vector3Int(j + roomInfo.roomRect.x, k + roomInfo.roomRect.y, 0), select.tilemap.GetTile(new Vector3Int(j, k, 0)));
+
+                if (select.wallTilemap.GetTile(new Vector3Int(j, k, 0)) != null)
+                {
+                    walltile.SetTile(new Vector3Int(j + roomInfo.roomRect.x, k + roomInfo.roomRect.y, 0), select.wallTilemap.GetTile(new Vector3Int(j, k, 0)));
+                }
+            }
+        }
+
+        Transform trm = select.obstacleParent.transform;
+        for (int j = 0; j < trm.childCount; j++)
+        {
+            Transform t = trm.GetChild(j);
+            Transform obj = Instantiate(t,
+                new Vector3(t.position.x + roomInfo.roomRect.x, t.position.y + roomInfo.roomRect.y, 0), Quaternion.identity);
+        }
+    }
+
     private void LoadGenerator()
     {
         for (int i = 0; i < loadsInfo.Count; i++)
@@ -190,7 +235,6 @@ public class RoomTileMap : MonoBehaviour
             }
         }
     }
-
 
     private void WidthLoad(Vector2 pos, Vector2 targetpos)
     {
@@ -306,8 +350,6 @@ public class RoomTileMap : MonoBehaviour
 
     private void LoadRoom()
     {
-        BGTileSetting();
-
         for (int i = 0; i < roomGenarator.useRooms.Count(); ++i)
         {
             if (rooms.Count > 0 && i != 0)

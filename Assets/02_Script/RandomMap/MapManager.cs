@@ -73,6 +73,9 @@ public class MapManager : MonoBehaviour
 
     public void RoomClear()
     {
+        if (roomGenarator.spawnType != MapSpawnType.TP)
+            return;
+
         centerPos = new Vector2(roomGenarator.WidthLength * (curIdxX - correctX),
             roomGenarator.HeightLength * (curIdxY - correctY));
 
@@ -136,12 +139,11 @@ public class MapManager : MonoBehaviour
 
     void SetConfiner()
     {
-        int wid = roomGenarator.checkRoom[curIdxY, curIdxX].width / 2;
-        int hei = roomGenarator.checkRoom[curIdxY, curIdxX].height / 2;
         Vector2[] newpoints = { };
         switch (roomGenarator.spawnType)
         {
             case MapSpawnType.Load:
+            case MapSpawnType.BSP:
                 {
                     newpoints = new Vector2[]
                     {
@@ -154,6 +156,8 @@ public class MapManager : MonoBehaviour
                 break;
             case MapSpawnType.TP:
                 {
+                    int wid = roomGenarator.checkRoom[curIdxY, curIdxX].width / 2;
+                    int hei = roomGenarator.checkRoom[curIdxY, curIdxX].height / 2;
                     newpoints = new Vector2[]
                     {
                   new Vector2((centerPos.x + wid) + plusValue,
