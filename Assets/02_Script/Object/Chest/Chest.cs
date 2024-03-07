@@ -2,7 +2,7 @@ using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Chest : MonoBehaviour
+public class Chest : MonoBehaviour, IInteractable
 {
     // normal item probabilities are the remaining probabilities other than other item probabilities
     [Header("percent")]
@@ -159,6 +159,15 @@ public class Chest : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             _detectPlayer = false;
+        }
+    }
+
+    public void OnInteract()
+    {
+        if(_detectPlayer)
+        {
+            Open();
+            Destroy(gameObject);
         }
     }
 }

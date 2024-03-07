@@ -8,6 +8,7 @@ public class Item : MonoBehaviour
 {
 
     [SerializeField] private InvenBrick brick;
+    public bool one = true;
 
     private WeaponInventory inventory;
     private Transform parent;
@@ -35,9 +36,13 @@ public class Item : MonoBehaviour
                 obj.Setting();
                 obj.transform.localPosition = (point.Value * 100) - (new Vector2(inventory.Width, inventory.Height) * 50) + new Vector2(50, 50);
 
+                if (one == true)
+                    Destroy(gameObject);
             }
 
         }
+
+        
 
     }
 

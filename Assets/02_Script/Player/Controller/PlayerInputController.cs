@@ -19,24 +19,27 @@ public class PlayerInputController : IDisposable
 
         CheckMovementKeyInput();
         CheckDashKey();
-        CheckChestKey();
+        CheckInteractable();
 
     }
 
-    private void CheckChestKey()
+    private void CheckInteractable()
     {
-        Vector2 pos = GameManager.Instance.player.position;
-        float radius = 3f;
-        Collider2D col = Physics2D.OverlapCircle(pos, radius, LayerMask.GetMask("Chest"));
-        Chest chest;
-        if(col.TryGetComponent<Chest>(out chest))
+        if(Input.GetKeyDown(KeyCode.F))
         {
-            if(Input.GetKeyDown(KeyCode.E))
+            Vector2 pos = GameManager.Instance.player.position;
+            float radius = 2f;
+            Collider2D[] col = Physics2D.OverlapCircleAll(pos, radius, LayerMask.GetMask("Interactable"));
+
+            for(int i = 0; i < col.Length; i++) 
             {
-                chest.Open();
+                IInteractable interact;
+                if (col[i].TryGetComponent<IInteractable>(out interact))
+                {
+                    interact.OnInteract();
+                }
             }
         }
-
     }
 
     private void CheckMovementKeyInput()
