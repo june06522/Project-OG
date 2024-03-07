@@ -23,6 +23,28 @@ public class Chest : MonoBehaviour
     [SerializeField] private Transform _itemSpawnPos;
     [SerializeField] private ParticleSystem _openEffect;
 
+    #region TestCode
+    // test Code
+    PlayerController playerController;
+    Transform playerTrm;
+
+    private void Start()
+    {
+        playerController = GameObject.FindAnyObjectByType<PlayerController>();
+        playerTrm = playerController.transform.root;
+    }
+
+    // test code
+    private void Update()
+    {
+        if (Vector2.Distance(transform.position, playerTrm.position) > 2f)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.E))
+            Open();
+    }
+    #endregion
+
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -34,13 +56,6 @@ public class Chest : MonoBehaviour
         }
 
         SetRateItems(_itemList.ItemInfoList.ToArray());
-    }
-
-    // test code
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-            Open();
     }
 
     private void SetRateItems(ItemInfoSO[] itemInfoSOs)
