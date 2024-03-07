@@ -105,8 +105,6 @@ public class SkillContainer : MonoBehaviour
     public Skill GetSKill(int i, int j)
     {
 
-        Debug.Log(1);
-
         // prevention Out of index
         if (weaponList.Count > i && weaponList[i].skillList.Count > j)
         {
@@ -114,8 +112,7 @@ public class SkillContainer : MonoBehaviour
             // Checks for existence of a value
             if (weaponList[i] != null && weaponList[i].skillList[j] != null)
             {
-
-                Debug.Log(2);
+                
                 return weaponList[i].skillList[j];
 
             }

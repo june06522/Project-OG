@@ -29,7 +29,7 @@ public class ParticleSelfDestroyer : MonoBehaviour
 
     }
 
-    private void EndOfAnimation()
+    public void EndOfAnimation()
     {
 
         Debug.Log("End of animation");  

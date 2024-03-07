@@ -9,6 +9,8 @@ public class Sickle : InvenWeapon
     [SerializeField] LayerMask hitMask;
     List<Collider2D> monsters = new List<Collider2D>();
 
+    [SerializeField] private GameObject effect;
+
     public override void GetSignal(object signal)
     {
 
@@ -21,6 +23,8 @@ public class Sickle : InvenWeapon
     {
 
         monsters.Clear();
+        
+        Instantiate(effect, transform.position, transform.rotation);
 
         monsters = Physics2D.OverlapCircleAll(transform.position, range, hitMask).ToList();
 
