@@ -20,6 +20,8 @@ public class ObstacleAvoidanceBehaviour : SteeringBehaviour
     }
     ~ObstacleAvoidanceBehaviour()
     {
+
+        Debug.Log("Á×À½");
         GizmoDrawer.Instance.Remove(OnDrawGizmos);
     }
 

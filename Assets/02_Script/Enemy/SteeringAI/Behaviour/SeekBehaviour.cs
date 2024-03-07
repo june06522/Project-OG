@@ -25,6 +25,7 @@ public class SeekBehaviour : SteeringBehaviour
     }
     ~SeekBehaviour()
     {
+        //Debug.Log("Á×À½");
         GizmoDrawer.Instance.Remove(OnDrawGizmos);
     }
 
@@ -88,7 +89,7 @@ public class SeekBehaviour : SteeringBehaviour
 
     private void OnDrawGizmos()
     {
-
+        if (transform == null) return;
         if (showGizmo == false)
             return;
         Gizmos.DrawSphere(targetPositionCached, 0.2f);
