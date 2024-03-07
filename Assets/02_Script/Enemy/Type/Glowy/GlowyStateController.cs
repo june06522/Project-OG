@@ -30,7 +30,7 @@ public class GlowyStateController : BaseFSM_Controller<EGlowyState>
         base.Start();
 
         var rootState = new GlowyRootState(this);
-        var rootToPatrol = new RoomOpenTransitions<EGlowyState>(this, EGlowyState.Patrol);
+        var rootToPatrol = new RoomOpenTransitions<EGlowyState>(this, EGlowyState.Patrol, Enemy.MyZone);
         rootState
             .AddTransition<EGlowyState>(rootToPatrol);
 
