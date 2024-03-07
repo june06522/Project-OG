@@ -108,8 +108,6 @@ public class Enemy : MonoBehaviour, IHitAble
 
     private void Die()
     {
-        Debug.Log("Die");
-
         DeadEvent?.Invoke();
     }
 

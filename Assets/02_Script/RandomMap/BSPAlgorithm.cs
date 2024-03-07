@@ -91,6 +91,8 @@ public class BSPAlgorithm : MonoBehaviour
                 Random.Range(-xlen, xlen), Random.Range(-ylen, ylen)));
         }
 
+        Debug.Log(roomList[1].roomRect);
+
         //안곂치게 방 밀어내기
         bool isClear = false;
         while (!isClear)
@@ -105,19 +107,20 @@ public class BSPAlgorithm : MonoBehaviour
                     while (CheckOverlap(roomList[i].roomRect, roomList[j].roomRect))
                     {
                         isClear = false;
-                        if (roomList[i].roomRect.x > roomList[j].roomRect.x)
-                            roomList[i].roomRect.x += Random.Range(-5, 15);
+                        if (roomList[j].roomRect.x > roomList[i].roomRect.x)
+                            roomList[j].roomRect.x += Random.Range(-5, 15);
                         else
-                            roomList[i].roomRect.x -= Random.Range(-5, 15);
+                            roomList[j].roomRect.x -= Random.Range(-5, 15);
 
-                        if (roomList[i].roomRect.y > roomList[j].roomRect.y)
-                            roomList[i].roomRect.y += Random.Range(-5, 15);
+                        if (roomList[j].roomRect.y > roomList[i].roomRect.y)
+                            roomList[j].roomRect.y += Random.Range(-5, 15);
                         else
-                            roomList[i].roomRect.y -= Random.Range(-5, 15);
+                            roomList[j].roomRect.y -= Random.Range(-5, 15);
                     }
                 }
             }
         }
+        Debug.Log(roomList[1].roomRect);
 
         // 방 그리기
         for (int i = 0; i < roomList.Count; i++)
@@ -141,7 +144,7 @@ public class BSPAlgorithm : MonoBehaviour
 
         //디버깅
         //StartCoroutine(Debuging(triangles));
-        //StartCoroutine(Debuging(edges));
+        StartCoroutine(Debuging(edges));
 
         //길 그리기
         for (int i = 0; i < edges.Count; i++)

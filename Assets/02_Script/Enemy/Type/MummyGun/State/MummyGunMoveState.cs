@@ -18,7 +18,6 @@ public class MummyGunMoveState : MummyGunRootState
 
     protected override void EnterState()
     {
-        Debug.Log("In");
         chaseAct.OnEnter();
     }
 
