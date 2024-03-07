@@ -14,7 +14,7 @@ public class MummyGunAttackState : MummyGunRootState
 
     protected override void EnterState()
     {
-        controller.ChangeColor(Color.red);
+        //controller.Enemy.enemyAnimController.SetAttack();
         
         StartCoroutine(Attack());
     }
@@ -46,6 +46,7 @@ public class MummyGunAttackState : MummyGunRootState
     {
         yield return new WaitForSeconds(0.3f);
 
+        Debug.Log($"Cool : {_data.name}");
         _data.SetCoolDown();
         controller.ChangeState(EMummyGunState.Idle);
     }
