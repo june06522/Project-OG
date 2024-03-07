@@ -47,8 +47,10 @@ public class BombStateController : BaseFSM_Controller<EBombState>
             Debug.Log("Hit");
             hitAble.Hit(EnemyDataSO.AttackPower);
         }
+
         Destroy(this.gameObject);
-        Destroy(instShowRangeObj);
+        if(instShowRangeObj != null)
+            Destroy(instShowRangeObj);
     }
 
     public void InstantiateRange()
