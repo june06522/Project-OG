@@ -18,7 +18,7 @@ public class ObstacleDetector : Detector
     public ObstacleDetector(Transform ownerTrm, LayerMask obstacleLayer) : base(ownerTrm)
     {
         layerMask = obstacleLayer;
-        GizmoDrawer.Instance.Add(OnDrawGizmos);
+        //GizmoDrawer.Instance.Add(OnDrawGizmos);
     }
 
     public override void Detect(AIData aiData)

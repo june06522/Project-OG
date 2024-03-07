@@ -75,9 +75,9 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
 
         beforeIdleTime = Time.time;
 
-        GizmoDrawer.Instance.Add(GizmoDraw);
+        //GizmoDrawer.Instance.Add(GizmoDraw);
 
-        Debug.Log("Patrol");
+        //Debug.Log("Patrol");
     }
 
     public override void OnExit()
@@ -85,7 +85,7 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
         controller.FixedUpdateAction -= OnFixedUpdate;
         idle = false;
         StopCoroutine(idleCor);
-        GizmoDrawer.Instance.Remove(GizmoDraw);
+        //GizmoDrawer.Instance.Remove(GizmoDraw);
     }
 
     public override void OnUpdate()
@@ -117,7 +117,7 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
         }
 
         t += Time.deltaTime;
-        #region Route±â¹Ý Patrol
+        #region Routeï¿½ï¿½ï¿½ Patrol
         //if (!controller.Nav.IsNavActive) return;
         //if (idle) return;
 
@@ -146,7 +146,7 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     {
         if (moveIdx >= route.Count)
         {
-            //¸ñÀûÁö¿¡ µµÂø
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             route.Clear();
             idle = true;
             float idleTime = Random.Range(this.idleTime, this.idleTime + 0.5f);
@@ -162,10 +162,10 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
 
     private void SetToMove()
     {
-        Debug.Log("SetTarget");
+        //Debug.Log("SetTarget");
         //targetPos = FindRandomPoint(controller.transform.position);
         //SetTarget(targetPos);
-        //route = controller.Nav.GetRoute(targetPos); //°æ·Î °Ë»ö
+        //route = controller.Nav.GetRoute(targetPos); //ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½
         //if (route != null && route.Count != 0)
         //    nextPos = route[0];
 

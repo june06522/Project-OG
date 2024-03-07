@@ -45,7 +45,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
         {
             firstDiscovered = true;
             DiscoverEvent();
-            Debug.Log("DisCover");
+            //Debug.Log("DisCover");
         }
         
         controller.Enemy.enemyAnimController.SetMove(true);
@@ -90,7 +90,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
         //    aiData.currentTarget = aiData.targets[0];
         //}
         //updateAction.Invoke();
-        //º® °Ë»ç
+        
     }
 
     private void NormalChase()

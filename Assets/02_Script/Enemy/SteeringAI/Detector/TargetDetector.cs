@@ -22,7 +22,7 @@ public class TargetDetector : Detector
         this.playerLayerMask = dataSO.TargetAbleLayer;
         this.checkObstacle = dataSO.CheckObstacle;
         this.targetDetectionRange = dataSO.Range;
-        GizmoDrawer.Instance.Add(OnDrawGizmosSelected);
+        //GizmoDrawer.Instance.Add(OnDrawGizmosSelected);
     }
 
     public override void Detect(AIData aiData)
