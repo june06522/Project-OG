@@ -5,13 +5,15 @@ using UnityEngine;
 
 public class RoomOpenTransitions<T> : BaseFSM_Transition<T> where T : Enum
 {
-    public RoomOpenTransitions(BaseFSM_Controller<T> controller, T nextState) : base(controller, nextState)
+    DetectZone myZone;
+    public RoomOpenTransitions(BaseFSM_Controller<T> controller, T nextState, DetectZone detectZone) : base(controller, nextState)
     {
+        myZone = detectZone;
     }
 
     protected override bool CheckTransition()
     {
-        return Time.time > 1;
+        //return myZone.IsPlayerIn;
     }
 
 }

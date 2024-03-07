@@ -23,7 +23,7 @@ public class MummyStateController : BaseFSM_Controller<EMummyState>
 
         var rootState = new MummyRootState(this);
         rootState
-            .AddTransition<EMummyState>(new RoomOpenTransitions<EMummyState>(this, EMummyState.Patrol));
+            .AddTransition<EMummyState>(new RoomOpenTransitions<EMummyState>(this, EMummyState.Patrol, Enemy.MyZone));
 
         var patrolState = new MummyPatrolState(this);
         var patrolToMove = new TransitionIdleOrMove<EMummyState>(this, EMummyState.Move);
