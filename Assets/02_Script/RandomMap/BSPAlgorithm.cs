@@ -578,7 +578,7 @@ public class BSPAlgorithm : MonoBehaviour
             }
         }
 
-        Instantiate(debugObject, midPos, Quaternion.identity);
+        //Instantiate(debugObject, midPos, Quaternion.identity);
     }
 
     //길 버그 해결용
