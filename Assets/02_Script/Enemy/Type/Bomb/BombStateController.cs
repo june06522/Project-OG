@@ -40,12 +40,15 @@ public class BombStateController : BaseFSM_Controller<EBombState>
     public void Boom()
     {
         //Instantiate(bomb, transform.position, Quaternion.identity);
-        Collider2D collider = Physics2D.OverlapCircle(transform.position, radius, LayerMask.GetMask("Player"));
+        Collider2D collider = Physics2D.OverlapCircle(instShowRangeObj.transform.position, radius, LayerMask.GetMask("Player"));
         IHitAble hitAble;
-        if(collider.TryGetComponent<IHitAble>(out hitAble))
+        if(collider != null)
         {
-            Debug.Log("Hit");
-            hitAble.Hit(EnemyDataSO.AttackPower);
+            if(collider.TryGetComponent<IHitAble>(out hitAble))
+            {
+                Debug.Log("Hit");
+                hitAble.Hit(EnemyDataSO.AttackPower);
+            }
         }
 
         Destroy(this.gameObject);

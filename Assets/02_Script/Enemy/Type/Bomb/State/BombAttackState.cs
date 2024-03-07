@@ -2,6 +2,7 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BombAttackState : BombRootState
@@ -16,13 +17,13 @@ public class BombAttackState : BombRootState
     {
         act.Invoke();
         controller.StopImmediately();
-        float randomTime = UnityEngine.Random.Range(1f,2f);
+        float randomTime = 1f;
         Attack(randomTime);
     }
 
     private void Attack(float randomTime)
     {
-        Sequence seq = DOTween.Sequence();
+        DG.Tweening.Sequence seq = DOTween.Sequence();
 
         Tween shakeTween =
             controller.transform.DOShakeScale(randomTime, strength:0.3f, vibrato:20, randomness: 40, false);
@@ -30,10 +31,13 @@ public class BombAttackState : BombRootState
         Color endColor = Color.red;
 
         Tween twinkleTween = 
-            DOTween.To(() => startColor, cur => controller.ChangeColor(cur, false), endColor, randomTime / 6).SetLoops(6, LoopType.Yoyo) ;
+            DOTween.To(() => startColor, cur => controller.ChangeColor(cur, false), endColor, randomTime / 4).SetLoops(4, LoopType.Yoyo).SetEase(Ease.InOutCirc) ;
+        Tween bombTween =
+            controller.transform.DOMoveY(transform.position.y + 1f, 0.5f);
 
         seq.Append(shakeTween);
         seq.Insert(0, twinkleTween);
+        seq.Insert(0.75f, bombTween);
         seq.OnComplete(() =>
         {
             controller.Boom();
