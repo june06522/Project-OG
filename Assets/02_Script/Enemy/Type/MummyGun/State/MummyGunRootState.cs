@@ -7,28 +7,37 @@ using UnityEngine;
 public class MummyGunRootState : BaseFSM_State<EMummyGunState>
 {
     protected new MummyGunStateController controller;
-    protected EnemyDataSO _data => controller.EnemyData;
+    protected EnemyDataSO _data => controller.EnemyDataSO;
 
-    PatrolAction<EMummyGunState> patrolAct;
+    protected List<Detector> detectors;
 
     public MummyGunRootState(MummyGunStateController controller) : base(controller)
     {
         this.controller = controller;
-        patrolAct = new PatrolAction<EMummyGunState>(controller, controller.Target);
+        
+        //detector
+        detectors = new List<Detector>() 
+        { 
+            new TargetDetector( controller.transform, _data),
+            new ObstacleDetector( controller.transform, _data.ObstacleLayer),
+        };
     }
 
     protected override void EnterState()
     {
-        patrolAct.OnEnter();
-    }
-
-    protected override void ExitState()
-    {
-        patrolAct.OnExit();
+        controller.Enemy.enemyAnimController.SetMove(false);
     }
 
     protected override void UpdateState()
     {
-        patrolAct.OnUpdate();
+        UpdateDetector();
+    }
+
+    public void UpdateDetector()
+    {
+        foreach(var detector in detectors)
+        {
+            detector.Detect(controller.AIdata);
+        }
     }
 }

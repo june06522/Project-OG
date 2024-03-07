@@ -6,7 +6,8 @@ public abstract class BaseAction<T> where T : Enum
 {
 
     protected BaseFSM_Controller<T> controller;
-    protected EnemyDataSO _data => controller.EnemyData;
+    protected EnemyDataSO _data => controller.EnemyDataSO;
+    protected Rigidbody2D _rigidbody => controller.Enemy.Rigidbody;
 
     protected BaseAction(BaseFSM_Controller<T> controller)
     {
@@ -16,6 +17,7 @@ public abstract class BaseAction<T> where T : Enum
     public abstract void OnEnter();
     public abstract void OnExit();
     public abstract void OnUpdate();
+    public abstract void OnFixedUpdate();
 
  
     public Coroutine StartCoroutine(IEnumerator coroutine)

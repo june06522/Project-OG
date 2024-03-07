@@ -9,55 +9,82 @@ public class Enemy : MonoBehaviour, IHitAble
 {
     [SerializeField] EnemyDataSO enemyDataSO;
     public EnemyDataSO EnemyDataSO => enemyDataSO;
-    public FeedbackPlayer feedbackPlayer { get; set; }
-    public bool Dead { get; private set; } = false;
-    private int curHp;
 
+    
+    [Header("Movement")]
+    [SerializeField]
+    float acceleration = 50, deacceleration = 100;
+    [SerializeField]
+    private float currentSpeed = 0;
+    
+    private Vector2 oldMovementInput;
+    private Vector2 movementInput;
+    public Vector2 MovementInput { get => movementInput; set => movementInput = value; }
+
+    
+    [Header("Health")]
+    private int curHp;
+    public bool Dead { get; private set; } = false;
     public event Action DeadEvent;
+
+    //ETC
+    public FeedbackPlayer feedbackPlayer { get; set; }
+    public EnemyAnimController enemyAnimController { get; set; }
 
     private new Collider2D collider;
     private new Rigidbody2D rigidbody;
     public Collider2D Collider => collider;
     public Rigidbody2D Rigidbody => rigidbody;
 
-
-    public Transform TargetTrm { get; set; }
-    public RoomInfo RoomInfo { get; private set; } //내가 지금 위치해있는 room정보;
-
-    //Debug
-    [SerializeField]
-    private Tilemap _mainMap;
-    [SerializeField]
-    private Tilemap _wallMap;
-
+    //public RoomInfo RoomInfo { get; private set; } //내가 지금 위치해있는 room정보;
+    
     private void Awake()
+    {
+        collider = GetComponent<Collider2D>();
+        rigidbody = GetComponent<Rigidbody2D>();
+       
+        enemyAnimController = transform.Find("Visual").GetComponent<EnemyAnimController>();
+        //Debug.Log(_mainMap.cellBounds);
+
+        //RoomInfo roomInfo = new RoomInfo()
+        //{
+        //    bound = _mainMap.cellBounds,
+        //    pos = _mainMap.transform.position,
+        //};
+        
+        //SetRoomInfo(roomInfo);
+    }
+
+    private void Start()
     {
         curHp = enemyDataSO.MaxHP;
         DeadEvent += DieEvent;
-        collider = GetComponent<Collider2D>();
-        rigidbody = GetComponent<Rigidbody2D>();
-        TargetTrm = GameObject.Find("Player").GetComponent<Transform>();
-
-        //Debug 나중에 한곳에서 할당해줘야함.
-        Debug.Log(_mainMap.cellBounds);
-
-        RoomInfo roomInfo = new RoomInfo()
-        {
-            bound = _mainMap.cellBounds,
-            pos = _mainMap.transform.position,
-        };
-        
-        SetRoomInfo(roomInfo);
-    }
-
-    public void SetRoomInfo(RoomInfo curRoom)
-    {
-        RoomInfo = curRoom;
     }
 
     private void Update()
     {
-        Debug.DrawRay(transform.position, Vector3.up * 2f,Color.red);
+        if(movementInput != Vector2.zero)
+            enemyAnimController.Flip(oldMovementInput);
+    }
+
+    private void FixedUpdate()
+    {
+        float maxSpeed = EnemyDataSO.Speed;
+        if (MovementInput.magnitude > 0 && currentSpeed >= 0)
+        {
+            oldMovementInput = MovementInput;
+            currentSpeed += acceleration * maxSpeed * Time.deltaTime;
+        }
+        else
+        {
+            currentSpeed -= deacceleration * maxSpeed * Time.deltaTime;
+        }
+        currentSpeed = Mathf.Clamp(currentSpeed, 0, maxSpeed);
+       
+        //Debug.Log(movementInput);
+        Vector3 position = rigidbody.position
+                            + (oldMovementInput * currentSpeed * Time.deltaTime);
+        rigidbody.MovePosition(position);
     }
 
     public void Hit(float damage)
@@ -85,5 +112,11 @@ public class Enemy : MonoBehaviour, IHitAble
 
     private void DieEvent()
     {
+                
     }
+
+    //public void SetRoomInfo(RoomInfo curRoom)
+    //{
+    //    RoomInfo = curRoom;
+    //}
 }

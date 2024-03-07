@@ -13,7 +13,6 @@ public class MummyAttackState : MummyRootState
 
     protected override void EnterState()
     {
-        controller.ChangeColor(Color.red);
         Attack();
     }
 
@@ -39,7 +38,11 @@ public class MummyAttackState : MummyRootState
         Collider2D col = Physics2D.OverlapCircle(controller.attackPoint.position, 0.25f, LayerMask.GetMask("Player"));
         if (col)
         {
-            col.GetComponent<IHitAble>().Hit(_data.AttackPower);
+            IHitAble hitAble;
+            if(col.TryGetComponent<IHitAble>(out hitAble))
+            {
+                hitAble.Hit(_data.AttackPower);
+            }
         }
     }
 
@@ -50,6 +53,7 @@ public class MummyAttackState : MummyRootState
 
     protected override void UpdateState()
     {
-
+        Vector2 dir = targetTrm.position - controller.transform.position;
+        controller.Enemy.enemyAnimController.Flip(dir);
     }
 }

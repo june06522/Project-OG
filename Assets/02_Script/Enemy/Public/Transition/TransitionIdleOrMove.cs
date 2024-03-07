@@ -22,7 +22,7 @@ public class TransitionIdleOrMove<T> : BaseFSM_Transition<T> where T : Enum
     public TransitionIdleOrMove(BaseFSM_Controller<T> controller, T nextState) : base(controller, nextState)
     {
 
-        if (nextState.ToString() == "Idle")
+        if (nextState.ToString() == "Idle" || nextState.ToString() == "Patrol")
             _myType = CheckType.Idle;
         else if (nextState.ToString() == "Move")
             _myType = CheckType.Move;
@@ -62,8 +62,8 @@ public class TransitionIdleOrMove<T> : BaseFSM_Transition<T> where T : Enum
             if(_data.CheckObstacle) // 땅
             {
                 //감지거리 밖에 있거나 장애물이 있으면 전환.
-                return !Transitions.CheckDistance(playerTrm, this.transform, _data.Range) ||
-                    !Transitions.CheckObstacleBetweenTarget(playerTrm, this.transform, _data.ObstacleLayer);
+                return !Transitions.CheckDistance(playerTrm, this.transform, _data.Range);
+                    //!Transitions.CheckObstacleBetweenTarget(playerTrm, this.transform, _data.ObstacleLayer);
             }
             else // 공중
             {
@@ -77,8 +77,8 @@ public class TransitionIdleOrMove<T> : BaseFSM_Transition<T> where T : Enum
             if (_data.CheckObstacle) // 땅
             {
                 //감지거리 안에 있고 사이에 장애물이 없으면 전환
-                return Transitions.CheckDistance(playerTrm, this.transform, _data.Range) &&
-                        Transitions.CheckObstacleBetweenTarget(playerTrm, this.transform, _data.ObstacleLayer);
+                return Transitions.CheckDistance(playerTrm, this.transform, _data.Range);
+                        //Transitions.CheckObstacleBetweenTarget(playerTrm, this.transform, _data.ObstacleLayer);
             }
             else // 공중
             {

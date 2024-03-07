@@ -8,7 +8,13 @@ public class BatMoveState : BatEnemyRootState
     ChaseAction<EBatState> chaseAct;
     public BatMoveState(BatStateController controller) : base(controller)
     {
-        chaseAct = new ChaseAction<EBatState>( controller, GameManager.Instance.player, false);
+        chaseAct = new ChaseAction<EBatState>
+        ( 
+            controller,
+            new List<SteeringBehaviour>
+                { new SeekBehaviour(controller.transform) },
+            false
+        );
     }
 
     protected override void EnterState()
@@ -23,6 +29,7 @@ public class BatMoveState : BatEnemyRootState
 
     protected override void UpdateState()
     {
+        base.UpdateState();
         chaseAct.OnUpdate();
     }
 }

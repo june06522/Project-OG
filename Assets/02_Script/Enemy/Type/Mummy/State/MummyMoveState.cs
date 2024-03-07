@@ -5,9 +5,15 @@ using UnityEngine;
 public class MummyMoveState : MummyRootState
 {
     ChaseAction<EMummyState> chaseAct;
+
     public MummyMoveState(MummyStateController controller) : base(controller)
     {
-        chaseAct = new ChaseAction<EMummyState>(controller, GameManager.Instance.player, true);
+        List<SteeringBehaviour> behaviourlist = new List<SteeringBehaviour>()
+        {
+            new ObstacleAvoidanceBehaviour(controller.transform),
+            new SeekBehaviour(controller.transform)
+        };
+        chaseAct = new ChaseAction<EMummyState>(controller, behaviourlist, true);
     }
 
     protected override void EnterState()
@@ -18,10 +24,12 @@ public class MummyMoveState : MummyRootState
     protected override void ExitState()
     {
         chaseAct.OnExit();
+        controller.StopImmediately();
     }
 
     protected override void UpdateState()
     {
+        base.UpdateState();
         chaseAct.OnUpdate();
     }
 

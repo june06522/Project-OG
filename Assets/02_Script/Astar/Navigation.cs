@@ -25,22 +25,22 @@ namespace Astar
 
         public Navigation(Enemy enemy)
         {
-            this.roomBounds = enemy.RoomInfo.bound;
+            //this.roomBounds = enemy.RoomInfo.bound;
 
-            this.conCol = enemy.Collider;
-            this.conTrm = enemy.transform;
+            //this.conCol = enemy.Collider;
+            //this.conTrm = enemy.transform;
 
-            this.obstacleLayer = enemy.EnemyDataSO.ObstacleLayer;
+            //this.obstacleLayer = enemy.EnemyDataSO.ObstacleLayer;
 
            
-            int capacity = enemy.RoomInfo.bound.size.x * enemy.RoomInfo.bound.size.y;
-            openNodes = new Heap(capacity);
-            closeNodes = new List<Node>(capacity);
-            roomNodes = new List<Node>(capacity);
+            //int capacity = enemy.RoomInfo.bound.size.x * enemy.RoomInfo.bound.size.y;
+            //openNodes = new Heap(capacity);
+            //closeNodes = new List<Node>(capacity);
+            //roomNodes = new List<Node>(capacity);
 
 
-            NodeManager.Instance.BakeStartEvent += BakeStartEvent;
-            NodeManager.Instance.BakeEndEvent += BakeEndEvent;
+            //NodeManager.Instance.BakeStartEvent += BakeStartEvent;
+            //NodeManager.Instance.BakeEndEvent += BakeEndEvent;
         }
 
         ~Navigation()
@@ -64,10 +64,12 @@ namespace Astar
         {
             Vector3Int pos = TilemapManager.Instance.GetTilePos(curPos);
             List<Node> moveAbleNodes = (from node in roomNodes
-                                        where node.Weight == 0 && (Vector3Int.Distance(node.Pos, pos) < distance) // 장애물, 벽 x
+                                        where node.Weight == 0 && (Vector3Int.Distance(node.Pos, pos) < distance)// 장애물, 벽 x
                                         select node).ToList();
 
-            Debug.Log(moveAbleNodes.Count);
+            if (moveAbleNodes.Count == 0 || moveAbleNodes == null)
+                return curPos;
+            
             Vector3Int randomTilePos = moveAbleNodes[Random.Range(0, moveAbleNodes.Count)].Pos;
             Vector3 randomPos = TilemapManager.Instance.GetWorldPos(randomTilePos);
             return randomPos;
@@ -124,12 +126,12 @@ namespace Astar
                 route.Add(TilemapManager.Instance.GetWorldPos(last.Pos));
                 while (last.Parent != null)
                 {
-                    // 노드와 다음 노드 사이에 벽이 없으면 그냥 넣지 않는다
+                    ////// 노드와 다음 노드 사이에 벽이 없으면 그냥 넣지 않는다
                     Vector3 pos = TilemapManager.Instance.GetWorldPos(last.Pos);
-                    Vector3 dir = TilemapManager.Instance.GetWorldPos(targetPos) - pos;
-                    Vector2 size = conCol.bounds.size;
-                    float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                    if (Physics2D.BoxCast(pos, size, angle, dir.normalized, dir.magnitude, obstacleLayer))
+                    //Vector3 dir = TilemapManager.Instance.GetWorldPos(targetPos) - pos;
+                    //Vector2 size = conCol.bounds.size;
+                    //float angle = Vector3.Angle(targetPos, pos);
+                    //if (!Physics2D.BoxCast(pos, size, angle, dir.normalized, dir.magnitude, obstacleLayer))
                     {
                         route.Add(pos);
                     }
@@ -187,11 +189,11 @@ namespace Astar
                     if (x == y) continue;
 
                     Vector3Int nextPos = n.Pos + new Vector3Int(x, y, 0);
-
+                    
                     Node temp = closeNodes.Find(x => x.Pos == nextPos);
                     if (temp != null) continue;
 
-                    if (CanMove(nextPos))
+                    if (CanMove(nextPos, n.Pos))
                     {
                         float g = (n.Pos - nextPos).magnitude + n.G;
 
@@ -229,7 +231,7 @@ namespace Astar
             return distance.magnitude;
         }
 
-        public bool CanMove(Vector3Int pos)
+        public bool CanMove(Vector3Int pos, Vector3Int beforePos)
         {
             
             if (pos.x < roomBounds.xMin || pos.x > roomBounds.xMax
@@ -240,16 +242,20 @@ namespace Astar
 
             Vector3 nPos = TilemapManager.Instance.GetWorldPos(pos);
 
-            if(obstacleLayer != default(LayerMask))
+            if (obstacleLayer != default(LayerMask))
             {
+                float angle = Vector3.Angle(pos, beforePos);
+                Vector3 dir = pos - beforePos;
                 //아예 못지나가는 장애물 체크
-                if (Physics2D.OverlapBox(nPos, conCol.bounds.size, 0, obstacleLayer) != null)
+                if (Physics2D.BoxCast(nPos, conCol.bounds.size * 1.1f,
+                    angle, dir.normalized, 0.5f, obstacleLayer))
                 {
+                    Debug.Log("CheckWall");
                     return false;
                 }
             }
 
-           
+
             return TilemapManager.Instance.HasWallTile(pos) == false;
         }
     }
