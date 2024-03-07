@@ -42,7 +42,7 @@ public class Chest : MonoBehaviour
         if (Vector2.Distance(transform.position, playerTrm.position) > 2f)
             return;
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.F))
             Open();
     }
     #endregion

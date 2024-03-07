@@ -27,7 +27,7 @@ public class Shop : MonoBehaviour
     private List<ShopItem> _shopItemList = new List<ShopItem>();
 
     // open
-    private bool _isOpened = false;
+    private bool _isOpen = false;
 
     [Header("Item Info")]
     [SerializeField]
@@ -36,18 +36,23 @@ public class Shop : MonoBehaviour
 
     private void Awake()
     {
+        Debug.Log("Shop.awake");
         _playerMoney = FindObjectOfType<Money>();
         if (_playerMoney == null)
             Debug.LogError("Money Object is not found");
 
         SetRandomItem();
+        _isOpen = false;
     }
 
     public void OpenShop()
     {
-        if(_isOpened) return;
+        Debug.Log(_isOpen);
+        if(_isOpen) return;
 
-        _isOpened = true;
+        Debug.Log("open");
+
+        _isOpen = true;
         _playerMoney.GoldChangedEvent += UpdatePlayerGoldUI;
         _shopUIObject.SetActive(true);
 
@@ -56,10 +61,11 @@ public class Shop : MonoBehaviour
 
     public void CloseShop()
     {
-        if (_isOpened == false) return;
+        if (_isOpen == false) return;
 
-        _isOpened = false;
+        _isOpen = false;
         _playerMoney.GoldChangedEvent -= UpdatePlayerGoldUI;
+        Debug.Log("close");
         _shopUIObject.SetActive(false);
     }
 
