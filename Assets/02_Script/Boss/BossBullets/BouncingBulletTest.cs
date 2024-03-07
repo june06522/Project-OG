@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BouncingBulletTest : MonoBehaviour
+public class BouncingBulletTest : BossBullet
 {
     private Rigidbody2D _rigid;
 
@@ -23,9 +23,10 @@ public class BouncingBulletTest : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) 
+    protected override void OnTriggerEnter2D(Collider2D collision)
     {
-        // 라이팅 시스템에 있는 RenderDistanceCollider가 obstacle임 그래서 오류가 나는건데 그거 때메 Wall에 레이어 Wall을 추가해서 적용시킴
+        base.OnTriggerEnter2D(collision);
+
         Vector2 dir = _rigid.velocity;
 
         rHit = Physics2D.Raycast(transform.position, Vector2.right, 1, _mask);
