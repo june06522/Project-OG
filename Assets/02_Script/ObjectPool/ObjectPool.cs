@@ -116,4 +116,11 @@ public class ObjectPool : MonoBehaviour
             }
         }
     }
+
+    public IEnumerator ReturnObject(float returnTime, ObjectPoolType type, GameObject obj)
+    {
+        yield return new WaitForSeconds(returnTime);
+
+        ReturnObject(type, obj);
+    }
 }

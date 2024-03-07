@@ -25,6 +25,29 @@ public class POneBrokenState : BossBaseState
         
     }
 
+    public override IEnumerator RandomPattern(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+
+        int rand = Random.Range(1, 5);
+
+        switch (rand)
+        {
+            case 1:
+                _boss.StartCoroutine(OmnidirAttack(20, 3, 1, 3, 1));
+                break;
+            case 2:
+                _boss.StartCoroutine(SoundAttack(3, 1));
+                break;
+            case 3:
+                _boss.StartCoroutine(OmniGuidPlayerAttack(20, 3, 1, 3, 1, 1));
+                break;
+            case 4:
+                _boss.StartCoroutine(ThrowEnergyBall(3, 4, 1, 2));
+                break;
+        }
+    }
+
     private GameObject CheckPlayerCircleCastG(float radius)
     {
         RaycastHit2D[] hit = Physics2D.CircleCastAll(_boss.transform.position, radius, Vector2.zero);
@@ -39,30 +62,8 @@ public class POneBrokenState : BossBaseState
         return null;
     }
 
-    public override IEnumerator RandomPattern(float waitTime)
-    {
-        Debug.Log("One");
-
-        yield return new WaitForSeconds(waitTime);
-
-        int rand = Random.Range(1, 4);
-
-        switch (rand)
-        {
-            case 1:
-                _boss.StartCoroutine(OmnidirAttack(20, 3, 1, 1));
-                break;
-            case 2:
-                _boss.StartCoroutine(SoundAttack(3, 1));
-                break;
-            case 3:
-                _boss.StartCoroutine(OmniGuidPlayerAttack(20, 3, 1, 1, 1));
-                break;
-        }
-    }
-
     // 전방향으로 공격한다
-    private IEnumerator OmnidirAttack(int bulletCount, float speed, float time, int burstCount)
+    private IEnumerator OmnidirAttack(int bulletCount, float speed, float time, float returnTime, int burstCount)
     {
         GameObject[,] bullets = new GameObject[burstCount, bulletCount];
         for (int i = 0; i < burstCount; i++)
@@ -77,10 +78,6 @@ public class POneBrokenState : BossBaseState
                 Rigidbody2D rigid = bullets[i, j].GetComponent<Rigidbody2D>();
                 Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * j / bulletCount), Mathf.Sin(Mathf.PI * 2 * j / bulletCount));
                 rigid.velocity = dir.normalized * speed;
-
-                // 원기둥의 경우 총알이 발사 방향으로 회전
-                //Vector3 rotation = Vector3.forward * 360 * i / bulletCount + Vector3.forward * 90;
-                //bullet.transform.Rotate(rotation);
             }
 
             yield return new WaitForSeconds(time);
@@ -91,12 +88,11 @@ public class POneBrokenState : BossBaseState
         for (int i = 0; i < burstCount; i++)
         {
             for (int j = 0; j < bulletCount; j++)
-            {
-                ObjectPool.Instance.ReturnObject(ObjectPoolType.BossBulletType0, bullets[i, j]);
-            }
+                _boss.StartCoroutine(ObjectPool.Instance.ReturnObject(returnTime, ObjectPoolType.BossBulletType0, bullets[i, j]));
 
             yield return new WaitForSeconds(time);
         }
+
         if (!_willChange)
             _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
     }
@@ -128,8 +124,8 @@ public class POneBrokenState : BossBaseState
             _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
     }
 
-    // 전방향으로 탄막을 날리고 잠시 뒤 탄막들이 플레이어 방향으로 날아간다
-    private IEnumerator OmniGuidPlayerAttack(int bulletCount, float speed, float time, int returnCount, int burstCount)
+    // 전방향으로 탄막을 날리고 잠시 뒤 탄막들이 플레이어 방향으로 날아간다 - 플레이어가 근접하기 좋은 패턴
+    private IEnumerator OmniGuidPlayerAttack(int bulletCount, float speed, float time, float returnTime, int returnCount, int burstCount)
     {
         GameObject[,] bullets = new GameObject[burstCount, bulletCount];
 
@@ -172,7 +168,7 @@ public class POneBrokenState : BossBaseState
             {
                 for (int j = 0; j < bulletCount; j++)
                 {
-                    ObjectPool.Instance.ReturnObject(ObjectPoolType.BossBulletType0, bullets[returnCounting, j]);
+                    _boss.StartCoroutine(ObjectPool.Instance.ReturnObject(returnTime, ObjectPoolType.BossBulletType0, bullets[returnCounting, j]));
                 }
 
                 returnCounting++;
@@ -185,12 +181,34 @@ public class POneBrokenState : BossBaseState
         {
             for (int j = 0; j < bulletCount; j++)
             {
-                ObjectPool.Instance.ReturnObject(ObjectPoolType.BossBulletType0, bullets[i, j]);
+                _boss.StartCoroutine(ObjectPool.Instance.ReturnObject(returnTime, ObjectPoolType.BossBulletType0, bullets[i, j]));
             }
 
-            yield return new WaitForSeconds(time);
         }
 
+        if (!_willChange)
+            _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
+    }
+
+    // 플레이어 방향으로 에너지 볼을 던진다
+    private IEnumerator ThrowEnergyBall(int burstCount, float speed, float waitTime, float returnTime)
+    {
+        for (int i = 0; i < burstCount; i++)
+        {
+            GameObject energyBall = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _boss.transform);
+            energyBall.GetComponent<BossBullet>().Attack(_boss.bossSo.Damage);
+            energyBall.transform.localScale *= 2;
+            energyBall.transform.position = new Vector3(_boss.transform.position.x, _boss.transform.position.y + 0.5f, _boss.transform.position.z);
+            energyBall.transform.rotation = Quaternion.identity;
+
+            Rigidbody2D rigid = energyBall.GetComponent<Rigidbody2D>();
+            Vector2 dir = _boss.player.transform.position - energyBall.transform.position;
+            rigid.velocity = dir.normalized * speed;
+
+            yield return new WaitForSeconds(waitTime);
+
+            _boss.StartCoroutine(ObjectPool.Instance.ReturnObject(returnTime, ObjectPoolType.BossBulletType0, energyBall));
+        }
         if (!_willChange)
             _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
     }
