@@ -15,7 +15,7 @@ public class BatAttackState : BatEnemyRootState
 
     protected override void EnterState()
     {
-        controller.ChangeColor(Color.red);
+        controller.Enemy.enemyAnimController.SetAttack();
         Attack();
     }
 

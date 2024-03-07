@@ -23,6 +23,11 @@ public class MummyGunRootState : BaseFSM_State<EMummyGunState>
         };
     }
 
+    protected override void EnterState()
+    {
+        controller.Enemy.enemyAnimController.SetMove(false);
+    }
+
     protected override void UpdateState()
     {
         UpdateDetector();

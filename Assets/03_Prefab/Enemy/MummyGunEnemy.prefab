@@ -86,8 +86,6 @@ MonoBehaviour:
   acceleration: 50
   deacceleration: 100
   currentSpeed: 0
-  _mainMap: {fileID: 0}
-  _wallMap: {fileID: 0}
 --- !u!114 &2356515405765778977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,6 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <EnemyDataSO>k__BackingField: {fileID: 11400000, guid: 16e35be596fdcd849b935211c69eeba6, type: 2}
+  enemyFindEffect: {fileID: -6713558889965095767, guid: 11f2f1a4a9d7af04298f2fc1435e6a51, type: 3}
   AIdata: {fileID: 0}
   Target: {fileID: 0}
   DebugTile: {fileID: 0}
@@ -183,6 +182,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5167196551445744791}
   - component: {fileID: 9118037530969377695}
+  - component: {fileID: 3847388907186603734}
+  - component: {fileID: 7643937569509827135}
   m_Layer: 14
   m_Name: Visual
   m_TagString: Untagged
@@ -257,3 +258,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &3847388907186603734
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7113090586515351776}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1d78c501e9c10b04294edacbe8e58354, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7643937569509827135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7113090586515351776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bd332299282dd5498f9abfe25be18be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -61,6 +61,12 @@ public class Enemy : MonoBehaviour, IHitAble
         DeadEvent += DieEvent;
     }
 
+    private void Update()
+    {
+        if(movementInput != Vector2.zero)
+            enemyAnimController.Flip(oldMovementInput);
+    }
+
     private void FixedUpdate()
     {
         float maxSpeed = EnemyDataSO.Speed;

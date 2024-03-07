@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class EnemyFindEffect : MonoBehaviour
 {
-    Animator animator;
+    public void EndAnim()
+    {
+        Destroy(this.gameObject, 0.1f);
+    }
 }

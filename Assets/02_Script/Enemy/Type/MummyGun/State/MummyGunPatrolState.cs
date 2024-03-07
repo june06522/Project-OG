@@ -19,6 +19,7 @@ public class MummyGunPatrolState : MummyGunRootState
 
     protected override void EnterState()
     {
+        //controller.Enemy.enemyAnimController.SetMove(true);
         patrolAct.OnEnter();
     }
 

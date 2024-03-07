@@ -18,6 +18,10 @@ public class ObstacleAvoidanceBehaviour : SteeringBehaviour
     {
         GizmoDrawer.Instance.Add(OnDrawGizmos);
     }
+    ~ObstacleAvoidanceBehaviour()
+    {
+        GizmoDrawer.Instance.Remove(OnDrawGizmos);
+    }
 
     public override (float[] danger, float[] interest) GetSteering(float[] danger, float[] interest, AIData aiData)
     {
@@ -59,9 +63,16 @@ public class ObstacleAvoidanceBehaviour : SteeringBehaviour
         return (danger, interest);
     }
 
+    public override void OnDestroy()
+    {
+        //throw new System.NotImplementedException();
+    }
+
     private void OnDrawGizmos()
     {
+        if (transform == null) return;
         if (showGizmo == false)
+            
             return;
 
         if (Application.isPlaying && dangersResultTemp != null)

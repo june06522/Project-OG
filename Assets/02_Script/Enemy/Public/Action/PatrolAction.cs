@@ -11,6 +11,7 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     bool idle;
     float idleTime;
     float idleTimer;
+    float beforeIdleTime;
     float t;
     Vector2 beforeStopPos;
     Coroutine idleCor;
@@ -38,7 +39,7 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
         aiData = controller.AIdata;
         idleTime = controller.EnemyDataSO.IdleTime;
         idleTimer = 1f;
-
+        beforeIdleTime = Time.time;
         //idle = false;
         //idleCor = null;
         //route = new();
@@ -64,17 +65,15 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
 
     public override void OnEnter()
     {
-        //moveIdx = 0;
-        //route.Clear();
-        //idle = true; 
-        //currentPos = TilemapManager.Instance.GetTilePos(controller.transform.position);
         StartIdleCor(idleTime);
 
         startPos = controller.transform.position;
         patrolBehaviour.Setting(startPos, Random.Range(10, 25));
 
         controller.FixedUpdateAction += OnFixedUpdate;
-        controller.ChangeColor(Color.white);
+        controller.Enemy.enemyAnimController.SetMove(true);
+
+        beforeIdleTime = Time.time;
 
         GizmoDrawer.Instance.Add(GizmoDraw);
 
@@ -91,13 +90,17 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
 
     public override void OnUpdate()
     {
-
     }
 
 
     public override void OnFixedUpdate()
     {
-        if (idle) return;
+        controller.Enemy.enemyAnimController.SetMove(!idle);
+        if (idle)
+        {
+            return;
+        }
+
         beforeDir = curDir;
         Vector2 movementInput = controller.Solver.GetDirectionToMove(behaviours, controller.AIdata);
         controller.Enemy.MovementInput = movementInput;
@@ -109,6 +112,7 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
             //aiData.IsOutOfDistance = false;
             idle = true;
             controller.StopImmediately();
+            beforeIdleTime = Time.time;
             StartIdleCor(idleTime);
         }
 

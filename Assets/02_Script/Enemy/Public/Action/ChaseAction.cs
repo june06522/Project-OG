@@ -47,6 +47,8 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
             DiscoverEvent();
             Debug.Log("DisCover");
         }
+        
+        controller.Enemy.enemyAnimController.SetMove(true);
         controller.FixedUpdateAction += OnFixedUpdate;  
     }
 
@@ -71,7 +73,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
     public override void OnUpdate()
     {
-        
+
         //if (controller.AIdata.currentTarget != null)
         //{
         //    //Looking at the Target

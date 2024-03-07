@@ -67,7 +67,8 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
 
     public void PlayDiscoverAnim()
     {
-
+        Vector2 spawnPoint = new Vector2(-0.8f, 1.2f);
+        Instantiate(enemyFindEffect, transform).transform.localPosition = spawnPoint;
     }
 
     //public void PrintRoute(List<Vector3> route)

@@ -13,7 +13,6 @@ public class MummyAttackState : MummyRootState
 
     protected override void EnterState()
     {
-        controller.ChangeColor(Color.red);
         Attack();
     }
 
@@ -54,6 +53,7 @@ public class MummyAttackState : MummyRootState
 
     protected override void UpdateState()
     {
-
+        Vector2 dir = targetTrm.position - controller.transform.position;
+        controller.Enemy.enemyAnimController.Flip(dir);
     }
 }

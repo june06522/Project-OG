@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class SteeringBehaviour
@@ -13,6 +14,8 @@ public abstract class SteeringBehaviour
 
     public abstract (float[] danger, float[] interest) 
         GetSteering(float[] danger, float[] interest, AIData aiData);
+
+    public abstract void OnDestroy();
 
 }
 public static class Directions

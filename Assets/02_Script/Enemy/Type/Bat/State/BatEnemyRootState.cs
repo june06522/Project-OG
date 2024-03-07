@@ -12,6 +12,11 @@ public class BatEnemyRootState : FSM_State<EBatState>
         detector = new TargetDetector(controller.transform, _data);
     }
 
+    protected override void EnterState()
+    {
+        controller.Enemy.enemyAnimController.SetMove(false);
+    }
+
     protected override void UpdateState()
     {
         UpdateDetector();

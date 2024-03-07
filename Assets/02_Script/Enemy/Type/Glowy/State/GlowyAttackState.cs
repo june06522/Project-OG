@@ -15,7 +15,6 @@ public class GlowyAttackState : GlowyRootState
     protected override void EnterState()
     {
         controller.StopImmediately();
-        controller.ChangeColor(Color.red);
         
         pointerOn = true;
         controller.SetLaserPointerActive(true);
@@ -30,6 +29,7 @@ public class GlowyAttackState : GlowyRootState
         yield return new WaitForSeconds(0.1f);
         controller.SetLaserPointerActive(false);
         controller.Shoot(endPos);
+
         yield return new WaitForSeconds(0.5f);
         _data.SetCoolDown();
         controller.ChangeState(EGlowyState.Idle);

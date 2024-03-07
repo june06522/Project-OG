@@ -23,6 +23,10 @@ public class SeekBehaviour : SteeringBehaviour
         GizmoDrawer.Instance.Add(OnDrawGizmos);
         //this.checkObstacle = checkObstacle;
     }
+    ~SeekBehaviour()
+    {
+        GizmoDrawer.Instance.Remove(OnDrawGizmos);
+    }
 
     public override (float[] danger, float[] interest) GetSteering(float[] danger, float[] interest, AIData aiData)
     {
@@ -75,6 +79,11 @@ public class SeekBehaviour : SteeringBehaviour
         }
         interestsTemp = interest;
         return (danger, interest);
+    }
+
+    public override void OnDestroy()
+    {
+        //throw new System.NotImplementedException();
     }
 
     private void OnDrawGizmos()

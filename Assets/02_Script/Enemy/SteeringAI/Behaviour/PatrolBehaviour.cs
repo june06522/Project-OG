@@ -55,4 +55,9 @@ public class PatrolBehaviour : SteeringBehaviour
         }
         return (danger, interest);
     }
+
+    public override void OnDestroy()
+    {
+       // throw new System.NotImplementedException();
+    }
 }

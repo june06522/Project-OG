@@ -13,6 +13,9 @@ public enum EBombState
 public class BombStateController : BaseFSM_Controller<EBombState>
 {
     public ParticleSystem bomb;
+    public GameObject showRange;
+    public float radius = 3f;
+    private GameObject instShowRangeObj;
 
     protected override void Start()
     {
@@ -37,6 +40,19 @@ public class BombStateController : BaseFSM_Controller<EBombState>
     public void Boom()
     {
         //Instantiate(bomb, transform.position, Quaternion.identity);
+        Collider2D collider = Physics2D.OverlapCircle(transform.position, radius, LayerMask.GetMask("Player"));
+        IHitAble hitAble;
+        if(collider.TryGetComponent<IHitAble>(out hitAble))
+        {
+            Debug.Log("Hit");
+            hitAble.Hit(EnemyDataSO.AttackPower);
+        }
         Destroy(this.gameObject);
+        Destroy(instShowRangeObj);
+    }
+
+    public void InstantiateRange()
+    {
+        instShowRangeObj = Instantiate(showRange, transform.position, Quaternion.identity);
     }
 }
