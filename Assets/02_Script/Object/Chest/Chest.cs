@@ -23,6 +23,8 @@ public class Chest : MonoBehaviour
     [SerializeField] private Transform _itemSpawnPos;
     [SerializeField] private ParticleSystem _openEffect;
 
+    public bool _detectPlayer;
+
     #region TestCode
     // test Code
     PlayerController playerController;
@@ -72,7 +74,7 @@ public class Chest : MonoBehaviour
         }
     }
 
-    private void Open()
+    public void Open()
     {
         // 상자 스프라이트 변경
         _spriteRenderer.sprite = _openSprite;
@@ -142,5 +144,21 @@ public class Chest : MonoBehaviour
 
         ItemInfoSO iteminfo = _rateItems[rate][Random.Range(0, _rateItems[rate].Count)];
         return iteminfo;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Player"))
+        {
+            _detectPlayer = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            _detectPlayer = false;
+        }
     }
 }

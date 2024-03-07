@@ -12,6 +12,7 @@ public class MapManager : MonoBehaviour
     public RoomGenarator roomGenarator;
 
     [SerializeField] private MovePortal _portalPrefab;
+    [SerializeField] private Chest _chestPrefab;
     [SerializeField] PolygonCollider2D _vcamConfiner;
     [SerializeField] private float plusValue = 1.5f;
     [SerializeField] CinemachineConfiner2D _cmConfiner;
@@ -118,6 +119,11 @@ public class MapManager : MonoBehaviour
 
     public void RoomClear()
     {
+        //Chest 생성
+        Vector2 randomPos = (Vector2)GameManager.Instance.player.position 
+            + UnityEngine.Random.insideUnitCircle;
+        Instantiate(_chestPrefab, randomPos, Quaternion.identity);
+        
         if (roomGenarator.spawnType == MapSpawnType.BSP)
         {
         }
