@@ -492,6 +492,7 @@ MonoBehaviour:
   plusValue: 1.5
   _cmConfiner: {fileID: 885542252}
   door: []
+  curZone: {fileID: 0}
 --- !u!114 &232736767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -507,8 +508,11 @@ MonoBehaviour:
   roomCnt: 6
   xlen: 20
   ylen: 20
-  minlen: 8
+  minlen: 4
   shopCnt: 1
+  sideWall: {fileID: 298839016255329391, guid: 61d1126270500f34cb7bf875763e29e5, type: 3}
+  topWall: {fileID: 6769342586942418573, guid: 2e1e98b434eaa4843b841af1fa7663e5, type: 3}
+  bottomWall: {fileID: 4756548246840921678, guid: acb0108eac577cf4c805bac943291baa, type: 3}
   loadtile: {fileID: 11400000, guid: b13d5bb028a938c4abe169d84db39c11, type: 2}
   leftWallTile: {fileID: 11400000, guid: 26162c8904057b14a955227309c8919f, type: 2}
   righttWalltile: {fileID: 11400000, guid: 9e624e423c25e894a921186947da762e, type: 2}
@@ -678,7 +682,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 24576
   maxCheckCount: 100
 --- !u!114 &509554656
 MonoBehaviour:
@@ -6441,8 +6445,8 @@ Camera:
   m_GameObject: {fileID: 1726162039}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

@@ -19,14 +19,13 @@ public class HitShakeFeedback : Feedback
         if (!isShake)
         {
 
-            currentCo = player.StartCoroutine(BlinkCo());
+            currentCo = player?.StartCoroutine(BlinkCo());
 
         }
         else
         {
-
-            player.StopCoroutine(currentCo);
-            currentCo = player.StartCoroutine(BlinkCo());
+            player?.StopCoroutine(currentCo);
+            currentCo = player?.StartCoroutine(BlinkCo());
 
         }
 

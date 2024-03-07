@@ -16,7 +16,8 @@ public class MapManager : MonoBehaviour
     [SerializeField] private float plusValue = 1.5f;
     [SerializeField] CinemachineConfiner2D _cmConfiner;
 
-    public WallDoor[] door;
+    public List<WallDoor> door = new List<WallDoor>();
+    [HideInInspector] public DetectZone curZone;
 
     Vector2 centerPos;
     public Vector2 CenterPos => centerPos;
@@ -73,13 +74,51 @@ public class MapManager : MonoBehaviour
         SetConfiner();
     }
 
+    private void Update()
+    {
+        if (curZone != null)
+        {
+            foreach (var a in door)
+            {
+                if (!a.gameObject.activeSelf)
+                    a.gameObject.SetActive(true);
+            }
+
+            Collider2D collider;
+
+            collider = Physics2D.OverlapBox(curZone.transform.position,
+               new Vector2(curZone.boxCol2D.size.x + 4, curZone.boxCol2D.size.y + 6), 0f,
+               LayerMask.GetMask("Enemy"));
+
+            if (collider == null)
+            {
+                collider = Physics2D.OverlapBox(curZone.transform.position,
+               new Vector2(curZone.boxCol2D.size.x + 4, curZone.boxCol2D.size.y + 6), 0f,
+               LayerMask.GetMask("TriggerEnemy"));
+            }
+
+            if (collider == null)
+            {
+                curZone = null;
+                RoomClear();
+            }
+        }
+        else
+        {
+            foreach (var a in door)
+            {
+                if (a.gameObject.activeSelf)
+                    a.gameObject.SetActive(false);
+            }
+        }
+    }
+
     public void RoomClear()
     {
         if (roomGenarator.spawnType == MapSpawnType.BSP)
         {
-
         }
-        else if(roomGenarator.spawnType == MapSpawnType.TP)
+        else if (roomGenarator.spawnType == MapSpawnType.TP)
         {
             centerPos = new Vector2(roomGenarator.WidthLength * (curIdxX - correctX),
                 roomGenarator.HeightLength * (curIdxY - correctY));

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4729665105537801365}
   - component: {fileID: 4729665105537801447}
   - component: {fileID: 316001206}
-  - component: {fileID: 4729665105537801372}
   - component: {fileID: 4729665105537801373}
   - component: {fileID: 5479890625482268552}
   m_Layer: 14
@@ -89,20 +88,6 @@ MonoBehaviour:
   obstacles: []
   currentTarget: {fileID: 0}
   IsOutOfDistance: 0
---- !u!114 &4729665105537801372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4729665105537801376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5fe50beff9976e49b5c0574ef0071f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enableFeedback: 21
-  prefab: {fileID: 2728001201958583583, guid: f856cdcf62a2e60449713591a22ae8be, type: 3}
 --- !u!50 &4729665105537801373
 Rigidbody2D:
   serializedVersion: 4
@@ -183,6 +168,7 @@ GameObject:
   - component: {fileID: 2819485562935039502}
   - component: {fileID: 5225474074833152419}
   - component: {fileID: 4212599590131675674}
+  - component: {fileID: 3098477270176419637}
   m_Layer: 14
   m_Name: Visual
   m_TagString: Untagged
@@ -290,3 +276,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bd332299282dd5498f9abfe25be18be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3098477270176419637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7797728906063257287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5fe50beff9976e49b5c0574ef0071f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableFeedback: 21
+  prefab: {fileID: 2728001201958583583, guid: f856cdcf62a2e60449713591a22ae8be, type: 3}

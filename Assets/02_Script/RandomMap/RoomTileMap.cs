@@ -222,6 +222,13 @@ public class RoomTileMap : MonoBehaviour
                     new Vector3(t.position.x + roomInfo.roomRect.x, t.position.y + roomInfo.roomRect.y, 0), Quaternion.identity);
             }
         }
+
+        if (select.detectZone != null)
+        {
+            Transform d = select.detectZone.transform;
+            Instantiate(d,
+                    new Vector3(d.position.x + roomInfo.roomRect.x, d.position.y + roomInfo.roomRect.y, 0), Quaternion.identity);
+        }
     }
 
     private void LoadGenerator()

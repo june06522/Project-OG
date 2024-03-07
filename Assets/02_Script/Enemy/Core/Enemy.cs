@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
 
 public class Enemy : MonoBehaviour, IHitAble
@@ -36,12 +37,13 @@ public class Enemy : MonoBehaviour, IHitAble
     public Collider2D Collider => collider;
     public Rigidbody2D Rigidbody => rigidbody;
 
-    //public RoomInfo RoomInfo { get; private set; } //내가 지금 위치해있는 room정보;
+    //public RoomInfo RoomInfo { get; private set; }
     
     private void Awake()
     {
         collider = GetComponent<Collider2D>();
         rigidbody = GetComponent<Rigidbody2D>();
+        feedbackPlayer = transform.Find("Visual").GetComponent<FeedbackPlayer>();
        
         enemyAnimController = transform.Find("Visual").GetComponent<EnemyAnimController>();
         //Debug.Log(_mainMap.cellBounds);
@@ -90,7 +92,8 @@ public class Enemy : MonoBehaviour, IHitAble
     public void Hit(float damage)
     {
         if (Dead) return;
-
+        
+        feedbackPlayer?.Play(damage + UnityEngine.Random.Range(0.25f, 1.75f));
         curHp -= (int)damage;
 
         if (curHp <= 0)
@@ -99,8 +102,6 @@ public class Enemy : MonoBehaviour, IHitAble
             Die();
             return;
         }
-
-        feedbackPlayer.Play(damage + UnityEngine.Random.Range(0.25f, 1.75f));
     }
 
     private void Die()
@@ -112,7 +113,7 @@ public class Enemy : MonoBehaviour, IHitAble
 
     private void DieEvent()
     {
-                
+        Destroy(gameObject);
     }
 
     //public void SetRoomInfo(RoomInfo curRoom)

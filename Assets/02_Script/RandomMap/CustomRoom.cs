@@ -14,6 +14,9 @@ public class CustomRoom : MonoBehaviour
     public int width; // 벽포함 가로
     public int height; // 벽포함 세로
 
+    public DetectZone detectZone; // -4 , -6
+
     [HideInInspector]
     public Vector3 centerPos;
+
 }

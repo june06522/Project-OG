@@ -15,18 +15,17 @@ public class HitBlinkFeedback : Feedback
 
     public override void Play(float damage)
     {
-
         if (!isBlink)
         {
 
-            currentCo = player.StartCoroutine(BlinkCo());
+            currentCo = player?.StartCoroutine(BlinkCo());
 
         }
         else
         {
 
-            player.StopCoroutine(currentCo);
-            currentCo = player.StartCoroutine(BlinkCo());
+            player?.StopCoroutine(currentCo);
+            currentCo = player?.StartCoroutine(BlinkCo());
 
         }
 
