@@ -13,7 +13,7 @@ public class RoomOpenTransitions<T> : BaseFSM_Transition<T> where T : Enum
 
     protected override bool CheckTransition()
     {
-        //return myZone.IsPlayerIn;
+        return myZone.IsPlayerIn;
     }
 
 }
