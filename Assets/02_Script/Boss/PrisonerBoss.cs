@@ -5,15 +5,11 @@ using UnityEngine;
 
 public class PrisonerBoss : Boss
 {
-    // 새 패턴 하나 만들고,
-
     private enum BossState
     {
         Idle,
         Tied,
         OneBroken,
-        TwoBroken,
-        ThreeBroken,
         Free
     }
 
@@ -21,9 +17,9 @@ public class PrisonerBoss : Boss
 
     private BossFSM _bossFSM;
 
-    private GameObject[] _restraints = new GameObject[4];
+    private GameObject[] _restraints = new GameObject[2];
 
-    private GameObject[,] _chains = new GameObject[4, 10];
+    private GameObject[,] _chains = new GameObject[2, 10];
 
     private int _restraintIndex = 0;
     private int _restrainCount = 0;
@@ -34,6 +30,9 @@ public class PrisonerBoss : Boss
     [SerializeField]
     private float _unChainTime;
     private float _currentTime = 0;
+    private float _shakeInterval;
+
+    private bool _isShaked = false;
 
     void Start()
     {
@@ -41,35 +40,15 @@ public class PrisonerBoss : Boss
         _restraintIndex = 0;
         _restrainCount = _restraints.Length;
         _chainCount = _chains.GetLength(1);
+        _shakeInterval = _unChainTime / 2;
+        _isShaked = false;
 
-        for(int i = 0; i < _restrainCount; i++)
-        {
-            _restraints[i] = ObjectPool.Instance.GetObject(ObjectPoolType.PrisonerRestraint);
-            var rad = Mathf.Deg2Rad * i * 360 / _restrainCount;
-            var x = _restraintDistance * Mathf.Cos(rad);
-            var y = _restraintDistance * Mathf.Sin(rad);
-            _restraints[i].transform.position = transform.position + new Vector3(x, y, 0);
-            _restraints[i].transform.rotation = Quaternion.identity;
-            for(int j = 0; j < _chainCount; j++)
-            {
-                var xx = j * _restraintDistance / 10 * Mathf.Cos(rad); 
-                var yy = j * _restraintDistance / 10 * Mathf.Sin(rad);
-                _chains[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.PrisonerChain);
-                if (j % 2 == 0)
-                    _chains[i, j].GetComponent<SpriteRenderer>().color = Color.grey;
-                else
-                    _chains[i, j].GetComponent<SpriteRenderer>().color = Color.black;
-                _chains[i, j].transform.position = transform.position + new Vector3(xx, yy, 0);
-                _chains[i, j].transform.rotation = Quaternion.identity;
-            }
-        }
+        ChainSetting();
 
         _curBossState = BossState.Idle;
         _bossFSM = new BossFSM(new BossIdleState(this));
 
         ChangeBossState(BossState.Tied);
-
-        StartCoroutine(ChainShake(0.3f));
     }
 
     private void OnDrawGizmos()
@@ -85,12 +64,36 @@ public class PrisonerBoss : Boss
         if(_restraintIndex < _restrainCount)
         {
             TimeChecker(Time.deltaTime * (_restraintIndex + 1));
-            HpChecker();
         }
 
         ChangeState();
 
         _bossFSM.UpdateBossState();
+    }
+
+    private void ChainSetting()
+    {
+        for (int i = 0; i < _restrainCount; i++)
+        {
+            _restraints[i] = ObjectPool.Instance.GetObject(ObjectPoolType.PrisonerRestraint, transform);
+            var rad = Mathf.Deg2Rad * i * 360 / _restrainCount;
+            var x = _restraintDistance * Mathf.Cos(rad);
+            var y = _restraintDistance * Mathf.Sin(rad);
+            _restraints[i].transform.position = transform.position + new Vector3(x, y, 0);
+            _restraints[i].transform.rotation = Quaternion.identity;
+            for (int j = 0; j < _chainCount; j++)
+            {
+                var xx = j * _restraintDistance / 10 * Mathf.Cos(rad);
+                var yy = j * _restraintDistance / 10 * Mathf.Sin(rad);
+                _chains[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.PrisonerChain, transform);
+                if (j % 2 == 0)
+                    _chains[i, j].GetComponent<SpriteRenderer>().color = Color.grey;
+                else
+                    _chains[i, j].GetComponent<SpriteRenderer>().color = Color.black;
+                _chains[i, j].transform.position = transform.position + new Vector3(xx, yy, 0);
+                _chains[i, j].transform.rotation = Quaternion.identity;
+            }
+        }
     }
 
     private void ChangeState()
@@ -103,14 +106,6 @@ public class PrisonerBoss : Boss
                 break;
             case BossState.OneBroken:
                 if (_restraintIndex > 1)
-                    ChangeBossState(BossState.TwoBroken);
-                break;
-            case BossState.TwoBroken:
-                if (_restraintIndex > 2)
-                    ChangeBossState(BossState.ThreeBroken);
-                break;
-            case BossState.ThreeBroken:
-                if (_restraintIndex > _restrainCount - 1)
                     ChangeBossState(BossState.Free);
                 break;
         }
@@ -131,27 +126,9 @@ public class PrisonerBoss : Boss
             case BossState.OneBroken:
                 _bossFSM.ChangeBossState(new POneBrokenState(this));
                 break;
-            case BossState.TwoBroken:
-                _bossFSM.ChangeBossState(new PTwoBrokenState(this));
-                break;
-            case BossState.ThreeBroken:
-                _bossFSM.ChangeBossState(new PThreeBrokenState(this));
-                break;
             case BossState.Free:
                 _bossFSM.ChangeBossState(new PFreeState(this));
                 break;
-        }
-    }
-
-    private void HpChecker()
-    {
-        if(_currentTime < _unChainTime)
-        {
-            if (currentHp <= bossSo.MaxHP - bossSo.MaxHP / _restrainCount * (_restraintIndex + 1))
-            {
-                StartCoroutine(UnChain(8, 3, 2));
-                _currentTime = 0;
-            }
         }
     }
 
@@ -160,6 +137,13 @@ public class PrisonerBoss : Boss
         if (_currentTime <= 0)
             _currentTime = 0;
 
+        if (_currentTime >= _shakeInterval && !_isShaked)
+        {
+            StartCoroutine(CameraManager.Instance.CameraShake(3, 1));
+            _isShaked = true;
+        }
+
+
         if (_currentTime <= _unChainTime)
             _currentTime += time;
         else
@@ -167,42 +151,6 @@ public class PrisonerBoss : Boss
             StartCoroutine(UnChain(8, 3, 2));
             _currentTime = 0;
         }
-
-        if (_hit)
-        {
-            _currentTime -= time;
-            _hit = false;
-        }
-    }
-
-    private IEnumerator ChainShake(float speed)
-    {
-        while(_restraintIndex < _restrainCount)
-        {
-            int temp = 0;
-            if (_restraintIndex == _restrainCount)
-                temp = _restraintIndex - 1;
-            else
-                temp = _restraintIndex;
-            for (int i = 0; i < _chainCount; i++)
-            {
-                Rigidbody2D rigid = _chains[temp, i].GetComponent<Rigidbody2D>();
-                Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * temp / _restrainCount), Mathf.Sin(Mathf.PI * 2 * temp / _restrainCount));
-                rigid.velocity = dir.normalized * speed;
-            }
-
-            yield return null;
-
-            for (int i = 0; i < _chainCount; i++)
-            {
-                Rigidbody2D rigid = _chains[temp, i].GetComponent<Rigidbody2D>();
-                Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * temp / _restrainCount), Mathf.Sin(Mathf.PI * 2 * temp / _restrainCount));
-                rigid.velocity = -dir.normalized * speed;
-            }
-
-            yield return null;
-        }
-        
     }
 
     private IEnumerator UnChain(int splitCount, float speed, float returnTime)
@@ -240,11 +188,7 @@ public class PrisonerBoss : Boss
         }
 
         _restraintIndex++;
-
-        if (_restraintIndex >= _restrainCount - 1)
-        {
-            StopCoroutine(ChainShake(0));
-        }
+        _isShaked = false;
 
         yield return new WaitForSeconds(returnTime);
 

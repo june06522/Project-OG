@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class PFreeState : BossBaseState
 {
-    private bool _isDash;
-
     private bool _healing;
+
     public PFreeState(Boss boss) : base(boss)
     {
         _healing = false;
-        _isDash = true;
         _willChange = false;
     }
 
@@ -22,12 +20,12 @@ public class PFreeState : BossBaseState
 
     public override void OnBossStateOn()
     {
-        _boss.StartCoroutine(Dash(5, 1));
+        _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
     }
 
     public override void OnBossStateUpdate()
     {
-        if(!_isDash && !_boss.isStop)
+        if(!_boss.isStop)
         {
             if (!DontNeedToFollow())
             {
@@ -42,6 +40,48 @@ public class PFreeState : BossBaseState
             }
         }
             
+    }
+
+    public override IEnumerator RandomPattern(float waitTime)
+    {
+        Debug.Log("dd");
+
+        yield return new WaitForSeconds(waitTime);
+
+        Debug.Log("ddd");
+
+        int rand = Random.Range(1, 7);
+
+        Debug.Log(rand);
+
+        switch (rand)
+        {
+            case 1:
+                _boss.StartCoroutine(OmnidirAttack(20, 3, 1, 3, 1));
+                break;
+            case 2:
+                _boss.StopImmediately(_boss.rigid);
+                _boss.isStop = true;
+                _boss.StartCoroutine(SoundAttack(3, 1));
+                break;
+            case 3:
+                _boss.StartCoroutine(OmniGuidPlayerAttack(20, 3, 1, 3, 1, 1));
+                break;
+            case 4:
+                _boss.StopImmediately(_boss.rigid);
+                _boss.isStop = true;
+                _boss.StartCoroutine(OmnidirShooting(6, 2, 0.2f, 4, 30, 50));
+                break;
+            case 5:
+                _boss.StartCoroutine(ThrowEnergyBall(3, 4, 1, 2));
+                break;
+            case 6:
+                _healing = true;
+                _boss.StopImmediately(_boss.rigid);
+                _boss.isStop = true;
+                _boss.StartCoroutine(Buff(4, 5));
+                break;
+        }
     }
 
     private bool DontNeedToFollow()
@@ -82,56 +122,8 @@ public class PFreeState : BossBaseState
         return null;
     }
 
-    public override IEnumerator RandomPattern(float waitTime)
-    {
-        Debug.Log("Free");
-
-        yield return new WaitForSeconds(waitTime);
-
-
-        int rand = Random.Range(1, 6);
-
-        switch (rand)
-        {
-            case 1:
-                _boss.StartCoroutine(OmnidirAttack(20, 3, 1, 1));
-                break;
-            case 2:
-                _boss.StopImmediately(_boss.rigid);
-                _boss.isStop = true;
-                _boss.StartCoroutine(SoundAttack(3, 1));
-                break;
-            case 3:
-                _boss.StartCoroutine(OmniGuidPlayerAttack(20, 3, 1, 1, 1));
-                break;
-            case 4:
-                _boss.StartCoroutine(ThrowEnergyBall(3, 4, 2));
-                break;
-            case 5:
-                _healing = true;
-                _boss.StopImmediately(_boss.rigid);
-                _boss.isStop = true;
-                _boss.StartCoroutine(Buff(4, 5));
-                break;
-        }
-    }
-
-    private IEnumerator Dash(float speed, float waitTime)
-    {
-        Vector2 dir = _boss.player.transform.position - _boss.transform.position;
-        _boss.rigid.velocity = dir.normalized * speed;
-
-        yield return new WaitForSeconds(waitTime);
-
-        if(_boss.rigid.velocity != Vector2.zero)
-            _boss.StopImmediately(_boss.rigid);
-        _isDash = false;
-        if (!_willChange)
-            _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
-    }
-
-    // 전방향으로 공격한다
-    private IEnumerator OmnidirAttack(int bulletCount, float speed, float time, int burstCount)
+    // 전방향으로 공격한다 - 플레이어가 근접하기 좋은 패턴
+    private IEnumerator OmnidirAttack(int bulletCount, float speed, float time, float returnTime, int burstCount)
     {
         GameObject[,] bullets = new GameObject[burstCount, bulletCount];
         for (int i = 0; i < burstCount; i++)
@@ -156,7 +148,7 @@ public class PFreeState : BossBaseState
         for (int i = 0; i < burstCount; i++)
         {
             for (int j = 0; j < bulletCount; j++)
-                ObjectPool.Instance.ReturnObject(ObjectPoolType.BossBulletType0, bullets[i, j]);
+                _boss.StartCoroutine(ObjectPool.Instance.ReturnObject(returnTime, ObjectPoolType.BossBulletType0, bullets[i, j]));
 
             yield return new WaitForSeconds(time);
         }
@@ -165,37 +157,8 @@ public class PFreeState : BossBaseState
             _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
     }
 
-    // 범위안에 플레이어가 있으면 피해를 준다
-    private IEnumerator SoundAttack(int radius, float waitTime)
-    {
-        GameObject warning = ObjectPool.Instance.GetObject(ObjectPoolType.WarningType1, _boss.transform);
-        warning.transform.localScale = warning.transform.localScale * radius * 2;
-        warning.transform.position = _boss.transform.position;
-        warning.transform.rotation = Quaternion.identity;
-
-        yield return new WaitForSeconds(waitTime);
-
-        ObjectPool.Instance.ReturnObject(ObjectPoolType.WarningType1, warning);
-
-        GameObject p = CheckPlayerCircleCastG(radius);
-
-        if (p)
-        {
-            //Debug.Log("데미지 줌");
-            if (p.TryGetComponent<IHitAble>(out var IhitAble))
-            {
-                IhitAble.Hit(_boss.bossSo.Damage);
-            }
-        }
-
-        _boss.isStop = false;
-
-        if (!_willChange)
-            _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
-    }
-
-    // 전방향으로 탄막을 날리고 잠시 뒤 탄막들이 플레이어 방향으로 날아간다
-    private IEnumerator OmniGuidPlayerAttack(int bulletCount, float speed, float time, int returnCount, int burstCount)
+    // 전방향으로 탄막을 날리고 잠시 뒤 탄막들이 플레이어 방향으로 날아간다 - 플레이어가 근접하기 좋은 패턴
+    private IEnumerator OmniGuidPlayerAttack(int bulletCount, float speed, float time, float returnTime, int returnCount, int burstCount)
     {
         GameObject[,] bullets = new GameObject[burstCount, bulletCount];
 
@@ -238,7 +201,7 @@ public class PFreeState : BossBaseState
             {
                 for (int j = 0; j < bulletCount; j++)
                 {
-                    ObjectPool.Instance.ReturnObject(ObjectPoolType.BossBulletType0, bullets[returnCounting, j]);
+                    _boss.StartCoroutine(ObjectPool.Instance.ReturnObject(returnTime, ObjectPoolType.BossBulletType0, bullets[returnCounting, j]));
                 }
 
                 returnCounting++;
@@ -251,17 +214,17 @@ public class PFreeState : BossBaseState
         {
             for (int j = 0; j < bulletCount; j++)
             {
-                ObjectPool.Instance.ReturnObject(ObjectPoolType.BossBulletType0, bullets[i, j]);
+                _boss.StartCoroutine(ObjectPool.Instance.ReturnObject(returnTime, ObjectPoolType.BossBulletType0, bullets[i, j]));
             }
 
-            yield return new WaitForSeconds(time);
         }
+
         if (!_willChange)
             _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
     }
 
-    // 플레이어 방향으로 에너지 볼을 던진다
-    private IEnumerator ThrowEnergyBall(int burstCount, float speed, float waitTime)
+    // 플레이어 방향으로 에너지 볼을 던진다 - 플레이어가 근접하기 좋은 패턴
+    private IEnumerator ThrowEnergyBall(int burstCount, float speed, float waitTime, float returnTime)
     {
         for (int i = 0; i < burstCount; i++)
         {
@@ -277,7 +240,7 @@ public class PFreeState : BossBaseState
 
             yield return new WaitForSeconds(waitTime);
 
-            ObjectPool.Instance.ReturnObject(ObjectPoolType.BossBulletType0, energyBall);
+            _boss.StartCoroutine(ObjectPool.Instance.ReturnObject(returnTime, ObjectPoolType.BossBulletType0, energyBall));
         }
         if (!_willChange)
             _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
@@ -314,5 +277,90 @@ public class PFreeState : BossBaseState
                 _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
         }
         
+    }
+
+    // 범위안에 플레이어가 있으면 피해를 준다 - 플레이어가 멀어져야 좋은 패턴
+    private IEnumerator SoundAttack(int radius, float waitTime)
+    {
+        GameObject warning = ObjectPool.Instance.GetObject(ObjectPoolType.WarningType1, _boss.transform);
+        warning.transform.localScale = warning.transform.localScale * radius * 2;
+        warning.transform.position = _boss.transform.position;
+        warning.transform.rotation = Quaternion.identity;
+
+        yield return new WaitForSeconds(waitTime);
+
+        _boss.StartCoroutine(CameraManager.Instance.CameraShake(1, 0.5f));
+
+        ObjectPool.Instance.ReturnObject(ObjectPoolType.WarningType1, warning);
+
+        GameObject p = CheckPlayerCircleCastG(radius);
+
+        if (p)
+        {
+            //Debug.Log("데미지 줌");
+            if (p.TryGetComponent<IHitAble>(out var IhitAble))
+            {
+                IhitAble.Hit(_boss.bossSo.Damage);
+            }
+        }
+
+        _boss.isStop = false;
+
+        if (!_willChange)
+            _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
+    }
+
+    // 총알을 전 방향으로 난사한다 - 플레이어가 멀어져야 좋은 패턴
+    private IEnumerator OmnidirShooting(int bulletCount, float speed, float time, float returnTime, int startReturnCount, int turnCount)
+    {
+        GameObject[,] bullets = new GameObject[turnCount, bulletCount];
+
+        int returnCounting = 0;
+
+        for (int i = 0; i < turnCount; i++)
+        {
+            for (int j = 0; j < bulletCount; j++)
+            {
+                bullets[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _boss.transform);
+                bullets[i, j].GetComponent<BossBullet>().Attack(_boss.bossSo.Damage);
+                bullets[i, j].transform.position = _boss.transform.position;
+                bullets[i, j].transform.rotation = Quaternion.identity;
+
+                Rigidbody2D rigid = bullets[i, j].GetComponent<Rigidbody2D>();
+                Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * j / 5 + i * 2), Mathf.Sin(Mathf.PI * 2 * j / 5 + i * 2));
+                rigid.velocity = dir.normalized * speed;
+
+                // 원기둥의 경우 총알이 발사 방향으로 회전 <- 이거 회전이 이상함 (일단은 이 패턴은 원형 총알로만 하기)
+                //Vector3 rotation = Vector3.forward * 360 * j / 5 + Vector3.forward * 90 - Vector3.forward * 10 * i;
+                //bullet.transform.Rotate(rotation);
+            }
+
+            yield return new WaitForSeconds(time);
+
+            if (i >= startReturnCount)
+            {
+                for (int k = 0; k < bulletCount; k++)
+                {
+                    if (bullets[returnCounting, k].activeSelf)
+                        ObjectPool.Instance.ReturnObject(ObjectPoolType.BossBulletType0, bullets[returnCounting, k]);
+                }
+
+                returnCounting++;
+            }
+        }
+
+        _boss.isStop = false;
+
+        if (!_willChange)
+            _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
+
+        for (int i = returnCounting; i < turnCount; i++)
+        {
+            for (int j = 0; j < bulletCount; j++)
+            {
+                if (bullets[i, j].activeSelf)
+                    _boss.StartCoroutine(ObjectPool.Instance.ReturnObject(returnTime, ObjectPoolType.BossBulletType0, bullets[i, j]));
+            }
+        }
     }
 }

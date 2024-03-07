@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class Boss : MonoBehaviour, IHitAble
 {
-    protected bool _hit = false;
-
     public Rigidbody2D rigid;
 
     public GameObject player;
@@ -63,7 +61,6 @@ public class Boss : MonoBehaviour, IHitAble
         if (dead)
             return;
 
-        _hit = true;
         currentHp -= damage;
         feedbackPlayer.Play(damage);
         //Debug.Log(currentHp + "," + damage);
@@ -108,7 +105,6 @@ public class Boss : MonoBehaviour, IHitAble
         // 죽는 애니메이션
         StopAllCoroutines();
         ReturnAll();
-        Debug.Log("보스 사망");
         gameObject.SetActive(false);
     }
 
