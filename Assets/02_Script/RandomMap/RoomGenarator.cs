@@ -116,7 +116,7 @@ public class RoomGenarator : MonoBehaviour
             SelectBoardPotal();
         MonsterSpawnManager.Instance.DecideWave(useRooms, height, width);
         roomTilemap.SetTileMap();
-        MapManager.Instance.RoomClear();
+        //MapManager.Instance.RoomClear();
     }
 
     void CreateBoard()

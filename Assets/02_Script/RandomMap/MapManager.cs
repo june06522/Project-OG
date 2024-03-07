@@ -16,6 +16,8 @@ public class MapManager : MonoBehaviour
     [SerializeField] private float plusValue = 1.5f;
     [SerializeField] CinemachineConfiner2D _cmConfiner;
 
+    public WallDoor[] door;
+
     Vector2 centerPos;
     public Vector2 CenterPos => centerPos;
 
@@ -73,41 +75,45 @@ public class MapManager : MonoBehaviour
 
     public void RoomClear()
     {
-        if (roomGenarator.spawnType != MapSpawnType.TP)
-            return;
-
-        centerPos = new Vector2(roomGenarator.WidthLength * (curIdxX - correctX),
-            roomGenarator.HeightLength * (curIdxY - correctY));
-
-        int x = roomGenarator.checkRoom[curIdxY, curIdxX].width / 2 - roomGenarator.PortalLenth;
-        int y = roomGenarator.checkRoom[curIdxY, curIdxX].height / 2 - roomGenarator.PortalLenth;
-
-        if (roomGenarator.checkRoom[curIdxY + 1, curIdxX] != null)
+        if (roomGenarator.spawnType == MapSpawnType.BSP)
         {
-            MovePortal obj = Instantiate(_portalPrefab);
-            obj.dir = MoveDir.up;
-            obj.transform.position = new Vector2(centerPos.x, centerPos.y + y);
+
         }
-
-        if (roomGenarator.checkRoom[curIdxY - 1, curIdxX] != null)
+        else if(roomGenarator.spawnType == MapSpawnType.TP)
         {
-            MovePortal obj = Instantiate(_portalPrefab);
-            obj.dir = MoveDir.down;
-            obj.transform.position = new Vector2(centerPos.x, centerPos.y - y);
-        }
+            centerPos = new Vector2(roomGenarator.WidthLength * (curIdxX - correctX),
+                roomGenarator.HeightLength * (curIdxY - correctY));
 
-        if (roomGenarator.checkRoom[curIdxY, curIdxX + 1] != null)
-        {
-            MovePortal obj = Instantiate(_portalPrefab);
-            obj.dir = MoveDir.right;
-            obj.transform.position = new Vector2(centerPos.x + x, centerPos.y);
-        }
+            int x = roomGenarator.checkRoom[curIdxY, curIdxX].width / 2 - roomGenarator.PortalLenth;
+            int y = roomGenarator.checkRoom[curIdxY, curIdxX].height / 2 - roomGenarator.PortalLenth;
 
-        if (roomGenarator.checkRoom[curIdxY, curIdxX - 1] != null)
-        {
-            MovePortal obj = Instantiate(_portalPrefab);
-            obj.dir = MoveDir.left;
-            obj.transform.position = new Vector2(centerPos.x - x, centerPos.y);
+            if (roomGenarator.checkRoom[curIdxY + 1, curIdxX] != null)
+            {
+                MovePortal obj = Instantiate(_portalPrefab);
+                obj.dir = MoveDir.up;
+                obj.transform.position = new Vector2(centerPos.x, centerPos.y + y);
+            }
+
+            if (roomGenarator.checkRoom[curIdxY - 1, curIdxX] != null)
+            {
+                MovePortal obj = Instantiate(_portalPrefab);
+                obj.dir = MoveDir.down;
+                obj.transform.position = new Vector2(centerPos.x, centerPos.y - y);
+            }
+
+            if (roomGenarator.checkRoom[curIdxY, curIdxX + 1] != null)
+            {
+                MovePortal obj = Instantiate(_portalPrefab);
+                obj.dir = MoveDir.right;
+                obj.transform.position = new Vector2(centerPos.x + x, centerPos.y);
+            }
+
+            if (roomGenarator.checkRoom[curIdxY, curIdxX - 1] != null)
+            {
+                MovePortal obj = Instantiate(_portalPrefab);
+                obj.dir = MoveDir.left;
+                obj.transform.position = new Vector2(centerPos.x - x, centerPos.y);
+            }
         }
     }
 
