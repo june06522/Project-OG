@@ -27,7 +27,7 @@ public class Chest : MonoBehaviour
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
 
-        if(_itemList == null)
+        if (_itemList == null)
         {
             Debug.LogError("ItemSOList is null");
             return;
@@ -51,7 +51,7 @@ public class Chest : MonoBehaviour
         _rateItems[ItemRate.EPIC] = new List<ItemInfoSO>();
         _rateItems[ItemRate.LEGEND] = new List<ItemInfoSO>();
 
-        foreach(ItemInfoSO item in itemInfoSOs)
+        foreach (ItemInfoSO item in itemInfoSOs)
         {
             _rateItems[item.Rate].Add(item);
         }
@@ -64,7 +64,7 @@ public class Chest : MonoBehaviour
 
         ItemInfoSO item = RandomItem();
         // 아이템 소환인데.. 아이템 프리팹이 없는데?
-        if(item.ItemObject != null) // 여기 true 빼야되고 밑에 테스트 코드 지워야함
+        if (item.ItemObject != null) // 여기 true 빼야되고 밑에 테스트 코드 지워야함
         {
             Item itemObject = Instantiate(item.ItemObject, transform.position, Quaternion.identity);
 
@@ -73,7 +73,7 @@ public class Chest : MonoBehaviour
         }
 
         // 이펙트
-        if(_openEffect != null)
+        if (_openEffect != null)
             PlayOpenEffect(item.Rate);
     }
 
@@ -106,18 +106,21 @@ public class Chest : MonoBehaviour
         float percent = Random.Range(0f, 100f); // 0 ~ 100
         ItemRate rate = ItemRate.NORMAL;
 
-        if(percent <= _legendProbability)
+        if (percent <= _legendProbability)
         {
+
             rate = ItemRate.LEGEND;
 
         }
         else if (percent <= _legendProbability + _epicProbability)
         {
+
             rate = ItemRate.EPIC;
 
         }
         else if (percent <= _legendProbability + _epicProbability + _rareProbability)
         {
+
             rate = ItemRate.RARE;
 
         }
