@@ -141,7 +141,7 @@ public class BSPAlgorithm : MonoBehaviour
 
         //디버깅
         //StartCoroutine(Debuging(triangles));
-        StartCoroutine(Debuging(edges));
+        //StartCoroutine(Debuging(edges));
 
         //길 그리기
         for (int i = 0; i < edges.Count; i++)
@@ -219,7 +219,12 @@ public class BSPAlgorithm : MonoBehaviour
 
         if (start.x > end.x)
         {
-            while (!CanCreate(midPos, end.x, Dir.left))
+            while (roomTilemap.Tile.GetTile(new Vector3Int((int)end.x, (int)midPos.y, 0)) != null &&
+                roomTilemap.Tile.GetTile(new Vector3Int((int)end.x, (int)midPos.y - 1, 0)) != null &&
+                roomTilemap.Tile.GetTile(new Vector3Int((int)end.x, (int)midPos.y - 2, 0)) != null &&
+                roomTilemap.Tile.GetTile(new Vector3Int((int)end.x, (int)midPos.y + 1, 0)) != null &&
+                roomTilemap.Tile.GetTile(new Vector3Int((int)end.x, (int)midPos.y + 2, 0)) != null &&
+                !CanCreate(midPos, end.x, Dir.left))
                 if (idx % 2 == 0)
                     midPos.y += idx++;
                 else
@@ -227,7 +232,12 @@ public class BSPAlgorithm : MonoBehaviour
         }
         else if (start.x < end.x)
         {
-            while (!CanCreate(midPos, end.x, Dir.right))
+            while (roomTilemap.Tile.GetTile(new Vector3Int((int)end.x, (int)midPos.y, 0)) != null &&
+                roomTilemap.Tile.GetTile(new Vector3Int((int)end.x, (int)midPos.y - 1, 0)) != null &&
+                roomTilemap.Tile.GetTile(new Vector3Int((int)end.x, (int)midPos.y - 2, 0)) != null &&
+                roomTilemap.Tile.GetTile(new Vector3Int((int)end.x, (int)midPos.y + 1, 0)) != null &&
+                roomTilemap.Tile.GetTile(new Vector3Int((int)end.x, (int)midPos.y + 2, 0)) != null &&
+                !CanCreate(midPos, end.x, Dir.right))
                 if (idx % 2 == 0)
                     midPos.y += idx++;
                 else
@@ -238,7 +248,12 @@ public class BSPAlgorithm : MonoBehaviour
         idx = 1;
         if (start.y > end.y)
         {
-            while (!CanCreate(midPos, start.y, Dir.top))
+            while (roomTilemap.Tile.GetTile(new Vector3Int((int)midPos.x, (int)start.y, 0)) != null &&
+                roomTilemap.Tile.GetTile(new Vector3Int((int)midPos.x - 1, (int)start.y, 0)) != null &&
+                roomTilemap.Tile.GetTile(new Vector3Int((int)midPos.x - 2, (int)start.y, 0)) != null &&
+                roomTilemap.Tile.GetTile(new Vector3Int((int)midPos.x + 1, (int)start.y, 0)) != null &&
+                roomTilemap.Tile.GetTile(new Vector3Int((int)midPos.x + 2, (int)start.y, 0)) != null &&
+                !CanCreate(midPos, start.y, Dir.top))
                 if (idx % 2 == 0)
                     midPos.x += idx++;
                 else
@@ -246,7 +261,12 @@ public class BSPAlgorithm : MonoBehaviour
         }
         else if (start.y < end.y)
         {
-            while (!CanCreate(midPos, start.y, Dir.bottom))
+            while (roomTilemap.Tile.GetTile(new Vector3Int((int)midPos.x, (int)start.y, 0)) != null &&
+                roomTilemap.Tile.GetTile(new Vector3Int((int)midPos.x - 1, (int)start.y, 0)) != null &&
+                roomTilemap.Tile.GetTile(new Vector3Int((int)midPos.x - 2, (int)start.y, 0)) != null &&
+                roomTilemap.Tile.GetTile(new Vector3Int((int)midPos.x + 1, (int)start.y, 0)) != null &&
+                roomTilemap.Tile.GetTile(new Vector3Int((int)midPos.x + 2, (int)start.y, 0)) != null &&
+                !CanCreate(midPos, start.y, Dir.bottom))
                 if (idx % 2 == 0)
                     midPos.x += idx++;
                 else
@@ -664,6 +684,7 @@ public class BSPAlgorithm : MonoBehaviour
                 }
                 break;
         }
+
         if (cnt > 3)
             return false;
 
@@ -671,3 +692,5 @@ public class BSPAlgorithm : MonoBehaviour
         return true;
     }
 }
+
+//엔드포스에 겟타일 해보기
