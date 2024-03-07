@@ -78,11 +78,6 @@ public class MapManager : MonoBehaviour
     {
         if (curZone != null)
         {
-            foreach (var a in door)
-            {
-                if (!a.gameObject.activeSelf)
-                    a.gameObject.SetActive(true);
-            }
 
             Collider2D collider;
 
@@ -101,6 +96,14 @@ public class MapManager : MonoBehaviour
             {
                 curZone = null;
                 RoomClear();
+            }
+            else
+            {
+                foreach (var a in door)
+                {
+                    if (!a.gameObject.activeSelf)
+                        a.gameObject.SetActive(true);
+                }
             }
         }
         else
