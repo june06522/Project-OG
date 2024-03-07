@@ -1,6 +1,7 @@
 using Astar;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -280,7 +281,7 @@ public class BSPAlgorithm : MonoBehaviour
             {
                 if (roomTilemap.Tile.GetTile(new Vector3Int((int)midPos.x, i, 0)) == null)
                 {
-                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x - 2, i, 0)) != null)
+                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x - 2, i, 0)) == bottomtile)
                         roomTilemap.WallTile.SetTile(new Vector3Int((int)midPos.x - 2, i, 0), corner1);
                     if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x - 1, i, 0)) != null)
                         roomTilemap.WallTile.SetTile(new Vector3Int((int)midPos.x - 1, i, 0), null);
@@ -288,7 +289,7 @@ public class BSPAlgorithm : MonoBehaviour
                         roomTilemap.WallTile.SetTile(new Vector3Int((int)midPos.x + 0, i, 0), null);
                     if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x + 1, i, 0)) != null)
                         roomTilemap.WallTile.SetTile(new Vector3Int((int)midPos.x + 1, i, 0), null);
-                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x + 2, i, 0)) != null)
+                    if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x + 2, i, 0)) == bottomtile)
                         roomTilemap.WallTile.SetTile(new Vector3Int((int)midPos.x + 2, i, 0), corner2);
                     roomTilemap.Tile.SetTile(new Vector3Int((int)midPos.x - 1, i, 0), loadtile);
                     roomTilemap.Tile.SetTile(new Vector3Int((int)midPos.x + 0, i, 0), loadtile);
@@ -439,11 +440,13 @@ public class BSPAlgorithm : MonoBehaviour
         {
             if (midPos.x < (int)start.x)
             {
-                roomTilemap.WallTile.SetTile(new Vector3Int((int)midPos.x - 2, (int)midPos.y - 2, 0), corner1);
+                if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x - 2, (int)midPos.y - 2, 0)) != null)
+                    roomTilemap.WallTile.SetTile(new Vector3Int((int)midPos.x - 2, (int)midPos.y - 2, 0), corner1);
             }
             else
             {
-                roomTilemap.WallTile.SetTile(new Vector3Int((int)midPos.x + 2, (int)midPos.y - 2, 0), corner2);
+                if (roomTilemap.WallTile.GetTile(new Vector3Int((int)midPos.x + 2, (int)midPos.y - 2, 0)) != null)
+                    roomTilemap.WallTile.SetTile(new Vector3Int((int)midPos.x + 2, (int)midPos.y - 2, 0), corner2);
             }
         }
     }
@@ -464,8 +467,10 @@ public class BSPAlgorithm : MonoBehaviour
                                     if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y - 3, 0)) != null)
                                         if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 3, 0)) != null)
                                             if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y, 0)) != null)
+                                            {
+                                                cnt++;
                                                 continue;
-                    cnt++;
+                                            }
 
                     if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 1, 0)) != null ||
                       roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 2, 0)) != null ||
@@ -488,8 +493,10 @@ public class BSPAlgorithm : MonoBehaviour
                                     if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 2, 0)) != null)
                                         if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 3, 0)) != null)
                                             if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y, 0)) != null)
+                                            {
+                                                cnt++;
                                                 continue;
-                    cnt++;
+                                            }
 
                     if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y + 1, 0)) != null ||
                         roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y - 1, 0)) != null ||
@@ -510,8 +517,10 @@ public class BSPAlgorithm : MonoBehaviour
                             if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x + 2, (int)start.y, 0)) != null)
                                 if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x - 2, (int)start.y, 0)) != null)
                                     if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y, 0)) != null)
+                                    {
+                                        cnt++;
                                         continue;
-                    cnt++;
+                                    }
 
                     if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x + 1, (int)start.y, 0)) != null ||
                         roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x - 1, (int)start.y, 0)) != null ||
@@ -530,8 +539,10 @@ public class BSPAlgorithm : MonoBehaviour
                             if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x + 2, (int)start.y, 0)) != null)
                                 if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x - 1, (int)start.y, 0)) != null)
                                     if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x, (int)start.y, 0)) != null)
+                                    {
+                                        cnt++;
                                         continue;
-                    cnt++;
+                                    }
 
                     if (roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x + 1, (int)start.y, 0)) != null ||
                         roomTilemap.WallTile.GetTile(new Vector3Int((int)start.x - 2, (int)start.y, 0)) != null ||
@@ -542,16 +553,8 @@ public class BSPAlgorithm : MonoBehaviour
                 }
                 break;
         }
+        if (cnt > 3)
+            return false;
         return true;
-        //if (cnt == 1 || cnt == 2)
-        //{
-        //    Debug.Log($"true : {cnt}");
-        //    return true;
-        //}
-        //else
-        //{
-        //    Debug.Log($"false : {cnt}");
-        //    return false;
-        //}
     }
 }
