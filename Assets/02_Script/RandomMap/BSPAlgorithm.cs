@@ -19,7 +19,7 @@ public class BSPRoomInfo
     public BSPRoomInfo(CustomRoom _room, int xpos, int ypos)
     {
         room = _room;
-        roomRect = new RectInt(xpos, ypos, _room.width, _room.height);
+        roomRect = new RectInt(xpos - room.width / 2, ypos - room.height / 2, _room.width, _room.height);
     }
 
     public Vector2Int GetCenterPos()
@@ -78,11 +78,11 @@ public class BSPAlgorithm : MonoBehaviour
         //랜덤 위치에 생성
 
         //시작방
-        roomList.Add(new BSPRoomInfo(roomTilemap.startMap, 0, 0));
+        roomList.Add(new BSPRoomInfo(roomTilemap.startMap, Random.Range(-xlen, xlen), Random.Range(-ylen, ylen)));
 
         //상점
         for (int i = 0; i < shopCnt; i++)
-            roomList.Add(new BSPRoomInfo(roomTilemap.shopMap, 0, 0));
+            roomList.Add(new BSPRoomInfo(roomTilemap.shopMap, Random.Range(-xlen, xlen), Random.Range(-ylen, ylen)));
 
         //몬스터 방
         for (int i = 0; i < roomCnt; i++)
@@ -91,9 +91,7 @@ public class BSPAlgorithm : MonoBehaviour
                 Random.Range(-xlen, xlen), Random.Range(-ylen, ylen)));
         }
 
-        Debug.Log(roomList[1].roomRect);
-
-        //안곂치게 방 밀어내기
+        //안겹치게 방 밀어내기
         bool isClear = false;
         while (!isClear)
         {
@@ -108,19 +106,23 @@ public class BSPAlgorithm : MonoBehaviour
                     {
                         isClear = false;
                         if (roomList[j].roomRect.x > roomList[i].roomRect.x)
-                            roomList[j].roomRect.x += Random.Range(-5, 15);
+                            roomList[j].roomRect.x += Random.Range(-20, 40);
                         else
-                            roomList[j].roomRect.x -= Random.Range(-5, 15);
+                            roomList[j].roomRect.x -= Random.Range(-20, 40);
 
                         if (roomList[j].roomRect.y > roomList[i].roomRect.y)
-                            roomList[j].roomRect.y += Random.Range(-5, 15);
+                            roomList[j].roomRect.y += Random.Range(-20, 40);
                         else
-                            roomList[j].roomRect.y -= Random.Range(-5, 15);
+                            roomList[j].roomRect.y -= Random.Range(-20, 40);
+                    }
+
+                    if (CheckOverlap(roomList[i].roomRect, roomList[j].roomRect))
+                    {
+                        j--;
                     }
                 }
             }
         }
-        Debug.Log(roomList[1].roomRect);
 
         // 방 그리기
         for (int i = 0; i < roomList.Count; i++)
@@ -143,8 +145,8 @@ public class BSPAlgorithm : MonoBehaviour
         List<TriEdge> edges = MinimumSpanningTree.FindLine(triangles, triangles[0].a);
 
         //디버깅
-        //StartCoroutine(Debuging(triangles));
-        StartCoroutine(Debuging(edges));
+        StartCoroutine(Debuging(triangles));
+        //StartCoroutine(Debuging(edges));
 
         //길 그리기
         for (int i = 0; i < edges.Count; i++)
@@ -189,12 +191,18 @@ public class BSPAlgorithm : MonoBehaviour
     //방 곂치는지 확인
     public bool CheckOverlap(RectInt rect1, RectInt rect2)
     {
+        rect1.x -= rect1.width / 2;
+        rect1.y -= rect1.height / 2;
+
+        rect2.x -= rect2.width / 2;
+        rect2.y -= rect2.height / 2;
         bool condition1 = rect1.x - minlen < rect2.x + rect2.width;
         bool condition2 = rect1.x + rect1.width > rect2.x - minlen;
         bool condition3 = rect1.y - minlen < rect2.y + rect2.height;
         bool condition4 = rect1.y + rect1.height > rect2.y - minlen;
 
         return condition1 && condition2 && condition3 && condition4;
+        
     }
 
     //길 생성
