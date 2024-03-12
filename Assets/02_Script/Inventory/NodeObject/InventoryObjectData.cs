@@ -15,9 +15,9 @@ public struct SignalPoint
 public class InventoryObjectData : ScriptableObject
 {
 
-    [field:SerializeField] public List<Vector2Int> bricks { get; protected set; } = new();
-    [field:SerializeField] public List<SignalPoint> inputPoints { get; protected set; } = new();
-    [field:SerializeField] public List<SignalPoint> sendPoints { get; protected set; } = new();
+    [field: SerializeField] public List<Vector2Int> bricks { get; protected set; } = new();
+    [field: SerializeField] public List<SignalPoint> inputPoints { get; protected set; } = new();
+    [field: SerializeField] public List<SignalPoint> sendPoints { get; protected set; } = new();
     [HideInInspector] public List<InventoryObjectRoot> includes = new();
 
     private WeaponInventory inventory;
@@ -32,7 +32,7 @@ public class InventoryObjectData : ScriptableObject
 
         inventory = UnityEngine.Object.FindObjectOfType<WeaponInventory>();
 
-        for(int i  = 0; i < includes.Count; i++)
+        for (int i = 0; i < includes.Count; i++)
         {
 
             includes[i] = includes[i].Copy();
@@ -67,16 +67,19 @@ public class InventoryObjectData : ScriptableObject
 
         List<InventoryObjectData> datas = new List<InventoryObjectData>();
 
-        foreach(var item in sendPoints)
+        foreach (var item in sendPoints)
         {
 
+            Debug.Log(item.point);
+            Debug.Log(item.dir);
+            Debug.Log(originPos);
             var d = inventory.GetObjectData(item.point, item.dir, originPos);
 
             if (d != null) datas.Add(d);
 
         }
 
-        foreach(var item in datas)
+        foreach (var item in datas)
         {
 
             item.GetSignal(signal);
