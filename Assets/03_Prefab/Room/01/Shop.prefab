@@ -1849,7 +1849,8 @@ GameObject:
   - component: {fileID: 9150983052137439445}
   - component: {fileID: 9150983052137439446}
   - component: {fileID: 6910863883585403599}
-  m_Layer: 0
+  - component: {fileID: 4121972981024633282}
+  m_Layer: 17
   m_Name: TempShopImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1937,6 +1938,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shop: {fileID: 9150983053749384280}
+--- !u!61 &4121972981024633282
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9150983052137439444}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.011125207, y: -0.17983639}
+  m_SpriteTilingProperty:
+    border: {x: 0.5625, y: 0.5625, z: 0.5625, w: 0.5625}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2, y: 2}
+    newSize: {x: 8, y: 8}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.5327384, y: 1.6403272}
+  m_EdgeRadius: 0
 --- !u!1 &9150983052138095316
 GameObject:
   m_ObjectHideFlags: 0
@@ -2853,6 +2880,7 @@ MonoBehaviour:
   _openSprite: {fileID: -354052659, guid: eec3db8c95ed45a48aef9978f9bb23cb, type: 3}
   _itemSpawnPos: {fileID: 9150983052158957462}
   _openEffect: {fileID: 0}
+  _detectPlayer: 0
 --- !u!1 &9150983053002720864
 GameObject:
   m_ObjectHideFlags: 0

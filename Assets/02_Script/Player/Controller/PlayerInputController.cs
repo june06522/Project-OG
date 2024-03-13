@@ -30,7 +30,6 @@ public class PlayerInputController : IDisposable
             Vector2 pos = GameManager.Instance.player.position;
             float radius = 2f;
             Collider2D[] col = Physics2D.OverlapCircleAll(pos, radius, LayerMask.GetMask("Interactable"));
-
             for(int i = 0; i < col.Length; i++) 
             {
                 IInteractable interact;

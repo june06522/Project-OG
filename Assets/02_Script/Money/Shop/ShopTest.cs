@@ -3,17 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopTest : MonoBehaviour
+public class ShopTest : MonoBehaviour, IInteractable
 {
     [SerializeField]
     Shop _shop;
 
-    Transform playerTrm;
-
     private void Start()
     {
-        playerTrm = GameManager.Instance.player.transform;
-
         _shop = GameObject.FindAnyObjectByType<Shop>();
     }
 
@@ -26,18 +22,11 @@ public class ShopTest : MonoBehaviour
             _shop.CloseShop();
         }
 
-        if (PlayerCheck() == false)
-            return;
-
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            _shop.OpenShop();
-        }
-
     }
 
-    private bool PlayerCheck()
+    public void OnInteract()
     {
-        return (Vector2.Distance(transform.position, playerTrm.position) < 2f);
+        Debug.Log("상호작용");
+        _shop.OpenShop();
     }
 }
