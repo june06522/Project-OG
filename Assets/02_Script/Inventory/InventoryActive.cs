@@ -9,6 +9,7 @@ public class InventoryActive : MonoBehaviour
     public Image[] images;
 
     bool isOn = false;
+    public bool IsOn => isOn;
 
     private void Update()
     {
