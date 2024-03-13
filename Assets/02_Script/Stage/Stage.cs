@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [System.Serializable]
 public struct MonsterSpawnInfo
@@ -56,12 +57,8 @@ public class Stage : MonoBehaviour
     private void StartWave()
     {
         // Wave Start
-        StartCoroutine(MonsterSpawn());
-    }
-
-    private void NextWave()
-    {
         waveCount--;
+        StartCoroutine(MonsterSpawn());
     }
 
     // linked Enemy class's deadEvent
@@ -71,14 +68,14 @@ public class Stage : MonoBehaviour
         if(monsterCount <= 0)
         {
 
-            if(waveCount == 0)
+            if(waveCount <= 0)
             {
 
                 AppearGate();
 
             }
             else
-                NextWave();
+                StartWave();
 
         }    
     }
@@ -86,14 +83,32 @@ public class Stage : MonoBehaviour
     private void AppearGate()
     {
         // appear Gate ...it need tween
-        StageGate gate = Instantiate(stageGate);
+        if(NextStage.Count <= 1)
+        {
+            StageGate gate = Instantiate(stageGate, transform.position, Quaternion.identity);
+            gate.SetStage(NextStage[Random.Range(0, NextStage.Count)]);
+        }
+        else if (NextStage.Count == 2)
+        {
+            // 2
+            StageGate gate = Instantiate(stageGate,
+                    transform.position - new Vector3(40, 0, 0), Quaternion.identity);
+            gate.SetStage(NextStage[Random.Range(0, NextStage.Count)]);
+
+            StageGate gate2 = Instantiate(stageGate,
+                    transform.position + new Vector3(40, 0, 0), Quaternion.identity);
+            gate2.SetStage(NextStage[Random.Range(0, NextStage.Count)]);
+        }
+
+        
+
         // effect or tween
     }
 
     IEnumerator MonsterSpawn()
     {
         isMonsterSpawning = true;
-        WaveInfo waveInfo = waveList[waveCount - 1];
+        WaveInfo waveInfo = waveList[waveCount];
         yield return new WaitForSeconds(0.1f);
         
         
