@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ public class SendData : MonoBehaviour
     private WeaponType weaponType;
     private GeneratorID generatorID;
     private int power;
+    public Hashtable isVisited = new Hashtable();
 
     public WeaponType WeaponType => weaponType;
     public GeneratorID GeneratorID => generatorID;
