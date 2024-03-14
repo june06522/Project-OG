@@ -223,8 +223,8 @@ public class InventoryEditorGraph : FAED_BaseGraphView
                 if(edge != null)
                 {
 
-                    var parent = edge.output.node as InventoryBaseNode; //½ÅÈ£ º¸³»´Â³ð
-                    var child = edge.input.node as InventoryBaseNode; //½ÅÈ£ ¹Þ´Â³ð
+                    var parent = edge.output.node as InventoryBaseNode; //ï¿½ï¿½È£ ï¿½ï¿½ï¿½ï¿½ï¿½Â³ï¿½
+                    var child = edge.input.node as InventoryBaseNode; //ï¿½ï¿½È£ ï¿½Þ´Â³ï¿½
 
                     parent.invenObj.Disconnect(child.invenObj, ConnectType.Output);
                     child.invenObj.Disconnect(parent.invenObj, ConnectType.Input);
@@ -247,8 +247,8 @@ public class InventoryEditorGraph : FAED_BaseGraphView
             foreach(var edge in graphViewChange.edgesToCreate)
             {
 
-                var parent = edge.output.node as InventoryBaseNode; //½ÅÈ£ º¸³»´Â³ð
-                var child = edge.input.node as InventoryBaseNode; //½ÅÈ£ ¹Þ´Â³ð
+                var parent = edge.output.node as InventoryBaseNode; //ï¿½ï¿½È£ ï¿½ï¿½ï¿½ï¿½ï¿½Â³ï¿½
+                var child = edge.input.node as InventoryBaseNode; //ï¿½ï¿½È£ ï¿½Þ´Â³ï¿½
 
                 parent.invenObj.Connect(child.invenObj, ConnectType.Output);
                 child.invenObj.Connect(parent.invenObj, ConnectType.Input);

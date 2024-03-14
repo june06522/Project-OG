@@ -173,7 +173,6 @@ public class WeaponInventory : MonoBehaviour
 
     public InventoryObjectData GetObjectData(Vector2Int point, Vector2Int dir, Vector2Int origin)
     {
-
         var c = container.Find(x => x.inputPoints.Count != 0 ?
         x.sendPoints.FindIndex(y => y.point + x.originPos == origin + (point + dir) && y.dir == -dir) != -1 : 
         x.bricks.FindIndex(y => y.point + x.originPos == origin + (point + dir)) != -1);

@@ -90,22 +90,23 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             inventory.AddItem(InvenObject, point.Value);
             InvenPoint = point.Value;
 
-            //transform.position = p * 100 + new Vector3Int(60, 40);
-            rectTransform.localPosition = p * 100;// + new Vector3Int(60, 40);
+            rectTransform.localPosition = p * 100;
 
+            rectTransform.localPosition += new Vector3((rectTransform.rect.width - 100) / 2, (rectTransform.rect.height - 100) / 2);
             Setting();
         }
         else
         {
 
-            Vector3Int prevP = Vector3Int.RoundToInt(prevPos / 100);
-            var prev = inventory.FindInvenPoint(Vector2Int.RoundToInt(prevPos / 100));
+            Vector2Int prevP = Vector2Int.RoundToInt(prevPos / 100);
+            var prev = inventory.FindInvenPoint(Vector2Int.RoundToInt((prevPos - new Vector3Int
+                ((int)rectTransform.rect.width - 100,
+                ((int)rectTransform.rect.height) - 100) / 2) / 100));
 
             inventory.AddItem(InvenObject, prev.Value);
             InvenPoint = prev.Value;
 
-            transform.localPosition = prevP * 100;// + new Vector3Int(60, 40);
-            //transform.position = prevP * 100 + new Vector3Int(60, 40);
+            transform.localPosition = prevPos;
 
             Setting();
         }
