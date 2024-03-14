@@ -19,14 +19,6 @@ public class StageTransition : MonoBehaviour
         _transitionImage = GetComponent<Image>();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.S))
-            StartTransition();
-        if (Input.GetKeyDown(KeyCode.D))
-            EndTransition();
-    }
-
     public void StartTransition()
     {
         RandomTransitionValue();

@@ -69,6 +69,9 @@ public class Enemy : MonoBehaviour, IHitAble
     {
         if(movementInput != Vector2.zero)
             enemyAnimController.Flip(oldMovementInput);
+
+        if (Input.GetKeyDown(KeyCode.T))
+            Die(); //test
     }
 
     private void FixedUpdate()
