@@ -16,7 +16,7 @@ public class Obstacle : MonoBehaviour
     public int Weight = 0;
     public EObstacleType Type => _type;
 
-    Collider2D collider;
+    Collider2D _collider;
 
     void OnDrawGizmosSelected()
     {
