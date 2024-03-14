@@ -17,6 +17,7 @@ public class FireSword : Skill
 
         f.Shoot(power * 5, power);
 
+
     }
 
 }
