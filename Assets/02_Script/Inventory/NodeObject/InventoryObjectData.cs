@@ -76,10 +76,6 @@ public class InventoryObjectData : ScriptableObject
 
         foreach (var item in sendPoints)
         {
-
-            Debug.Log(item.point);
-            Debug.Log(item.dir);
-            Debug.Log(originPos);
             var d = inventory.GetObjectData(item.point, item.dir, originPos);
 
             if (d != null) datas.Add(d);

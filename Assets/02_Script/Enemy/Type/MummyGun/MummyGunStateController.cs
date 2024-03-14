@@ -24,7 +24,7 @@ public class MummyGunStateController : BaseFSM_Controller<EMummyGunState>
         base.Start();
 
         var rootState = new MummyGunRootState(this);
-        var rootToPatrol = new RoomOpenTransitions<EMummyGunState>(this, EMummyGunState.Patrol, Enemy.MyZone);
+        var rootToPatrol = new RoomOpenTransitions<EMummyGunState>(this, EMummyGunState.Patrol);
         rootState.
             AddTransition<EMummyGunState>(rootToPatrol);
         
