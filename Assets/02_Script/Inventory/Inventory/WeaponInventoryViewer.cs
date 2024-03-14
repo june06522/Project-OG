@@ -31,6 +31,8 @@ public class WeaponInventoryViewer : MonoBehaviour
 
         var pos = (this.point.position + (Vector3)((Vector2)point * 100)) - (new Vector3(inventory.Width, inventory.Height) * 100 / 2);
 
+        //var pos = (Vector3)(new Vector2(point.x - 51.5f,point.y - 53));
+
         var slot = Instantiate(slotPrefab, Vector2.zero, Quaternion.identity ,parent);
         slot.invenPoint = point;
         slot.transform.position = pos + new Vector3(50, 50);

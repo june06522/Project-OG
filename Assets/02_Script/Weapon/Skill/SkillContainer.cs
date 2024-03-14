@@ -3,67 +3,67 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-// »ı¼º±â°¡ °¡Áö°í ÀÖ´Â°Å
-// Ç¥Àû Å¸ÀÔ, »ı¼º±â ID(½ºÅ³ Á¾·ù)
+// ìƒì„±ê¸°ê°€ ê°€ì§€ê³  ìˆëŠ”ê±°
+// í‘œì  íƒ€ì…, ìƒì„±ê¸° ID(ìŠ¤í‚¬ ì¢…ë¥˜)
 
-// ¹«±â°¡ °¡Áö°í ÀÖ´Â°Å
-// ÀÚ±â Å¸ÀÔ, ÀÚ±â ID
+// ë¬´ê¸°ê°€ ê°€ì§€ê³  ìˆëŠ”ê±°
+// ìê¸° íƒ€ì…, ìê¸° ID
 
-// ¹«±â Å¸ÀÔ
+// ë¬´ê¸° íƒ€ì…
 [Flags]
 [Serializable]
 public enum WeaponType
 {
-    Gun = 1 << 0,       // ÃÑ±â·ù
-    Bow = 1 << 1,       // È°
-    Throw = 1 << 2,     // ÅõÃ´·ù
-    Sword = 1 << 3,     // °Ë
-    Spear = 1 << 4,     // Ã¢
-    Sickle = 1 << 5,    // ³´
-    Blunt = 1 << 6,     // µĞ±â·ù
-    Whip = 1 << 7,      // Ã¤Âï·ù
+    Gun = 1 << 0,       // ì´ê¸°ë¥˜
+    Bow = 1 << 1,       // í™œ
+    Throw = 1 << 2,     // íˆ¬ì²™ë¥˜
+    Sword = 1 << 3,     // ê²€
+    Spear = 1 << 4,     // ì°½
+    Sickle = 1 << 5,    // ë‚«
+    Blunt = 1 << 6,     // ë‘”ê¸°ë¥˜
+    Whip = 1 << 7,      // ì±„ì°ë¥˜
 }
 
-// ¹«±âº° ID
+// ë¬´ê¸°ë³„ ID
 [Serializable]
 public enum WeaponID
 {
-    None,       // ¾Æ¹«°Íµµ ¾Æ´Ô
-    Shotgun,    // ¼¦°Ç
-    Pistol,     // ÇÇ½ºÅç
-    Crossbow,   // ¼®±Ã
-    Bow,        // È°
-    Slingshot,  // »õÃÑ
-    Stone,      // Â¯µ¹
-    Kunai,      // Äí³ªÀÌ
-    Monkey,     // ¸ùÅ°½ºÆĞ³Ê
-    WaterBang,  // ¹°Ç³¼±
-    Bomb,       // ÆøÅº
-    Katana,     // Ä«Å¸³ª
-    Branch,     // ³ª¹µ°¡Áö
-    Tennis,     // Å×´Ï½º¶óÄÏ
-    Spear,      // Ã¢
-    Cane,       // ÁöÆÎÀÌ
-    Golfclub,   // °ñÇÁÃ¤
-    Sickle,     // ³´
-    Hammer,     // ¸ÁÄ¡
-    Pickaxe,    // °î±ªÀÌ
-    Bat,        // ºüµû
-    Rope,       // ·ÎÇÁ
-    Chain,      // ¼è»ç½½
+    None,       // ì•„ë¬´ê²ƒë„ ì•„ë‹˜
+    Shotgun,    // ìƒ·ê±´
+    Pistol,     // í”¼ìŠ¤í†¨
+    Crossbow,   // ì„ê¶
+    Bow,        // í™œ
+    Slingshot,  // ìƒˆì´
+    Stone,      // ì§±ëŒ
+    Kunai,      // ì¿ ë‚˜ì´
+    Monkey,     // ëª½í‚¤ìŠ¤íŒ¨ë„ˆ
+    WaterBang,  // ë¬¼í’ì„ 
+    Bomb,       // í­íƒ„
+    Katana,     // ì¹´íƒ€ë‚˜
+    Branch,     // ë‚˜ë­‡ê°€ì§€
+    Tennis,     // í…Œë‹ˆìŠ¤ë¼ì¼“
+    Spear,      // ì°½
+    Cane,       // ì§€íŒ¡ì´
+    Golfclub,   // ê³¨í”„ì±„
+    Sickle,     // ë‚«
+    Hammer,     // ë§ì¹˜
+    Pickaxe,    // ê³¡ê´­ì´
+    Bat,        // ë¹ ë”°
+    Rope,       // ë¡œí”„
+    Chain,      // ì‡ ì‚¬ìŠ¬
 }
 
-// »ı¼º±âº° ID
+// ìƒì„±ê¸°ë³„ ID
 [Serializable]
 public enum GeneratorID
 {
-    None,       // ¾øÀ½
-    Double,     // µûºí
-    Fire,       // ºÒ
-    Water,      // ¹°
+    None,       // ì—†ìŒ
+    Double,     // ë”°ë¸”
+    Fire,       // ë¶ˆ
+    Water,      // ë¬¼
 }
 
-// Skill 2Â÷¿ø ¸®½ºÆ®´Â ÀÎ½ºÆåÅÍ¿¡¼­ ¾Èº¸ÀÓ ÀÌ·¸°Ô ÇØ¾ßÇÔ
+// Skill 2ì°¨ì› ë¦¬ìŠ¤íŠ¸ëŠ” ì¸ìŠ¤í™í„°ì—ì„œ ì•ˆë³´ì„ ì´ë ‡ê²Œ í•´ì•¼í•¨
 [Serializable]
 public class Shell
 {
@@ -97,10 +97,10 @@ public class SkillContainer : MonoBehaviour
     }
 
     /// <summary>
-    /// ID¿¡ ¸Â´Â ½ºÅ³ ¹ñ´Â ¾Ö
+    /// IDì— ë§ëŠ” ìŠ¤í‚¬ ë±‰ëŠ” ì• 
     /// </summary>
-    /// <param name="i">¹«±â ID</param>
-    /// <param name="j">»ı¼º±â ID</param>
+    /// <param name="i">ë¬´ê¸° ID</param>
+    /// <param name="j">ìƒì„±ê¸° ID</param>
     /// <returns></returns>
     public Skill GetSKill(int i, int j)
     {
@@ -112,7 +112,7 @@ public class SkillContainer : MonoBehaviour
             // Checks for existence of a value
             if (weaponList[i] != null && weaponList[i].skillList[j] != null)
             {
-                
+
                 return weaponList[i].skillList[j];
 
             }

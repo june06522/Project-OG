@@ -11,13 +11,20 @@ public struct SignalPoint
 
 }
 
+[Serializable]
+public struct BrickPoint
+{
+    public Vector2Int point;
+    public Vector2Int[] dir;
+}
+
 [CreateAssetMenu(menuName = "SO/Inventory/Object")]
 public class InventoryObjectData : ScriptableObject
 {
 
-    [field: SerializeField] public List<Vector2Int> bricks { get; protected set; } = new();
-    [field: SerializeField] public List<SignalPoint> inputPoints { get; protected set; } = new();
-    [field: SerializeField] public List<SignalPoint> sendPoints { get; protected set; } = new();
+    [field:SerializeField] public List<BrickPoint> bricks { get; protected set; } = new();
+    [field:SerializeField] public List<SignalPoint> inputPoints { get; protected set; } = new();
+    [field:SerializeField] public List<SignalPoint> sendPoints { get; protected set; } = new();
     [HideInInspector] public List<InventoryObjectRoot> includes = new();
 
     private WeaponInventory inventory;

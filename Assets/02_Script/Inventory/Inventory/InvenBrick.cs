@@ -4,6 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+public enum ItemType
+{
+    Weapon,
+    Generator,
+    Connector
+}
+
 public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
 
@@ -14,8 +21,12 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private WeaponInventory inventory;
 
-    private bool isDrag;
+    public ItemType Type = ItemType.Weapon;
 
+    private bool isDrag;
+    public bool IsDrag => isDrag;
+
+    private RectTransform rectTransform;
 
     protected virtual void Awake()
     {
@@ -23,7 +34,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         InvenObject = Instantiate(InvenObject);
         InvenObject.Init(transform);
         inventory = FindObjectOfType<WeaponInventory>();
-
+        rectTransform = GetComponent<RectTransform>();
     }
 
     public virtual void Settings()
@@ -52,8 +63,8 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         if (isDrag)
         {
 
-            transform.position = Input.mousePosition;
-             
+            transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            rectTransform.position = new Vector3(rectTransform.position.x,rectTransform.position.y,0);
         }
 
     }
@@ -63,37 +74,39 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         isDrag = false;
 
-        Vector3Int p = Vector3Int.FloorToInt(transform.position / 100);
-        var point = inventory.FindInvenPoint(Vector2Int.FloorToInt(transform.position / 100));
+        Vector3Int p = Vector3Int.RoundToInt(rectTransform.localPosition / 100);
+        p.z = 0;
+        var point = inventory.FindInvenPoint(Vector2Int.RoundToInt(rectTransform.localPosition / 100));
 
         if (point == null)
         {
-
             Destroy(gameObject);
             return;
 
         }
 
-        if (inventory.CheckFills(InvenObject.bricks, point.Value))
+        if (inventory.CheckFills(InvenObject.bricks, point.Value))                                  
         {
-
             inventory.AddItem(InvenObject, point.Value);
             InvenPoint = point.Value;
 
-            transform.position = p * 100 + new Vector3Int(60, 40);
+            rectTransform.localPosition = p * 100;
 
+            rectTransform.localPosition += new Vector3((rectTransform.rect.width - 100) / 2, (rectTransform.rect.height - 100) / 2);
             Setting();
         }
         else
         {
 
-            Vector3Int prevP = Vector3Int.FloorToInt(prevPos / 100);
-            var prev = inventory.FindInvenPoint(Vector2Int.FloorToInt(prevPos / 100));
+            Vector2Int prevP = Vector2Int.RoundToInt(prevPos / 100);
+            var prev = inventory.FindInvenPoint(Vector2Int.RoundToInt((prevPos - new Vector3Int
+                ((int)rectTransform.rect.width - 100,
+                ((int)rectTransform.rect.height) - 100) / 2) / 100));
 
             inventory.AddItem(InvenObject, prev.Value);
             InvenPoint = prev.Value;
 
-            transform.position = prevP * 100 + new Vector3Int(60, 40);
+            transform.localPosition = prevPos;
 
             Setting();
         }
@@ -105,7 +118,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public virtual void OnPointerDown(PointerEventData eventData)
     {
 
-        prevPos = transform.position;
+        prevPos = transform.localPosition;
 
         isDrag = true;
         inventory.RemoveItem(InvenObject, InvenObject.originPos);

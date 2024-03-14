@@ -18,8 +18,8 @@ public abstract class InventoryObjectRoot : ScriptableObject
     protected Transform transform;
     protected GameObject gameObject;
 
-    [HideInInspector] public List<InventoryObjectRoot> connectedInput = new(); //µé¾î¿À´Â³à¼®
-    [HideInInspector] public List<InventoryObjectRoot> connectedOutput = new(); //³»º¸³»´Â ³à¼®
+    [HideInInspector] public List<InventoryObjectRoot> connectedInput = new(); //ë“¤ì–´ì˜¤ëŠ”ë…€ì„
+    [HideInInspector] public List<InventoryObjectRoot> connectedOutput = new(); //ë‚´ë³´ë‚´ëŠ”ë…€ì„
     protected InventoryObjectData data;
 
 #if UNITY_EDITOR
@@ -115,6 +115,7 @@ public abstract class InventoryObjectRoot : ScriptableObject
     {
 
         if(signal == null) return;
+
         GetSignal(signal);
 
     }

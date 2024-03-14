@@ -80,12 +80,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9830de08a0b99f4e81ecc6ec92294b0, type: 3}
-  m_Name: Connector_Right
+  m_Name: Connector_Horizon
   m_EditorClassIdentifier: 
   <bricks>k__BackingField:
-  - {x: 0, y: 0}
-  <inputPoints>k__BackingField: []
+  - point: {x: 0, y: 0}
+    dir:
+    - {x: 1, y: 0}
+    - {x: -1, y: 0}
+  <inputPoints>k__BackingField:
+  - point: {x: 0, y: 0}
+    dir: {x: 1, y: 0}
+  - point: {x: 0, y: 0}
+    dir: {x: -1, y: 0}
   <sendPoints>k__BackingField:
+  - point: {x: 0, y: 0}
+    dir: {x: -1, y: 0}
   - point: {x: 0, y: 0}
     dir: {x: 1, y: 0}
   includes:
