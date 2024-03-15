@@ -3,6 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
+
+public struct ConnectInfo
+{
+    public Vector2 pos;
+    public Vector2Int dir;
+
+    public ConnectInfo(Vector2 pos, Vector2Int dir)
+    {
+        this.pos = pos;
+        this.dir = dir;
+    }
+}
 
 public class ConnectVisible : MonoBehaviour
 {
@@ -63,38 +76,43 @@ public class ConnectVisible : MonoBehaviour
 
                 foreach (var vec in generator.InvenObject.sendPoints)
                 {
-                    Hashtable h = new Hashtable();
-                    h.Add((Vector2)(generator.InvenObject.originPos), true);
-                    Connect(line, generator.InvenObject.originPos + vec.dir + vec.point, vec.dir, pos, h);
+                    Dictionary<ConnectInfo, bool> dic = new Dictionary<ConnectInfo, bool>();
+                    Connect(line, generator.InvenObject.originPos + vec.dir + vec.point, vec.dir, pos, dic);
                 }
             }
         }
     }
 
-    void Connect(LineRenderer line, Vector2 pos, Vector2Int dir, Vector2 originpos, Hashtable isVisited)
+    void Connect(LineRenderer line, Vector2 pos, Vector2Int dir, Vector2 originpos, Dictionary<ConnectInfo, bool> isVisited)
     {
-        Vector2 tempVec = originpos - new Vector2(dir.x * -0.93f, dir.y * -0.93f);
-
-        //스택 오버 플로우 방지 <- 방문한곳 체크
-        if (isVisited.ContainsKey(pos) && (bool)isVisited[pos])
+        Vector2 tempVec = originpos + new Vector2(dir.x * 0.93f, dir.y * 0.93f);
+        ConnectInfo info = new ConnectInfo(pos, dir);
+        #region 스택 오버 플로우 방지 <- 방문한곳 체크
+        if (isVisited.ContainsKey(info) && isVisited[info])
             return;
 
-        isVisited[pos] = true;
-        Stack<BrickPoint> s = new Stack<BrickPoint>();
+        isVisited[info] = true;
+        #endregion
 
         Vector2Int fillCheckVec = new Vector2Int((int)pos.x, (int)pos.y);
+
+
+
         if (inventory.CheckFill2(fillCheckVec))
         {
             InventoryObjectData data = inventory.GetObjectData2(fillCheckVec, dir);
             if (data != null)
             {
+
+                BrickPoint b = new BrickPoint();
                 bool isConnect = false;
 
-                //무기만 예외처리하는 일종 하드코딩 ㅎㅎ...
+                #region 무기 예외처리
                 if (data.sendPoints.Count == 0)
                     isConnect = true;
+                #endregion
 
-                //연결 되었는지 확인
+                #region 연결된 블록 있으면 스택에 추가 없으면 리턴
                 foreach (var point in data.inputPoints)
                 {
                     if (point.dir == dir && point.point == fillCheckVec - data.originPos)
@@ -103,10 +121,8 @@ public class ConnectVisible : MonoBehaviour
                         {
                             if (point.point == point1.point)
                             {
-                                BrickPoint b;
                                 b.point = point.point;
                                 b.dir = point1.dir;
-                                s.Push(b);
                             }
                         }
                         isConnect = true;
@@ -114,60 +130,85 @@ public class ConnectVisible : MonoBehaviour
                 }
 
                 if (!isConnect) return;
+                #endregion
+
+                
+
+                
+                
+                //연결된 블록 순회
+                BrickCircuit(b,tempVec, line, data, isVisited);
+            }
+        }
+    }
+
+    private void BrickCircuit(BrickPoint tmpVec, Vector2 tempVec, LineRenderer line, InventoryObjectData data, Dictionary<ConnectInfo, bool> isVisited)
+    {
+
+        //라인 렌더러에 추가
+        AddLineRenderPoint(line, tempVec);
+
+        #region 무기면 리턴
+        if (tmpVec.dir == null)
+            return;
+        #endregion
+
+        #region 연결된 곳 순회
+        foreach (SignalPoint point1 in data.sendPoints)
+        {
+            if (point1.point == tmpVec.point)
+            {
+                Vector2 tempPos1 = data.originPos + point1.dir + point1.point;
+                Connect(line, tempPos1, point1.dir, tempVec, isVisited);
 
                 //라인 렌더러에 추가
                 AddLineRenderPoint(line, tempVec);
-
-                if (s.Count == 0)
-                    return;
-
-                do
-                {
-                    BrickPoint tmpVec = s.Pop(); // 0,1  아래 오른쪽
-                                                 // 만약 이어진 블럭이 sendpoint면 데이터 보내기
-                    foreach (SignalPoint point1 in data.sendPoints)
-                    {
-                        if (point1.point == tmpVec.point)
-                        {
-                            Vector2 tempPos1 = data.originPos + point1.dir + point1.point;
-                            Connect(line, tempPos1, point1.dir, tempVec - new Vector2(point1.point.x * -0.93f, point1.point.y * -0.93f), isVisited);
-                        }
-                    }
-                    //이친구와 이어진 블록 연결
-                    foreach (BrickPoint point in data.bricks)
-                    {
-                        //방향검사
-                        foreach (var v in tmpVec.dir)
-                        {
-                            //전블록과 이어지면 연결
-                            if (point.point == tmpVec.point + v)// 0,0 1,1
-                            {
-                                Vector2 tempPos = data.originPos + point.point;
-
-                                if (isVisited.ContainsKey(tempPos) && (bool)isVisited[tempPos])
-                                    continue;
-
-                                isVisited[tempPos] = true;
-
-                                AddLineRenderPoint(line,
-                                    tempVec - new Vector2(point.point.x * -0.93f, point.point.y * -0.93f));
-
-                                BrickPoint b;
-                                b.point = point.point;
-                                b.dir = point.dir;
-                                s.Push(b);
-                            }
-                        }
-                    }
-                } while (s.Count > 0);
             }
         }
-        isVisited[pos] = false;
+        //이친구와 이어진 블록 연결
+        foreach (BrickPoint point in data.bricks)
+        {
+            //방향검사
+            foreach (var v in tmpVec.dir)
+            {
+                //전블록과 이어지면 연결
+                if (point.point == tmpVec.point + v)// 0,0 1,1
+                {
+                    Vector2 tempPos = data.originPos + point.point;
+                    ConnectInfo info = new ConnectInfo(tempPos, v);
+
+                    if (isVisited.ContainsKey(info) && isVisited[info])
+                        continue;
+
+                    isVisited[info] = true;
+
+
+                    tempVec += new Vector2(v.x * 0.93f, v.y * 0.93f);
+                    AddLineRenderPoint(line, tempVec);
+
+                    BrickPoint b;
+                    b.point = point.point;
+                    b.dir = point.dir;
+                    
+                    BrickCircuit(b, tempVec, line, data, isVisited);
+
+                    tempVec -= new Vector2(v.x * 0.93f, v.y * 0.93f);
+                    AddLineRenderPoint(line, tempVec);
+                }
+            }
+        }
+        #endregion
     }
 
     private void AddLineRenderPoint(LineRenderer line, Vector3 pos)
     {
         line.positionCount += 1;
+        pos.x = (int)(pos.x * 100);
+        pos.x /= 100;
+
+        pos.y = (int)(pos.y * 100);
+        pos.y /= 100;
+
         pos.z = -4;
         line.SetPosition(line.positionCount - 1, pos);
     }

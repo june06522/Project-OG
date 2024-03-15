@@ -32,7 +32,6 @@ public class ParticleSelfDestroyer : MonoBehaviour
     public void EndOfAnimation()
     {
 
-        Debug.Log("End of animation");  
         Destroy(gameObject);
 
     }
