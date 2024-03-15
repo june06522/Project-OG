@@ -3,6 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
+
+public struct ConnectInfo
+{
+    public Vector2 pos;
+    public Vector2Int dir;
+
+    public ConnectInfo(Vector2 pos, Vector2Int dir)
+    {
+        this.pos = pos;
+        this.dir = dir;
+    }
+}
 
 public class ConnectVisible : MonoBehaviour
 {
@@ -63,23 +76,22 @@ public class ConnectVisible : MonoBehaviour
 
                 foreach (var vec in generator.InvenObject.sendPoints)
                 {
-                    Hashtable h = new Hashtable();
-                    h.Add((Vector2)(generator.InvenObject.originPos), true);
-                    Connect(line, generator.InvenObject.originPos + vec.dir + vec.point, vec.dir, pos, h);
+                    Dictionary<ConnectInfo, bool> dic = new Dictionary<ConnectInfo, bool>();
+                    Connect(line, generator.InvenObject.originPos + vec.dir + vec.point, vec.dir, pos, dic);
                 }
             }
         }
     }
 
-    void Connect(LineRenderer line, Vector2 pos, Vector2Int dir, Vector2 originpos, Hashtable isVisited)
+    void Connect(LineRenderer line, Vector2 pos, Vector2Int dir, Vector2 originpos, Dictionary<ConnectInfo, bool> isVisited)
     {
         Vector2 tempVec = originpos + new Vector2(dir.x * 0.93f, dir.y * 0.93f);
-
+        ConnectInfo info = new ConnectInfo(pos, dir);
         #region 스택 오버 플로우 방지 <- 방문한곳 체크
-        if (isVisited.ContainsKey(pos) && (bool)isVisited[pos])
+        if (isVisited.ContainsKey(info) && isVisited[info])
             return;
 
-        isVisited[pos] = true;
+        isVisited[info] = true;
         #endregion
 
         Vector2Int fillCheckVec = new Vector2Int((int)pos.x, (int)pos.y);
@@ -130,8 +142,9 @@ public class ConnectVisible : MonoBehaviour
         }
     }
 
-    private void BrickCircuit(BrickPoint tmpVec, Vector2 tempVec, LineRenderer line, InventoryObjectData data, Hashtable isVisited)
+    private void BrickCircuit(BrickPoint tmpVec, Vector2 tempVec, LineRenderer line, InventoryObjectData data, Dictionary<ConnectInfo, bool> isVisited)
     {
+
         //라인 렌더러에 추가
         AddLineRenderPoint(line, tempVec);
 
@@ -162,11 +175,12 @@ public class ConnectVisible : MonoBehaviour
                 if (point.point == tmpVec.point + v)// 0,0 1,1
                 {
                     Vector2 tempPos = data.originPos + point.point;
+                    ConnectInfo info = new ConnectInfo(tempPos, v);
 
-                    if (isVisited.ContainsKey(tempPos) && (bool)isVisited[tempPos])
+                    if (isVisited.ContainsKey(info) && isVisited[info])
                         continue;
 
-                    isVisited[tempPos] = true;
+                    isVisited[info] = true;
 
 
                     tempVec += new Vector2(v.x * 0.93f, v.y * 0.93f);
@@ -189,6 +203,12 @@ public class ConnectVisible : MonoBehaviour
     private void AddLineRenderPoint(LineRenderer line, Vector3 pos)
     {
         line.positionCount += 1;
+        pos.x = (int)(pos.x * 100);
+        pos.x /= 100;
+
+        pos.y = (int)(pos.y * 100);
+        pos.y /= 100;
+
         pos.z = -4;
         line.SetPosition(line.positionCount - 1, pos);
     }
