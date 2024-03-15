@@ -82,8 +82,6 @@ public class ConnectVisible : MonoBehaviour
         isVisited[pos] = true;
         #endregion
 
-        //Stack<BrickPoint> s = new Stack<BrickPoint>();
-
         Vector2Int fillCheckVec = new Vector2Int((int)pos.x, (int)pos.y);
 
 
@@ -113,7 +111,6 @@ public class ConnectVisible : MonoBehaviour
                             {
                                 b.point = point.point;
                                 b.dir = point1.dir;
-                                //s.Push(b);
                             }
                         }
                         isConnect = true;
@@ -123,14 +120,11 @@ public class ConnectVisible : MonoBehaviour
                 if (!isConnect) return;
                 #endregion
 
-                //라인 렌더러에 추가
-                AddLineRenderPoint(line, tempVec);
-
-                //#region 무기면 리턴
-                if (b.dir == null)
-                    return;
-                //#endregion
                 
+
+                
+                
+                //연결된 블록 순회
                 BrickCircuit(b,tempVec, line, data, isVisited);
             }
         }
@@ -138,14 +132,24 @@ public class ConnectVisible : MonoBehaviour
 
     private void BrickCircuit(BrickPoint tmpVec, Vector2 tempVec, LineRenderer line, InventoryObjectData data, Hashtable isVisited)
     {
+        //라인 렌더러에 추가
+        AddLineRenderPoint(line, tempVec);
+
+        #region 무기면 리턴
+        if (tmpVec.dir == null)
+            return;
+        #endregion
+
         #region 연결된 곳 순회
-        //BrickPoint tmpVec = s.Pop();
         foreach (SignalPoint point1 in data.sendPoints)
         {
             if (point1.point == tmpVec.point)
             {
                 Vector2 tempPos1 = data.originPos + point1.dir + point1.point;
                 Connect(line, tempPos1, point1.dir, tempVec, isVisited);
+
+                //라인 렌더러에 추가
+                AddLineRenderPoint(line, tempVec);
             }
         }
         //이친구와 이어진 블록 연결
@@ -171,10 +175,11 @@ public class ConnectVisible : MonoBehaviour
                     BrickPoint b;
                     b.point = point.point;
                     b.dir = point.dir;
+                    
                     BrickCircuit(b, tempVec, line, data, isVisited);
+
                     tempVec -= new Vector2(v.x * 0.93f, v.y * 0.93f);
                     AddLineRenderPoint(line, tempVec);
-                    //s.Push(b);
                 }
             }
         }
