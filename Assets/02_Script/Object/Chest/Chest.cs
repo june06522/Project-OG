@@ -22,33 +22,12 @@ public class Chest : MonoBehaviour, IInteractable
 
     [SerializeField] private Transform _itemSpawnPos;
     [SerializeField] private ParticleSystem _openEffect;
-
-    public bool _detectPlayer;
-
-    #region TestCode
-    // test Code
-    PlayerController playerController;
-    Transform playerTrm;
-
-    private void Start()
-    {
-        playerController = GameObject.FindAnyObjectByType<PlayerController>();
-        playerTrm = playerController.transform.root;
-    }
-
-    // test code
-    private void Update()
-    {
-        if (Vector2.Distance(transform.position, playerTrm.position) > 2f)
-            return;
-
-        if (Input.GetKeyDown(KeyCode.F))
-            Open();
-    }
-    #endregion
+    private bool _isOpen = false;
+    private Collider2D _collider;
 
     private void Awake()
     {
+        _collider = GetComponent<Collider2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
 
         if (_itemList == null)
@@ -76,6 +55,11 @@ public class Chest : MonoBehaviour, IInteractable
 
     public void Open()
     {
+        if (_isOpen)
+            return;
+
+        _collider.enabled = false;
+        _isOpen = true;
         // 상자 스프라이트 변경
         _spriteRenderer.sprite = _openSprite;
 
@@ -146,28 +130,8 @@ public class Chest : MonoBehaviour, IInteractable
         return iteminfo;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.CompareTag("Player"))
-        {
-            _detectPlayer = true;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-        {
-            _detectPlayer = false;
-        }
-    }
-
     public void OnInteract()
     {
-        if(_detectPlayer)
-        {
-            Open();
-            Destroy(gameObject);
-        }
+        Open();
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
-public class Item : MonoBehaviour
+public class Item : MonoBehaviour, IInteractable
 {
 
     [SerializeField] private InvenBrick brick;
@@ -21,30 +21,20 @@ public class Item : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void OnInteract()
     {
-
-        if (collision.CompareTag("Player"))
+        var point = inventory.CheckItemAuto(brick.InvenObject);
+        if (point != null)
         {
 
-            var point =  inventory.CheckItemAuto(brick.InvenObject);
-            if(point != null)
-            {
+            var obj = Instantiate(brick, Vector3.zero, Quaternion.identity, parent);
+            inventory.AddItem(obj.InvenObject, Vector2Int.FloorToInt(point.Value));
+            obj.Setting();
+            obj.transform.localPosition = (point.Value * 100) - (new Vector2(inventory.Width, inventory.Height) * 50) + new Vector2(50, 50);
+            obj.transform.localPosition += new Vector3((obj.GetComponent<RectTransform>().rect.width - 100) / 2, (obj.GetComponent<RectTransform>().rect.height - 100) / 2);
 
-                var obj = Instantiate(brick, Vector3.zero, Quaternion.identity, parent);
-                inventory.AddItem(obj.InvenObject, Vector2Int.FloorToInt(point.Value));
-                obj.Setting();
-                obj.transform.localPosition = (point.Value * 100) - (new Vector2(inventory.Width, inventory.Height) * 50) + new Vector2(50, 50);
-                obj.transform.localPosition += new Vector3((obj.GetComponent<RectTransform>().rect.width - 100) / 2, (obj.GetComponent<RectTransform>().rect.height - 100) / 2);
-
-                if (one == true)
-                    Destroy(gameObject);
-            }
-
+            if (one == true)
+                Destroy(gameObject);
         }
-
-        
-
     }
-
 }

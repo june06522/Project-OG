@@ -44,7 +44,10 @@ public class Stage : MonoBehaviour
 
     [Header("Stage Info")]
     public StageGate stageGate;
-    private List<StageGate> gates = new List<StageGate>();
+    private List<GameObject> stageItems = new List<GameObject>();
+
+    [SerializeField]
+    private Chest _stageChest;
 
     [SerializeField]
     private StageType _stageType = StageType.EnemyStage;
@@ -87,6 +90,17 @@ public class Stage : MonoBehaviour
         waveCount++;
     }
 
+    private void AppearChest()
+    {
+        if (_stageChest != null)
+        {
+
+            GameObject chest = Instantiate(_stageChest, transform.position - new Vector3(0, 3, 0), Quaternion.identity).gameObject;
+            stageItems.Add(chest);
+
+        }
+    }
+
     // linked Enemy class's deadEvent
     private void HandleWaveClearCheck()
     {
@@ -103,7 +117,7 @@ public class Stage : MonoBehaviour
             {
 
                 AppearGate();
-
+                AppearChest();
             }
             else
                 StartWave();
@@ -125,8 +139,8 @@ public class Stage : MonoBehaviour
         }
         else if (NextStage.Count == 2)
         {
-            SpawnGate(NextStage[0], -new Vector3(40, 0, 0));
-            SpawnGate(NextStage[1], new Vector3(40, 0, 0));
+            SpawnGate(NextStage[0], -new Vector3(2, 0, 0));
+            SpawnGate(NextStage[1], new Vector3(2, 0, 0));
         }
 
         // effect or tween
@@ -142,7 +156,7 @@ public class Stage : MonoBehaviour
         StageGate gate = Instantiate(stageGate, transform.position + offset, Quaternion.identity);
         gate.OnGateEvent += HandleGateEvent;
         gate.OnMoveEndEvent += HandleDestroyGate;
-        gates.Add(gate);
+        stageItems.Add(gate.gameObject);
 
         if(stage != null)
         {
@@ -161,9 +175,9 @@ public class Stage : MonoBehaviour
     }
     private void HandleDestroyGate()
     {
-        foreach(StageGate gate in gates)
+        foreach(GameObject obj in stageItems)
         {
-            Destroy(gate.gameObject);
+            Destroy(obj);
         }
     }
 
