@@ -27,7 +27,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     Vector2 movementInput;
 
     private bool firstDiscovered;
-
+    
     public ChaseAction(BaseFSM_Controller<T> controller, List<SteeringBehaviour> behaviours, bool checkCollision) : base(controller)
     {
         this.targetTrm = GameManager.Instance.player;
