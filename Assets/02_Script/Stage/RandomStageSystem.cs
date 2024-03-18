@@ -28,6 +28,7 @@ public class RandomStageSystem : MonoBehaviour
 
     private int _step = 0;
     private int _stageInterval = 50;
+    private Vector3 _spawnPos = Vector3.zero;
 
     private void Start()
     {
@@ -36,10 +37,10 @@ public class RandomStageSystem : MonoBehaviour
 
     public void CreateStage()
     {
-        GameManager.Instance.player.position = transform.position;
+        _spawnPos = _spawnPos + new Vector3(0, _stageInterval, 0);
+        GameManager.Instance.player.position = _spawnPos;
 
         _randomStageList.Clear();
-        Vector3 spawnPos = transform.position;
 
         // shuffle
         _randomStageList = _stageLists[_step].stages.ToList<Stage>();
@@ -52,26 +53,26 @@ public class RandomStageSystem : MonoBehaviour
             _randomStageList[randomIdx] = temp;
         }
 
-        _firstStage = Instantiate(_startStage, spawnPos, Quaternion.identity);
+        _firstStage = Instantiate(_startStage, _spawnPos, Quaternion.identity);
         Stage lastStage = _firstStage;
         for (int i = 0; i < _stageCount; i++)
         {
-            spawnPos = spawnPos + new Vector3(0, _stageInterval, 0);
+            _spawnPos = _spawnPos + new Vector3(0, _stageInterval, 0);
 
-            Stage stage = Instantiate(_randomStageList[i], spawnPos, Quaternion.identity);
+            Stage stage = Instantiate(_randomStageList[i], _spawnPos, Quaternion.identity);
 
             lastStage.AddNextStage(stage);
             lastStage = stage;
         }
 
         // event
-        spawnPos = spawnPos + new Vector3(0, _stageInterval, 0);
-        Stage eventStage = Instantiate(RandomStage(_eventStageLists), spawnPos, Quaternion.identity);
+        _spawnPos = _spawnPos + new Vector3(0, _stageInterval, 0);
+        Stage eventStage = Instantiate(RandomStage(_eventStageLists), _spawnPos, Quaternion.identity);
         lastStage.AddNextStage(eventStage);
 
         // boss
-        spawnPos = spawnPos + new Vector3(0, _stageInterval, 0);
-        Stage bossStage = Instantiate(RandomStage(_bossStageLists[_step]), spawnPos, Quaternion.identity);
+        _spawnPos = _spawnPos + new Vector3(0, _stageInterval, 0);
+        Stage bossStage = Instantiate(RandomStage(_bossStageLists[_step]), _spawnPos, Quaternion.identity);
         eventStage.AddNextStage(bossStage);
 
         bossStage.OnGateEvent += ClearBossStage;
@@ -81,7 +82,6 @@ public class RandomStageSystem : MonoBehaviour
 
     public void ClearBossStage()
     {
-        Debug.Log("AA");
         _step++;
 
         ResetStage();
