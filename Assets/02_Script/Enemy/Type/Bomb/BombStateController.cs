@@ -55,7 +55,7 @@ public class BombStateController : BaseFSM_Controller<EBombState>
 
         if(instShowRangeObj != null)
             Destroy(instShowRangeObj);
-        Destroy(this.gameObject);
+        Enemy.Die();
     }
 
     public void InstantiateRange()

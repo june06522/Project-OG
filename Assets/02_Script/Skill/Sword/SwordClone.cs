@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System;
@@ -10,15 +8,19 @@ public class SwordClone : MonoBehaviour
     private float speed = 20f;
     private float attackRadius;
 
-    private bool block = true;
-    public bool EndDissolve { get; set; } = false;
+    float t;
 
     Material material;
     Rigidbody2D rb;
+    SpriteRenderer spriteRenderer;
+
+    public bool EndDissolve { get; set; } = false;
+    public bool EndAttack { get; set; } = false;
+    public bool IsAttack { get; set; } = false;
 
     private void Awake()
     {
-        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         material = spriteRenderer.material;
         rb = GetComponent<Rigidbody2D>();
         Init();
@@ -28,8 +30,16 @@ public class SwordClone : MonoBehaviour
     {
         material.SetFloat("_SourceGlowDissolveFade", 0f);
         EndDissolve = false;
-        block = true;
+        EndAttack = false;
+        IsAttack = false;
+        t = 0f;
     }
+
+    private void Update()
+    {
+        spriteRenderer.sortingOrder = Mathf.RoundToInt(transform.position.y * -100);
+    }
+
 
     public void Setting(float dissolveTime, float attackRadius, Transform ownerTrm)
     {
@@ -42,18 +52,7 @@ public class SwordClone : MonoBehaviour
 
     public void Shooting(Vector2 dir)
     {
-        block = false;
         rb.velocity = dir * speed; 
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(block == false)
-        {
-            float value = 1;
-            DOTween.To(() => value, x => material.SetFloat("_SourceGlowDissolveFade", x), 0, 1f)
-                .OnComplete(() => Destroy(this.gameObject));
-        }
     }
 
     public void Search(LayerMask layerMask)
@@ -78,5 +77,43 @@ public class SwordClone : MonoBehaviour
             return null;
         else
             return cols[UnityEngine.Random.Range(0, colCount)].transform;
+    }
+
+    public void Attack(Vector3 targetPos)
+    {
+        IsAttack = true;
+        Vector3 dir = (targetPos - transform.position).normalized;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        Sequence seq = DOTween.Sequence();
+        seq.Append(transform.DORotate(new Vector3(0,0,angle), 0.2f));
+        seq.Insert(0,transform.DOMove(transform.position + -dir, 0.5f));
+        seq.Append(transform.DOMove(targetPos, 0.2f).OnComplete(() => DisAppear()));
+        seq.Play();
+    }
+
+    private void DisAppear()
+    {
+        rb.velocity = Vector2.zero;
+        float value = 1;
+        DOTween.To(() => value, x => material.SetFloat("_SourceGlowDissolveFade", x), 0, 1)
+            .OnComplete(() => EndAttack = true);
+    }
+
+    public void DestroyThis()
+    {
+        Destroy(this.gameObject);
+    }
+
+    public void Move(Vector3 pos)
+    {
+        if(IsAttack)
+        {
+            return;
+        }
+        else
+        {
+            transform.position = pos;
+        }
     }
 }

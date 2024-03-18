@@ -35,8 +35,8 @@ public class SwordYondo : MonoBehaviour
     Transform targetTrm;
 
     //시작 설정되있는 값
-    Vector2 startLocalPos;
-    Vector2 startDir;
+    Vector3 startLocalPos;
+    Quaternion startRot;
 
     Action AttackStartAction;
 
@@ -48,6 +48,7 @@ public class SwordYondo : MonoBehaviour
 
     Rigidbody2D rb;
     public SwordTargetDetector Detector;
+    private float lerpAngleValue;
 
     private void Awake()
     {
@@ -67,7 +68,7 @@ public class SwordYondo : MonoBehaviour
         targetTrm = null;
 
         startLocalPos = transform.localPosition;
-        startDir = transform.right;
+        startRot = transform.localRotation;
 
         curSpeed = speed;
         curState = ESwordYondoState.Idle;
@@ -104,10 +105,10 @@ public class SwordYondo : MonoBehaviour
                 }
                 break;
             case ESwordYondoState.Attack:
-                if (!CheckEnemyInRadius())
-                {
-                    ChangeState(ESwordYondoState.Attach);
-                }
+                //if (!CheckEnemyInRadius())
+                //{
+                //    ChangeState(ESwordYondoState.Attach);
+                //}
                 break;
             case ESwordYondoState.Attach:
                 if(completlyAttach == true)
@@ -128,35 +129,34 @@ public class SwordYondo : MonoBehaviour
     {
         curSpeed = 0;
         rb.velocity = Vector2.zero;
+        transform.position = ownerTrm.position + startLocalPos;
     }
 
     private void Attach()
     {
-        //Vector2 dir = (startLocalPos - (Vector2)transform.position).normalized;
-
-        //if (Vector2.Distance(startTrm.position, transform.position) < 3f)
-        //{
-        //    DOTween.To(() => curSpeed, (spd) => curSpeed = spd, 0, 0.5f);
-        //    StartCoroutine(Rotate(startDir, 0.5f, () => completlyAttach = true));
-        //}
-        //else
-        //{
-        //    Vector2 dir = (startLocalPos - (Vector2)transform.position).normalized;
-        //    float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        //    Quaternion startRotation = transform.rotation;
-        //    Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
-
-        //    Quaternion result = Quaternion.Lerp(startRotation, targetRotation, 0.5f);
-        //    transform.rotation = result;
-        //}
-        //rb.velocity = dir * curSpeed;
+        rb.velocity = Vector2.zero;
+        transform.DOMove(startLocalPos, 2f).SetEase(Ease.OutQuad);
+        transform.DORotateQuaternion(startRot, 1.5f).SetEase(Ease.OutQuad);
+        
+        if(Vector3.Distance(transform.localPosition, startLocalPos) < 0.05f)
+        {
+            completlyAttach = true;
+        }
+        //StartCoroutine(Rotate(startDir, 0.5f, () => completlyAttach = true));   
     }
 
     private void Attack()
     {
+        if(targetTrm == null || targetTrm.gameObject.activeSelf == false)
+        {
+            ChangeState(ESwordYondoState.Attach);
+            return;
+        }
+
         if(Detector.IsDetect)
         {
             SetTarget();
+            lerpAngleValue = 0f;
         }
         else
         {   
@@ -165,8 +165,9 @@ public class SwordYondo : MonoBehaviour
             Quaternion startRotation = transform.rotation;
             Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-            Quaternion result = Quaternion.Lerp(startRotation, targetRotation, 0.5f);
+            Quaternion result = Quaternion.Lerp(startRotation, targetRotation, 0.2f + lerpAngleValue);
             transform.rotation = result;
+            lerpAngleValue += 0.01f;
         }
         //if ((targetTrm.position - transform.position).sqrMagnitude > 1)
         //{
@@ -193,6 +194,7 @@ public class SwordYondo : MonoBehaviour
         Detector.CurTargetTrm = targetTrm;
 
         isRotating = true;
+        completlyAttach = false;
 
         float distance = Vector3.Distance(ownerTrm.position, targetTrm.position);
         float rotateTime = Mathf.Lerp(minRotateTime, maxRotateTime, distance / radius);

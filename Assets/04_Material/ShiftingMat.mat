@@ -7,10 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SourceGlowMat
+  m_Name: ShiftingMat
   m_Shader: {fileID: 4800000, guid: 0803c241834332942abfcbd27c498b46, type: 3}
   m_ValidKeywords:
-  - _ENABLESOURCEGLOWDISSOLVE_ON
+  - _ENABLESHIFTING_ON
   - _SHADERFADING_NONE
   - _SHADERSPACE_UV
   m_InvalidKeywords: []
@@ -173,18 +173,18 @@ Material:
     - _CustomFadeSmoothness: 2
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DirectionalAlphaFadeFade: 0.38
+    - _DirectionalAlphaFadeFade: 0
     - _DirectionalAlphaFadeInvert: 0
     - _DirectionalAlphaFadeNoiseFactor: 0.2
     - _DirectionalAlphaFadeRotation: 0
     - _DirectionalAlphaFadeWidth: 0.2
-    - _DirectionalDistortionFade: -4.25
+    - _DirectionalDistortionFade: 0
     - _DirectionalDistortionInvert: 0
     - _DirectionalDistortionNoiseFactor: 0.2
     - _DirectionalDistortionRandomDirection: 0.1
     - _DirectionalDistortionRotation: 0
     - _DirectionalDistortionWidth: 0.5
-    - _DirectionalGlowFadeFade: 0.4
+    - _DirectionalGlowFadeFade: 0
     - _DirectionalGlowFadeInvert: 0
     - _DirectionalGlowFadeNoiseFactor: 0.2
     - _DirectionalGlowFadeRotation: 0
@@ -232,7 +232,7 @@ Material:
     - _EnableShadow: 0
     - _EnableSharpen: 0
     - _EnableShiftHue: 0
-    - _EnableShifting: 0
+    - _EnableShifting: 1
     - _EnableShine: 0
     - _EnableSineGlow: 0
     - _EnableSineMove: 0
@@ -241,7 +241,7 @@ Material:
     - _EnableSmoke: 0
     - _EnableSmoothPixelArt: 0
     - _EnableSourceAlphaDissolve: 0
-    - _EnableSourceGlowDissolve: 1
+    - _EnableSourceGlowDissolve: 0
     - _EnableSplitToning: 0
     - _EnableSqueeze: 0
     - _EnableSquish: 0
@@ -279,8 +279,8 @@ Material:
     - _FrozenSnowDensity: 0.25
     - _FullAlphaDissolveFade: 0.5
     - _FullAlphaDissolveWidth: 0.5
-    - _FullDistortionFade: 0.54
-    - _FullGlowDissolveFade: 0.86
+    - _FullDistortionFade: 1
+    - _FullGlowDissolveFade: 0.5
     - _FullGlowDissolveWidth: 0.5
     - _GaussianBlurFade: 1
     - _GaussianBlurOffset: 0.5
@@ -291,7 +291,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _HalftoneFade: 1.52
+    - _HalftoneFade: 1
     - _HalftoneFadeWidth: 1.5
     - _HalftoneInvert: 0
     - _HalftoneTiling: 4
@@ -300,7 +300,7 @@ Material:
     - _HologramDistortionOffset: 0.5
     - _HologramDistortionScale: 10
     - _HologramDistortionSpeed: 2
-    - _HologramFade: 1
+    - _HologramFade: 0.3
     - _HologramLineFrequency: 500
     - _HologramLineGap: 3
     - _HologramLineSpeed: 0.01
@@ -340,7 +340,7 @@ Material:
     - _PixelOutlineWidth: 1
     - _PixelPerfectSpace: 0
     - _PixelPerfectUV: 0
-    - _PixelateFade: 0
+    - _PixelateFade: 1
     - _PixelatePixelDensity: 16
     - _PixelatePixelsPerUnit: 100
     - _PixelsPerUnit: 100
@@ -405,7 +405,7 @@ Material:
     - _SmokeSmoothness: 1
     - _SmokeVertexSeed: 0
     - _SmoothnessTextureChannel: 0
-    - _SourceAlphaDissolveFade: 1.02
+    - _SourceAlphaDissolveFade: 1
     - _SourceAlphaDissolveInvert: 0
     - _SourceAlphaDissolveNoiseFactor: 0.2
     - _SourceAlphaDissolveWidth: 0.2
@@ -419,9 +419,9 @@ Material:
     - _SplitToningFade: 1
     - _SplitToningShift: 0
     - _SpriteSheetFix: 0
-    - _SqueezeFade: 0.37
+    - _SqueezeFade: 1
     - _SqueezePower: 1
-    - _SquishFade: 0.24
+    - _SquishFade: 1
     - _SquishFlip: 0
     - _SquishSquish: 0.1
     - _SquishStretch: 0.1
