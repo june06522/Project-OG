@@ -74,9 +74,9 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         isDrag = false;
 
-        Vector3Int p = Vector3Int.RoundToInt(rectTransform.localPosition / 100);
+        Vector3Int p = Vector3Int.FloorToInt(rectTransform.localPosition / 100);
         p.z = 0;
-        var point = inventory.FindInvenPoint(Vector2Int.RoundToInt(rectTransform.localPosition / 100));
+        var point = inventory.FindInvenPoint(Vector2Int.FloorToInt(rectTransform.localPosition / 100));
 
         if (point == null)
         {
