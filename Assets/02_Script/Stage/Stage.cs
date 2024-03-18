@@ -1,6 +1,8 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 using Random = UnityEngine.Random;
@@ -20,10 +22,21 @@ public struct AnchoredMonsterSpawnInfo
 }
 
 [System.Serializable]
+public struct DelayedSpawnMonster
+{
+    public float delay;
+    public List<MonsterSpawnInfo> enemyList;
+}
+
+[System.Serializable]
 public struct WaveInfo
 {
+    
     public List<Transform> spawnPoints;
     public List<MonsterSpawnInfo> mobInfo;
+
+    public List<Transform> delayedSpawnPoints;
+    public List<DelayedSpawnMonster> delayedSpawnMobInfo;
 
     // anchored spawn monster
     public List<AnchoredMonsterSpawnInfo> anchoredMobInfo;
@@ -185,6 +198,7 @@ public class Stage : MonoBehaviour
     {
         isMonsterSpawning = true;
         WaveInfo waveInfo = waveList[waveCount];
+        #region Setting SpawnPos
         // Monster List
         List<Enemy> enemyList = new List<Enemy>();
         for(int i = 0; i < waveInfo.mobInfo.Count; ++i)
@@ -218,6 +232,8 @@ public class Stage : MonoBehaviour
         }
 
         int minValue = Math.Min(enemyList.Count, spawnPoints.Count);
+        #endregion
+        #region Multi Spawn
         // SpawnPoint Particle
         for (int i = 0; i < minValue; ++i)
         {
@@ -243,6 +259,37 @@ public class Stage : MonoBehaviour
             Enemy spawnEnemy = Instantiate(waveInfo.anchoredMobInfo[i].enemy, waveInfo.anchoredMobInfo[i].spawnPos.position, Quaternion.identity);
             spawnEnemy.DeadEvent += HandleWaveClearCheck;
         }
+        #endregion
+        #region Delayed Spawn Monster
+        
+        // Delayed Spawn
+        for(int idx = 0; idx < waveInfo.delayedSpawnMobInfo.Count; ++idx)
+        {
+            // spawn Points Suffle
+            List<Transform> delaySpawnList = waveInfo.spawnPoints.ToList<Transform>();
+            for (int i = 0; i < delaySpawnList.Count; ++i)
+            {
+                int randomIdx = Random.Range(i, delaySpawnList.Count);
+
+                Transform tempSpawn = delaySpawnList[i];
+                delaySpawnList[i] = delaySpawnList[randomIdx];
+                delaySpawnList[randomIdx] = tempSpawn;
+            }
+            // setting monster
+            minValue = Math.Min(delaySpawnList.Count, waveInfo.delayedSpawnMobInfo[idx].enemyList.Count);
+            // <-- 진행중
+            // 이제 몬스터 리스트화 한 번 하고
+            // 파티클 작업
+            
+            // 스폰 연속으로 진행
+
+            // 딜레이
+            yield return new WaitForSeconds(waveInfo.delayedSpawnMobInfo[idx].delay);
+        }
+
+
+        #endregion
+
 
         isMonsterSpawning = false;
     }
