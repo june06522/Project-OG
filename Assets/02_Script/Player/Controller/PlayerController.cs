@@ -19,6 +19,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 {
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
+    private GameObject _interactKey;
 
     [field: SerializeField] public PlayerDataSO playerData { get; protected set; }
 
@@ -32,9 +33,13 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
     protected override void Awake()
     {
+        _interactKey = GameManager.Instance.transform.Find("InteractKey").gameObject;
 
         inputController = new PlayerInputController();
         eventController = new PlayerEventController();
+
+        if(_interactKey != null)
+            inputController.SetInteractUI(_interactKey);
 
         playerData = Instantiate(playerData);
         playerData.SetOwner(this);

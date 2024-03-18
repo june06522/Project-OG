@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public delegate void TwoDirInput(Vector2 dir);
@@ -14,6 +12,10 @@ public class PlayerInputController : IDisposable
     public Vector2 LastMoveDir { get; private set; } = Vector2.right;
     public bool isDashKeyPressed { get; private set; }
 
+    private Vector3 _lastNearObjPos = Vector3.zero;
+    public GameObject _interactUI { get; private set; }
+    private bool _isDetectIntractObj = false;
+
     public void Update()
     {
 
@@ -23,20 +25,62 @@ public class PlayerInputController : IDisposable
 
     }
 
+    public void SetInteractUI(GameObject interactUI)
+    {
+        _interactUI = interactUI;
+    }
+
     private void CheckInteractable()
     {
-        if(Input.GetKeyDown(KeyCode.F))
+        Vector2 pos = GameManager.Instance.player.position;
+        float radius = 2f;
+        Collider2D[] col = Physics2D.OverlapCircleAll(pos, radius, LayerMask.GetMask("Interactable"));
+
+        // if not detect interact object, return
+        if (col.Length == 0 && _isDetectIntractObj == true)
         {
-            Vector2 pos = GameManager.Instance.player.position;
-            float radius = 2f;
-            Collider2D[] col = Physics2D.OverlapCircleAll(pos, radius, LayerMask.GetMask("Interactable"));
-            for(int i = 0; i < col.Length; i++) 
+            _isDetectIntractObj = false;
+            if (_interactUI != null)
             {
-                IInteractable interact;
-                if (col[i].TryGetComponent<IInteractable>(out interact))
-                {
-                    interact.OnInteract();
-                }
+                _interactUI.SetActive(false);
+            }
+            return;
+        }
+        else if(col.Length == 0) return;
+
+        // near interact Object
+        Collider2D nearObject = col[0];
+        float nearObjectDistance = Vector2.Distance(pos, nearObject.gameObject.transform.position);
+        float curObjDistance = 0f;
+        for(int i = 1; i < col.Length; i++)
+        {
+            curObjDistance = Vector2.Distance(pos, col[i].gameObject.transform.position);
+            if(curObjDistance < nearObjectDistance)
+            {
+                nearObject = col[i];
+                nearObjectDistance = curObjDistance;
+            }
+        }
+
+        Vector3 uiPos = nearObject.transform.position;
+        uiPos.y = nearObject.bounds.max.y + 0.2f;
+
+        if (_interactUI != null && (_isDetectIntractObj == false || uiPos != _lastNearObjPos))
+        {
+            _lastNearObjPos = uiPos;
+            _isDetectIntractObj = true;
+
+            _interactUI.SetActive(true);
+            _interactUI.transform.position = uiPos;
+        }
+
+        // interact
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            IInteractable interact;
+            if (nearObject.TryGetComponent<IInteractable>(out interact))
+            {
+                interact.OnInteract();
             }
         }
     }
