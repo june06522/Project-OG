@@ -265,6 +265,9 @@ public class Stage : MonoBehaviour
         // Delayed Spawn
         for(int idx = 0; idx < waveInfo.delayedSpawnMobInfo.Count; ++idx)
         {
+            // 딜레이
+            yield return new WaitForSeconds(waveInfo.delayedSpawnMobInfo[idx].delay);
+
             // spawn Points Suffle
             List<Transform> delaySpawnList = waveInfo.spawnPoints.ToList<Transform>();
             for (int i = 0; i < delaySpawnList.Count; ++i)
@@ -275,16 +278,46 @@ public class Stage : MonoBehaviour
                 delaySpawnList[i] = delaySpawnList[randomIdx];
                 delaySpawnList[randomIdx] = tempSpawn;
             }
-            // setting monster
-            minValue = Math.Min(delaySpawnList.Count, waveInfo.delayedSpawnMobInfo[idx].enemyList.Count);
-            // <-- 진행중
-            // 이제 몬스터 리스트화 한 번 하고
-            // 파티클 작업
             
-            // 스폰 연속으로 진행
+            // setting spawn enemy List
+            List<Enemy> spawnEnemies = new List<Enemy>();
+            for (int i = 0; i < waveInfo.delayedSpawnMobInfo[idx].enemyList.Count; ++i)
+            {
+                for (int cnt = 0; cnt < waveInfo.delayedSpawnMobInfo[idx].enemyList[i].count; ++cnt)
+                {
+                    spawnEnemies.Add(waveInfo.delayedSpawnMobInfo[idx].enemyList[i].enemy);
+                }
+            }
+            // setting monster
+            minValue = Math.Min(delaySpawnList.Count, spawnEnemies.Count);
 
-            // 딜레이
-            yield return new WaitForSeconds(waveInfo.delayedSpawnMobInfo[idx].delay);
+            // Shuffle enemy List
+            for (int i = 0; i < spawnEnemies.Count; ++i)
+            {
+                int randomIdx = Random.Range(i, spawnEnemies.Count);
+
+                Enemy tempSpawnEnemy = spawnEnemies[i];
+                spawnEnemies[i] = spawnEnemies[randomIdx];
+                spawnEnemies[randomIdx] = tempSpawnEnemy;
+            }
+
+            // 파티클 작업
+            for (int i = 0; i < minValue; ++i)
+            {
+                Instantiate(_enemySpawnParticle, delaySpawnList[i].position, Quaternion.identity).Play();
+            }
+
+            yield return new WaitForSeconds(0.2f);
+
+            // 스폰 연속으로 진행
+            for (int i = 0; i < minValue; ++i)
+            {
+                monsterCount++;
+                Enemy spawnEnemy = Instantiate(spawnEnemies[i], delaySpawnList[i].position + offset, Quaternion.identity);
+                spawnEnemy.DeadEvent += HandleWaveClearCheck;
+            }
+
+            
         }
 
 
