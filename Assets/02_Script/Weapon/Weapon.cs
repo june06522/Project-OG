@@ -14,6 +14,7 @@ public abstract class Weapon : MonoBehaviour
     [field: SerializeField] public WeaponDataSO Data { get; protected set; }
     public Guid WeaponGuid { get; protected set; }
 
+    public string explainTxt = "";
 
     protected virtual void Awake()
     {
@@ -56,4 +57,8 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void OnRePosition() { }
 
+    public string GetName()
+    {
+        return id.ToString();
+    }
 }

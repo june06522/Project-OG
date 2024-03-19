@@ -27,6 +27,9 @@ public class InventoryObjectData : ScriptableObject
     [field:SerializeField] public List<SignalPoint> sendPoints { get; protected set; } = new();
     [HideInInspector] public List<InventoryObjectRoot> includes = new();
 
+    public TriggerID trigger;
+    public string[] skills;
+
     private WeaponInventory inventory;
 
     public Action<object> OnSignalReceived;

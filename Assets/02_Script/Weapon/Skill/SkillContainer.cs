@@ -63,6 +63,17 @@ public enum GeneratorID
     Water,      // 물
 }
 
+//트리거별 ID
+[Serializable]
+public enum TriggerID
+{
+    None,       // 없음
+    Dash,       // 대쉬
+    Attack,     // 공격
+    Hit,        // 맞음
+    Time,       // 시간
+}
+
 // Skill 2차원 리스트는 인스펙터에서 안보임 이렇게 해야함
 [Serializable]
 public class Shell
