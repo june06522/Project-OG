@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
-
+using System;
 public class DashEventReceiver : InventoryEventReceiverBase
 {
     public WeaponType targetType;
@@ -31,7 +32,7 @@ public class DashEventReceiver : InventoryEventReceiverBase
     {
 
         SendData s = new SendData(targetType, generatorID);
-
+        
         GetSignal(s);
 
     }

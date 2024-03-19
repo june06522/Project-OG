@@ -60,7 +60,7 @@ public class WeaponBrick : InvenBrick
 
     public override void ShowExplain()
     {
-        ItemExplain.Instance.HoverWeapon(image.sprite, GetName(), GetDamage(), GetExplain(), null);
+        ItemExplain.Instance.HoverWeapon(image.sprite, GetName(), GetDamage(), GetExplain(), GetOnSkillList());
     }
 
     private float GetDamage() => weaponPrefab.Data.AttackDamage.GetValue();
@@ -68,4 +68,9 @@ public class WeaponBrick : InvenBrick
     private string GetName() => weaponPrefab.GetName();
 
     private string GetExplain() => weaponPrefab.explainTxt;
+
+    private string[] GetOnSkillList()
+    {
+        return null;
+    }
 }

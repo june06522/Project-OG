@@ -2,8 +2,8 @@ using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 
-// Å×½ºÆ®¿ë
-// ³ªÁß¿¡ °ø°ÝÇÑ¹ø¿¡ Å¸°Ý 1È¸·Î °íÃÄ¾ßÇÔ
+// ï¿½×½ï¿½Æ®ï¿½ï¿½
+// ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ 1È¸ï¿½ï¿½ ï¿½ï¿½ï¿½Ä¾ï¿½ï¿½ï¿½
 public class Sword : InvenWeapon
 {
 
@@ -29,6 +29,7 @@ public class Sword : InvenWeapon
         SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
 
     }
+
 
     public override void Attack(Transform target)
     {
