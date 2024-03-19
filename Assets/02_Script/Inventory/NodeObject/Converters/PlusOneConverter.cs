@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlusOneConverter : InventoryConverterBase
@@ -12,9 +13,13 @@ public class PlusOneConverter : InventoryConverterBase
 
         foreach (var item in connectedOutput)
         {
-            if (sendData.isVisited.ContainsKey(item))
+            if (sendData.isVisited.ContainsKey(item.Data.originPos) && sendData.isVisited[item.Data.originPos] > sendData.Power)
                 continue;
-            sendData.isVisited[item] = true;
+
+            if (sendData.isVisited.ContainsKey(item.Data.originPos))
+                continue;
+
+            sendData.isVisited[item.Data.originPos] = sendData.Power;
             item.DoGetSignal(sendData);
 
         }

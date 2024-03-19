@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public enum ItemType
 {
@@ -11,7 +12,7 @@ public enum ItemType
     Connector
 }
 
-public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
 
     [field: SerializeField] public InventoryObjectData InvenObject { get; private set; }
@@ -27,10 +28,11 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public bool IsDrag => isDrag;
 
     private RectTransform rectTransform;
+    protected Image image;
 
     protected virtual void Awake()
     {
-
+        image = GetComponent<Image>();
         InvenObject = Instantiate(InvenObject);
         InvenObject.Init(transform);
         inventory = FindObjectOfType<WeaponInventory>();
@@ -44,17 +46,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void Setting()
     {
-        //bool isControllerSetActive = GameManager.Instance.InventoryActive.inven.activeSelf == false;
-
-        //if (isControllerSetActive)
-        //{
-        //    GameManager.Instance.InventoryActive.inven.SetActive(true);
-        //}
-
         Settings();
-
-        //if (isControllerSetActive)
-        //    GameManager.Instance.InventoryActive.inven.SetActive(false);
     }
 
     private void Update()
@@ -64,7 +56,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
 
             transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            rectTransform.position = new Vector3(rectTransform.position.x,rectTransform.position.y,0);
+            rectTransform.position = new Vector3(rectTransform.position.x, rectTransform.position.y, 0);
         }
 
     }
@@ -73,10 +65,11 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
 
         isDrag = false;
+        ItemExplain.Instance.isDrag = false;
 
-        Vector3Int p = Vector3Int.RoundToInt(rectTransform.localPosition / 100);
+        Vector3Int p = Vector3Int.FloorToInt(rectTransform.localPosition / 100);
         p.z = 0;
-        var point = inventory.FindInvenPoint(Vector2Int.RoundToInt(rectTransform.localPosition / 100));
+        var point = inventory.FindInvenPoint(Vector2Int.FloorToInt(rectTransform.localPosition / 100));
 
         if (point == null)
         {
@@ -85,7 +78,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         }
 
-        if (inventory.CheckFills(InvenObject.bricks, point.Value))                                  
+        if (inventory.CheckFills(InvenObject.bricks, point.Value))
         {
             inventory.AddItem(InvenObject, point.Value);
             InvenPoint = point.Value;
@@ -94,6 +87,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
             rectTransform.localPosition += new Vector3((rectTransform.rect.width - 100) / 2, (rectTransform.rect.height - 100) / 2);
             Setting();
+            ShowExplain();
         }
         else
         {
@@ -117,11 +111,31 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
+        ItemExplain.Instance.HoverEnd();
 
         prevPos = transform.localPosition;
 
         isDrag = true;
+        ItemExplain.Instance.isDrag = true;
         inventory.RemoveItem(InvenObject, InvenObject.originPos);
 
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if(!ItemExplain.Instance.isDrag)
+            ShowExplain();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        ItemExplain.Instance.HoverEnd();
+    }
+
+    public virtual void ShowExplain()
+    {
+        if (Type == ItemType.Generator)
+            ItemExplain.Instance.HoverGenerator(image.sprite, InvenObject.trigger.ToString()
+                , InvenObject.skills);
     }
 }

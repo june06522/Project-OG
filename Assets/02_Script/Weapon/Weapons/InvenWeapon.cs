@@ -4,7 +4,18 @@ using UnityEngine;
 
 public abstract class InvenWeapon : Weapon
 {
+    protected SendData sendDatas;
 
     public abstract void GetSignal(object signal);
 
+    protected void LateUpdate()
+    {
+        if (sendDatas != null)
+        {
+            Debug.Log("스킬사용");
+            SkillContainer.Instance.GetSKill((int)id, (int)sendDatas.GeneratorID)?.Excute(transform, target, sendDatas.Power);
+            sendDatas = null;
+        }
+
+    }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ public abstract class InventoryObjectRoot : ScriptableObject
     [HideInInspector] public List<InventoryObjectRoot> connectedInput = new(); //들어오는녀석
     [HideInInspector] public List<InventoryObjectRoot> connectedOutput = new(); //내보내는녀석
     protected InventoryObjectData data;
+    public InventoryObjectData Data => data;
 
 #if UNITY_EDITOR
 

@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-// ±ÇÃÑ
+// ï¿½ï¿½ï¿½ï¿½
 public class Pistol : InvenWeapon
 {
 
@@ -26,10 +26,6 @@ public class Pistol : InvenWeapon
         
         var data = (SendData)signal;
         SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
-
-        //var skill = Instantiate(SkillManager.Instance.GetSKill((int)id, (int)data.GeneratorID));
-
-        //skill.Excute(transform, target, data.Power);
     }
 
     public override void Attack(Transform target)

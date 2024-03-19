@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-// ÀÎº¥Åä¸®¿¡ µé¾î¿À´Â ¾ÆÀÌÅÛ ÀÌ¹ÌÁö
+// ì¸ë²¤í† ë¦¬ì— ë“¤ì–´ì˜¤ëŠ” ì•„ì´í…œ ì´ë¯¸ì§€
 
 public class WeaponBrick : InvenBrick
 {
@@ -22,12 +22,12 @@ public class WeaponBrick : InvenBrick
         weaponController = GameManager.Instance.WeaponController;
 
     }
-    
-    // ÀåÂø ½Ã ½ÇÇà
+
+    // ìž¥ì°© ì‹œ ì‹¤í–‰
     public override void Settings()
     {
         weapon = Instantiate(weaponPrefab);
-        //Debug.Log("ÀÌ°Ç°¡");
+        //Debug.Log("ì´ê±´ê°€");
         InvenObject.OnSignalReceived -= HandleWeaponSiganl;
         InvenObject.OnSignalReceived += HandleWeaponSiganl;
 
@@ -47,7 +47,7 @@ public class WeaponBrick : InvenBrick
 
         base.OnPointerDown(eventData);
 
-        if(weaponGuid != Guid.Empty)
+        if (weaponGuid != Guid.Empty)
         {
 
             Destroy(weapon.gameObject);
@@ -58,4 +58,19 @@ public class WeaponBrick : InvenBrick
 
     }
 
+    public override void ShowExplain()
+    {
+        ItemExplain.Instance.HoverWeapon(image.sprite, GetName(), GetDamage(), GetExplain(), GetOnSkillList());
+    }
+
+    private float GetDamage() => weaponPrefab.Data.AttackDamage.GetValue();
+
+    private string GetName() => weaponPrefab.GetName();
+
+    private string GetExplain() => weaponPrefab.explainTxt;
+
+    private string[] GetOnSkillList()
+    {
+        return null;
+    }
 }
