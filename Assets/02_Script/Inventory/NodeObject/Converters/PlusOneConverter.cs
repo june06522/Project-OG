@@ -8,19 +8,25 @@ public class PlusOneConverter : InventoryConverterBase
     public override void GetSignal([BindParameterType(typeof(SendData))] object signal)
     {
         var sendData = (SendData)signal;
-        
-        sendData.Power++;
+
 
         foreach (var item in connectedOutput)
         {
-            if (sendData.isVisited.ContainsKey(item.Data.originPos) && sendData.isVisited[item.Data.originPos] > sendData.Power)
+            //if (sendData.isVisited.ContainsKey(item.Data.originPos) && sendData.isVisited[item.Data.originPos] > sendData.Power)
+            //    continue;
+
+            if (sendData.checkVisit.ContainsKey(item.Data.originPos))
                 continue;
 
-            if (sendData.isVisited.ContainsKey(item.Data.originPos))
-                continue;
+            SendData tempdata = sendData;
+            tempdata.Power++;
+            tempdata.checkVisit.Add(item.Data.originPos, 1);
+            tempdata.isVisited[item.Data.originPos] = tempdata.Power;
+            item.DoGetSignal(tempdata);
+            
 
-            sendData.isVisited[item.Data.originPos] = sendData.Power;
-            item.DoGetSignal(sendData);
+            //sendData.checkVisit.Remove(item.Data.originPos);
+            //sendData.Power--;
 
         }
 

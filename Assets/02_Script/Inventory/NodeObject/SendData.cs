@@ -18,6 +18,7 @@ public class SendData
     private GeneratorID generatorID;
     private int power;
     public Dictionary<Vector2Int, int> isVisited;
+    public Hashtable checkVisit = new();
     
     public WeaponType WeaponType => weaponType;
     public GeneratorID GeneratorID => generatorID;
