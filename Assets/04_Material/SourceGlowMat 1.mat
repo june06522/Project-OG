@@ -7,9 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SourceGlowMat
+  m_Name: SourceGlowMat 1
   m_Shader: {fileID: 4800000, guid: 0803c241834332942abfcbd27c498b46, type: 3}
   m_ValidKeywords:
+  - _ENABLEHOLOGRAM_ON
   - _ENABLESOURCEGLOWDISSOLVE_ON
   - _SHADERFADING_NONE
   - _SHADERSPACE_UV
@@ -132,7 +133,7 @@ Material:
     - PixelSnap: 0
     - _AddColorContrast: 0.5
     - _AddColorContrastToggle: 0
-    - _AddColorFade: 1
+    - _AddColorFade: 0.04
     - _AddColorMaskToggle: 0
     - _AddHueBrightness: 2
     - _AddHueContrast: 0.5
@@ -173,7 +174,7 @@ Material:
     - _CustomFadeSmoothness: 2
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DirectionalAlphaFadeFade: 0.38
+    - _DirectionalAlphaFadeFade: 0.7
     - _DirectionalAlphaFadeInvert: 0
     - _DirectionalAlphaFadeNoiseFactor: 0.2
     - _DirectionalAlphaFadeRotation: 0
@@ -213,7 +214,7 @@ Material:
     - _EnableGaussianBlur: 0
     - _EnableGlitch: 0
     - _EnableHalftone: 0
-    - _EnableHologram: 0
+    - _EnableHologram: 1
     - _EnableHue: 0
     - _EnableInkSpread: 0
     - _EnableInnerOutline: 0
@@ -279,7 +280,7 @@ Material:
     - _FrozenSnowDensity: 0.25
     - _FullAlphaDissolveFade: 0.5
     - _FullAlphaDissolveWidth: 0.5
-    - _FullDistortionFade: 0.54
+    - _FullDistortionFade: 1
     - _FullGlowDissolveFade: 0.86
     - _FullGlowDissolveWidth: 0.5
     - _GaussianBlurFade: 1
@@ -295,16 +296,16 @@ Material:
     - _HalftoneFadeWidth: 1.5
     - _HalftoneInvert: 0
     - _HalftoneTiling: 4
-    - _HologramContrast: 1
+    - _HologramContrast: 0.6
     - _HologramDistortionDensity: 0.5
-    - _HologramDistortionOffset: 0.5
+    - _HologramDistortionOffset: 0
     - _HologramDistortionScale: 10
-    - _HologramDistortionSpeed: 2
+    - _HologramDistortionSpeed: 0
     - _HologramFade: 1
-    - _HologramLineFrequency: 500
-    - _HologramLineGap: 3
-    - _HologramLineSpeed: 0.01
-    - _HologramMinAlpha: 0.2
+    - _HologramLineFrequency: 400
+    - _HologramLineGap: 1.68
+    - _HologramLineSpeed: 1
+    - _HologramMinAlpha: 0.47
     - _Hue: 0
     - _InkSpreadContrast: 2
     - _InkSpreadDistance: 3
@@ -384,7 +385,7 @@ Material:
     - _ShineFrequency: 0.3
     - _ShineMaskToggle: 0
     - _ShineRotation: 30
-    - _ShineSaturation: 0.5
+    - _ShineSaturation: 0.58
     - _ShineSpeed: 5
     - _ShineWidth: 0.1
     - _SineGlowContrast: 1
@@ -409,7 +410,7 @@ Material:
     - _SourceAlphaDissolveInvert: 0
     - _SourceAlphaDissolveNoiseFactor: 0.2
     - _SourceAlphaDissolveWidth: 0.2
-    - _SourceGlowDissolveFade: 1
+    - _SourceGlowDissolveFade: 2.48
     - _SourceGlowDissolveInvert: 0
     - _SourceGlowDissolveNoiseFactor: 0.2
     - _SourceGlowDissolveWidth: 0.1
@@ -501,8 +502,8 @@ Material:
     - _DirectionalGlowFadeEdgeColor: {r: 11.98431, g: 0.6901961, b: 0.6901961, a: 0}
     - _DirectionalGlowFadeNoiseScale: {r: 0.4, g: 0.4, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _EnchantedHighColor: {r: 0, g: 0.7098798, b: 4.237095, a: 0}
-    - _EnchantedLowColor: {r: 2.996078, g: 0, b: 0, a: 0}
+    - _EnchantedHighColor: {r: 0, g: 0, b: 0, a: 0}
+    - _EnchantedLowColor: {r: 0, g: 1.7986965, b: 2.4905658, a: 0}
     - _EnchantedScale: {r: 0.1, g: 0.1, b: 0, a: 0}
     - _EnchantedSpeed: {r: 0, g: 1, b: 0, a: 0}
     - _FadingNoiseScale: {r: 0.2, g: 0.2, b: 0, a: 0}
@@ -531,7 +532,7 @@ Material:
     - _GlitchNoiseScale: {r: 0, g: 3, b: 0, a: 0}
     - _GlitchNoiseSpeed: {r: 0, g: 1, b: 0, a: 0}
     - _HalftonePosition: {r: 0, g: 0, b: 0, a: 0}
-    - _HologramTint: {r: 0.3137255, g: 1.662745, b: 2.996078, a: 1}
+    - _HologramTint: {r: 0, g: 0.5566955, b: 2.1265793, a: 1}
     - _InkSpreadColor: {r: 8.47419, g: 5.013525, b: 0.08873497, a: 0}
     - _InkSpreadNoiseScale: {r: 0.4, g: 0.4, b: 0, a: 0}
     - _InkSpreadPosition: {r: 0.5, g: -1, b: 0, a: 0}
@@ -574,9 +575,9 @@ Material:
     - _ScreenTilingScale: {r: 1, g: 1, b: 0, a: 0}
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 0}
     - _ShadowOffset: {r: 0.05, g: -0.05, b: 0, a: 0}
-    - _ShiftingColorA: {r: 1.498039, g: 0, b: 0, a: 0}
-    - _ShiftingColorB: {r: 1.498039, g: 0.7490196, b: 0, a: 0}
-    - _ShineColor: {r: 11.98431, g: 11.98431, b: 11.98431, a: 0}
+    - _ShiftingColorA: {r: 0, g: 0.8769978, b: 1.9999998, a: 0}
+    - _ShiftingColorB: {r: 0, g: 0.3896741, b: 1.4980391, a: 0}
+    - _ShineColor: {r: 8.150942, g: 8.150942, b: 8.150942, a: 0}
     - _SineGlowColor: {r: 0, g: 2.007843, b: 2.996078, a: 0}
     - _SineMoveFrequency: {r: 1, g: 1, b: 0, a: 0}
     - _SineMoveOffset: {r: 0, g: 0.5, b: 0, a: 0}

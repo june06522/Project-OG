@@ -1,6 +1,14 @@
 using UnityEngine;
 using DG.Tweening;
 using System;
+using UnityEditor;
+
+public enum ECloneType
+{
+    SMALL,
+    BIG,
+}
+
 
 public class SwordClone : MonoBehaviour
 {
@@ -8,75 +16,49 @@ public class SwordClone : MonoBehaviour
     private float speed = 20f;
     private float attackRadius;
 
-    float t;
-
     Material material;
-    Rigidbody2D rb;
     SpriteRenderer spriteRenderer;
+    Transform checkOrderPointTrm;
 
     public bool EndDissolve { get; set; } = false;
     public bool EndAttack { get; set; } = false;
     public bool IsAttack { get; set; } = false;
 
+    public float CurAngle;
+    public ECloneType CloneType;
+
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        checkOrderPointTrm = transform;//transform.Find("OrderPoint").GetComponent<Transform>();
+        spriteRenderer = transform.Find("Visual").GetComponent<SpriteRenderer>();
         material = spriteRenderer.material;
-        rb = GetComponent<Rigidbody2D>();
         Init();
     }
 
     public void Init()
     {
-        material.SetFloat("_SourceGlowDissolveFade", 0f);
+        float initValue = CloneType == ECloneType.BIG ? 1f : 0f;
+        material.SetFloat("_SourceGlowDissolveFade", initValue);
+
         EndDissolve = false;
         EndAttack = false;
         IsAttack = false;
-        t = 0f;
     }
 
     private void Update()
     {
-        spriteRenderer.sortingOrder = Mathf.RoundToInt(transform.position.y * -100);
+        spriteRenderer.sortingOrder  = Mathf.RoundToInt(checkOrderPointTrm.position.y * -100);
     }
 
 
-    public void Setting(float dissolveTime, float attackRadius, Transform ownerTrm)
+    public virtual void Setting(float dissolveTime)
     {
-        float value = 0;
-       
-        DOTween.To(() => value, x => material.SetFloat("_SourceGlowDissolveFade", x), 1, dissolveTime)
+        float initValue = CloneType == ECloneType.BIG ? 1f : 0f;
+        float endValue = Mathf.Abs(initValue - 1);
+        float value = initValue;
+
+        DOTween.To(() => value, x => material.SetFloat("_SourceGlowDissolveFade", x), endValue, dissolveTime)
             .OnComplete(() => EndDissolve = true);
-        
-    }
-
-    public void Shooting(Vector2 dir)
-    {
-        rb.velocity = dir * speed; 
-    }
-
-    public void Search(LayerMask layerMask)
-    {
-        Transform targetTrm = FindClosestEnemy(layerMask);
-        if(targetTrm != null)
-        {
-            Vector2 dir = (targetTrm.position - transform.position).normalized;
-            Shooting(dir);
-        }
-    }
-
-
-    private Transform FindClosestEnemy(LayerMask layerMask)
-    {
-        Vector2 detectStartPos = transform.position;
-        Collider2D[] cols = new Collider2D[5];
-        int colCount = Physics2D.OverlapCircleNonAlloc(detectStartPos, 5, cols, layerMask);
-        //Collider2D col = Physics2D.OverlapCircle(detectStartPos, radius, layerMask);
-
-        if (colCount == 0)
-            return null;
-        else
-            return cols[UnityEngine.Random.Range(0, colCount)].transform;
     }
 
     public void Attack(Vector3 targetPos)
@@ -86,17 +68,23 @@ public class SwordClone : MonoBehaviour
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
         Sequence seq = DOTween.Sequence();
-        seq.Append(transform.DORotate(new Vector3(0,0,angle), 0.2f));
-        seq.Insert(0,transform.DOMove(transform.position + -dir, 0.5f));
-        seq.Append(transform.DOMove(targetPos, 0.2f).OnComplete(() => DisAppear()));
-        seq.Play();
+        if(CloneType == ECloneType.SMALL)
+        {
+            seq.Append(transform.DORotate(new Vector3(0,0,angle), 0.2f));
+            seq.Insert(0,transform.DOMove(transform.position + -dir, 0.5f));
+        }
+        seq.Append(transform.DOMove(targetPos, 0.15f).OnComplete(() => DisAppear()));
+        
+        seq.Play();    
     }
 
     private void DisAppear()
     {
-        rb.velocity = Vector2.zero;
-        float value = 1;
-        DOTween.To(() => value, x => material.SetFloat("_SourceGlowDissolveFade", x), 0, 1)
+        float initValue = CloneType == ECloneType.SMALL ? 1f : 0f;
+        float endValue = Mathf.Abs(initValue - 1);
+        float value = initValue;
+
+        DOTween.To(() => value, x => material.SetFloat("_SourceGlowDissolveFade", x), endValue, 1)
             .OnComplete(() => EndAttack = true);
     }
 
