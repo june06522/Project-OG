@@ -6,7 +6,7 @@ public class Hammer : InvenWeapon
 {
     public override void Attack(Transform target)
     {
-
+        // 망치 돌리기 && 파티클 소환해서 피격처리 해주기
     }
 
     [BindExecuteType(typeof(SendData))]
@@ -17,6 +17,7 @@ public class Hammer : InvenWeapon
         SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
 
     }
+
 
 
 
