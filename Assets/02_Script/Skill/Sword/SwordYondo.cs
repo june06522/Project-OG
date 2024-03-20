@@ -61,6 +61,7 @@ public class SwordYondo : MonoBehaviour
             DOTween.To(() => curSpeed, (spd) => curSpeed = spd, this.speed, 0.5f);
             SetTarget();
         };
+        ownerTrm = transform.parent;
     }
 
     private void OnEnable()
