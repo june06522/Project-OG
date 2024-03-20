@@ -57,7 +57,7 @@ public class SwordSkills : MonoBehaviour
     private void Awake()
     {
         clones = new();
-        ownerTrm = transform.parent;
+        ownerTrm = GameManager.Instance.player.transform;
 #if UNITY_EDITOR
         Debug.Log("Running");
 #endif

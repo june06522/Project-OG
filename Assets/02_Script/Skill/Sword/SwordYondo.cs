@@ -24,7 +24,7 @@ public class SwordYondo : MonoBehaviour
     [Header("Speed")]
     [SerializeField] float speed = 500f;
 
-    [Header("ETC")]    
+    [Header("ETC")]
     [SerializeField] LayerMask layerMask;
     [SerializeField] float radius = 10f;
     [SerializeField] float damage = 5f;
@@ -61,7 +61,7 @@ public class SwordYondo : MonoBehaviour
             DOTween.To(() => curSpeed, (spd) => curSpeed = spd, this.speed, 0.5f);
             SetTarget();
         };
-        ownerTrm = transform.parent;
+        ownerTrm = GameManager.Instance.player.transform;
     }
 
     private void OnEnable()
@@ -87,11 +87,14 @@ public class SwordYondo : MonoBehaviour
     {
         switch (curState)
         {
-            case ESwordYondoState.Idle: Idle();
+            case ESwordYondoState.Idle:
+                Idle();
                 break;
-            case ESwordYondoState.Attack: Attack();
+            case ESwordYondoState.Attack:
+                Attack();
                 break;
-            case ESwordYondoState.Attach: Attach();
+            case ESwordYondoState.Attach:
+                Attach();
                 break;
         }
     }
@@ -100,7 +103,7 @@ public class SwordYondo : MonoBehaviour
         switch (curState)
         {
             case ESwordYondoState.Idle:
-                if(CheckEnemyInRadius())
+                if (CheckEnemyInRadius())
                 {
                     AttackStartAction?.Invoke();
                     ChangeState(ESwordYondoState.Attack);
@@ -113,7 +116,7 @@ public class SwordYondo : MonoBehaviour
                 //}
                 break;
             case ESwordYondoState.Attach:
-                if(completlyAttach == true)
+                if (completlyAttach == true)
                 {
                     ChangeState(ESwordYondoState.Idle);
                 }
@@ -137,7 +140,7 @@ public class SwordYondo : MonoBehaviour
 
     private void Attach()
     {
-        if(attachTrigger == false) //한번만 실행할 것들
+        if (attachTrigger == false) //한번만 실행할 것들
         {
             attachTrigger = true;
             rb.velocity = Vector2.zero;
@@ -145,8 +148,8 @@ public class SwordYondo : MonoBehaviour
         }
         Vector3 targetPos = ownerTrm.position + startLocalPos;
         transform.position = Vector3.Lerp(targetPos, transform.position, 0.3f);
-        
-        if(Vector3.Distance(transform.localPosition, startLocalPos) < 0.1f)
+
+        if (Vector3.Distance(transform.localPosition, startLocalPos) < 0.1f)
         {
             completlyAttach = true;
             transform.position = targetPos;
@@ -155,19 +158,19 @@ public class SwordYondo : MonoBehaviour
 
     private void Attack()
     {
-        if(targetTrm == null || targetTrm.gameObject.activeSelf == false)
+        if (targetTrm == null || targetTrm.gameObject.activeSelf == false)
         {
             ChangeState(ESwordYondoState.Attach);
             return;
         }
 
-        if(detector.IsDetect)
+        if (detector.IsDetect)
         {
             SetTarget();
             lerpAngleValue = 0f;
         }
         else
-        {   
+        {
             Vector2 dir = (targetTrm.position - transform.position).normalized;
             float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             Quaternion startRotation = transform.rotation;

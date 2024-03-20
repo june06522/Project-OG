@@ -1,27 +1,20 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 public class SlashExcuter : MonoBehaviour
 {
     public LayerMask hitableLayer;
 
-    private void Update()
+    private void OnEnable()
     {
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-
-            StartCoroutine(Play());
-
-        }
-
+        StartCoroutine(Play());
     }
 
     IEnumerator Play()
     {
-        Debug.Log(2);
 
         var obj1 = transform.GetChild(0).gameObject;
         obj1.SetActive(true);
@@ -48,13 +41,14 @@ public class SlashExcuter : MonoBehaviour
         transform.GetChild(5).gameObject.SetActive(true);
 
         StartCoroutine(Attack(obj4));
+        yield return new WaitForSeconds(0.3f);
+        Destroy(gameObject);
 
     }
 
     IEnumerator Attack(GameObject obj)
     {
-        Debug.Log(1);
-
+        
         foreach (var item in Physics2D.OverlapCircleAll(obj.transform.position, 2.5f, hitableLayer))
         {
 
