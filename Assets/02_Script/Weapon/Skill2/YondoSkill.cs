@@ -10,7 +10,6 @@ public class YondoSkill : Skill
     {
 
         var obj = Instantiate(yondo, weaponTrm.parent.position, weaponTrm.rotation);
-        obj.transform.SetParent(GameManager.Instance.player.transform);
 
     }
 

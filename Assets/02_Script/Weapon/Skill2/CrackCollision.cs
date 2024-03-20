@@ -14,6 +14,8 @@ public class CrackCollision : MonoBehaviour
         if (collision.TryGetComponent<IHitAble>(out var h))
         {
             h.Hit(damage);
+            h.Hit(damage * 1.2f);
+            h.Hit(damage * 1.5f);
         }
     }
 

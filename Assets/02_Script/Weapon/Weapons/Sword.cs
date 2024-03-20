@@ -42,7 +42,7 @@ public class Sword : InvenWeapon
             Append(transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z), 0.1f).SetEase(Ease.Linear));
 
 
-        AttackTween();
+        StartCoroutine(AttackTween());
 
     }
 
