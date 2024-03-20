@@ -18,8 +18,19 @@ public class PlusOneConverter : InventoryConverterBase
             if (sendData.checkVisit.ContainsKey(item.Data.originPos))
                 continue;
 
-            SendData tempdata = sendData;
+            SendData tempdata = new(sendData.WeaponType,sendData.GeneratorID,sendData.Power);
+
+
+            tempdata.checkVisit = new();
+
+            foreach (DictionaryEntry item2 in sendData.checkVisit)
+            {
+                tempdata.checkVisit.Add(item2.Key,item2.Value);
+            }
+            
+            
             tempdata.Power++;
+
             tempdata.checkVisit.Add(item.Data.originPos, 1);
             tempdata.isVisited[item.Data.originPos] = tempdata.Power;
             item.DoGetSignal(tempdata);
