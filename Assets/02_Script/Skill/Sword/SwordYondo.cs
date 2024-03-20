@@ -23,7 +23,6 @@ public class SwordYondo : MonoBehaviour
 
     [Header("Speed")]
     [SerializeField] float speed = 500f;
-    [SerializeField] AnimationCurve curve;
 
     [Header("ETC")]    
     [SerializeField] LayerMask layerMask;
@@ -39,21 +38,23 @@ public class SwordYondo : MonoBehaviour
     Quaternion startRot;
 
     Action AttackStartAction;
+    AnimationCurve curve;
 
 
     private float curSpeed;
     ESwordYondoState curState;
     bool isRotating;
     bool completlyAttach;
+    bool attachTrigger;
 
     Rigidbody2D rb;
-    public SwordTargetDetector Detector;
+    private SwordTargetDetector detector;
     private float lerpAngleValue;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        Detector = transform.Find("Detector").GetComponent<SwordTargetDetector>();
+        detector = transform.Find("Detector").GetComponent<SwordTargetDetector>();
 
         AttackStartAction = () =>
         {
@@ -130,19 +131,25 @@ public class SwordYondo : MonoBehaviour
         curSpeed = 0;
         rb.velocity = Vector2.zero;
         transform.position = ownerTrm.position + startLocalPos;
+        attachTrigger = false;
     }
 
     private void Attach()
     {
-        rb.velocity = Vector2.zero;
-        transform.DOMove(startLocalPos, 2f).SetEase(Ease.OutQuad);
-        transform.DORotateQuaternion(startRot, 1.5f).SetEase(Ease.OutQuad);
+        if(attachTrigger == false) //한번만 실행할 것들
+        {
+            attachTrigger = true;
+            rb.velocity = Vector2.zero;
+            transform.DORotateQuaternion(startRot, 1.5f).SetEase(Ease.OutQuad);
+        }
+        Vector3 targetPos = ownerTrm.position + startLocalPos;
+        transform.position = Vector3.Lerp(targetPos, transform.position, 0.3f);
         
-        if(Vector3.Distance(transform.localPosition, startLocalPos) < 0.05f)
+        if(Vector3.Distance(transform.localPosition, startLocalPos) < 0.1f)
         {
             completlyAttach = true;
+            transform.position = targetPos;
         }
-        //StartCoroutine(Rotate(startDir, 0.5f, () => completlyAttach = true));   
     }
 
     private void Attack()
@@ -153,7 +160,7 @@ public class SwordYondo : MonoBehaviour
             return;
         }
 
-        if(Detector.IsDetect)
+        if(detector.IsDetect)
         {
             SetTarget();
             lerpAngleValue = 0f;
@@ -191,7 +198,7 @@ public class SwordYondo : MonoBehaviour
     private void SetTarget()
     {
         targetTrm = FindClosestEnemy();
-        Detector.CurTargetTrm = targetTrm;
+        detector.CurTargetTrm = targetTrm;
 
         isRotating = true;
         completlyAttach = false;
@@ -244,18 +251,18 @@ public class SwordYondo : MonoBehaviour
     }
 
 
-    #if UNITY_EDITOR
-        private void OnDrawGizmos()
-        {
-            if (Application.isPlaying == false) return;
-            if (Detector.detectPoint != Vector2.zero)
-            {
-                Gizmos.color = Color.magenta;
-                Gizmos.DrawSphere(Detector.detectPoint, 1f);
-                Gizmos.DrawLine(Detector.detectPoint, targetTrm.position);
-            }
-        }
-    #endif
+    //#if UNITY_EDITOR
+    //    private void OnDrawGizmos()
+    //    {
+    //        if (Application.isPlaying == false) return;
+    //        if (detector.detectPoint != Vector2.zero && targetTrm != null)
+    //        {
+    //            Gizmos.color = Color.magenta;
+    //            Gizmos.DrawSphere(detector.detectPoint, 1f);
+    //            Gizmos.DrawLine(detector.detectPoint, targetTrm.position);
+    //        }
+    //    }
+    //#endif
 
 
 }

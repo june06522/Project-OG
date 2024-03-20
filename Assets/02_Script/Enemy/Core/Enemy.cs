@@ -101,7 +101,6 @@ public class Enemy : MonoBehaviour, IHitAble
 
         if (curHp <= 0)
         {
-            Dead = true;
             Die();
             return;
         }
@@ -109,6 +108,7 @@ public class Enemy : MonoBehaviour, IHitAble
 
     public void Die()
     {
+        Dead = true;
         DeadEvent?.Invoke();
     }
 
