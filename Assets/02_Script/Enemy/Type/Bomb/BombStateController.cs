@@ -12,7 +12,7 @@ public enum EBombState
 
 public class BombStateController : BaseFSM_Controller<EBombState>
 {
-    public ParticleSystem bomb;
+    public EffectAnim bombAnim;
     public GameObject showRange;
     public float radius = 3f;
     private GameObject instShowRangeObj;
@@ -52,6 +52,8 @@ public class BombStateController : BaseFSM_Controller<EBombState>
             //collider.gameObject.GetComponent<Rigidbody2D>().
             //    AddForce((collider.transform.position- instShowRangeObj.transform.position).normalized * 100, ForceMode2D.Impulse) ;
         }
+
+        Instantiate(bombAnim, instShowRangeObj.transform.position, Quaternion.identity);
 
         if(instShowRangeObj != null)
             Destroy(instShowRangeObj);

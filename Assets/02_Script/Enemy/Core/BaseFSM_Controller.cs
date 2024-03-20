@@ -9,13 +9,13 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
 {
     [field: SerializeField] public EnemyDataSO EnemyDataSO { get; protected set; }
     [SerializeField] public EnemyFindEffect enemyFindEffect;
-    public Enemy Enemy { get; private set; }
     public Navigation Nav;
     public ContextSolver Solver;
-    public AIData AIdata;
 
     public event Action FixedUpdateAction;
-    public Transform Target;
+    public Transform Target { get; set; }
+    public Enemy Enemy { get; private set; }
+    public AIData AIdata { get; private set; }
 
     protected override void Awake()
     {

@@ -143,11 +143,12 @@ public class SwordYondo : MonoBehaviour
             transform.DORotateQuaternion(startRot, 1.5f).SetEase(Ease.OutQuad);
         }
         Vector3 targetPos = ownerTrm.position + startLocalPos;
-        transform.position = Vector3.Lerp(targetPos, transform.position, 0.5f);
+        transform.position = Vector3.Lerp(targetPos, transform.position, 0.3f);
         
-        if(Vector3.Distance(transform.localPosition, startLocalPos) < 0.05f)
+        if(Vector3.Distance(transform.localPosition, startLocalPos) < 0.1f)
         {
             completlyAttach = true;
+            transform.position = targetPos;
         }
     }
 
@@ -250,18 +251,18 @@ public class SwordYondo : MonoBehaviour
     }
 
 
-    #if UNITY_EDITOR
-        private void OnDrawGizmos()
-        {
-            if (Application.isPlaying == false) return;
-            if (detector.detectPoint != Vector2.zero)
-            {
-                Gizmos.color = Color.magenta;
-                Gizmos.DrawSphere(detector.detectPoint, 1f);
-                Gizmos.DrawLine(detector.detectPoint, targetTrm.position);
-            }
-        }
-    #endif
+    //#if UNITY_EDITOR
+    //    private void OnDrawGizmos()
+    //    {
+    //        if (Application.isPlaying == false) return;
+    //        if (detector.detectPoint != Vector2.zero && targetTrm != null)
+    //        {
+    //            Gizmos.color = Color.magenta;
+    //            Gizmos.DrawSphere(detector.detectPoint, 1f);
+    //            Gizmos.DrawLine(detector.detectPoint, targetTrm.position);
+    //        }
+    //    }
+    //#endif
 
 
 }
