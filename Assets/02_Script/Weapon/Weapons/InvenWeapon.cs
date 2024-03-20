@@ -12,7 +12,6 @@ public abstract class InvenWeapon : Weapon
     {
         if (sendDatas != null)
         {
-            Debug.Log(sendDatas.Power);
             SkillContainer.Instance.GetSKill((int)id, (int)sendDatas.GeneratorID)?.Excute(transform, target, sendDatas.Power);
             sendDatas = null;
         }

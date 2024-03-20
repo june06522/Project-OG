@@ -28,7 +28,6 @@ public class PlusOneConverter : InventoryConverterBase
                 tempdata.checkVisit.Add(item2.Key,item2.Value);
             }
             
-            
             tempdata.Power++;
 
             tempdata.checkVisit.Add(item.Data.originPos, 1);
