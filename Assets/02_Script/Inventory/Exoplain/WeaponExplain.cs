@@ -29,9 +29,12 @@ public class WeaponExplain : MonoBehaviour
         _explain.text = explain;
 
         if(skillList != null)
-        for(int i = 0; i < skillList.Length; i++)
         {
-            _skillList.text += skillList[i] + '\n';
+            _skillList.text = "";
+            for(int i = 0; i < skillList.Length; i++)
+            {
+                _skillList.text += skillList[i] + '\n';
+            }
         }
     }
 }
