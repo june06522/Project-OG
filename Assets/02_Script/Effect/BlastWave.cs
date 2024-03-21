@@ -19,18 +19,23 @@ public class BlastWave : MonoBehaviour
         lineRenderer.positionCount = pointsCount + 1;
     }
 
+    public void Play()
+    {
+        StartCoroutine(nameof(Blast));
+    }
+
     private IEnumerator Blast()
     {
         float currentRadius = 0f;
 
         while(currentRadius < maxRadius)
         {
-            {
-                currentRadius += Time.deltaTime * speed;
-                Draw(currentRadius);
-                yield return null;
-            }
+            currentRadius += Time.deltaTime * speed;
+            Draw(currentRadius);
+            yield return null;
         }
+
+        Destroy(this.gameObject);
     }
 
     private void Draw(float currentRadius)
@@ -46,11 +51,5 @@ public class BlastWave : MonoBehaviour
         }
 
         lineRenderer.widthMultiplier = Mathf.Lerp(0f, startWidth, 1f - currentRadius / maxRadius);
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.A))
-            StartCoroutine(Blast());
     }
 }
