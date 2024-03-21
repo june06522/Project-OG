@@ -23,8 +23,6 @@ public class BossMoveState : BossBaseState
         if(!_boss.isStop)
         {
             Vector2 dir = _boss.player.transform.position - _boss.transform.position;
-
-            _boss.rigid.velocity = dir.normalized * _boss.bossSo.Speed;
         }
     }
 }

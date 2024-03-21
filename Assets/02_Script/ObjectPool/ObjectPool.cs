@@ -67,6 +67,17 @@ public class ObjectPool : MonoBehaviour
         }
     }
 
+    public IEnumerator ReturnObject(GameObject obj, float destoryTime)
+    {
+        float curTime = 0;
+        while(curTime < destoryTime)
+        {
+            curTime += Time.deltaTime;
+            yield return null;
+        }
+        ReturnObject(obj);
+    }
+
     public void ReturnObject(ObjectPoolType type, GameObject obj)
     {
         if(obj.activeSelf)
@@ -82,21 +93,6 @@ public class ObjectPool : MonoBehaviour
             obj.transform.SetParent(transform);
             _pool[type].Enqueue(obj);
         }
-    }
-
-    public void ReturnObject(Transform trans)
-    {
-        int childCnt = trans.childCount;
-        for (int i = 0; i < childCnt; i++)
-        {
-            if (trans.GetChild(i).gameObject == null)
-            {
-                Debug.Log(i);
-                return;
-            }
-            ReturnObject(trans.GetChild(i).gameObject);
-        }
-        Debug.Log("dd");
     }
 
     public void ReturnObject(GameObject obj)
@@ -115,12 +111,5 @@ public class ObjectPool : MonoBehaviour
                 }
             }
         }
-    }
-
-    public IEnumerator ReturnObject(float returnTime, ObjectPoolType type, GameObject obj)
-    {
-        yield return new WaitForSeconds(returnTime);
-
-        ReturnObject(type, obj);
     }
 }

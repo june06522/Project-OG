@@ -13,6 +13,10 @@ public class Chest : MonoBehaviour, IInteractable
     [Header("Info")]
     [SerializeField]
     private ItemInfoListSO _itemList;
+    [SerializeField]
+    private int _dropMinGold = 10;
+    [SerializeField]
+    private int _dropMaxGold = 50;
 
     private Dictionary<ItemRate, List<ItemInfoSO>> _rateItems = new Dictionary<ItemRate, List<ItemInfoSO>>();
 
@@ -21,7 +25,7 @@ public class Chest : MonoBehaviour, IInteractable
     private SpriteRenderer _spriteRenderer;
 
     [SerializeField] private Transform _itemSpawnPos;
-    [SerializeField] private ParticleSystem _openEffect;
+    [SerializeField] private ParticleSystem _goldEffect;
     private bool _isOpen = false;
     private Collider2D _collider;
 
@@ -55,55 +59,54 @@ public class Chest : MonoBehaviour, IInteractable
 
     public void Open()
     {
+        Debug.Log("1");
         if (_isOpen)
             return;
-
+        Debug.Log("2");
         _collider.enabled = false;
         _isOpen = true;
-        // 상자 스프라이트 변경
+
         _spriteRenderer.sprite = _openSprite;
 
         ItemInfoSO item = RandomItem();
-        // 아이템 소환인데.. 아이템 프리팹이 없는데?
-        if (item.ItemObject != null) // 여기 true 빼야되고 밑에 테스트 코드 지워야함
+        
+        if (item.ItemObject != null) 
         {
             Item itemObject = Instantiate(item.ItemObject, transform.position, Quaternion.identity);
 
-            // 애니메이션 연출
             itemObject.transform.DOJump(_itemSpawnPos.position, 1.5f, 1, 0.7f);
         }
 
-        // 이펙트
-        if (_openEffect != null)
+        if (_goldEffect != null)
             PlayOpenEffect(item.Rate);
+
+        Money.Instance.EarnGold(Random.Range(_dropMinGold, _dropMaxGold + 1));
     }
 
     private void PlayOpenEffect(ItemRate rate)
     {
-        _openEffect.Stop();
+        _goldEffect.Stop();
 
-        // 등급에 따른 이펙트 색 변화
-        var main = _openEffect.main;
-        main.startColor = Color.white;
-        switch (rate)
-        {
-            case ItemRate.RARE:
-                main.startColor = Color.cyan;
-                break;
-            case ItemRate.EPIC:
-                main.startColor = Color.magenta;
-                break;
-            case ItemRate.LEGEND:
-                main.startColor = Color.yellow;
-                break;
-        }
+        //var main = _openEffect.main;
+        //main.startColor = Color.white;
+        //switch (rate)
+        //{
+        //    case ItemRate.RARE:
+        //        main.startColor = Color.cyan;
+        //        break;
+        //    case ItemRate.EPIC:
+        //        main.startColor = Color.magenta;
+        //        break;
+        //    case ItemRate.LEGEND:
+        //        main.startColor = Color.yellow;
+        //        break;
+        //}
 
-        _openEffect.Play();
+        _goldEffect.Play();
     }
 
     private ItemInfoSO RandomItem()
     {
-        // 등급 계산
         float percent = Random.Range(0f, 100f); // 0 ~ 100
         ItemRate rate = ItemRate.NORMAL;
 

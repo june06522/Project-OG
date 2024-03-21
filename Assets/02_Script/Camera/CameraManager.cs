@@ -9,14 +9,16 @@ public class CameraManager : MonoBehaviour
 
     public CinemachineVirtualCamera cam;
 
+    private CinemachineBasicMultiChannelPerlin perlin;
+
     private void Awake()
     {
         Instance = this;
+        perlin = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
 
     public IEnumerator CameraShake(float shakeIntensity, float shakeTime)
     {
-        CinemachineBasicMultiChannelPerlin perlin = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         perlin.m_AmplitudeGain = shakeIntensity; // 노이즈의 진폭
         perlin.m_FrequencyGain = shakeIntensity; // 노이즈의 주파수
 

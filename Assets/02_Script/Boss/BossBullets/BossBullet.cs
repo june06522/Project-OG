@@ -8,6 +8,16 @@ public class BossBullet : MonoBehaviour
 
     private float _currentDamage = 0;
 
+    protected virtual void OnEnable()
+    {
+        StartCoroutine(ObjectPool.Instance.ReturnObject(this.gameObject, data.DestoryTime));
+    }
+
+    protected virtual void OnDisable()
+    {
+        StopAllCoroutines();
+    }
+
     public void Attack(float bossDamage)
     {
         _currentDamage = bossDamage + data.Damage;

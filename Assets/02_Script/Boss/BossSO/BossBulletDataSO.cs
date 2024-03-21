@@ -6,6 +6,7 @@ using UnityEngine;
 public class BossBulletDataSO : ScriptableObject
 {
     public float Damage;
+    public float DestoryTime;
     public bool IfHitWillBreak;
     public string[] HitAbleTag;
 }

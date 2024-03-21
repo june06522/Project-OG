@@ -5,11 +5,28 @@ using UnityEngine;
 
 public class Money : MonoBehaviour
 {
+    public static Money Instance { get; private set; }
+
     [field:SerializeField]
     public int Gold { get; private set; }
     public event Action<int> GoldChangedEvent;
 
-    public void GetGold(int gold)
+    private void Awake()
+    {
+        #region ΩÃ±€≈Ê
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Debug.LogError($"{transform} : Money is multiply running!");
+            Destroy(this);
+        }
+        #endregion
+    }
+
+    public void EarnGold(int gold)
     {
         Gold += gold;
         GoldChangedEvent?.Invoke(Gold);

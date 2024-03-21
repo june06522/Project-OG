@@ -108,6 +108,7 @@ public class Enemy : MonoBehaviour, IHitAble
 
     public void Die()
     {
+        if(Dead) return;
         Dead = true;
         DeadEvent?.Invoke();
     }
