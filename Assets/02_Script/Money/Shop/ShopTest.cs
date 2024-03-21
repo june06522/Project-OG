@@ -16,7 +16,7 @@ public class ShopTest : MonoBehaviour, IInteractable
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.M))
-            _shop.PlayerMoney.GetGold(10);
+            _shop.PlayerMoney.EarnGold(10);
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             _shop.CloseShop();

@@ -13,6 +13,10 @@ public class Chest : MonoBehaviour, IInteractable
     [Header("Info")]
     [SerializeField]
     private ItemInfoListSO _itemList;
+    [SerializeField]
+    private int _dropMinGold = 10;
+    [SerializeField]
+    private int _dropMaxGold = 50;
 
     private Dictionary<ItemRate, List<ItemInfoSO>> _rateItems = new Dictionary<ItemRate, List<ItemInfoSO>>();
 
@@ -76,6 +80,8 @@ public class Chest : MonoBehaviour, IInteractable
         // ¿Ã∆Â∆Æ
         if (_openEffect != null)
             PlayOpenEffect(item.Rate);
+
+        Money.Instance.EarnGold(Random.Range(_dropMinGold, _dropMaxGold + 1));
     }
 
     private void PlayOpenEffect(ItemRate rate)
