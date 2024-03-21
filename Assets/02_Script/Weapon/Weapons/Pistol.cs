@@ -21,11 +21,16 @@ public class Pistol : InvenWeapon
     [BindExecuteType(typeof(SendData))]
     public override void GetSignal([BindParameterType(typeof(SendData))] object signal)
     {
-
-        //Debug.Log("Pistol Get Signal");
-        
         var data = (SendData)signal;
-        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
+
+        if (sendDatas == null)
+        {
+            sendDatas = data;
+        }
+        else
+        {
+            sendDatas = sendDatas.Power > data.Power ? sendDatas : data;
+        }
     }
 
     public override void Attack(Transform target)

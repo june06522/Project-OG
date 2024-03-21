@@ -6,7 +6,7 @@ public class Hammer : InvenWeapon
 {
     public override void Attack(Transform target)
     {
-        // ¸ÁÄ¡ µ¹¸®±â && ÆÄÆ¼Å¬ ¼ÒÈ¯ÇØ¼­ ÇÇ°İÃ³¸® ÇØÁÖ±â
+        // ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ && ï¿½ï¿½Æ¼Å¬ ï¿½ï¿½È¯ï¿½Ø¼ï¿½ ï¿½Ç°ï¿½Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½Ö±ï¿½
     }
 
     [BindExecuteType(typeof(SendData))]
@@ -14,7 +14,15 @@ public class Hammer : InvenWeapon
     {
 
         var data = (SendData)signal;
-        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
+
+        if (sendDatas == null)
+        {
+            sendDatas = data;
+        }
+        else
+        {
+            sendDatas = sendDatas.Power > data.Power ? sendDatas : data;
+        }
 
     }
 
