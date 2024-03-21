@@ -5,51 +5,57 @@ using DG.Tweening;
 
 public class PTiedState : BossBaseState
 {
-    private float _maxMoveDistance;
+    private float f_maxMoveDistance;
     
-    private float _movingDelay;
+    private float f_movingDelay;
 
-    private Vector3 _patrolPos;
+    private Vector3 v_patrolPos;
 
     public PTiedState(Boss boss) : base(boss)
     {
-        _maxMoveDistance = 1;
-        _movingDelay = 1;
-        _patrolPos = _boss.transform.position;
+        f_maxMoveDistance = 1;
+        f_movingDelay = 1;
+        v_patrolPos = _boss.transform.position;
     }
 
     public override void OnBossStateExit()
     {
-        _boss.StopCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
-        StopThisCoroutine();
+        
     }
 
     public override void OnBossStateOn()
     {
-        _boss.isStop = false;
+        _boss.B_isStop = false;
+        _boss.B_isTied = true;
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
-        _boss.StartCoroutine(TiedPatorl(_movingDelay));
+        _boss.StartCoroutine(TiedPatorl(f_movingDelay));
     }
 
     public override void OnBossStateUpdate()
     {
-        if(_boss.blocked)
+        if(!_boss.B_isTied)
         {
-            _patrolPos = MakeNewPatrolPos();
-            _boss.blocked = false;
+            _boss.StopCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
+            StopThisCoroutine();
+        }
+
+        if(_boss.B_blocked)
+        {
+            v_patrolPos = MakeNewPatrolPos();
+            _boss.B_blocked = false;
         }
     }
 
     public IEnumerator RandomPattern(float waitTime)
     {
-        if (!_boss.isTied)
+        if (!_boss.B_isTied)
             yield break;
 
         yield return new WaitForSeconds(waitTime);
 
         int rand = Random.Range(1, 4);
 
-        _boss.isRunning = true;
+        _boss.B_isRunning = true;
 
         switch (rand)
         {
@@ -58,8 +64,8 @@ public class PTiedState : BossBaseState
                 break;
             case 2:
                 _boss.StopImmediately(_boss.transform);
-                _boss.isStop = true;
-                NowCoroutine(SoundAttack(4, 1));
+                _boss.B_isStop = true;
+                NowCoroutine(SoundAttack(6, 1));
                 break;
             case 3:
                 NowCoroutine(OmniGuidPlayerAttack(20, 5, 1, 1));
@@ -69,22 +75,22 @@ public class PTiedState : BossBaseState
 
     private IEnumerator TiedPatorl(float waitTime)
     {
-        while(_boss.isTied)
+        while(_boss.B_isTied)
         {
-            if (Arrive(_boss.transform.position, _patrolPos))
+            if (Arrive(_boss.transform.position, v_patrolPos))
             {
                 yield return new WaitForSeconds(waitTime);
-                _patrolPos = MakeNewPatrolPos();
+                v_patrolPos = MakeNewPatrolPos();
             }
             else
             {
-                if (_boss.isStop)
+                if (_boss.B_isStop)
                 {
-                    _patrolPos = _boss.transform.position;
+                    v_patrolPos = _boss.transform.position;
                 }
                 else
                 {
-                    _boss.transform.position = Vector2.MoveTowards(_boss.transform.position, _patrolPos, Time.deltaTime);
+                    _boss.transform.position = Vector2.MoveTowards(_boss.transform.position, v_patrolPos, Time.deltaTime);
                 }
             }
 
@@ -102,7 +108,7 @@ public class PTiedState : BossBaseState
 
     private Vector3 MakeNewPatrolPos()
     {
-        Vector3 newPatrolPos =  new Vector2(Random.Range(-_maxMoveDistance, _maxMoveDistance), Random.Range(-_maxMoveDistance, _maxMoveDistance));
+        Vector3 newPatrolPos =  new Vector2(Random.Range(-f_maxMoveDistance, f_maxMoveDistance), Random.Range(-f_maxMoveDistance, f_maxMoveDistance));
 
         return newPatrolPos;
     }
@@ -124,7 +130,7 @@ public class PTiedState : BossBaseState
     // 전방향으로 공격한다 - 플레이어가 근접하기 좋은 패턴
     private IEnumerator OmnidirAttack(int bulletCount, float speed, float time, int burstCount)
     {
-        if (!_boss.isTied)
+        if (!_boss.B_isTied)
             yield break;
 
         Vector3 originSize = _boss.transform.localScale;
@@ -139,7 +145,7 @@ public class PTiedState : BossBaseState
         {
             for (int j = 0; j < bulletCount; j++)
             {
-                GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _boss.bulletCollector.transform);
+                GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _boss.G_bulletCollector.transform);
                 bullet.GetComponent<BossBullet>().Attack(_boss.bossSo.Damage);
                 bullet.transform.position = _boss.transform.position;
                 bullet.transform.rotation = Quaternion.identity;
@@ -154,7 +160,7 @@ public class PTiedState : BossBaseState
 
         yield return new WaitForSeconds(time);
 
-        _boss.isRunning = false;
+        _boss.B_isRunning = false;
 
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
     }
@@ -162,7 +168,7 @@ public class PTiedState : BossBaseState
     // 전방향으로 탄막을 날리고 잠시 뒤 탄막들이 플레이어 방향으로 날아간다 - 플레이어가 근접하기 좋은 패턴
     private IEnumerator OmniGuidPlayerAttack(int bulletCount, float speed, float time, int burstCount)
     {
-        if (!_boss.isTied)
+        if (!_boss.B_isTied)
             yield break;
 
         Vector3 originSize = _boss.transform.localScale;
@@ -182,7 +188,7 @@ public class PTiedState : BossBaseState
 
             for (int j = 0; j < bulletCount; j++)
             {
-                bullets[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _boss.bulletCollector.transform);
+                bullets[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _boss.G_bulletCollector.transform);
                 bullets[i, j].GetComponent<BossBullet>().Attack(_boss.bossSo.Damage);
                 bullets[i, j].transform.position = _boss.transform.position;
                 bullets[i, j].transform.rotation = Quaternion.identity;
@@ -206,7 +212,7 @@ public class PTiedState : BossBaseState
 
             yield return new WaitForSeconds(Time.deltaTime);
 
-            Vector3 nextDir = _boss.player.transform.position;
+            Vector3 nextDir = _boss.G_player.transform.position;
 
             for (int j = 0; j < bulletCount; j++)
             {
@@ -218,7 +224,7 @@ public class PTiedState : BossBaseState
 
         yield return new WaitForSeconds(time);
 
-        _boss.isRunning = false;
+        _boss.B_isRunning = false;
 
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
     }
@@ -226,10 +232,10 @@ public class PTiedState : BossBaseState
     // 범위안에 플레이어가 있으면 피해를 준다 - 플레이어가 멀어져야 좋은 패턴
     private IEnumerator SoundAttack(int radius, float waitTime)
     {
-        if (!_boss.isTied)
+        if (!_boss.B_isTied)
             yield break;
 
-        GameObject warning = ObjectPool.Instance.GetObject(ObjectPoolType.WarningType1, _boss.bulletCollector.transform);
+        GameObject warning = ObjectPool.Instance.GetObject(ObjectPoolType.WarningType1, _boss.G_bulletCollector.transform);
         warning.transform.localScale = warning.transform.localScale * radius * 2;
         warning.transform.position = _boss.transform.position;
         warning.transform.rotation = Quaternion.identity;
@@ -253,8 +259,8 @@ public class PTiedState : BossBaseState
 
         yield return new WaitForSeconds(0.5f);
 
-        _boss.isStop = false;
-        _boss.isRunning = false;
+        _boss.B_isStop = false;
+        _boss.B_isRunning = false;
 
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
     }

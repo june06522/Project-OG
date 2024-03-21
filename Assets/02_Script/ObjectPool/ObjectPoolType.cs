@@ -9,6 +9,7 @@ public enum ObjectPoolType
     BossBulletType2,
     BossBulletType3,
     BossBulletType4,
+    BossBulletType5,
 
     Laser,
 

@@ -15,7 +15,7 @@ public class BossIdleState : BossBaseState
 
     public override void OnBossStateOn()
     {
-        _boss.transform.position = _boss.originPos;
+        _boss.transform.position = _boss.V_originPos;
         _boss.StopImmediately(_boss.transform);
     }
 

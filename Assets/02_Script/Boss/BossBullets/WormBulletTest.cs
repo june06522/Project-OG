@@ -5,33 +5,43 @@ using UnityEngine;
 public class WormBulletTest : BossBullet
 {
     [SerializeField]
-    private float _speed;
-    private float deg;
-    private float _s;
+    private float f_speed;
+    private float f_deg;
+    private float f_s;
 
-    private bool _x;
-    private bool _y;
+    private bool b_x;
+    private bool b_y;
 
     private Rigidbody2D rigid;
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
-        deg = _s = 0;
+        f_deg = f_s = 0;
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
     }
 
     void Update()
     {
-        deg += 0.01f * _speed;
-        _s = Mathf.Sin(deg) * 0.01f;
+        f_deg += 0.01f * f_speed;
+        f_s = Mathf.Sin(f_deg) * 0.01f;
 
         if (Mathf.Abs(rigid.velocity.x) > Mathf.Abs(rigid.velocity.y))
         {
-            transform.Translate(new Vector3(0, _s, 0));
+            transform.Translate(new Vector3(0, f_s, 0));
         }
         else
         {
-            transform.Translate(new Vector3(_s, 0, 0));
+            transform.Translate(new Vector3(f_s, 0, 0));
         } 
     }
 

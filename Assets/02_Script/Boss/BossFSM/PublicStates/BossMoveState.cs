@@ -20,9 +20,9 @@ public class BossMoveState : BossBaseState
 
     public override void OnBossStateUpdate()
     {
-        if(!_boss.isStop)
+        if(!_boss.B_isStop)
         {
-            Vector2 dir = _boss.player.transform.position - _boss.transform.position;
+            Vector2 dir = _boss.G_player.transform.position - _boss.transform.position;
         }
     }
 }
