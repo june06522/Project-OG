@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 478834e2e5720624d8fc8e0b707cb943
+guid: ccfe00347437b3b4c9a926fc0a09b6cd
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 8
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -67,10 +67,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 512
+    maxTextureSize: 256
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -79,6 +79,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -105,13 +117,97 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: HammerAtk-Sheet_0
+      name: JombieAnim-Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdbf77444409d0f4aa9c4ee1602ac9a6
+      internalID: -568458185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JombieAnim-Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c171e9e1f8465be4e8845bc725332847
+      internalID: -69485273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JombieAnim-Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4e8387eb35c1c94aa300307c23fb829
+      internalID: 1031263078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JombieAnim-Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8687ef7dfef97ce49a5b2bf4f0aaa52d
+      internalID: 1418013221
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JombieAnim-Sheet_4
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 48
-        height: 48
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -119,20 +215,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 513e801d48d938b4182e528cd211c715
-      internalID: -1005331971
+      spriteID: 673c4df0631cce645b1b109a6b07df1b
+      internalID: 91052751
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HammerAtk-Sheet_1
+      name: JombieAnim-Sheet_5
       rect:
         serializedVersion: 2
-        x: 48
+        x: 32
         y: 0
-        width: 48
-        height: 48
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,20 +236,41 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 63ab7a49cdc120943b2dbc860538e72b
-      internalID: -494508955
+      spriteID: 85fdf6e5d966e8145979183d0f1735bb
+      internalID: 388069332
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HammerAtk-Sheet_2
+      name: JombieAnim-Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c417c4663b86e7c4e8014ca60f2c4e36
+      internalID: -695394119
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JombieAnim-Sheet_7
       rect:
         serializedVersion: 2
         x: 96
         y: 0
-        width: 48
-        height: 48
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -161,20 +278,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cd70c6ae328def64d8e37d3045bd7816
-      internalID: 217052962
+      spriteID: f5fb6587033b9d440a1de3599d1b6690
+      internalID: 1694001826
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HammerAtk-Sheet_3
+      name: JombieAnim-Sheet_8
       rect:
         serializedVersion: 2
-        x: 144
+        x: 128
         y: 0
-        width: 48
-        height: 48
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -182,20 +299,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 86b28b97ef7158c46bf9b0ad52b0a8e8
-      internalID: -1100709939
+      spriteID: e4ba39c64a40f0c43a1512a5836a4c24
+      internalID: -682239667
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HammerAtk-Sheet_4
+      name: JombieAnim-Sheet_9
       rect:
         serializedVersion: 2
-        x: 192
+        x: 160
         y: 0
-        width: 48
-        height: 48
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -203,29 +320,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 96203c515d6e72e4da9195fbc7d59885
-      internalID: -995572171
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: HammerAtk-Sheet_5
-      rect:
-        serializedVersion: 2
-        x: 240
-        y: 0
-        width: 48
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a50322705345c5a41bde3a6ec90a143f
-      internalID: 1875114590
+      spriteID: c8bf5aa5a605cd940b304c774d948315
+      internalID: -1584924638
       vertices: []
       indices: 
       edges: []
@@ -241,12 +337,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      HammerAtk-Sheet_0: -1005331971
-      HammerAtk-Sheet_1: -494508955
-      HammerAtk-Sheet_2: 217052962
-      HammerAtk-Sheet_3: -1100709939
-      HammerAtk-Sheet_4: -995572171
-      HammerAtk-Sheet_5: 1875114590
+      JombieAnim-Sheet_0: -568458185
+      JombieAnim-Sheet_1: -69485273
+      JombieAnim-Sheet_2: 1031263078
+      JombieAnim-Sheet_3: 1418013221
+      JombieAnim-Sheet_4: 91052751
+      JombieAnim-Sheet_5: 388069332
+      JombieAnim-Sheet_6: -695394119
+      JombieAnim-Sheet_7: 1694001826
+      JombieAnim-Sheet_8: -682239667
+      JombieAnim-Sheet_9: -1584924638
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -133,7 +133,10 @@ public class Stage : MonoBehaviour
                 AppearChest();
             }
             else
+            {
+                isMonsterSpawning = true;
                 StartWave();
+            }
 
         }    
     }

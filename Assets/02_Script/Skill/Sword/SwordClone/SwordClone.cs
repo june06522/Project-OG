@@ -14,10 +14,9 @@ public enum ECloneType
 public class SwordClone : MonoBehaviour
 {
     [SerializeField]
-    private float damage = 10f;
+    protected float damage = 10f;
     [SerializeField]
-    private float speed = 20f;
-    private float attackRadius;
+    protected float speed = 20f;
 
     Material material;
     SpriteRenderer spriteRenderer;
@@ -33,13 +32,12 @@ public class SwordClone : MonoBehaviour
     public float Width { get; set; }
     public float Height { get; set; }
 
-    
-
-    private void Awake()
+    protected virtual void Awake()
     {
         checkOrderPointTrm = transform;//transform.Find("OrderPoint").GetComponent<Transform>();
         spriteRenderer = transform.Find("Visual").GetComponent<SpriteRenderer>();
         material = spriteRenderer.material;
+        
         Init();
     }
 
@@ -72,34 +70,22 @@ public class SwordClone : MonoBehaviour
             .OnComplete(() => EndDissolve = true);
     }
 
-    public void Attack(Vector3 targetPos)
+    public virtual void Attack(Vector3 targetPos)
     {
-        IsAttack = true;
-        Vector3 dir = (targetPos - transform.position).normalized;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-        Sequence seq = DOTween.Sequence();
-        if(CloneType == ECloneType.SMALL)
-        {
-            seq.Append(transform.DORotate(new Vector3(0,0,angle), 0.2f));
-            seq.Insert(0,transform.DOMove(transform.position + -dir, 0.5f));
-        }
-        seq.Append(transform.DOMove(targetPos, 0.15f).OnComplete(() => CheckHit(targetPos)));
-        
-        seq.Play();    
+       
     }
 
-    private void DisAppear()
+    public void DisAppear()
     {
         float initValue = CloneType == ECloneType.SMALL ? 1f : 0f;
         float endValue = Mathf.Abs(initValue - 1);
         float value = initValue;
 
         DOTween.To(() => value, x => material.SetFloat("_SourceGlowDissolveFade", x), endValue, 1)
-            .OnComplete(() => SetEndAttack());
+            .OnComplete(() => EndAttackEvt());
     }
 
-    private void SetEndAttack()
+    private void EndAttackEvt()
     {
         EndAttack = true;
         if (CloneType == ECloneType.BIG) 
@@ -124,18 +110,12 @@ public class SwordClone : MonoBehaviour
     }
 
     List<Vector2> points = new(); 
-    public void CheckHit(Vector2 targetPos)
+    public virtual void CheckHit(Vector2 targetPos)
     {
         float radius; 
-        if (CloneType == ECloneType.SMALL)
-        {
+        
             radius = 1f;
-        }
-        else
-        {
-            radius = Width;
-           
-        }
+        
 
         Collider2D[] enemyCols = Physics2D.OverlapCircleAll(transform.position, radius,
                LayerMask.GetMask("Enemy", "TriggerEnemy"));
@@ -164,7 +144,7 @@ public class SwordClone : MonoBehaviour
 
     
 
-    private bool IsInElipse(Vector2 centerPos, Vector2 targetPos)
+    public bool IsInElipse(Vector2 centerPos, Vector2 targetPos)
     {
         Vector2 dot1 = targetPos;
         dot1.x -= Mathf.Sqrt(Width * Width - Height * Height);
