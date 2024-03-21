@@ -18,8 +18,9 @@ public class ShockWaveEffect : MonoBehaviour
         _spriteRenderer.gameObject.SetActive(false);
     }
 
-    public void ShockwaveEffect()
+    public void Play(Vector2 pos)
     {
+        transform.position = pos;
         //if (_shockTween != null && _shockTween.IsActive())
         //{
         //    _shockTween.Kill();

@@ -4,25 +4,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SwordSkill
+[Flags]
+public enum ESwordSkill
 {
-    Yondu,
-    SwordRain,
+    NONE,
+    BIGSWORD,
+    SWORDRAIN
 }
 
 public class SwordSkills : MonoBehaviour
 {
     [SerializeField]
-    private SwordClone smallSwordClone;
+    private SmallSwordClone smallSwordClone;
     [SerializeField]
-    private SwordClone bigSwordClone;
+    private BigSwordClone bigSwordClone;
 
     [SerializeField]
     private TargetZone targetZone;
-    [SerializeField] 
-    BlastWave blastWave;
 
     [Header("Sword Make Setting")]
+    [SerializeField]
+    private ESwordSkill skills;
     [SerializeField]
     private float instantiateCount = 6;
     [SerializeField]
@@ -56,6 +58,8 @@ public class SwordSkills : MonoBehaviour
     private float tempWidth;
     private float tempHeight;
 
+    float t = 0;
+
     private void Awake()
     {
         clones = new();
@@ -67,12 +71,12 @@ public class SwordSkills : MonoBehaviour
         Make();
     }
 
-    float t = 0;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.B))
+        {
             Make();
-
+        }
 
         if (makeDone)
         {
@@ -108,35 +112,107 @@ public class SwordSkills : MonoBehaviour
     {
         isAttack = true;
         Vector2 targetPos = new Vector2(makePos.x, makePos.y - yPosValue - height);
+        
+        if(skills.HasFlag(ESwordSkill.BIGSWORD))
+        {
+            MakeBigClone(targetPos);
+
+            yield return new WaitForSeconds(0.4f);
+            TargetZone zone = Instantiate(targetZone, targetPos, Quaternion.identity);
+            Vector2 targetScale = new Vector2(width * 3f, height * 3f);
+            zone.Marking(warningZoneFadeTime, targetScale);
+            Destroy(zone.gameObject, warningZoneFadeTime + 0.5f);
+            
+            yield return new WaitForSeconds(1.3f);
+        }
+
+        if (skills.HasFlag(ESwordSkill.SWORDRAIN))
+        {
+
+            for (int i = 0; i < clones.Count; i++)
+            {
+                SwordClone clone = clones[i];
+                float x = UnityEngine.Random.Range(-1f, 1f);
+                float y = UnityEngine.Random.Range(-1f, 1f);
+                Vector2 _targetPos = GetElipsePos(targetPos, clone.CurAngle, tempWidth / 1.5f, tempHeight / 1.5f);
+                clone.Attack(_targetPos);
+                yield return new WaitForSeconds(0.07f);
+            }
+        }
+
+    }
+
+    private void MakeBigClone(Vector2 targetPos)
+    {
         Vector2 bigClonePos = new Vector2(makePos.x, makePos.y + 2f);
 
         SwordClone bigClone = Instantiate(bigSwordClone, bigClonePos, Quaternion.Euler(new Vector3(0, 0, 270)));
-        bigClone.Setting(warningZoneFadeTime * 2f, width * 1.5f, height * 1.5f);
+        bigClone.Setting(warningZoneFadeTime * 2f, width * 1.5f, height * 1.5f, makePos);
         bigClone.transform.DOMoveY(bigClone.transform.position.y - 1f, warningZoneFadeTime + 0.5f).SetEase(Ease.OutQuad)
             .OnComplete(() => bigClone.Attack(targetPos));
-
-        yield return new WaitForSeconds(0.4f);
-        TargetZone zone = Instantiate(targetZone, targetPos, Quaternion.identity);
-        Vector2 targetScale = new Vector2(width * 3f, height * 3f);
-        zone.Marking(warningZoneFadeTime, targetScale);
-
-        yield return new WaitForSeconds(1.3f);
-
-        for (int i = 0; i < clones.Count; i++)
-        {
-            SwordClone clone = clones[i];
-            float x = UnityEngine.Random.Range(-1f, 1f);
-            float y = UnityEngine.Random.Range(-1f, 1f);
-            Vector2 _targetPos = GetElipsePos(targetPos, clone.CurAngle, tempWidth / 1.5f, tempHeight / 1.5f);
-            clone.Attack(_targetPos);
-            yield return new WaitForSeconds(0.07f);
-        }
-
-        Destroy(zone.gameObject);
     }
 
     //angle : radian
-    private Vector2 GetElipsePos(Vector2 centerPos, float angle, float width, float height)
+
+    private void Make()
+    {
+        clones.Clear();
+        makeDone = false;
+        isAttack = false;
+
+        tempWidth = width;
+        tempHeight = height;
+
+        t = 0;
+        makePos = ownerTrm.position + new Vector3(0, 3f, 0);
+
+        StopAllCoroutines();
+        if(skills.HasFlag(ESwordSkill.SWORDRAIN) && skills.HasFlag(ESwordSkill.BIGSWORD))
+        {
+            StartCoroutine(MakeSmallClone(true));
+        }
+        else
+        {
+            if(skills.HasFlag(ESwordSkill.SWORDRAIN))
+            {
+                StartCoroutine(MakeSmallClone(false));
+            }
+            else if(skills.HasFlag(ESwordSkill.BIGSWORD))
+            {
+                StartCoroutine(Attack());
+            }
+        }
+
+    }
+
+
+    private IEnumerator MakeSmallClone(bool widthChange)
+    {
+        for (int i = 0; i < instantiateCount; i++)
+        {
+            float angle = 360 / instantiateCount * Mathf.Deg2Rad * i;
+            Vector2 dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+
+            SwordClone clone = Instantiate(smallSwordClone, GetElipsePos(makePos, angle, this.width, this.height), Quaternion.Euler(0, 0, 270));
+            clone.Setting(dissolveTime, width, height, makePos);
+
+            clones.Add(clone);
+            yield return new WaitForSeconds(delayTime);
+        }
+
+        yield return new WaitForSeconds(delayTime);
+
+        if (widthChange)
+        {
+            float targetWidth = width * 1.5f;
+            float targetHeight = height * 1.5f;
+            DOTween.To(() => tempWidth, (curWidth) => tempWidth = curWidth, targetWidth, rotateTime).SetEase(Ease.InOutQuint);
+            DOTween.To(() => tempHeight, (curHeight) => tempHeight = curHeight, targetHeight, rotateTime).SetEase(Ease.InOutQuint);
+        }
+        makeDone = true;
+    }
+
+    public Vector2 GetElipsePos(Vector2 centerPos, float angle, float width, float height)
     {
         float cx = centerPos.x;
         float cy = centerPos.y;
@@ -152,46 +228,4 @@ public class SwordSkills : MonoBehaviour
 
         return new Vector2(dx, dy);
     }
-
-    private void Make()
-    {
-        clones.Clear();
-        makeDone = false;
-        isAttack = false;
-
-        tempWidth = width;
-        tempHeight = height;
-
-        t = 0;
-        StopAllCoroutines();
-        StartCoroutine(MakeCoroutine());
-    }
-
-    private IEnumerator MakeCoroutine()
-    {
-        makePos = ownerTrm.position + new Vector3(0, 3f, 0);
-
-        for (int i = 0; i < instantiateCount; i++)
-        {
-            float angle = 360 / instantiateCount * Mathf.Deg2Rad * i;
-            Vector2 dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-
-            SwordClone clone = Instantiate(smallSwordClone, GetElipsePos(makePos, angle, this.width, this.height), Quaternion.Euler(0, 0, 270));
-            clone.Setting(dissolveTime, width, height);
-
-            clones.Add(clone);
-            yield return new WaitForSeconds(delayTime);
-        }
-
-        yield return new WaitForSeconds(delayTime);
-        float targetWidth = width * 1.5f;
-        float targetHeight = height * 1.5f;
-        DOTween.To(() => tempWidth, (curWidth) => tempWidth = curWidth, targetWidth, rotateTime).SetEase(Ease.InOutQuint);
-        DOTween.To(() => tempHeight, (curHeight) => tempHeight = curHeight, targetHeight, rotateTime).SetEase(Ease.InOutQuint);
-
-
-        makeDone = true;
-    }
-
-
 }
