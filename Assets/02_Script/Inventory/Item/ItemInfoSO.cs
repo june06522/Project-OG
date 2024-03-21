@@ -51,6 +51,8 @@ public class ItemInfoSO : ScriptableObject
             inventory.AddItem(obj.InvenObject, Vector2Int.FloorToInt(point.Value));
             obj.Setting();
             obj.transform.localPosition = (point.Value * 100) - (new Vector2(inventory.Width, inventory.Height) * 50) + new Vector2(50, 50);
+            obj.transform.localPosition += new Vector3((obj.GetComponent<RectTransform>().rect.width - 100) / 2, (obj.GetComponent<RectTransform>().rect.height - 100) / 2);
+
 
         }
     }
