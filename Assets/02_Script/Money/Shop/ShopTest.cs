@@ -8,11 +8,6 @@ public class ShopTest : MonoBehaviour, IInteractable
     [SerializeField]
     Shop _shop;
 
-    private void Start()
-    {
-        _shop = GameObject.FindAnyObjectByType<Shop>();
-    }
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.M))
