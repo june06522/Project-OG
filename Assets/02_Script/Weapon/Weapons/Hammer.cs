@@ -24,17 +24,11 @@ public class Hammer : InvenWeapon
     {
 
         isAttack = true;
-<<<<<<< Updated upstream
-        yield return new WaitForSeconds(0.2f);
-        Debug.Log(1);
-        var obj = Instantiate(effect, transform.position + transform.right * 1.5f, Quaternion.identity);
-=======
         yield return new WaitForSeconds(0.09f);
         var obj = Instantiate(effect, transform.position - transform.up * 1.5f, Quaternion.identity);
->>>>>>> Stashed changes
         obj.Attack(Data.AttackDamage.GetValue());
         yield return new WaitForSeconds(0.21f);
-        isAttack = false;
+        isAttack = false;   
 
     }
 
