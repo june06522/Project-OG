@@ -34,7 +34,7 @@ public class SwordTargetDetector : MonoBehaviour
         if(canCheckTarget == false || targetTrm == null)
             return;
 
-        if(collision.transform == targetTrm)
+        if (collision.transform == targetTrm)
         {
             detectPoint = transform.position;
             IsDetect = true;

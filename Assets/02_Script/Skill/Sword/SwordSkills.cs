@@ -19,6 +19,8 @@ public class SwordSkills : MonoBehaviour
 
     [SerializeField]
     private TargetZone targetZone;
+    [SerializeField] 
+    BlastWave blastWave;
 
     [Header("Sword Make Setting")]
     [SerializeField]
@@ -57,7 +59,8 @@ public class SwordSkills : MonoBehaviour
     private void Awake()
     {
         clones = new();
-        ownerTrm = GameManager.Instance.player.transform;
+        //ownerTrm = GameManager.Instance.player.transform;
+        ownerTrm = GameObject.Find("Player").transform;
 #if UNITY_EDITOR
         Debug.Log("Running");
 #endif
@@ -67,6 +70,9 @@ public class SwordSkills : MonoBehaviour
     float t = 0;
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.B))
+            Make();
+
 
         if (makeDone)
         {
