@@ -71,8 +71,9 @@ public class WeaponBrick : InvenBrick
 
     private string[] GetOnSkillList()
     {
-        List<string> list = InventoryWeaponInfo.Instance.GetConnect(InvenObject.originPos.x, InvenObject.originPos.y);
+        //List<string> list = InventoryWeaponInfo.Instance.GetConnect(InvenObject.originPos.x, InvenObject.originPos.y);
 
-        return list.ToArray();
+        //return list.ToArray();
+        return null;
     }
 }
