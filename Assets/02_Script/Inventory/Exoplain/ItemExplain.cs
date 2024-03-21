@@ -10,6 +10,7 @@ public class ItemExplain : MonoBehaviour
     [SerializeField] WeaponExplain weaponExplain;
     [SerializeField] GeneratorExplain generatorExplain;
 
+    private InventoryActive inventoryActive;
     public bool isDrag = false;
 
     private void Awake()
@@ -20,6 +21,9 @@ public class ItemExplain : MonoBehaviour
         {
             Debug.LogError($"{transform}: Item Explain is multiply running!");
         }
+
+
+        inventoryActive = FindObjectOfType<InventoryActive>();
     }
 
     private void Update()
@@ -30,6 +34,11 @@ public class ItemExplain : MonoBehaviour
 
         pos.y += (GameManager.Instance.player.transform.position.y - pos.y < 0) ? -2.8f : 2.8f;
         transform.position = pos;
+
+        if (!inventoryActive.IsOn)
+        {
+            HoverEnd();
+        }
     }
 
     public void HoverWeapon (Sprite image, string name, float power, string explain, string[] skillList)

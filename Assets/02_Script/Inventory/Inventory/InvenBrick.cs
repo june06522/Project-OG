@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public enum ItemType
 {
@@ -59,6 +60,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             rectTransform.position = new Vector3(rectTransform.position.x, rectTransform.position.y, 0);
         }
 
+
     }
 
     public virtual void OnPointerUp(PointerEventData eventData)
@@ -113,12 +115,14 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
-        StopAllCoroutines();
+        StopCoroutine("CheckMouse");
         ItemExplain.Instance.HoverEnd();
+
 
         prevPos = transform.localPosition;
 
         isDrag = true;
+        StartCoroutine("IDoShake");
         ItemExplain.Instance.isDrag = true;
         inventory.RemoveItem(InvenObject, InvenObject.originPos);
 
@@ -126,12 +130,13 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        StartCoroutine(CheckMouse());
+        StartCoroutine("CheckMouse");
+
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        StopAllCoroutines();
+        StopCoroutine("CheckMouse");
         ItemExplain.Instance.HoverEnd();
     }
 
@@ -144,7 +149,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         while (true)
         {
             bool isOpen = false;
-            Vector2Int invenPos = new Vector2Int(-1,-1);
+            Vector2Int invenPos = new Vector2Int(-1, -1);
             Vector2 pos = rectTransform.position;
             pos -= new Vector2(x * len / 2, y * len / 2);
             Vector2 curPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -174,6 +179,25 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             yield return null;
         }
 
+    }
+
+    IEnumerator IDoShake()
+    {
+        float rotation = 4f;
+        float rotationTime = 0.08f;
+        WaitForSeconds wfs = new WaitForSeconds(rotationTime);
+
+        transform.DOScale(new Vector2(0.85f, 0.85f), 0.1f);
+        while (isDrag)
+        {
+            transform.DORotate(new Vector3(0, 0, rotation), rotationTime);
+            yield return wfs;
+            transform.DORotate(new Vector3(0, 0, -rotation), rotationTime);
+            yield return wfs;
+        }
+        transform.DORotate(new Vector3(0, 0, 0f), 0.01f);
+        transform.DOScale(new Vector3(1, 1, 1), 0.01f);
+        yield return null;
     }
 
     public virtual void ShowExplain()
