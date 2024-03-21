@@ -105,13 +105,13 @@ public class SwordSkills : MonoBehaviour
         Vector2 bigClonePos = new Vector2(makePos.x, makePos.y + 2f);
 
         SwordClone bigClone = Instantiate(bigSwordClone, bigClonePos, Quaternion.Euler(new Vector3(0, 0, 270)));
-        bigClone.Setting(warningZoneFadeTime * 2f);
+        bigClone.Setting(warningZoneFadeTime * 2f, width * 1.5f, height * 1.5f);
         bigClone.transform.DOMoveY(bigClone.transform.position.y - 1f, warningZoneFadeTime + 0.5f).SetEase(Ease.OutQuad)
             .OnComplete(() => bigClone.Attack(targetPos));
 
         yield return new WaitForSeconds(0.4f);
         TargetZone zone = Instantiate(targetZone, targetPos, Quaternion.identity);
-        Vector2 targetScale = new Vector2(tempWidth * 2.5f, tempHeight * 2.5f);
+        Vector2 targetScale = new Vector2(width * 3f, height * 3f);
         zone.Marking(warningZoneFadeTime, targetScale);
 
         yield return new WaitForSeconds(1.3f);
@@ -171,7 +171,7 @@ public class SwordSkills : MonoBehaviour
             Vector2 dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
 
             SwordClone clone = Instantiate(smallSwordClone, GetElipsePos(makePos, angle, this.width, this.height), Quaternion.Euler(0, 0, 270));
-            clone.Setting(dissolveTime);
+            clone.Setting(dissolveTime, width, height);
 
             clones.Add(clone);
             yield return new WaitForSeconds(delayTime);
