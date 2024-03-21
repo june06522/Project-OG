@@ -13,9 +13,16 @@ public class Sickle : InvenWeapon
 
     public override void GetSignal(object signal)
     {
-
         var data = (SendData)signal;
-        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
+
+        if (sendDatas == null)
+        {
+            sendDatas = data;
+        }
+        else
+        {
+            sendDatas = sendDatas.Power > data.Power ? sendDatas : data;
+        }
 
     }
 
