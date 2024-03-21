@@ -21,19 +21,19 @@ public class ShockWaveEffect : MonoBehaviour
     public void Play(Vector2 pos)
     {
         transform.position = pos;
-        //if (_shockTween != null && _shockTween.IsActive())
-        //{
-        //    _shockTween.Kill();
-        //}
+        if (_shockTween != null && _shockTween.IsActive())
+        {
+            _shockTween.Kill();
+        }
 
-        //_spriteRenderer.gameObject.SetActive(true);
-        //_material.SetFloat(_hashWaveDistance, -0.1f);
+        _spriteRenderer.gameObject.SetActive(true);
+        _material.SetFloat(_hashWaveDistance, -0.1f);
 
-        //_shockTween = DOTween.To(
-        //    () => _material.GetFloat(_hashWaveDistance),
-        //    value => _material.SetFloat(_hashWaveDistance, value),
-        //    1f, 0.6f)
-        //    .OnComplete(() => _spriteRenderer.gameObject.SetActive(false));
+        _shockTween = DOTween.To(
+            () => _material.GetFloat(_hashWaveDistance),
+            value => _material.SetFloat(_hashWaveDistance, value),
+            1f, 0.6f)
+            .OnComplete(() => _spriteRenderer.gameObject.SetActive(false));
 
     }
 }

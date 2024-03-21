@@ -23,7 +23,7 @@ public class BigSwordClone : SwordClone
     public override void AttackEndEvt()
     {
         Instantiate(blastWave, TargetPos, Quaternion.identity).Play();
-        //shockWaveEffect.Play(TargetPos);
+        shockWaveEffect.Play(TargetPos);
         base.AttackEndEvt();
     }
 
