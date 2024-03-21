@@ -18,35 +18,30 @@ public class SlateBoss : Boss
 
     private BossFSM _bossFSM;
 
-    private GameObject[] _restraints = new GameObject[2];
+    private GameObject[] g_restraints = new GameObject[2];
 
-    private GameObject[,] _chains = new GameObject[2, 10];
+    private GameObject[,] g_chains = new GameObject[2, 10];
 
-    private int _restraintIndex = 0;
-    private int _restrainCount = 0;
-    private int _chainCount = 0;
-    private int _shortenChainIndex = 0;
+    private int i_restraintIndex = 0;
+    private int i_restrainCount = 0;
+    private int i_chainCount = 0;
+    private int i_shortenChainIndex = 0;
 
     [SerializeField]
-    private float _restraintDistance;
+    private float f_restraintDistance;
     [SerializeField]
-    private float _unChainTime;
-    private float _currentTime = 0;
-    private float _shakeInterval;
-
-    private bool _isShaked = false;
+    private float f_unChainTime;
+    private float f_currentTime = 0;
 
     void Start()
     {
-        _currentTime = 0;
-        _restraintIndex = 0;
-        _restrainCount = _restraints.Length;
-        _chainCount = _chains.GetLength(1);
-        _shortenChainIndex = 0;
-        _shakeInterval = _unChainTime / 2;
-        _isShaked = false;
-        originPos = Vector2.zero;
-        isTied = true;
+        f_currentTime = 0;
+        i_restraintIndex = 0;
+        i_restrainCount = g_restraints.Length;
+        i_chainCount = g_chains.GetLength(1);
+        i_shortenChainIndex = 0;
+        V_originPos = Vector2.zero;
+        B_isTied = true;
 
         ChainSetting();
 
@@ -66,13 +61,13 @@ public class SlateBoss : Boss
     protected override void Update()
     {
         base.Update();
-        if(!wasDead)
+        if(!B_wasDead)
         {
             ChangeState();
 
-            if (_restraintIndex < _restrainCount)
+            if (i_restraintIndex < i_restrainCount)
             {
-                TimeChecker(Time.deltaTime * (_restraintIndex + 1));
+                TimeChecker(Time.deltaTime * (i_restraintIndex + 1));
             }
 
             ChainsFollowBoss();
@@ -83,56 +78,56 @@ public class SlateBoss : Boss
 
     private void ChainSetting()
     {
-        for (int i = 0; i < _restrainCount; i++)
+        for (int i = 0; i < i_restrainCount; i++)
         {
-            _restraints[i] = ObjectPool.Instance.GetObject(ObjectPoolType.PrisonerRestraint);
-            var rad = Mathf.Deg2Rad * i * 360 / _restrainCount;
-            var x = _restraintDistance * Mathf.Cos(rad);
-            var y = _restraintDistance * Mathf.Sin(rad);
-            _restraints[i].transform.position = transform.GetChild(i).position + new Vector3(x, y, 0);
-            _restraints[i].transform.rotation = Quaternion.identity;
-            for (int j = 0; j < _chainCount; j++)
+            g_restraints[i] = ObjectPool.Instance.GetObject(ObjectPoolType.PrisonerRestraint);
+            var rad = Mathf.Deg2Rad * i * 360 / i_restrainCount;
+            var x = f_restraintDistance * Mathf.Cos(rad);
+            var y = f_restraintDistance * Mathf.Sin(rad);
+            g_restraints[i].transform.position = transform.GetChild(i).position + new Vector3(x, y, 0);
+            g_restraints[i].transform.rotation = Quaternion.identity;
+            for (int j = 0; j < i_chainCount; j++)
             {
-                var xx = j * _restraintDistance / _chainCount * Mathf.Cos(rad);
-                var yy = j * _restraintDistance / _chainCount * Mathf.Sin(rad);
-                _chains[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.PrisonerChain, _restraints[i].transform.GetChild(0).transform);
-                _chains[i, j].transform.position = transform.GetChild(i).position + new Vector3(xx, yy, 0);
-                _chains[i, j].transform.rotation = Quaternion.identity;
+                var xx = j * f_restraintDistance / i_chainCount * Mathf.Cos(rad);
+                var yy = j * f_restraintDistance / i_chainCount * Mathf.Sin(rad);
+                g_chains[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.PrisonerChain, g_restraints[i].transform.GetChild(0).transform);
+                g_chains[i, j].transform.position = transform.GetChild(i).position + new Vector3(xx, yy, 0);
+                g_chains[i, j].transform.rotation = Quaternion.identity;
             }
         }
     }
 
     private void ChainsFollowBoss()
     {
-        for (int i = 0; i < _restrainCount; i++)
+        for (int i = 0; i < i_restrainCount; i++)
         {
-            float angle = Mathf.Atan2(transform.position.y - _restraints[i].transform.position.y, transform.position.x - _restraints[i].transform.position.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(transform.position.y - g_restraints[i].transform.position.y, transform.position.x - g_restraints[i].transform.position.x) * Mathf.Rad2Deg;
 
-            _restraints[i].transform.GetChild(0).rotation = Quaternion.AngleAxis(angle + 180 - i * 180, Vector3.forward);
+            g_restraints[i].transform.GetChild(0).rotation = Quaternion.AngleAxis(angle + 180 - i * 180, Vector3.forward);
         }
     }
 
     private IEnumerator ShortenChain()
     {
-        while(_restraintIndex < 2)
+        while(i_restraintIndex < 2)
         {
-            if (_restraintIndex > 0)
+            if (i_restraintIndex > 0)
             {
-                if (Vector3.Distance(transform.position, _chains[_restraintIndex, _shortenChainIndex].transform.position) < 0.5f)
+                if (Vector3.Distance(transform.position, g_chains[i_restraintIndex, i_shortenChainIndex].transform.position) < 0.5f)
                 {
-                    if (_shortenChainIndex < _chainCount - 1)
+                    if (i_shortenChainIndex < i_chainCount - 1)
                     {
-                        _chains[_restraintIndex, _shortenChainIndex].gameObject.SetActive(false);
-                        _shortenChainIndex++;
+                        g_chains[i_restraintIndex, i_shortenChainIndex].gameObject.SetActive(false);
+                        i_shortenChainIndex++;
                     }
                     yield return null;
                 }
-                else if (Vector3.Distance(transform.position, _chains[_restraintIndex, _shortenChainIndex].transform.position) > 0.5f)
+                else if (Vector3.Distance(transform.position, g_chains[i_restraintIndex, i_shortenChainIndex].transform.position) > 0.5f)
                 {
-                    if (_shortenChainIndex > 0)
+                    if (i_shortenChainIndex > 0)
                     {
-                        _chains[_restraintIndex, _shortenChainIndex].gameObject.SetActive(true);
-                        _shortenChainIndex--;
+                        g_chains[i_restraintIndex, i_shortenChainIndex].gameObject.SetActive(true);
+                        i_shortenChainIndex--;
                     }
                     yield return null;
                 }
@@ -145,34 +140,31 @@ public class SlateBoss : Boss
 
     private void ChangeState()
     {
-        if(dead && !wasDead)
+        if(B_dead && !B_wasDead)
         {
-            if(_restraintIndex < 2)
+            if(i_restraintIndex < 2)
                 ReturnRestraintAndChains();
             StartCoroutine(CameraManager.Instance.CameraShake(0, 0));
-            wasDead = true;
-            isTied = false;
-            isOneBroken = false;
+            B_wasDead = true;
+            B_isTied = false;
+            B_isOneBroken = false;
             ChangeBossState(BossState.Dead);
         }
         else
         {
-            if (!isRunning)
+            if (!B_isRunning)
             {
                 switch (_curBossState)
                 {
                     case BossState.Tied:
-                        if (_restraintIndex > 0)
+                        if (i_restraintIndex > 0)
                         {
-                            isTied = false;
-                            isOneBroken = true;
                             ChangeBossState(BossState.OneBroken);
                         }
                         break;
                     case BossState.OneBroken:
-                        if (_restraintIndex > 1)
+                        if (i_restraintIndex > 1)
                         {
-                            isOneBroken = false;
                             ChangeBossState(BossState.Free);
                         }
                         break;
@@ -207,85 +199,83 @@ public class SlateBoss : Boss
 
     private void TimeChecker(float time)
     {
-        if (_currentTime <= 0)
-            _currentTime = 0;
+        if (f_currentTime <= 0)
+            f_currentTime = 0;
 
-        if (_currentTime >= _shakeInterval && !_isShaked)
+        if (f_currentTime >= f_unChainTime - 0.5f && f_currentTime < f_unChainTime)
         {
-            StartCoroutine(CameraManager.Instance.CameraShake(3, 1));
-            _isShaked = true;
+            B_isTied = false;
+            B_isOneBroken = false;
         }
 
-
-        if (_currentTime <= _unChainTime)
-            _currentTime += time;
+        if (f_currentTime <= f_unChainTime)
+            f_currentTime += time;
         else
         {
             StartCoroutine(CameraManager.Instance.CameraShake(3, 0.5f));
             StartCoroutine(UnChain(3));
-            _currentTime = 0;
+            f_currentTime = 0;
         }
     }
 
     private IEnumerator UnChain(float speed)
     {
-        for (int i = 0; i < _chainCount; i++)
+        for (int i = 0; i < i_chainCount; i++)
         {
-            GameObject chainFragment = ObjectPool.Instance.GetObject(ObjectPoolType.ChainFragment, chainCollector.transform);
+            GameObject chainFragment = ObjectPool.Instance.GetObject(ObjectPoolType.ChainFragment, G_chainCollector.transform);
             chainFragment.GetComponent<BossBullet>().Attack(bossSo.Damage);
-            chainFragment.transform.position = _chains[_restraintIndex, i].transform.position;
+            chainFragment.transform.position = g_chains[i_restraintIndex, i].transform.position;
             chainFragment.transform.rotation = Quaternion.identity;
 
             Rigidbody2D rigid = chainFragment.GetComponent<Rigidbody2D>();
             Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * UnityEngine.Random.Range(0, 361) / 360), Mathf.Sin(Mathf.PI * 2 * UnityEngine.Random.Range(0, 361) / 360));
             rigid.velocity = dir.normalized * speed;
         }
-        for(int i = 0; i < _chainCount; i++)
+        for(int i = 0; i < i_chainCount; i++)
         {
-            GameObject split = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, chainCollector.transform);
+            GameObject split = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, G_chainCollector.transform);
             split.GetComponent<BossBullet>().Attack(bossSo.Damage);
-            split.transform.position = _restraints[_restraintIndex].transform.position;
+            split.transform.position = g_restraints[i_restraintIndex].transform.position;
             split.transform.rotation = Quaternion.identity;
 
             Rigidbody2D rigid = split.GetComponent<Rigidbody2D>();
-            Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / _chainCount), Mathf.Sin(Mathf.PI * 2 * i / _chainCount));
+            Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / i_chainCount), Mathf.Sin(Mathf.PI * 2 * i / i_chainCount));
             rigid.velocity = dir.normalized * speed;
         }
 
-        ObjectPool.Instance.ReturnObject(ObjectPoolType.PrisonerRestraint, _restraints[_restraintIndex]);
-        for (int i = 0; i < _chainCount; i++)
+        ObjectPool.Instance.ReturnObject(ObjectPoolType.PrisonerRestraint, g_restraints[i_restraintIndex]);
+        for (int i = 0; i < i_chainCount; i++)
         {
-            ObjectPool.Instance.ReturnObject(ObjectPoolType.PrisonerChain, _chains[_restraintIndex, i]);
+            ObjectPool.Instance.ReturnObject(ObjectPoolType.PrisonerChain, g_chains[i_restraintIndex, i]);
         }
 
-        _restraintIndex++;
-        if(_restraintIndex == 1)
+        i_restraintIndex++;
+        if(i_restraintIndex == 1)
         {
-            originPos = _restraints[_restraintIndex].transform.position;
+            V_originPos = g_restraints[i_restraintIndex].transform.position;
         }
-        _isShaked = false;
 
         yield return null;
     }
 
     private void ReturnRestraintAndChains()
     {
-        if(_restraintIndex > 0)
+        if(i_restraintIndex > 0)
         {
-            ObjectPool.Instance.ReturnObject(ObjectPoolType.PrisonerRestraint, _restraints[_restraintIndex]);
-            for (int j = 0; j < _chainCount; j++)
+            ObjectPool.Instance.ReturnObject(ObjectPoolType.PrisonerRestraint, g_restraints[i_restraintIndex]);
+            for (int j = 0; j < i_chainCount; j++)
             {
-                ObjectPool.Instance.ReturnObject(ObjectPoolType.PrisonerChain, _chains[_restraintIndex, j]);
+                ObjectPool.Instance.ReturnObject(ObjectPoolType.PrisonerChain, g_chains[i_restraintIndex, j]);
             }
         }
         else
         {
-            for (int i = 0; i < _restrainCount; i++)
+            for (int i = 0; i < i_restrainCount; i++)
             {
-                ObjectPool.Instance.ReturnObject(ObjectPoolType.PrisonerRestraint, _restraints[i]);
-                for (int j = 0; j < _chainCount; j++)
+                ObjectPool.Instance.ReturnObject(ObjectPoolType.PrisonerRestraint, g_restraints[i]);
+                for (int j = 0; j < i_chainCount; j++)
                 {
-                    ObjectPool.Instance.ReturnObject(ObjectPoolType.PrisonerChain, _chains[i, j]);
+                    ObjectPool.Instance.ReturnObject(ObjectPoolType.PrisonerChain, g_chains[i, j]);
                 }
             }
         }

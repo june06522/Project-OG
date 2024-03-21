@@ -18,6 +18,16 @@ public class BouncingBulletTest : BossBullet
         _rigid = GetComponent<Rigidbody2D>();
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+    }
+
     private void Update()
     {
         

@@ -6,7 +6,7 @@ public class BossBullet : MonoBehaviour
 {
     [SerializeField] protected BossBulletDataSO data;
 
-    private float _currentDamage = 0;
+    private float f_currentDamage = 0;
 
     protected virtual void OnEnable()
     {
@@ -20,7 +20,7 @@ public class BossBullet : MonoBehaviour
 
     public void Attack(float bossDamage)
     {
-        _currentDamage = bossDamage + data.Damage;
+        f_currentDamage = bossDamage + data.Damage;
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
@@ -31,8 +31,8 @@ public class BossBullet : MonoBehaviour
             {
                 if (collision.TryGetComponent<IHitAble>(out var hitAble))
                 {
-                    hitAble.Hit(_currentDamage);
-                    Debug.Log($"{_currentDamage} 데미지 입힘");
+                    hitAble.Hit(f_currentDamage);
+                    Debug.Log($"{f_currentDamage} 데미지 입힘");
                     if (data.IfHitWillBreak)
                         ObjectPool.Instance.ReturnObject(gameObject);
                 }

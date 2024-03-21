@@ -5,47 +5,51 @@ using DG.Tweening;
 
 public class POneBrokenState : BossBaseState
 {
-    private float _maxMoveDistance;
-    private float _speed;
+    private float f_maxMoveDistance;
+    private float f_speed;
 
     public POneBrokenState(Boss boss) : base(boss)
     {
-        _maxMoveDistance = 5;
-        _speed = 2;
+        f_maxMoveDistance = 5;
+        f_speed = 2;
     }
 
     public override void OnBossStateExit()
     {
-        _boss.StopCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
-        StopThisCoroutine();
+
     }
 
     public override void OnBossStateOn()
     {
-        _boss.isStop = false;
-        _boss.ReturnAll(true);
+        _boss.B_isStop = false;
+        _boss.B_isOneBroken = true;
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime * 2));
         _boss.StartCoroutine(OneBrokenMove());
     }
 
     public override void OnBossStateUpdate()
     {
-        if (_boss.blocked)
+        if(!_boss.B_isOneBroken)
         {
-            _boss.blocked = false;
+            _boss.StopCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
+            StopThisCoroutine();
+        }
+        if (_boss.B_blocked)
+        {
+            _boss.B_blocked = false;
         }
     }
 
     public IEnumerator RandomPattern(float waitTime)
     {
-        if (!_boss.isOneBroken)
+        if (!_boss.B_isOneBroken)
             yield break;
 
         yield return new WaitForSeconds(waitTime);
 
         int rand = Random.Range(1, 5);
 
-        _boss.isRunning = true;
+        _boss.B_isRunning = true;
 
         switch (rand)
         {
@@ -54,8 +58,8 @@ public class POneBrokenState : BossBaseState
                 break;
             case 2:
                 _boss.StopImmediately(_boss.transform);
-                _boss.isStop = true;
-                NowCoroutine(SoundAttack(4, 1));
+                _boss.B_isStop = true;
+                NowCoroutine(SoundAttack(6, 1));
                 break;
             case 3:
                 NowCoroutine(OmniGuidPlayerAttack(20, 5, 1, 1));
@@ -68,21 +72,21 @@ public class POneBrokenState : BossBaseState
 
     private IEnumerator OneBrokenMove()
     {
-        while(_boss.isOneBroken)
+        while(_boss.B_isOneBroken)
         {
-            if(!_boss.isStop)
+            if(!_boss.B_isStop)
             {
-                if (Vector3.Distance(_boss.transform.position, _boss.originPos) < _maxMoveDistance)
+                if (Vector3.Distance(_boss.transform.position, _boss.V_originPos) < f_maxMoveDistance)
                 {
-                    Vector3 dir = (_boss.player.transform.position - _boss.transform.position).normalized;
+                    Vector3 dir = (_boss.G_player.transform.position - _boss.transform.position).normalized;
 
-                    _boss.transform.position = Vector2.MoveTowards(_boss.transform.position, _boss.transform.position + dir * _maxMoveDistance, Time.deltaTime * _speed);
+                    _boss.transform.position = Vector2.MoveTowards(_boss.transform.position, _boss.transform.position + dir * f_maxMoveDistance, Time.deltaTime * f_speed);
                 }
                 else
                 {
-                    Vector3 dir = (_boss.originPos - _boss.transform.position).normalized;
+                    Vector3 dir = (_boss.V_originPos - _boss.transform.position).normalized;
 
-                    _boss.transform.position = Vector2.MoveTowards(_boss.transform.position, _boss.transform.position + dir, Time.deltaTime * _speed);
+                    _boss.transform.position = Vector2.MoveTowards(_boss.transform.position, _boss.transform.position + dir, Time.deltaTime * f_speed);
                 }
             }
 
@@ -107,7 +111,7 @@ public class POneBrokenState : BossBaseState
     // 전방향으로 공격한다 - 플레이어가 근접하기 좋은 패턴
     private IEnumerator OmnidirAttack(int bulletCount, float speed, float time, int burstCount)
     {
-        if (!_boss.isOneBroken)
+        if (!_boss.B_isOneBroken)
             yield break;
 
         Vector3 originSize = _boss.transform.localScale;
@@ -124,7 +128,7 @@ public class POneBrokenState : BossBaseState
         {
             for (int j = 0; j < bulletCount; j++)
             {
-                GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _boss.bulletCollector.transform);
+                GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _boss.G_bulletCollector.transform);
                 bullet.GetComponent<BossBullet>().Attack(_boss.bossSo.Damage);
                 bullet.transform.position = _boss.transform.position;
                 bullet.transform.rotation = Quaternion.identity;
@@ -139,7 +143,7 @@ public class POneBrokenState : BossBaseState
 
         yield return new WaitForSeconds(time);
 
-        _boss.isRunning = false;
+        _boss.B_isRunning = false;
 
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
     }
@@ -147,7 +151,7 @@ public class POneBrokenState : BossBaseState
     // 전방향으로 탄막을 날리고 잠시 뒤 탄막들이 플레이어 방향으로 날아간다 - 플레이어가 근접하기 좋은 패턴
     private IEnumerator OmniGuidPlayerAttack(int bulletCount, float speed, float time, int burstCount)
     {
-        if (!_boss.isOneBroken)
+        if (!_boss.B_isOneBroken)
             yield break;
 
         Vector3 originSize = _boss.transform.localScale;
@@ -167,7 +171,7 @@ public class POneBrokenState : BossBaseState
 
             for (int j = 0; j < bulletCount; j++)
             {
-                bullets[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _boss.bulletCollector.transform);
+                bullets[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _boss.G_bulletCollector.transform);
                 bullets[i, j].GetComponent<BossBullet>().Attack(_boss.bossSo.Damage);
                 bullets[i, j].transform.position = _boss.transform.position;
                 bullets[i, j].transform.rotation = Quaternion.identity;
@@ -191,7 +195,7 @@ public class POneBrokenState : BossBaseState
 
             yield return new WaitForSeconds(Time.deltaTime);
 
-            Vector3 nextDir = _boss.player.transform.position;
+            Vector3 nextDir = _boss.G_player.transform.position;
 
             for (int j = 0; j < bulletCount; j++)
             {
@@ -203,7 +207,7 @@ public class POneBrokenState : BossBaseState
 
         yield return new WaitForSeconds(time);
 
-        _boss.isRunning = false;
+        _boss.B_isRunning = false;
 
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
     }
@@ -211,7 +215,7 @@ public class POneBrokenState : BossBaseState
     // 플레이어 방향으로 에너지 볼을 던진다 - 플레이어가 근접하기 좋은 패턴
     private IEnumerator ThrowEnergyBall(int burstCount, float speed, float waitTime, float returnTime)
     {
-        if (!_boss.isOneBroken)
+        if (!_boss.B_isOneBroken)
             yield break;
 
         Vector3 originSize = _boss.transform.localScale;
@@ -226,20 +230,20 @@ public class POneBrokenState : BossBaseState
                 .SetEase(Ease.OutQuad);
             });
 
-            GameObject energyBall = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _boss.bulletCollector.transform);
+            GameObject energyBall = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _boss.G_bulletCollector.transform);
             energyBall.GetComponent<BossBullet>().Attack(_boss.bossSo.Damage);
             energyBall.transform.localScale *= 2;
             energyBall.transform.position = new Vector3(_boss.transform.position.x, _boss.transform.position.y + 0.5f, _boss.transform.position.z);
             energyBall.transform.rotation = Quaternion.identity;
 
             Rigidbody2D rigid = energyBall.GetComponent<Rigidbody2D>();
-            Vector2 dir = _boss.player.transform.position - energyBall.transform.position;
+            Vector2 dir = _boss.G_player.transform.position - energyBall.transform.position;
             rigid.velocity = dir.normalized * speed;
 
             yield return new WaitForSeconds(waitTime);
         }
 
-        _boss.isRunning = false;
+        _boss.B_isRunning = false;
 
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
     }
@@ -247,10 +251,10 @@ public class POneBrokenState : BossBaseState
     // 범위안에 플레이어가 있으면 피해를 준다 - 플레이어가 멀어져야 좋은 패턴
     private IEnumerator SoundAttack(int radius, float waitTime)
     {
-        if (!_boss.isOneBroken)
+        if (!_boss.B_isOneBroken)
             yield break;
 
-        GameObject warning = ObjectPool.Instance.GetObject(ObjectPoolType.WarningType1, _boss.bulletCollector.transform);
+        GameObject warning = ObjectPool.Instance.GetObject(ObjectPoolType.WarningType1, _boss.G_bulletCollector.transform);
         warning.transform.localScale = warning.transform.localScale * radius * 2;
         warning.transform.position = _boss.transform.position;
         warning.transform.rotation = Quaternion.identity;
@@ -274,8 +278,8 @@ public class POneBrokenState : BossBaseState
 
         yield return new WaitForSeconds(0.5f);
 
-        _boss.isStop = false;
-        _boss.isRunning = false;
+        _boss.B_isStop = false;
+        _boss.B_isRunning = false;
 
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
     }

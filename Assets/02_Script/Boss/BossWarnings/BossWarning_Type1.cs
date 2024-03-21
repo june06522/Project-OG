@@ -2,21 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossWarning_Type1 : MonoBehaviour
+public class BossWarning_Type1 : BossWarning
 {
     private SpriteRenderer _sprite;
     private bool minous = true;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+
         minous = true;
         _sprite = GetComponent<SpriteRenderer>();
         _sprite.color = new Color(1, 0, 0, 0.5f);
         StartCoroutine(Blinking());
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
+
         StopAllCoroutines();
     }
 

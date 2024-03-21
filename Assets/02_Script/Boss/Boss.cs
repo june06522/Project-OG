@@ -6,53 +6,53 @@ using UnityEngine.UI;
 
 public class Boss : MonoBehaviour, IHitAble
 {
-    public Material MyMat { get => _mat; set => _mat = value; }
+    public Material MyMat { get => m_mat; set => m_mat = value; }
 
-    public List<Material> mats;
+    public List<Material> L_mats;
 
-    public GameObject player;
-    public GameObject bulletCollector;
-    public GameObject chainCollector;
+    public GameObject G_player;
+    public GameObject G_bulletCollector;
+    public GameObject G_chainCollector;
 
     public Slider bossHpSlider;
 
-    public bool isStop;
-    public bool dead;
-    public bool wasDead;
-    public bool blocked;
-    public bool isTied;
-    public bool isRunning;
-    public bool isOneBroken;
-    public bool awakening;
+    public bool B_isStop;
+    public bool B_dead;
+    public bool B_wasDead;
+    public bool B_blocked;
+    public bool B_isTied;
+    public bool B_isRunning;
+    public bool B_isOneBroken;
+    public bool B_awakening;
 
-    public float currentHp;
+    public float F_currentHp;
 
     public BossDataSO bossSo;
 
     public FeedbackPlayer feedbackPlayer { get; set; }
 
-    public Vector3 originPos;
+    public Vector3 V_originPos;
 
     public event Action DeadEvt;
 
-    private Vector2 _beforeVec;
-    private Material _mat;
+    private Vector2 v_beforeVec;
+    private Material m_mat;
 
     private void Awake()
     {
-        _mat = transform.GetComponent<SpriteRenderer>().material;
+        m_mat = transform.GetComponent<SpriteRenderer>().material;
         feedbackPlayer = GetComponent<FeedbackPlayer>();
-        isStop = false;
-        dead = false;
-        currentHp = bossSo.MaxHP;
+        B_isStop = false;
+        B_dead = false;
+        F_currentHp = bossSo.MaxHP;
         DeadEvt += DieEvent;
-        bossHpSlider.value = currentHp / bossSo.MaxHP;
+        bossHpSlider.value = F_currentHp / bossSo.MaxHP;
     }
 
     protected virtual void Update()
     {
-        transform.GetComponent<SpriteRenderer>().material = _mat;
-        bossHpSlider.value = currentHp / bossSo.MaxHP;
+        transform.GetComponent<SpriteRenderer>().material = m_mat;
+        bossHpSlider.value = F_currentHp / bossSo.MaxHP;
     }
 
     public void StopImmediately(Transform trans)
@@ -65,14 +65,14 @@ public class Boss : MonoBehaviour, IHitAble
         float critical = UnityEngine.Random.Range(0.25f, 1.75f);
         damage += critical;
 
-        if (dead)
+        if (B_dead)
             return;
 
-        currentHp -= damage;
+        F_currentHp -= damage;
         feedbackPlayer.Play(damage);
         //Debug.Log(currentHp + "," + damage);
         
-        if(currentHp < 0)
+        if(F_currentHp < 0)
         {
             DeadEvt?.Invoke();
 
@@ -82,7 +82,7 @@ public class Boss : MonoBehaviour, IHitAble
 
     private void DieEvent()
     {
-        dead = true;
+        B_dead = true;
         bossHpSlider.value = 0;
     }
 
@@ -92,22 +92,22 @@ public class Boss : MonoBehaviour, IHitAble
         GameObject[] objs;
         if (isInBulletCollector)
         {
-            childCount = bulletCollector.transform.childCount;
+            childCount = G_bulletCollector.transform.childCount;
             objs = new GameObject[childCount];
 
             for (int i = 0; i < childCount; i++)
             {
-                objs[i] = bulletCollector.transform.GetChild(i).gameObject;
+                objs[i] = G_bulletCollector.transform.GetChild(i).gameObject;
             }
         }
         else
         {
-            childCount = chainCollector.transform.childCount;
+            childCount = G_chainCollector.transform.childCount;
             objs = new GameObject[childCount];
 
             for (int i = 0; i < childCount; i++)
             {
-                objs[i] = chainCollector.transform.GetChild(i).gameObject;
+                objs[i] = G_chainCollector.transform.GetChild(i).gameObject;
             }
         }
         
@@ -135,7 +135,7 @@ public class Boss : MonoBehaviour, IHitAble
 
             transform.position = Vector2.MoveTowards(transform.position, -dir * 2, Time.deltaTime);
             StopImmediately(transform);
-            blocked = true;
+            B_blocked = true;
         }
     }
 }

@@ -29,11 +29,11 @@ public class CutScene : MonoBehaviour
 
     void Update()
     {
-        if(_thisBoss.awakening)
+        if(_thisBoss.B_awakening)
         {
             StartCoroutine(RealTimer());
             StartCoroutine(CutSceneOn(3, 1, 0.5f, 400, 50));
-            _thisBoss.awakening = false;
+            _thisBoss.B_awakening = false;
         }
     }
 

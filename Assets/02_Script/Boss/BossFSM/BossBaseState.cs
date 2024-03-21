@@ -28,12 +28,13 @@ public abstract class BossBaseState
 
     public void StopThisCoroutine()
     {
+        _boss.B_isRunning = false;
         if(co != null)
             _boss.StopCoroutine(co);
     }
 
     public void ChangeMat(int index = 0)
     {
-        _boss.MyMat = _boss.mats[index];
+        _boss.MyMat = _boss.L_mats[index];
     }
 }
