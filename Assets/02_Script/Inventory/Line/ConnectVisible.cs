@@ -130,10 +130,6 @@ public class ConnectVisible : MonoBehaviour
                 if (!isConnect) return;
                 #endregion
 
-                
-
-                
-                
                 //연결된 블록 순회
                 BrickCircuit(b,tempVec, line, data, isVisited);
             }
