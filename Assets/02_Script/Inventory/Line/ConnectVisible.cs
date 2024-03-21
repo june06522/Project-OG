@@ -28,6 +28,9 @@ public class ConnectVisible : MonoBehaviour
     List<LineRenderer> lendererList = new List<LineRenderer>();
     [SerializeField] Material lineRenderMat;
 
+    private float mulX = 2.0f;
+    private float mulY = 2.0f;
+
     private void Awake()
     {
         inventoryActive = FindObjectOfType<InventoryActive>();
@@ -83,7 +86,7 @@ public class ConnectVisible : MonoBehaviour
 
     void Connect(LineRenderer line, Vector2 pos, Vector2Int dir, Vector2 originpos, Dictionary<ConnectInfo, bool> isVisited)
     {
-        Vector2 tempVec = originpos + new Vector2(dir.x * 0.93f, dir.y * 0.93f);
+        Vector2 tempVec = originpos + new Vector2(dir.x *mulX, dir.y * mulY);
         ConnectInfo info = new ConnectInfo(pos, dir);
         #region 스택 오버 플로우 방지 <- 방문한곳 체크
         if (isVisited.ContainsKey(info) && isVisited[info])
@@ -177,7 +180,7 @@ public class ConnectVisible : MonoBehaviour
                     isVisited[info] = true;
 
 
-                    tempVec += new Vector2(v.x * 0.93f, v.y * 0.93f);
+                    tempVec += new Vector2(v.x * mulX, v.y * mulY);
                     AddLineRenderPoint(line, tempVec);
 
                     BrickPoint b;
@@ -186,7 +189,7 @@ public class ConnectVisible : MonoBehaviour
                     
                     BrickCircuit(b, tempVec, line, data, isVisited);
 
-                    tempVec -= new Vector2(v.x * 0.93f, v.y * 0.93f);
+                    tempVec -= new Vector2(v.x * mulX, v.y * mulY);
                     AddLineRenderPoint(line, tempVec);
                 }
             }
