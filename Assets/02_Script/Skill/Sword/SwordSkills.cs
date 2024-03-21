@@ -42,7 +42,7 @@ public class SwordSkills : MonoBehaviour
     [Header("Elipse")]
     [SerializeField] private float width;
     [SerializeField] private float height;
-    [SerializeField] [Range(-5,5)] private float theta;
+    [SerializeField][Range(-5, 5)] private float theta;
 
     List<SwordClone> clones;
     Transform ownerTrm;
@@ -57,21 +57,21 @@ public class SwordSkills : MonoBehaviour
     private void Awake()
     {
         clones = new();
-        ownerTrm = transform.parent;
+        ownerTrm = GameManager.Instance.player.transform;
+#if UNITY_EDITOR
+        Debug.Log("Running");
+#endif
+        Make();
     }
 
     float t = 0;
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.K)) 
-        {
-            Make();
-        }
 
-        if(makeDone) 
+        if (makeDone)
         {
             float angle = 0;
-            for(int i = 0; i < clones.Count; i++) 
+            for (int i = 0; i < clones.Count; i++)
             {
                 SwordClone clone = clones[i];
                 if (clone.EndAttack)
@@ -92,7 +92,7 @@ public class SwordSkills : MonoBehaviour
             t += Time.deltaTime * rotateSpeed;
         }
 
-        if(t > rotateTime && isAttack == false)
+        if (t > rotateTime && isAttack == false)
         {
             StartCoroutine(Attack());
         }
@@ -103,20 +103,20 @@ public class SwordSkills : MonoBehaviour
         isAttack = true;
         Vector2 targetPos = new Vector2(makePos.x, makePos.y - yPosValue - height);
         Vector2 bigClonePos = new Vector2(makePos.x, makePos.y + 2f);
-        
+
         SwordClone bigClone = Instantiate(bigSwordClone, bigClonePos, Quaternion.Euler(new Vector3(0, 0, 270)));
-        bigClone.Setting(warningZoneFadeTime * 2f);
+        bigClone.Setting(warningZoneFadeTime * 2f, width * 1.5f, height * 1.5f);
         bigClone.transform.DOMoveY(bigClone.transform.position.y - 1f, warningZoneFadeTime + 0.5f).SetEase(Ease.OutQuad)
             .OnComplete(() => bigClone.Attack(targetPos));
 
         yield return new WaitForSeconds(0.4f);
         TargetZone zone = Instantiate(targetZone, targetPos, Quaternion.identity);
-        Vector2 targetScale = new Vector2(tempWidth * 2.5f, tempHeight * 2.5f);
+        Vector2 targetScale = new Vector2(width * 3f, height * 3f);
         zone.Marking(warningZoneFadeTime, targetScale);
 
         yield return new WaitForSeconds(1.3f);
 
-        for(int i = 0; i < clones.Count; i++) 
+        for (int i = 0; i < clones.Count; i++)
         {
             SwordClone clone = clones[i];
             float x = UnityEngine.Random.Range(-1f, 1f);
@@ -142,9 +142,9 @@ public class SwordSkills : MonoBehaviour
         float y = cy + height * Mathf.Sin(t + weight);
 
         float dx = cx + (x - cx) * Mathf.Cos(theta) - (y - cy) * Mathf.Sin(theta);
-        float dy = cy + (x - cx) * Mathf.Sin(theta) + (y - cy) * Mathf.Cos(theta);  
-        
-        return new Vector2( dx, dy );
+        float dy = cy + (x - cx) * Mathf.Sin(theta) + (y - cy) * Mathf.Cos(theta);
+
+        return new Vector2(dx, dy);
     }
 
     private void Make()
@@ -163,15 +163,15 @@ public class SwordSkills : MonoBehaviour
 
     private IEnumerator MakeCoroutine()
     {
-         makePos = ownerTrm.position + new Vector3(0, 3f, 0);
-        
+        makePos = ownerTrm.position + new Vector3(0, 3f, 0);
+
         for (int i = 0; i < instantiateCount; i++)
         {
             float angle = 360 / instantiateCount * Mathf.Deg2Rad * i;
             Vector2 dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-            
-            SwordClone clone = Instantiate(smallSwordClone, GetElipsePos(makePos, angle, this.width, this.height), Quaternion.Euler(0,0,270));
-            clone.Setting(dissolveTime);
+
+            SwordClone clone = Instantiate(smallSwordClone, GetElipsePos(makePos, angle, this.width, this.height), Quaternion.Euler(0, 0, 270));
+            clone.Setting(dissolveTime, width, height);
 
             clones.Add(clone);
             yield return new WaitForSeconds(delayTime);
@@ -182,10 +182,10 @@ public class SwordSkills : MonoBehaviour
         float targetHeight = height * 1.5f;
         DOTween.To(() => tempWidth, (curWidth) => tempWidth = curWidth, targetWidth, rotateTime).SetEase(Ease.InOutQuint);
         DOTween.To(() => tempHeight, (curHeight) => tempHeight = curHeight, targetHeight, rotateTime).SetEase(Ease.InOutQuint);
-        
+
 
         makeDone = true;
     }
 
-    
+
 }

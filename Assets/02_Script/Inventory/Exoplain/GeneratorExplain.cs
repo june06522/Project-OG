@@ -25,9 +25,9 @@ public class GeneratorExplain : MonoBehaviour
         if(skillList != null )
         {
             _skillList.text = "";
-            for (int i = 0; i < skillList.Length; i++)
+            for (int i = 1; i <= skillList.Length; i++)
             {
-                _skillList.text += $"{i}개 - {skillList[i]}\n";
+                _skillList.text += $"{i}개 - {skillList[i - 1]}\n";
             }
         }
     }

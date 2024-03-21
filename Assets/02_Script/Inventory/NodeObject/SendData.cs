@@ -6,11 +6,11 @@ using UnityEngine;
 [Serializable]
 public class SendData
 {
-    public SendData(WeaponType wepaonType, GeneratorID generatorID)
+    public SendData(WeaponType wepaonType, GeneratorID generatorID, int power = 1)
     {
         this.weaponType = wepaonType;
         this.generatorID = generatorID;
-        power = 1;
+        this.power = power;
         isVisited = new();
     }
 

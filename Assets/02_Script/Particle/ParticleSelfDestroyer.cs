@@ -36,9 +36,12 @@ public class ParticleSelfDestroyer : MonoBehaviour
 
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, range);
     }
+#endif 
+    
 }

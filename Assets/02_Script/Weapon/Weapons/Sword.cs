@@ -24,9 +24,16 @@ public class Sword : InvenWeapon
     [BindExecuteType(typeof(float))]
     public override void GetSignal([BindParameterType(typeof(float))] object signal)
     {
-
         var data = (SendData)signal;
-        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
+
+        if (sendDatas == null)
+        {
+            sendDatas = data;
+        }
+        else
+        {
+            sendDatas = sendDatas.Power > data.Power ? sendDatas : data;
+        }
 
     }
 
@@ -42,7 +49,7 @@ public class Sword : InvenWeapon
             Append(transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z), 0.1f).SetEase(Ease.Linear));
 
 
-        AttackTween();
+        StartCoroutine(AttackTween());
 
     }
 

@@ -33,7 +33,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
     protected override void Awake()
     {
-        _interactKey = GameManager.Instance.transform.Find("InteractKey").gameObject;
+        _interactKey = GameManager.Instance.transform.Find("InteractKey")?.gameObject;
 
         inputController = new PlayerInputController();
         eventController = new PlayerEventController();
