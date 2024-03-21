@@ -13,7 +13,6 @@ public class Hammer : InvenWeapon
     {
 
         DOTween.Sequence().
-            Append(transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + 30 * transform.localScale.y), 0)).
             Append(transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z - 90 * transform.localScale.y), 0.1f).SetEase(Ease.Linear)).
             Append(transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z), 0.1f).SetEase(Ease.Linear));
 
@@ -25,11 +24,16 @@ public class Hammer : InvenWeapon
     {
 
         isAttack = true;
+<<<<<<< Updated upstream
         yield return new WaitForSeconds(0.2f);
         Debug.Log(1);
         var obj = Instantiate(effect, transform.position + transform.right * 1.5f, Quaternion.identity);
+=======
+        yield return new WaitForSeconds(0.09f);
+        var obj = Instantiate(effect, transform.position - transform.up * 1.5f, Quaternion.identity);
+>>>>>>> Stashed changes
         obj.Attack(Data.AttackDamage.GetValue());
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.21f);
         isAttack = false;
 
     }

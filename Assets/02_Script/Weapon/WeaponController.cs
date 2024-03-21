@@ -34,7 +34,7 @@ public class WeaponController : MonoBehaviour
             int cnt = Physics2D.OverlapCircle(
                 weapon.transform.position,
                 weapon.Data.AttackRange.GetValue(),
-                new ContactFilter2D { layerMask = enemyLayer, useLayerMask = true },
+                new ContactFilter2D { layerMask = enemyLayer, useLayerMask = true, useTriggers = true },
                 enemyArr);
 
             if (cnt != 0)
