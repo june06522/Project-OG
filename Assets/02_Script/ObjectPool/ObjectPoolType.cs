@@ -16,5 +16,6 @@ public enum ObjectPoolType
     WarningType1,
 
     PrisonerChain,
-    PrisonerRestraint
+    PrisonerRestraint,
+    ChainFragment
 }

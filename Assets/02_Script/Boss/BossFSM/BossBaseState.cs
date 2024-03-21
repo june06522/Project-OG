@@ -6,7 +6,7 @@ public abstract class BossBaseState
 {
     protected Boss _boss;
 
-    protected bool _willChange = false;
+    protected IEnumerator co;
 
     protected BossBaseState(Boss boss)
     {
@@ -19,8 +19,21 @@ public abstract class BossBaseState
 
     public abstract void OnBossStateExit();
 
-    public virtual IEnumerator RandomPattern(float waitTime)
+    // This Function was created to know what pattern is using now, please use this for patterns coroutine
+    public void NowCoroutine(IEnumerator coroutine)
     {
-        yield return null;
+        co = coroutine;
+        _boss.StartCoroutine(co);
+    }
+
+    public void StopThisCoroutine()
+    {
+        if(co != null)
+            _boss.StopCoroutine(co);
+    }
+
+    public void ChangeMat(int index = 0)
+    {
+        _boss.MyMat = _boss.mats[index];
     }
 }

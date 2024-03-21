@@ -6,14 +6,24 @@ using UnityEngine.UI;
 
 public class Boss : MonoBehaviour, IHitAble
 {
-    public Rigidbody2D rigid;
+    public Material MyMat { get => _mat; set => _mat = value; }
+
+    public List<Material> mats;
 
     public GameObject player;
+    public GameObject bulletCollector;
+    public GameObject chainCollector;
 
     public Slider bossHpSlider;
 
     public bool isStop;
     public bool dead;
+    public bool wasDead;
+    public bool blocked;
+    public bool isTied;
+    public bool isRunning;
+    public bool isOneBroken;
+    public bool awakening;
 
     public float currentHp;
 
@@ -21,12 +31,16 @@ public class Boss : MonoBehaviour, IHitAble
 
     public FeedbackPlayer feedbackPlayer { get; set; }
 
+    public Vector3 originPos;
+
     public event Action DeadEvt;
 
     private Vector2 _beforeVec;
+    private Material _mat;
 
     private void Awake()
     {
+        _mat = transform.GetComponent<SpriteRenderer>().material;
         feedbackPlayer = GetComponent<FeedbackPlayer>();
         isStop = false;
         dead = false;
@@ -37,20 +51,13 @@ public class Boss : MonoBehaviour, IHitAble
 
     protected virtual void Update()
     {
+        transform.GetComponent<SpriteRenderer>().material = _mat;
         bossHpSlider.value = currentHp / bossSo.MaxHP;
-
-        if(!WallChecker())
-        {
-            if (WallChecker())
-            {
-                StartCoroutine(StepBack());
-            }
-        }
     }
 
-    public void StopImmediately(Rigidbody2D rigid)
+    public void StopImmediately(Transform trans)
     {
-        rigid.velocity = Vector2.zero;
+        trans.position = Vector2.MoveTowards(trans.position, trans.position, Time.deltaTime);
     }
 
     public void Hit(float damage)
@@ -67,57 +74,47 @@ public class Boss : MonoBehaviour, IHitAble
         
         if(currentHp < 0)
         {
-            IsDead();
-            bossHpSlider.value = 0;
+            DeadEvt?.Invoke();
+
             return;
         }
     }
 
-    private IEnumerator StepBack()
-    {
-        yield return null;
-
-        rigid.velocity = -_beforeVec;
-    }
-
-    private bool WallChecker()
-    {
-        if (Physics2D.OverlapBox(transform.position,
-            transform.localScale, 0, LayerMask.GetMask("Wall")))
-        {
-            _beforeVec = rigid.velocity;
-            StopImmediately(rigid);
-            return true;
-        }
-
-        return false;
-    }
-
-    private void IsDead()
-    {
-        dead = true;
-        
-        DeadEvt?.Invoke();
-    }
-
     private void DieEvent()
     {
-        // �״� �ִϸ��̼�
-        StopAllCoroutines();
-        ReturnAll();
-        gameObject.SetActive(false);
+        dead = true;
+        bossHpSlider.value = 0;
     }
 
-    private void ReturnAll()
+    public void ReturnAll(bool isInBulletCollector)
     {
-        int childCount = transform.childCount;
-        GameObject[] objs = new GameObject[childCount];
-        for (int i = 0; i < childCount; i++)
+        int childCount = 0;
+        GameObject[] objs;
+        if (isInBulletCollector)
         {
-            objs[i] = transform.GetChild(i).gameObject;
+            childCount = bulletCollector.transform.childCount;
+            objs = new GameObject[childCount];
+
+            for (int i = 0; i < childCount; i++)
+            {
+                objs[i] = bulletCollector.transform.GetChild(i).gameObject;
+            }
         }
+        else
+        {
+            childCount = chainCollector.transform.childCount;
+            objs = new GameObject[childCount];
+
+            for (int i = 0; i < childCount; i++)
+            {
+                objs[i] = chainCollector.transform.GetChild(i).gameObject;
+            }
+        }
+        
         for(int i = 0; i < childCount; i++)
         {
+            if (objs[i] == null)
+                continue;
             ObjectPool.Instance.ReturnObject(objs[i]);
         }
     }
@@ -126,14 +123,19 @@ public class Boss : MonoBehaviour, IHitAble
     {
         if (collision.gameObject.tag == "Player")
         {
-            //Debug.Log("���� �� ����");
             if (collision.gameObject.TryGetComponent<IHitAble>(out var IhitAble))
             {
-                Debug.Log("�÷��̾�� �������� ������ ��");
                 IhitAble.Hit(Mathf.Pow(bossSo.Damage, 2));
             }
         }
 
-        
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
+        {
+            Vector2 dir = (collision.gameObject.transform.position - transform.position).normalized;
+
+            transform.position = Vector2.MoveTowards(transform.position, -dir * 2, Time.deltaTime);
+            StopImmediately(transform);
+            blocked = true;
+        }
     }
 }
