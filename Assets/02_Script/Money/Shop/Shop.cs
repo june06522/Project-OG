@@ -33,25 +33,24 @@ public class Shop : MonoBehaviour
     [SerializeField]
     private ItemInfoListSO _itemInfoListSO;
     private List<ItemInfoSO> _items = new List<ItemInfoSO>();
+    private InventoryActive inven;
 
     private void Awake()
     {
-        Debug.Log("Shop.awake");
         _playerMoney = FindObjectOfType<Money>();
         if (_playerMoney == null)
             Debug.LogError("Money Object is not found");
 
         SetRandomItem();
         _isOpen = false;
+        inven = FindObjectOfType<InventoryActive>();
     }
 
     public void OpenShop()
     {
-        Debug.Log(_isOpen);
-        if(_isOpen) return;
+        if(_isOpen || inven.IsOn) return;
 
-        Debug.Log("open");
-
+        inven.canOpen = false;
         _isOpen = true;
         _playerMoney.GoldChangedEvent += UpdatePlayerGoldUI;
         _shopUIObject.SetActive(true);
@@ -63,9 +62,9 @@ public class Shop : MonoBehaviour
     {
         if (_isOpen == false) return;
 
+        inven.canOpen = true;
         _isOpen = false;
         _playerMoney.GoldChangedEvent -= UpdatePlayerGoldUI;
-        Debug.Log("close");
         _shopUIObject.SetActive(false);
     }
 
@@ -80,14 +79,12 @@ public class Shop : MonoBehaviour
 
         SetRandomItem();
 
-        // 리롤마다 비용 증가
         _reRollGold += _reRollIncreaseGoldValue;
         _reRollGoldText.text = $"{_reRollGold}G";
     }
 
     private void SetRandomItem()
     {
-        // 아이템 SO List 필요할 듯
         _items.Clear();
         _items = _itemInfoListSO.ItemInfoList.ToList<ItemInfoSO>();
 
