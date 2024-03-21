@@ -32,7 +32,7 @@ public class InventoryWeaponInfo : MonoBehaviour
         brickList = GetComponentsInChildren<InvenBrick>();
         InvenBrick weapon = null;
         Vector2Int pos = new Vector2Int(x, y);
-        
+
         //무기 찾기
         foreach (InvenBrick b in brickList)
         {
@@ -54,25 +54,36 @@ public class InventoryWeaponInfo : MonoBehaviour
         {
             for (int j = 0; j < 4; j++)
             {
-                Find(weapon.InvenObject.originPos + weapon.InvenObject.bricks[i].point
-                    , new Vector2Int(dx[j], dy[j]),hash);
+                Vector2Int dir = new Vector2Int(dx[j], dy[j]);
+                Find(weapon.InvenObject.originPos + weapon.InvenObject.bricks[i].point, dir, hash);
             }
         }
 
-        foreach(DictionaryEntry item in end)
+        foreach (DictionaryEntry item in end)
         {
             InventoryObjectData obj = (InventoryObjectData)item.Key;
-            list.Add(obj.skills[(int)item.Value]); // 나중에 Min으로 제한두기 생성기 땜에 -1
+            list.Add(obj.skills[(int)item.Value]); // 나중에 Min으로 제한두기 생성기 땜에
         }
 
         return list;
     }
 
-    private void Find(Vector2Int pos, Vector2Int dir,Hashtable data)
+    private void Find(Vector2Int pos, Vector2Int dir, Hashtable data)
     {
         bool isfind = false;
         InventoryObjectData tempData = inventory.GetObjectData2(pos + dir, dir);
         if (tempData == null)
+            return;
+
+        bool canGo = false;
+        foreach (var v in tempData.inputPoints)
+        {
+            if (v.point + tempData.originPos == pos + dir && v.dir == dir)
+            {
+                canGo = true;
+            }
+        }
+        if (!canGo)
             return;
 
         if (tempData.skills.Length > 0)
@@ -121,12 +132,12 @@ public class InventoryWeaponInfo : MonoBehaviour
     private void Research(Hashtable isVisit, Hashtable data, Vector2Int pos)
     {
         //스택 오버 플로우 방지 방문 체크
-        if(isVisit.ContainsKey(pos))
+        if (isVisit.ContainsKey(pos))
         {
             return;
         }
 
-        isVisit.Add(pos,true);
+        isVisit.Add(pos, true);
 
         for (int i = 0; i < 4; i++)
         {
@@ -143,7 +154,7 @@ public class InventoryWeaponInfo : MonoBehaviour
             if (tempData == null)
                 continue;
 
-            if(!datas.ContainsKey(tempData))
+            if (!datas.ContainsKey(tempData))
                 datas.Add(tempData, true);
 
             bool isfind = false;
@@ -163,32 +174,44 @@ public class InventoryWeaponInfo : MonoBehaviour
                 if (isfind)
                 {
 
-                    if(!end.ContainsKey(tempData))
+                    if (!end.ContainsKey(tempData))
                         end.Add(tempData, data.Count - 1);
                     else
                     {
                         if ((int)end[tempData] < data.Count - 1)
                             end[tempData] = data.Count - 1;
                     }
-                    
+
                 }
             }
 
-            //foreach(var vec in tempData.inputPoints)
-            //{
-            //    if (vec.dir == dir)//칮있디!
-            //    {
-                    
-                    Hashtable visited = new();
-                    foreach (DictionaryEntry item in isVisit)
+            //이동되는 위치 타일 찾아서 방향검사해야대 ㅇㅋ? ㅇㅋ
+            bool isCan = false;
+
+            //여기 머가 문제니...
+            foreach (var v in tempData.bricks)
+            {
+                foreach (var d in v.dir)
+                {
+                    if (v.point + tempData.originPos == tempPos && d + dir == Vector2Int.zero)
                     {
-                        visited.Add(item.Key, item.Value);
+                        isCan = true;
                     }
 
-                   
-                    Research(visited, datas, tempPos);
-            //    }
-            //}
+                }
+            }
+
+            if (isCan)
+            {
+                Hashtable visited = new();
+                foreach (DictionaryEntry item in isVisit)
+                {
+                    visited.Add(item.Key, item.Value);
+                }
+
+
+                Research(visited, datas, tempPos);
+            }
         }
     }
 }
