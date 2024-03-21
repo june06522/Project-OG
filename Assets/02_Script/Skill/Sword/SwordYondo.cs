@@ -254,6 +254,18 @@ public class SwordYondo : MonoBehaviour
         return Physics2D.OverlapCircle(ownerTrm.position, radius, layerMask);
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Enemy enemy;
+        if(collision.TryGetComponent<Enemy>(out enemy))
+        {
+            enemy.Hit(damage);
+            if(enemy.Dead)
+            {
+                SetTarget();
+            }
+        }
+    }
 
     //#if UNITY_EDITOR
     //    private void OnDrawGizmos()
