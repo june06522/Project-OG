@@ -9,6 +9,7 @@ public class InventoryWeaponInfo : MonoBehaviour
     private WeaponInventory inventory;
 
     private Hashtable isVisit = new Hashtable();
+    private Hashtable end = new Hashtable();
     InvenBrick[] brickList = null;
     int[] dx = { 0, 0, 1, -1 };
     int[] dy = { 1, -1, 0, 0 };
@@ -28,6 +29,7 @@ public class InventoryWeaponInfo : MonoBehaviour
         //변수
         list = new List<string>();
         isVisit = new Hashtable();
+        end = new Hashtable();
         brickList = GetComponentsInChildren<InvenBrick>();
         InvenBrick weapon = null;
         Vector2Int pos = new Vector2Int(x, y);
@@ -56,6 +58,12 @@ public class InventoryWeaponInfo : MonoBehaviour
                 Find(weapon.InvenObject.originPos + weapon.InvenObject.bricks[i].point
                     , new Vector2Int(dx[j], dy[j]),hash);
             }
+        }
+
+        foreach(DictionaryEntry item in end)
+        {
+            InventoryObjectData obj = (InventoryObjectData)item.Key;
+            list.Add(obj.skills[(int)item.Value]); // 나중에 Min으로 제한두기 생성기 땜에 -1
         }
 
         return list;
@@ -126,12 +134,18 @@ public class InventoryWeaponInfo : MonoBehaviour
             Vector2Int dir = new Vector2Int(dx[i], dy[i]);
             Vector2Int tempPos = pos + dir;
             InventoryObjectData tempData = inventory.GetObjectData2(tempPos, dir);
+            Hashtable datas = new();
+            foreach (DictionaryEntry item in data)
+            {
+                datas.Add(item.Key, item.Value);
+            }
+
 
             if (tempData == null)
                 continue;
 
-            if(!data.ContainsKey(tempData))
-                data.Add(tempData, true);
+            if(!datas.ContainsKey(tempData))
+                datas.Add(tempData, true);
 
             bool isfind = false;
 
@@ -149,8 +163,15 @@ public class InventoryWeaponInfo : MonoBehaviour
 
                 if (isfind)
                 {
-                    Debug.Log(data.Count);
-                    list.Add(tempData.skills[data.Count - 2]); // 나중에 Min으로 제한두기 무기랑 생성기 땜에 -2
+
+                    if(!end.ContainsKey(tempData))
+                        end.Add(tempData, data.Count - 1);
+                    else
+                    {
+                        if ((int)end[tempData] < data.Count - 1)
+                            end[tempData] = data.Count - 1;
+                    }
+                    
                 }
             }
 
@@ -165,11 +186,7 @@ public class InventoryWeaponInfo : MonoBehaviour
                         visited.Add(item.Key, item.Value);
                     }
 
-                    Hashtable datas= new();
-                    foreach (DictionaryEntry item in data)
-                    {
-                        datas.Add(item.Key, item.Value);
-                    }
+                   
                     Research(visited, datas, tempPos);
             //    }
             //}
