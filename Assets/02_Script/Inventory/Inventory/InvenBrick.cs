@@ -67,6 +67,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         isDrag = false;
         ItemExplain.Instance.isDrag = false;
 
+        //드래그앤 드랍 여기 건들여야 함
         Vector3Int p = Vector3Int.FloorToInt(rectTransform.localPosition / 100);
         p.z = 0;
         var point = inventory.FindInvenPoint(Vector2Int.FloorToInt(rectTransform.localPosition / 100));
@@ -77,6 +78,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             return;
 
         }
+
 
         if (inventory.CheckFills(InvenObject.bricks, point.Value))
         {
@@ -111,6 +113,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
+        StopAllCoroutines();
         ItemExplain.Instance.HoverEnd();
 
         prevPos = transform.localPosition;
@@ -123,13 +126,54 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if(!ItemExplain.Instance.isDrag)
-            ShowExplain();
+        StartCoroutine(CheckMouse());
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        StopAllCoroutines();
         ItemExplain.Instance.HoverEnd();
+    }
+
+    IEnumerator CheckMouse()
+    {
+        int x = (int)rectTransform.rect.width / 100;
+        int y = (int)rectTransform.rect.height / 100;
+        float len = GameManager.Instance.Inventory.tileRength;
+
+        while (true)
+        {
+            bool isOpen = false;
+            Vector2Int invenPos = new Vector2Int(-1,-1);
+            Vector2 pos = rectTransform.position;
+            pos -= new Vector2(x * len / 2, y * len / 2);
+            Vector2 curPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            while (curPos.x > pos.x)
+            {
+                pos.x += len;
+                invenPos.x++;
+            }
+            while (curPos.y > pos.y)
+            {
+                pos.y += len;
+                invenPos.y++;
+            }
+            foreach (var v in InvenObject.bricks)
+            {
+                if (v.point == invenPos)
+                    isOpen = true;
+            }
+            if (!ItemExplain.Instance.isDrag && isOpen)
+            {
+                ShowExplain();
+            }
+            else
+            {
+                ItemExplain.Instance.HoverEnd();
+            }
+            yield return null;
+        }
+
     }
 
     public virtual void ShowExplain()

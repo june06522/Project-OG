@@ -37,6 +37,9 @@ public class WeaponInventory : MonoBehaviour
     public event CameraSetting camerasetting;
     public event SlotChanged OnSlotChangeEvent;
 
+    [HideInInspector]
+    public float tileRength;
+
     private void Awake()
     {
 
@@ -60,8 +63,16 @@ public class WeaponInventory : MonoBehaviour
             }
 
         }
-
         camerasetting?.Invoke();
+    }
+
+    public void CheckTileLen()
+    {
+        tileRength = viewer.parent.GetChild(1).transform.position.y  - viewer.parent.GetChild(0).transform.position.y;
+    }
+    private void Update()
+    {
+        CheckTileLen();
     }
 
     public void AddSlot(Vector2Int point)

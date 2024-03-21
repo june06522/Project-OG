@@ -20,7 +20,7 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler
     private int _itemPrice = 1;
     ItemInfoSO _item;
 
-    // º¯¼ö·Î ¾ÆÀÌÅÛ SO ³Ö°í SO°ªÀ¸·Î °¡°Ý°ú ÀÌ¹ÌÁö ¼³Á¤ÇÏ±â
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ SO ï¿½Ö°ï¿½ SOï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ý°ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
     public void SetShopItem(ItemInfoSO item)
     {
         _item = item;
