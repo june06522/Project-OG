@@ -60,7 +60,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
             transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             rectTransform.position = new Vector3(rectTransform.position.x, rectTransform.position.y, 0);
-            if(!inventoryActive.IsOn)
+            if (!inventoryActive.IsOn)
             {
                 SetPos();
             }
@@ -69,9 +69,9 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     public virtual void OnPointerUp(PointerEventData eventData)
     {
-        if(inventoryActive.IsOn)
+        if (inventoryActive.IsOn)
             SetPos();
-        
+
     }
 
     private void SetPos()
@@ -79,10 +79,20 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         isDrag = false;
         ItemExplain.Instance.isDrag = false;
 
+        Vector3 tempPos = rectTransform.localPosition;
+        tempPos.x += (rectTransform.rect.width / 100  % 2 == 0) ? 50 : 0;
+        tempPos.y += (rectTransform.rect.height / 100 % 2 == 0) ? 50 : 0;
+
         //드래그앤 드랍 여기 건들여야 함
-        Vector3Int p = Vector3Int.FloorToInt(rectTransform.localPosition / 100);
+        Vector3Int p = Vector3Int.RoundToInt(tempPos / 100);
+        p.x -= (int)(rectTransform.rect.width / 200);
+        p.y -= (int)(rectTransform.rect.height / 200);
         p.z = 0;
-        var point = inventory.FindInvenPoint(Vector2Int.FloorToInt(rectTransform.localPosition / 100));
+
+        Vector2Int p2 = Vector2Int.RoundToInt(tempPos / 100);
+        p2.x -= (int)(rectTransform.rect.width / 200);
+        p2.y -= (int)(rectTransform.rect.height / 200);
+        var point = inventory.FindInvenPoint(p2);
 
         if (point == null)
         {
