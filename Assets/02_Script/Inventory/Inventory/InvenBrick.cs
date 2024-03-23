@@ -22,6 +22,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public Vector3 prevPos;
 
     private WeaponInventory inventory;
+    private InventoryActive inventoryActive;
 
     public ItemType Type = ItemType.Weapon;
 
@@ -38,6 +39,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         InvenObject.Init(transform);
         inventory = FindObjectOfType<WeaponInventory>();
         rectTransform = GetComponent<RectTransform>();
+        inventoryActive = FindObjectOfType<InventoryActive>();
     }
 
     public virtual void Settings()
@@ -58,14 +60,22 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
             transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             rectTransform.position = new Vector3(rectTransform.position.x, rectTransform.position.y, 0);
+            if(!inventoryActive.IsOn)
+            {
+                SetPos();
+            }
         }
-
-
     }
 
     public virtual void OnPointerUp(PointerEventData eventData)
     {
+        if(inventoryActive.IsOn)
+            SetPos();
+        
+    }
 
+    private void SetPos()
+    {
         isDrag = false;
         ItemExplain.Instance.isDrag = false;
 
@@ -95,7 +105,6 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         }
         else
         {
-
             Vector2Int prevP = Vector2Int.RoundToInt(prevPos / 100);
             var prev = inventory.FindInvenPoint(Vector2Int.RoundToInt((prevPos - new Vector3Int
                 ((int)rectTransform.rect.width - 100,
@@ -108,9 +117,6 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
             Setting();
         }
-
-
-
     }
 
     public virtual void OnPointerDown(PointerEventData eventData)
