@@ -6,23 +6,17 @@ using UnityEngine.UI;
 
 public class Boss : MonoBehaviour, IHitAble
 {
-    public Material MyMat { get => m_mat; set => m_mat = value; }
-
-    public List<Material> L_mats;
-
     public GameObject G_player;
     public GameObject G_bulletCollector;
-    public GameObject G_chainCollector;
+    
 
     public Slider bossHpSlider;
 
     public bool B_isStop;
     public bool B_dead;
-    public bool B_wasDead;
+    public bool B_isDead;
     public bool B_blocked;
-    public bool B_isTied;
     public bool B_isRunning;
-    public bool B_isOneBroken;
     public bool B_awakening;
 
     public float F_currentHp;
@@ -35,8 +29,7 @@ public class Boss : MonoBehaviour, IHitAble
 
     public event Action DeadEvt;
 
-    private Vector2 v_beforeVec;
-    private Material m_mat;
+    protected Material m_mat;
 
     private void Awake()
     {
@@ -86,29 +79,17 @@ public class Boss : MonoBehaviour, IHitAble
         bossHpSlider.value = 0;
     }
 
-    public void ReturnAll(bool isInBulletCollector)
+    public void ReturnAll()
     {
         int childCount = 0;
         GameObject[] objs;
-        if (isInBulletCollector)
-        {
-            childCount = G_bulletCollector.transform.childCount;
-            objs = new GameObject[childCount];
 
-            for (int i = 0; i < childCount; i++)
-            {
-                objs[i] = G_bulletCollector.transform.GetChild(i).gameObject;
-            }
-        }
-        else
-        {
-            childCount = G_chainCollector.transform.childCount;
-            objs = new GameObject[childCount];
+        childCount = G_bulletCollector.transform.childCount;
+        objs = new GameObject[childCount];
 
-            for (int i = 0; i < childCount; i++)
-            {
-                objs[i] = G_chainCollector.transform.GetChild(i).gameObject;
-            }
+        for (int i = 0; i < childCount; i++)
+        {
+            objs[i] = G_bulletCollector.transform.GetChild(i).gameObject;
         }
         
         for(int i = 0; i < childCount; i++)
@@ -121,14 +102,6 @@ public class Boss : MonoBehaviour, IHitAble
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Player")
-        {
-            if (collision.gameObject.TryGetComponent<IHitAble>(out var IhitAble))
-            {
-                IhitAble.Hit(Mathf.Pow(bossSo.Damage, 2));
-            }
-        }
-
         if(collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
         {
             Vector2 dir = (collision.gameObject.transform.position - transform.position).normalized;
@@ -136,6 +109,18 @@ public class Boss : MonoBehaviour, IHitAble
             transform.position = Vector2.MoveTowards(transform.position, -dir * 2, Time.deltaTime);
             StopImmediately(transform);
             B_blocked = true;
+        }
+    }
+
+    protected virtual void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            Debug.Log($"{bossSo.Damage} µ•πÃ¡ˆ ¡‹");
+            if (collision.gameObject.TryGetComponent<IHitAble>(out var IhitAble))
+            {
+                IhitAble.Hit(bossSo.Damage);
+            }
         }
     }
 }
