@@ -21,15 +21,15 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     public Vector3 prevPos;
 
-    private WeaponInventory inventory;
-    private InventoryActive inventoryActive;
+    protected WeaponInventory inventory;
+    protected InventoryActive inventoryActive;
 
     public ItemType Type = ItemType.Weapon;
 
-    private bool isDrag;
+    protected bool isDrag;
     public bool IsDrag => isDrag;
 
-    private RectTransform rectTransform;
+    protected RectTransform rectTransform;
     protected Image image;
 
     protected virtual void Awake()
@@ -52,7 +52,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         Settings();
     }
 
-    private void Update()
+    protected void Update()
     {
 
         if (isDrag)
@@ -74,7 +74,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     }
 
-    private void SetPos()
+    protected void SetPos()
     {
         isDrag = false;
         ItemExplain.Instance.isDrag = false;
