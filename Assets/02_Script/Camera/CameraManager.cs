@@ -7,13 +7,14 @@ public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance;
 
-    public CinemachineVirtualCamera cam;
+    private CinemachineVirtualCamera cam;
 
     private CinemachineBasicMultiChannelPerlin perlin;
 
     private void Awake()
     {
         Instance = this;
+        cam = GameObject.Find("CM").GetComponent<CinemachineVirtualCamera>();
         perlin = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
 

@@ -215,7 +215,7 @@ public class ATiedState : BossBaseState
 
             yield return new WaitForSeconds(Time.deltaTime);
 
-            Vector3 nextDir = _boss.G_player.transform.position;
+            Vector3 nextDir = GameManager.Instance.player.transform.position;
 
             for (int j = 0; j < bulletCount; j++)
             {

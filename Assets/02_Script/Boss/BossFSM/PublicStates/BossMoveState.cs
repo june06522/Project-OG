@@ -22,7 +22,7 @@ public class BossMoveState : BossBaseState
     {
         if(!_boss.B_isStop)
         {
-            Vector2 dir = _boss.G_player.transform.position - _boss.transform.position;
+            Vector2 dir = GameManager.Instance.player.transform.position - _boss.transform.position;
         }
     }
 }

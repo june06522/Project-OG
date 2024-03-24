@@ -64,6 +64,8 @@ public class Stage : MonoBehaviour
 
     [SerializeField]
     private StageType _stageType = StageType.EnemyStage;
+    [SerializeField]
+    private Boss _bossObject = null;
     public StageType ThisStageType => _stageType;
 
     [SerializeField]
@@ -93,7 +95,9 @@ public class Stage : MonoBehaviour
         }
         else if (_stageType == StageType.BossStage)
         {
-            AppearGate(); //test code
+            _bossObject.gameObject.SetActive(true);
+            monsterCount++;
+            _bossObject.DeadEvt += HandleWaveClearCheck;
             // After Creating Boss, Delete AppearGate
             return;
         }

@@ -62,20 +62,20 @@ public class SFullHPState : BossBaseState
 
         GameObject warning = ObjectPool.Instance.GetObject(ObjectPoolType.WarningType0, _slate.G_slateOnlyCollector.transform);
         warning.transform.position = _slate.transform.position;
-        if (_slate.transform.position.x > _slate.G_player.transform.position.x)
+        if (_slate.transform.position.x > GameManager.Instance.player.transform.position.x)
         {
             startDir = Vector3.back;
         }
-        else if (_slate.transform.position.x < _slate.G_player.transform.position.x)
+        else if (_slate.transform.position.x < GameManager.Instance.player.transform.position.x)
         {
             startDir = Vector3.forward;
         }
 
-        if (_slate.transform.position.y >= _slate.G_player.transform.position.y)
+        if (_slate.transform.position.y >= GameManager.Instance.player.transform.position.y)
         {
             isDown = true;
         }
-        else if (_slate.transform.position.y < _slate.G_player.transform.position.y)
+        else if (_slate.transform.position.y < GameManager.Instance.player.transform.position.y)
         {
             isDown = false;
         }
