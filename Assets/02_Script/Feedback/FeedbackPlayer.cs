@@ -32,25 +32,6 @@ public class FeedbackPlayer : MonoBehaviour
 
     }
 
-    private void Update()
-    {
-        
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-
-            Play(10);
-
-        }
-
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-
-            Instantiate(prefab).Set(Random.Range(10f, 30f));
-
-        }
-
-    }
-
     public void Play(float damage)
     {
         foreach(var feedback in feedbackContainer)

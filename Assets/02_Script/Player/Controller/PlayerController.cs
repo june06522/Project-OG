@@ -20,6 +20,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
     private GameObject _interactKey;
+    private PlayerHP _playerHP;
 
     [field: SerializeField] public PlayerDataSO playerData { get; protected set; }
 
@@ -34,6 +35,9 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
     protected override void Awake()
     {
         _interactKey = GameManager.Instance.transform.Find("InteractKey")?.gameObject;
+        _playerHP = GetComponent<PlayerHP>();
+
+        _playerHP.SetPlayerHP((int)playerData[PlayerStatsType.MaxHP], (int)playerData[PlayerStatsType.CurrentHP]);
 
         inputController = new PlayerInputController();
         eventController = new PlayerEventController();

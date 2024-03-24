@@ -4,7 +4,8 @@ using UnityEngine;
 
 public enum PlayerStatsType
 {
-
+    MaxHP,
+    CurrentHP,
     MoveSpeed,
     DashCoolDown,
     DashLenght,
@@ -22,6 +23,8 @@ public enum PlayerCoolDownType
 [CreateAssetMenu(menuName = "SO/Player/Data")]
 public class PlayerDataSO : ScriptableObject
 {
+    [SerializeField] private Stats maxHp;
+    [SerializeField] private Stats currentHp;
 
     [SerializeField] private Stats moveSpeed;
     [SerializeField] private Stats dashCoolDown;
@@ -65,6 +68,9 @@ public class PlayerDataSO : ScriptableObject
     {
         
         owner = controller;
+
+        playerStatsContainer.Add(PlayerStatsType.MaxHP, maxHp);
+        playerStatsContainer.Add(PlayerStatsType.CurrentHP, currentHp);
 
         playerStatsContainer.Add(PlayerStatsType.MoveSpeed, moveSpeed);
         playerStatsContainer.Add(PlayerStatsType.DashCoolDown, dashCoolDown);
