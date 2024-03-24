@@ -10,7 +10,10 @@ public class BossBullet : MonoBehaviour
 
     protected virtual void OnEnable()
     {
-        StartCoroutine(ObjectPool.Instance.ReturnObject(this.gameObject, data.DestoryTime));
+        if(data.DestoryTime != 0)
+        {
+            StartCoroutine(ObjectPool.Instance.ReturnObject(this.gameObject, data.DestoryTime));
+        }
     }
 
     protected virtual void OnDisable()
@@ -32,13 +35,11 @@ public class BossBullet : MonoBehaviour
                 if (collision.TryGetComponent<IHitAble>(out var hitAble))
                 {
                     hitAble.Hit(f_currentDamage);
-                    Debug.Log($"{f_currentDamage} 데미지 입힘");
                     if (data.IfHitWillBreak)
                         ObjectPool.Instance.ReturnObject(gameObject);
                 }
                 else
                 {
-                    //Debug.Log($"플레이어에게 {_currentDamage}만큼 데미지를 줌");
                     if (data.IfHitWillBreak)
                         ObjectPool.Instance.ReturnObject(gameObject);
                 }

@@ -16,7 +16,11 @@ public enum ObjectPoolType
     WarningType0,
     WarningType1,
 
-    PrisonerChain,
-    PrisonerRestraint,
-    ChainFragment
+    AltarChain,
+    AltarRestraint,
+    ChainFragment,
+    AltarDeadEffect,
+
+    SlateMinimi,
+    SlateDeadEffect
 }

@@ -75,7 +75,8 @@ public class InventoryWeaponInfo : MonoBehaviour
         if (tempData == null)
             return;
 
-        bool canGo = false;
+        bool canGo = (tempData.inputPoints.Count == 0 && tempData.sendPoints.Count != 0);
+
         foreach (var v in tempData.inputPoints)
         {
             if (v.point + tempData.originPos == pos + dir && v.dir == dir)
@@ -83,9 +84,9 @@ public class InventoryWeaponInfo : MonoBehaviour
                 canGo = true;
             }
         }
+
         if (!canGo)
             return;
-
         if (tempData.skills.Length > 0)
         {
             foreach (var brick in tempData.sendPoints)
@@ -98,7 +99,9 @@ public class InventoryWeaponInfo : MonoBehaviour
             }
 
             if (isfind)
+            {
                 list.Add(tempData.skills[0]);
+            }
         }
 
         Hashtable datas = new Hashtable();
@@ -173,13 +176,13 @@ public class InventoryWeaponInfo : MonoBehaviour
 
                 if (isfind)
                 {
-
+                    int index = Mathf.Min(data.Count - 1,5);
                     if (!end.ContainsKey(tempData))
-                        end.Add(tempData, data.Count - 1);
+                        end.Add(tempData, index);
                     else
                     {
-                        if ((int)end[tempData] < data.Count - 1)
-                            end[tempData] = data.Count - 1;
+                        if ((int)end[tempData] < index)
+                            end[tempData] = index;
                     }
 
                 }

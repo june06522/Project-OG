@@ -32,9 +32,4 @@ public abstract class BossBaseState
         if(co != null)
             _boss.StopCoroutine(co);
     }
-
-    public void ChangeMat(int index = 0)
-    {
-        _boss.MyMat = _boss.L_mats[index];
-    }
 }
