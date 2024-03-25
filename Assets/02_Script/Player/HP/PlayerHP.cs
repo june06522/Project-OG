@@ -42,11 +42,15 @@ public class PlayerHP : MonoBehaviour, IHitAble
     {
         MaxHP = maxHP;
 
-        if (currentHP != 0)
+        if (currentHP == 0)
         {
 
-            currentHP = maxHP;
+            CurrentHP = maxHP;
 
+        }
+        else
+        {
+            CurrentHP = currentHP;
         }
 
         OnChangeHPEvent?.Invoke(MaxHP, CurrentHP);

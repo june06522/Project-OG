@@ -37,7 +37,6 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
         _interactKey = GameManager.Instance.transform.Find("InteractKey")?.gameObject;
         _playerHP = GetComponent<PlayerHP>();
 
-        _playerHP.SetPlayerHP((int)playerData[PlayerStatsType.MaxHP], (int)playerData[PlayerStatsType.CurrentHP]);
 
         inputController = new PlayerInputController();
         eventController = new PlayerEventController();
@@ -47,6 +46,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
         playerData = Instantiate(playerData);
         playerData.SetOwner(this);
+        _playerHP.SetPlayerHP((int)playerData[PlayerStatsType.MaxHP], (int)playerData[PlayerStatsType.CurrentHP]);
 
         var goToDash = new PlayerGoToDash(this);
 
