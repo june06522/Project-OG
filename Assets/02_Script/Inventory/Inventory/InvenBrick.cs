@@ -158,6 +158,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     IEnumerator CheckMouse()
     {
+        transform.SetAsLastSibling();
         int x = (int)rectTransform.rect.width / 100;
         int y = (int)rectTransform.rect.height / 100;
         float len = GameManager.Instance.Inventory.tileRength;
