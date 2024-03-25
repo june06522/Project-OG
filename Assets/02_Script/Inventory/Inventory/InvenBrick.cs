@@ -16,6 +16,7 @@ public enum ItemType
 public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
 
+    [HideInInspector] public GameObject origin;
     [field: SerializeField] public InventoryObjectData InvenObject { get; private set; }
     public Vector2 InvenPoint { get; set; }
 
@@ -31,6 +32,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     protected RectTransform rectTransform;
     protected Image image;
+
 
     protected virtual void Awake()
     {
@@ -96,6 +98,8 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
         if (point == null)
         {
+            origin.SetActive(true);
+            origin.transform.position = GameManager.Instance.player.position;
             Destroy(gameObject);
             return;
 
