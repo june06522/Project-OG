@@ -325,8 +325,6 @@ public class AFreeState : BossBaseState
     // 버프기 - 체력 회복 및 공격력 영구 증가
     private IEnumerator Buff(int division, float speed)
     {
-        _boss.bossSo.Damage += 2;
-
         int heal = (int)(_boss.bossSo.MaxHP / division);
         float currentHeal = 0;
 

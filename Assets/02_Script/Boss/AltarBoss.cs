@@ -42,7 +42,7 @@ public class AltarBoss : Boss
     private float f_unChainTime;
     private float f_currentTime = 0;
 
-    void Start()
+    private void OnEnable()
     {
         f_currentTime = 0;
         i_restraintIndex = 0;
@@ -115,7 +115,7 @@ public class AltarBoss : Boss
     {
         for (int i = 0; i < i_restrainCount; i++)
         {
-            g_restraints[i] = ObjectPool.Instance.GetObject(ObjectPoolType.AltarRestraint);
+            g_restraints[i] = ObjectPool.Instance.GetObject(ObjectPoolType.AltarRestraint, G_altarOnlyCollector.transform);
             var rad = Mathf.Deg2Rad * i * 360 / i_restrainCount;
             var x = f_restraintDistance * Mathf.Cos(rad);
             var y = f_restraintDistance * Mathf.Sin(rad);
@@ -287,7 +287,9 @@ public class AltarBoss : Boss
         i_restraintIndex++;
         if(i_restraintIndex == 1)
         {
-            V_originPos = g_restraints[i_restraintIndex].transform.position;
+            // 사슬이 뿜어져 나오는 그 기준 기둥을 체인콜렉터 자식 어때
+            V_originPos = g_restraints[i_restraintIndex].transform.localPosition;
+            Debug.Log($"V_originPos set : {g_restraints[i_restraintIndex].transform.localPosition}");
         }
 
         yield return null;
