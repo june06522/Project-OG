@@ -5,6 +5,8 @@ using UnityEngine;
 public class SFullHPState : BossBaseState
 {
     private SlateBoss _slate;
+    private Quaternion rot;
+
     public SFullHPState(SlateBoss boss) : base(boss)
     {
         _slate = boss;
@@ -46,41 +48,56 @@ public class SFullHPState : BossBaseState
         switch(rand)
         {
             case 1:
-                NowCoroutine(Laser(10, 0.1f, 1, 100));
+                NowCoroutine(WarningLine(10, 100));
                 break;
         }
     }
 
     // 미니미 레이저 추가해야함
-    private IEnumerator Laser(float warningTime, float waitFire, float fireTime, float speed)
+    private IEnumerator WarningLine(float warningTime, float speed)
+    {
+        GameObject warning = ObjectPool.Instance.GetObject(ObjectPoolType.WarningType0, _slate.G_slateOnlyCollector.transform);
+        warning.transform.position = _slate.transform.position;
+
+        yield return null;
+
+        _slate.StartCoroutine(TurnLine(false, warning, warningTime, speed, ObjectPoolType.WarningType0));
+    }
+
+    private IEnumerator Laser()
+    {
+        GameObject laser = ObjectPool.Instance.GetObject(ObjectPoolType.Laser, _slate.G_slateOnlyCollector.transform);
+        laser.transform.position = _slate.transform.position;
+        laser.transform.rotation = rot;
+        yield return null;
+    }
+
+    private IEnumerator TurnLine(bool isLaser, GameObject obj, float turnTime, float speed, ObjectPoolType type)
     {
         float curTime = 0;
         float angle = 0;
         float deg = 0;
         bool isDown = false;
         Vector3 startDir = Vector3.zero;
-
-        GameObject warning = ObjectPool.Instance.GetObject(ObjectPoolType.WarningType0, _slate.G_slateOnlyCollector.transform);
-        warning.transform.position = _slate.transform.position;
-        if (_slate.transform.position.x > _slate.G_player.transform.position.x)
+        if (_slate.transform.position.x > GameManager.Instance.player.transform.position.x)
         {
             startDir = Vector3.back;
         }
-        else if (_slate.transform.position.x < _slate.G_player.transform.position.x)
+        else if (_slate.transform.position.x < GameManager.Instance.player.transform.position.x)
         {
             startDir = Vector3.forward;
         }
 
-        if (_slate.transform.position.y >= _slate.G_player.transform.position.y)
+        if (_slate.transform.position.y >= GameManager.Instance.player.transform.position.y)
         {
             isDown = true;
         }
-        else if (_slate.transform.position.y < _slate.G_player.transform.position.y)
+        else if (_slate.transform.position.y < GameManager.Instance.player.transform.position.y)
         {
             isDown = false;
         }
 
-        while (curTime < warningTime)
+        while (curTime < turnTime)
         {
             curTime += Time.deltaTime;
             deg += Time.deltaTime * speed;
@@ -99,11 +116,11 @@ public class SFullHPState : BossBaseState
                 {
                     y = Mathf.Sin(rad);
                 }
-                
+
 
                 angle = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
 
-                warning.transform.rotation = Quaternion.AngleAxis(angle + 90, startDir);
+                obj.transform.rotation = Quaternion.AngleAxis(angle + 90, startDir);
             }
             else
             {
@@ -113,14 +130,17 @@ public class SFullHPState : BossBaseState
             yield return null;
         }
 
-        Quaternion rot = warning.transform.rotation;
+        yield return null;
 
-        yield return new WaitForSeconds(waitFire);
-
-        ObjectPool.Instance.ReturnObject(ObjectPoolType.WarningType0, warning);
-        GameObject laser = ObjectPool.Instance.GetObject(ObjectPoolType.Laser, _slate.G_slateOnlyCollector.transform);
-        laser.transform.position = _slate.transform.position;
-        laser.transform.rotation = rot;
-
+        if(!isLaser)
+        {
+            rot = obj.transform.rotation;
+            ObjectPool.Instance.ReturnObject(type, obj);
+            _slate.StartCoroutine(Laser());
+        }
+        else
+        {
+            ObjectPool.Instance.ReturnObject(type, obj);
+        }
     }
 }

@@ -36,7 +36,7 @@ public class AFreeState : BossBaseState
         {
             if (!DontNeedToFollow())
             {
-                _boss.transform.position = Vector2.MoveTowards(_boss.transform.position, _boss.G_player.transform.position, Time.deltaTime * _boss.bossSo.Speed);
+                _boss.transform.position = Vector2.MoveTowards(_boss.transform.position, GameManager.Instance.player.transform.position, Time.deltaTime * _boss.bossSo.Speed);
             }
             else
             {
@@ -136,7 +136,7 @@ public class AFreeState : BossBaseState
     {
         float curTime = 0;
 
-        Vector3 dir = (_boss.G_player.transform.position - _boss.transform.position).normalized;
+        Vector3 dir = (GameManager.Instance.player.transform.position - _boss.transform.position).normalized;
 
         while (curTime < dashTime)
         {
@@ -276,7 +276,7 @@ public class AFreeState : BossBaseState
 
             yield return new WaitForSeconds(Time.deltaTime);
 
-            Vector3 nextDir = _boss.G_player.transform.position;
+            Vector3 nextDir = GameManager.Instance.player.transform.position;
 
             for (int j = 0; j < bulletCount; j++)
             {
@@ -313,7 +313,7 @@ public class AFreeState : BossBaseState
             energyBall.transform.rotation = Quaternion.identity;
 
             Rigidbody2D rigid = energyBall.GetComponent<Rigidbody2D>();
-            Vector2 dir = _boss.G_player.transform.position - energyBall.transform.position;
+            Vector2 dir = GameManager.Instance.player.transform.position - energyBall.transform.position;
             rigid.velocity = dir.normalized * speed;
 
             yield return new WaitForSeconds(waitTime);
@@ -325,8 +325,6 @@ public class AFreeState : BossBaseState
     // 버프기 - 체력 회복 및 공격력 영구 증가
     private IEnumerator Buff(int division, float speed)
     {
-        _boss.bossSo.Damage += 2;
-
         int heal = (int)(_boss.bossSo.MaxHP / division);
         float currentHeal = 0;
 

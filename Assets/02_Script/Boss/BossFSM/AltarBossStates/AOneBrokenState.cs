@@ -26,6 +26,8 @@ public class AOneBrokenState : BossBaseState
         _altarBoss.B_isOneBroken = true;
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime * 2));
         _boss.StartCoroutine(OneBrokenMove());
+        Debug.Log($"boss Pos : {_boss.transform.localPosition}");
+        Debug.Log($"need Go Pos : {_boss.V_originPos}");
     }
 
     public override void OnBossStateUpdate()
@@ -77,17 +79,18 @@ public class AOneBrokenState : BossBaseState
         {
             if(!_boss.B_isStop)
             {
-                if (Vector3.Distance(_boss.transform.position, _boss.V_originPos) < f_maxMoveDistance)
+                if (Vector3.Distance(_boss.transform.localPosition, _boss.V_originPos) < f_maxMoveDistance)
                 {
-                    Vector3 dir = (_boss.G_player.transform.position - _boss.transform.position).normalized;
+                    Vector3 dir = (GameManager.Instance.player.transform.position - _boss.transform.position).normalized;
+                    Debug.Log(dir);
 
-                    _boss.transform.position = Vector2.MoveTowards(_boss.transform.position, _boss.transform.position + dir * f_maxMoveDistance, Time.deltaTime * f_speed);
+                    _boss.transform.localPosition = Vector2.MoveTowards(_boss.transform.localPosition, _boss.transform.localPosition + dir * f_maxMoveDistance, Time.deltaTime * f_speed);
                 }
                 else
                 {
-                    Vector3 dir = (_boss.V_originPos - _boss.transform.position).normalized;
+                    Vector3 dir = (_boss.V_originPos - _boss.transform.localPosition).normalized;
 
-                    _boss.transform.position = Vector2.MoveTowards(_boss.transform.position, _boss.transform.position + dir, Time.deltaTime * f_speed);
+                    _boss.transform.localPosition = Vector2.MoveTowards(_boss.transform.localPosition, _boss.transform.localPosition + dir, Time.deltaTime * f_speed);
                 }
             }
 
@@ -196,7 +199,7 @@ public class AOneBrokenState : BossBaseState
 
             yield return new WaitForSeconds(Time.deltaTime);
 
-            Vector3 nextDir = _boss.G_player.transform.position;
+            Vector3 nextDir = GameManager.Instance.player.transform.position;
 
             for (int j = 0; j < bulletCount; j++)
             {
@@ -238,7 +241,7 @@ public class AOneBrokenState : BossBaseState
             energyBall.transform.rotation = Quaternion.identity;
 
             Rigidbody2D rigid = energyBall.GetComponent<Rigidbody2D>();
-            Vector2 dir = _boss.G_player.transform.position - energyBall.transform.position;
+            Vector2 dir = GameManager.Instance.player.transform.position - energyBall.transform.position;
             rigid.velocity = dir.normalized * speed;
 
             yield return new WaitForSeconds(waitTime);

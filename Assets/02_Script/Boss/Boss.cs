@@ -6,9 +6,7 @@ using UnityEngine.UI;
 
 public class Boss : MonoBehaviour, IHitAble
 {
-    public GameObject G_player;
     public GameObject G_bulletCollector;
-    
 
     public Slider bossHpSlider;
 
