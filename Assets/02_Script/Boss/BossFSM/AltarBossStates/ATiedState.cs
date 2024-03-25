@@ -17,7 +17,7 @@ public class ATiedState : BossBaseState
     {
         f_maxMoveDistance = 1;
         f_movingDelay = 1;
-        v_patrolPos = _boss.transform.position;
+        v_patrolPos = _boss.transform.localPosition;
         _altarBoss = boss;
     }
 
@@ -80,7 +80,7 @@ public class ATiedState : BossBaseState
     {
         while(_altarBoss.B_isTied)
         {
-            if (Arrive(_boss.transform.position, v_patrolPos))
+            if (Arrive(_boss.transform.localPosition, v_patrolPos))
             {
                 yield return new WaitForSeconds(waitTime);
                 v_patrolPos = MakeNewPatrolPos();
@@ -89,11 +89,11 @@ public class ATiedState : BossBaseState
             {
                 if (_boss.B_isStop)
                 {
-                    v_patrolPos = _boss.transform.position;
+                    v_patrolPos = _boss.transform.localPosition;
                 }
                 else
                 {
-                    _boss.transform.position = Vector2.MoveTowards(_boss.transform.position, v_patrolPos, Time.deltaTime);
+                    _boss.transform.localPosition = Vector2.MoveTowards(_boss.transform.localPosition, v_patrolPos, Time.deltaTime);
                 }
             }
 
