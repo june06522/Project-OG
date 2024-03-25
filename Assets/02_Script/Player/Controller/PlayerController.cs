@@ -21,6 +21,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
     private SpriteRenderer _spriteRenderer;
     private GameObject _interactKey;
     private PlayerHP _playerHP;
+    private PlayerEnerge _playerEnerge;
 
     [field: SerializeField] public PlayerDataSO playerData { get; protected set; }
 
@@ -36,6 +37,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
     {
         _interactKey = GameManager.Instance.transform.Find("InteractKey")?.gameObject;
         _playerHP = GetComponent<PlayerHP>();
+        _playerEnerge = GetComponent<PlayerEnerge>();
 
 
         inputController = new PlayerInputController();
@@ -46,7 +48,8 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
         playerData = Instantiate(playerData);
         playerData.SetOwner(this);
-        _playerHP.SetPlayerHP((int)playerData[PlayerStatsType.MaxHP], (int)playerData[PlayerStatsType.CurrentHP]);
+        _playerHP.SetPlayerHP((int)playerData[PlayerStatsType.MaxHP]);
+        _playerEnerge.SetPlayerEnerge((int)playerData[PlayerStatsType.MaxEnerge], playerData[PlayerStatsType.RegenEnergePerSec]);
 
         var goToDash = new PlayerGoToDash(this);
 
