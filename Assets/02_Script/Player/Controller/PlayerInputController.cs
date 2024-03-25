@@ -119,8 +119,8 @@ public class PlayerInputController : IDisposable
 
         if (isDashKeyPressed)
         {
-            var module = Particle.main;
-            module.startLifetime = 0.3f;
+            //var module = Particle.main;
+            //module.startLifetime = 0.3f;
 
             OnDashKeyPressed?.Invoke();
 
