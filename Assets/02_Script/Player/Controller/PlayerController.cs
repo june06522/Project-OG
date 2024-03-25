@@ -52,10 +52,19 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
         playerData = Instantiate(playerData);
         playerData.SetOwner(this);
-        _playerHP.SetPlayerHP((int)playerData[PlayerStatsType.MaxHP]);
-        _playerEnerge.SetPlayerEnerge((int)playerData[PlayerStatsType.MaxEnerge], playerData[PlayerStatsType.RegenEnergePerSec]);
+        if(_playerHP != null)
+        {
+            _playerHP.SetPlayerHP((int)playerData[PlayerStatsType.MaxHP]);
 
-        var goToDash = new PlayerGoToDash(this);
+        }
+        if(_playerEnerge != null)
+        {
+            _playerEnerge.SetPlayerEnerge((int)playerData[PlayerStatsType.MaxEnerge], playerData[PlayerStatsType.RegenEnergePerSec]);
+            inputController.SetPlayerEnerge(_playerEnerge);
+        }
+        
+
+        var goToDash = new PlayerGoToDash(this, _playerEnerge);
 
         var idleState = new PlayerRootState(this);
         var idleToMove = new PlayerTransitionByMoveDir(this, EnumPlayerState.Move, Vector2.zero, TransitionCheckType.Greater);

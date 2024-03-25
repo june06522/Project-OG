@@ -16,6 +16,8 @@ public class PlayerInputController : IDisposable
     public GameObject _interactUI { get; private set; }
     private bool _isDetectIntractObj = false;
 
+    private PlayerEnerge _playerEnerge;
+
     public void Update()
     {
 
@@ -28,6 +30,10 @@ public class PlayerInputController : IDisposable
     public void SetInteractUI(GameObject interactUI)
     {
         _interactUI = interactUI;
+    }
+    public void SetPlayerEnerge(PlayerEnerge playerEnerge)
+    {
+        _playerEnerge = playerEnerge;
     }
 
     private void CheckInteractable()
@@ -116,6 +122,7 @@ public class PlayerInputController : IDisposable
 
         isDashKeyPressed = Input.GetKeyDown(KeyCode.Space);
 
+        // if (isDashKeyPressed && _playerEnerge.ConsumeEnerge(10))
         if (isDashKeyPressed)
         {
 
