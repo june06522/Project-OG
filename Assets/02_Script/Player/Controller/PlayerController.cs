@@ -38,6 +38,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
         inputController = new PlayerInputController();
         eventController = new PlayerEventController();
 
+
         if(_interactKey != null)
             inputController.SetInteractUI(_interactKey);
 
@@ -45,7 +46,6 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
         playerData.SetOwner(this);
 
         var goToDash = new PlayerGoToDash(this);
-
         var idleState = new PlayerRootState(this);
         var idleToMove = new PlayerTransitionByMoveDir(this, EnumPlayerState.Move, Vector2.zero, TransitionCheckType.Greater);
 
@@ -68,6 +68,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        InputController.Particle = GetComponent<ParticleSystem>();
 
     }
 

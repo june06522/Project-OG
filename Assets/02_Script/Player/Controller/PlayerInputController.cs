@@ -6,6 +6,7 @@ public delegate void OneDirInput(float value);
 
 public class PlayerInputController : IDisposable
 {
+    public ParticleSystem Particle;
 
     public event Action OnDashKeyPressed;
     public Vector2 MoveDir { get; private set; }
@@ -46,16 +47,16 @@ public class PlayerInputController : IDisposable
             }
             return;
         }
-        else if(col.Length == 0) return;
+        else if (col.Length == 0) return;
 
         // near interact Object
         Collider2D nearObject = col[0];
         float nearObjectDistance = Vector2.Distance(pos, nearObject.gameObject.transform.position);
         float curObjDistance = 0f;
-        for(int i = 1; i < col.Length; i++)
+        for (int i = 1; i < col.Length; i++)
         {
             curObjDistance = Vector2.Distance(pos, col[i].gameObject.transform.position);
-            if(curObjDistance < nearObjectDistance)
+            if (curObjDistance < nearObjectDistance)
             {
                 nearObject = col[i];
                 nearObjectDistance = curObjDistance;
@@ -89,7 +90,7 @@ public class PlayerInputController : IDisposable
     {
         float x = 0;// = Input.GetAxisRaw("Horizontal");
         float y = 0;// = Input.GetAxisRaw("Vertical");
-        if(Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W))
             y += 1;
         if (Input.GetKey(KeyCode.S))
             y -= 1;
@@ -118,6 +119,8 @@ public class PlayerInputController : IDisposable
 
         if (isDashKeyPressed)
         {
+            var module = Particle.main;
+            module.startLifetime = 0.3f;
 
             OnDashKeyPressed?.Invoke();
 
