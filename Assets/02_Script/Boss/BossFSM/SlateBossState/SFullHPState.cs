@@ -64,7 +64,7 @@ public class SFullHPState : BossBaseState
         _slate.StartCoroutine(TurnLine(false, warning, warningTime, speed, ObjectPoolType.WarningType0));
     }
 
-    private IEnumerator Laser()
+    private IEnumerator Laser(float fireTime)
     {
         GameObject laser = ObjectPool.Instance.GetObject(ObjectPoolType.Laser, _slate.G_slateOnlyCollector.transform);
         laser.transform.position = _slate.transform.position;
@@ -136,7 +136,7 @@ public class SFullHPState : BossBaseState
         {
             rot = obj.transform.rotation;
             ObjectPool.Instance.ReturnObject(type, obj);
-            _slate.StartCoroutine(Laser());
+            _slate.StartCoroutine(Laser(3));
         }
         else
         {

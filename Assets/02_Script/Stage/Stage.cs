@@ -127,7 +127,6 @@ public class Stage : MonoBehaviour
             if(_stageType == StageType.BossStage)
             {
                 OnStageClearEvent?.Invoke();
-                return;
             }    
 
             if(waveCount >= waveList.Count)
