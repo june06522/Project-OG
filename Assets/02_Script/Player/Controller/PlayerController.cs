@@ -29,10 +29,14 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
     public static PlayerInputController InputController => inputController;
     public static PlayerEventController EventController => eventController;
 
+    Rigidbody2D rb2D;
+
     private readonly int idleHash = Animator.StringToHash("IsIdle");
 
     protected override void Awake()
     {
+        rb2D = GetComponent<Rigidbody2D>();
+
         _interactKey = GameManager.Instance.transform.Find("InteractKey")?.gameObject;
 
         inputController = new PlayerInputController();
@@ -77,6 +81,11 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
         base.Update();
 
         inputController.Update();
+
+        if (inputController.MoveDir == Vector2.zero)
+        {
+            rb2D.velocity = Vector2.zero;
+        }
 
         _animator?.SetBool(idleHash, InputController.MoveDir == Vector2.zero);
         if (InputController.LastMoveDir.x != 0)
