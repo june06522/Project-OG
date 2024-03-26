@@ -25,7 +25,7 @@ public class Hammer : InvenWeapon
 
         isAttack = true;
         yield return new WaitForSeconds(0.09f);
-        var obj = Instantiate(effect, transform.position - transform.up * 1.5f, Quaternion.identity);
+        var obj = Instantiate(effect, transform.position + transform.up * 1.5f * transform.localScale.y, Quaternion.identity);
         obj.Attack(Data.AttackDamage.GetValue());
         yield return new WaitForSeconds(0.21f);
         isAttack = false;   
