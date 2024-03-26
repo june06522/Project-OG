@@ -23,6 +23,8 @@ public enum EEnemyBulletSpeedType
 public class EnemyBullet : MonoBehaviour
 {
     [SerializeField]
+    protected BulletDataSO _dataSO;
+    [SerializeField]
     float speed = 3;
     [SerializeField]
     float endSpeed = 15;
@@ -30,6 +32,13 @@ public class EnemyBullet : MonoBehaviour
     float duration = 0.75f;
     float curSpeed = 0;
     //юс╫ц
+
+    private void Start()
+    {
+        if(_dataSO != null)
+            endSpeed = _dataSO.Speed;    
+    }
+
     public void Shoot(Vector2 dir, EEnemyBulletSpeedType speedType = EEnemyBulletSpeedType.Linear, EEnemyBulletCurveType curveType = EEnemyBulletCurveType.None)
     {
         RotateBullet(dir);
@@ -81,5 +90,17 @@ public class EnemyBullet : MonoBehaviour
         transform.position += transform.up * curSpeed * Time.deltaTime;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(_dataSO == null) return;
+        if (collision.CompareTag(_dataSO.HitAbleTag[0]))
+        {
+            IHitAble hitAble;
+            if(collision.TryGetComponent<IHitAble>(out hitAble))
+            {
+                hitAble.Hit(_dataSO.Damage);
+            }
+        }
+    }
 
 }
