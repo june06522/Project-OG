@@ -255,12 +255,13 @@ public class SwordYondo : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Enemy enemy;
-        if(collision.TryGetComponent<Enemy>(out enemy))
+        IHitAble hitAble;
+        if(collision.TryGetComponent<IHitAble>(out hitAble))
         {
-            enemy.Hit(damage);
-            if(enemy.Dead)
+            // 적이 죽었으면
+            if(hitAble.Hit(damage) == false)
             {
+                //새로이 타겟 설정
                 SetTarget();
             }
         }

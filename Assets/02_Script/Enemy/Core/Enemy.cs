@@ -92,9 +92,9 @@ public class Enemy : MonoBehaviour, IHitAble
         rigidbody.MovePosition(position);
     }
 
-    public void Hit(float damage)
+    public bool Hit(float damage)
     {
-        if (Dead) return;
+        if (Dead) return false;
         
         feedbackPlayer?.Play(damage + UnityEngine.Random.Range(0.25f, 1.75f));
         curHp -= (int)damage;
@@ -102,8 +102,10 @@ public class Enemy : MonoBehaviour, IHitAble
         if (curHp <= 0)
         {
             Die();
-            return;
+            return false;
         }
+         
+        return true;
     }
 
     public void Die()
