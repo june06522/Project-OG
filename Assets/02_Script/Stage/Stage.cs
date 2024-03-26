@@ -311,7 +311,7 @@ public class Stage : MonoBehaviour
             yield return new WaitForSeconds(waveInfo.delayedSpawnMobInfo[idx].delay);
 
             // spawn Points Suffle
-            List<Transform> delaySpawnList = waveInfo.spawnPoints.ToList<Transform>();
+            List<Transform> delaySpawnList = waveInfo.delayedSpawnPoints.ToList<Transform>();
             for (int i = 0; i < delaySpawnList.Count; ++i)
             {
                 int randomIdx = Random.Range(i, delaySpawnList.Count);

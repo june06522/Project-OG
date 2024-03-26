@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Light2D _globalLight;
     public Light2D GlobalLight => _globalLight;
+    public void ResetGlobalLight() { _globalLight.intensity = _defaultLightValue; }
 
     private float _defaultLightValue = 0.9f;
     public float DefaultLightValue => _defaultLightValue;

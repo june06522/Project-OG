@@ -42,13 +42,16 @@ public class StageGate : MonoBehaviour, IInteractable
     {
         stageTransition.StartTransition();
         yield return new WaitForSeconds(0.2f);
-        if(NextStage != null )
+        if (NextStage != null)
         {
 
             GameManager.Instance.player.position = NextStage.playerSpawnPos;
             NextStage.SetGlobalLight();
 
         }
+        else
+            GameManager.Instance.ResetGlobalLight();
+
         OnGateEvent?.Invoke();
         yield return new WaitForSeconds(0.5f);
         stageTransition.EndTransition();
