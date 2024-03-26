@@ -98,11 +98,6 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
         inputController.Update();
 
-        if (inputController.MoveDir == Vector2.zero)
-        {
-            rb2D.velocity = Vector2.zero;
-        }
-
         _animator?.SetBool(idleHash, InputController.MoveDir == Vector2.zero);
         if (InputController.LastMoveDir.x != 0)
             _spriteRenderer.flipX = InputController.LastMoveDir.x > 0;

@@ -17,12 +17,20 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler
     [SerializeField]
     private TextMeshProUGUI _itemPriceText;
 
+    private WarningTxt _warningTxt;
+
     private int _itemPrice = 1;
     ItemInfoSO _item;
 
-    // ������ ������ SO �ְ� SO������ ���ݰ� �̹��� �����ϱ�
     public void SetShopItem(ItemInfoSO item)
     {
+        _warningTxt = FindObjectOfType<WarningTxt>();
+
+        if(_warningTxt == null )
+        {
+            Debug.LogError($"{transform} : warning Text is null!");
+        }
+
         _item = item;
 
         _itemImage.color = Color.white;
@@ -36,14 +44,25 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler
     {
         if(_shop.PlayerMoney.SpendGold(_itemPrice))
         {
-            _itemPrice = 0;
-            _itemPriceText.text = string.Empty;
-            _itemName.text = "Solved";
-            _itemName.color = Color.white;
+            if(_item.GetItem())
+            {
+                _itemPrice = 0;
+                _itemPriceText.text = string.Empty;
+                _itemName.text = "Solved";
+                _itemName.color = Color.white;
 
-            _itemImage.color = Color.clear;
+                _itemImage.color = Color.clear;
 
-            _item.GetItem();
+            }
+            else
+            {
+                _warningTxt.FullInven();
+                _shop.PlayerMoney.EarnGold(_itemPrice);
+            }
+        }
+        else
+        {
+            _warningTxt.LackMoney();
         }
     }
 

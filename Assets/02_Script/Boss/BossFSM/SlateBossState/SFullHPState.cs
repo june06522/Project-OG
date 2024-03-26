@@ -5,7 +5,7 @@ using UnityEngine;
 public class SFullHPState : BossBaseState
 {
     private SlateBoss _slate;
-    private Quaternion rot;
+    private GameObject[] g_minimis = new GameObject[4]; 
 
     public SFullHPState(SlateBoss boss) : base(boss)
     {
@@ -30,17 +30,20 @@ public class SFullHPState : BossBaseState
 
     private void CreateMinimi()
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 8; i++)
         {
-            GameObject minimi = ObjectPool.Instance.GetObject(ObjectPoolType.SlateMinimi, _boss.transform);
-            minimi.transform.position = new Vector3(Mathf.Cos(Mathf.PI * 2 * i / 4), Mathf.Sin(Mathf.PI * 2 * i / 4));
-            minimi.transform.rotation = Quaternion.identity;
+            if(i % 2 != 0)
+            {
+                g_minimis[i / 2] = ObjectPool.Instance.GetObject(ObjectPoolType.SlateMinimi, _boss.transform);
+                g_minimis[i / 2].transform.position = new Vector3(Mathf.Cos(Mathf.PI * 2 * i / 8), Mathf.Sin(Mathf.PI * 2 * i / 8)).normalized * _slate.F_minimiAwayDistance;
+                g_minimis[i / 2].gameObject.name = (i / 2).ToString();
+                g_minimis[i / 2].transform.rotation = Quaternion.identity;
+            }
         }
     }
 
     private IEnumerator RandomPattern(float waitTime)
     {
-        Debug.Log("laser");
         yield return new WaitForSeconds(waitTime);
 
         int rand = 1;// Random.Range(1, 5);
@@ -48,99 +51,63 @@ public class SFullHPState : BossBaseState
         switch(rand)
         {
             case 1:
-                NowCoroutine(WarningLine(10, 100));
+                NowCoroutine(Laser(2, 100));
                 break;
         }
     }
 
-    // 미니미 레이저 추가해야함
-    private IEnumerator WarningLine(float warningTime, float speed)
+    // 레이저 라인 랜더러로 바꾸기
+    private IEnumerator Laser(float warningTime, float fireTime)
     {
+        float curTime = 0;
         GameObject warning = ObjectPool.Instance.GetObject(ObjectPoolType.WarningType0, _slate.G_slateOnlyCollector.transform);
         warning.transform.position = _slate.transform.position;
 
-        yield return null;
-
-        _slate.StartCoroutine(TurnLine(false, warning, warningTime, speed, ObjectPoolType.WarningType0));
-    }
-
-    private IEnumerator Laser(float fireTime)
-    {
-        GameObject laser = ObjectPool.Instance.GetObject(ObjectPoolType.Laser, _slate.G_slateOnlyCollector.transform);
-        laser.transform.position = _slate.transform.position;
-        laser.transform.rotation = rot;
-        yield return null;
-    }
-
-    private IEnumerator TurnLine(bool isLaser, GameObject obj, float turnTime, float speed, ObjectPoolType type)
-    {
-        float curTime = 0;
-        float angle = 0;
-        float deg = 0;
-        bool isDown = false;
-        Vector3 startDir = Vector3.zero;
-        if (_slate.transform.position.x > GameManager.Instance.player.transform.position.x)
-        {
-            startDir = Vector3.back;
-        }
-        else if (_slate.transform.position.x < GameManager.Instance.player.transform.position.x)
-        {
-            startDir = Vector3.forward;
-        }
-
-        if (_slate.transform.position.y >= GameManager.Instance.player.transform.position.y)
-        {
-            isDown = true;
-        }
-        else if (_slate.transform.position.y < GameManager.Instance.player.transform.position.y)
-        {
-            isDown = false;
-        }
-
-        while (curTime < turnTime)
+        while(curTime < warningTime)
         {
             curTime += Time.deltaTime;
-            deg += Time.deltaTime * speed;
-            if (deg < 360)
-            {
-                float rad = Mathf.Deg2Rad * (deg + 360);
-
-                float x = Mathf.Cos(rad);
-
-                float y = 0;
-                if (isDown)
-                {
-                    y = -Mathf.Sin(rad);
-                }
-                else
-                {
-                    y = Mathf.Sin(rad);
-                }
-
-
-                angle = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
-
-                obj.transform.rotation = Quaternion.AngleAxis(angle + 90, startDir);
-            }
-            else
-            {
-                deg = 0;
-            }
-
+            warning.transform.Rotate(Vector3.forward);
             yield return null;
         }
 
-        yield return null;
+        ObjectPool.Instance.ReturnObject(ObjectPoolType.WarningType0, warning);
+        GameObject[] minimiLasers = new GameObject[g_minimis.Length];
 
-        if(!isLaser)
+        for(int i = 0; i < g_minimis.Length; i++)
         {
-            rot = obj.transform.rotation;
-            ObjectPool.Instance.ReturnObject(type, obj);
-            _slate.StartCoroutine(Laser(3));
+            minimiLasers[i] = ObjectPool.Instance.GetObject(ObjectPoolType.SlateMinimiLaser, _slate.G_slateOnlyCollector.transform);
+            minimiLasers[i].GetComponent<BossBullet>().Attack(_slate.bossSo.Damage);
+            minimiLasers[i].transform.position = g_minimis[i].transform.position;
+            minimiLasers[i].transform.rotation = Quaternion.identity;
         }
-        else
+        GameObject laser = ObjectPool.Instance.GetObject(ObjectPoolType.Laser, _slate.G_slateOnlyCollector.transform);
+        laser.GetComponentInChildren<BossBullet>().Attack(_slate.bossSo.Damage);
+        laser.transform.position = _slate.transform.position;
+        laser.transform.rotation = warning.transform.rotation;
+        curTime = 0;
+
+        while(curTime < fireTime)
         {
-            ObjectPool.Instance.ReturnObject(type, obj);
+            curTime += Time.deltaTime;
+            laser.transform.Rotate(Vector3.forward);
+            for(int i = 0; i < g_minimis.Length; i++)
+            {
+                if(i == 0 || i == 3)
+                {
+                    minimiLasers[i].transform.Rotate(Vector3.back * Time.deltaTime * 20);
+                }
+                else
+                {
+                    minimiLasers[i].transform.Rotate(Vector3.forward * Time.deltaTime * 20);
+                }
+            }
+            yield return null;
+        }
+
+        ObjectPool.Instance.ReturnObject(ObjectPoolType.Laser, laser);
+        for(int i = 0; i < g_minimis.Length; i++)
+        {
+            ObjectPool.Instance.ReturnObject(ObjectPoolType.SlateMinimiLaser, minimiLasers[i]);
         }
     }
 }

@@ -26,6 +26,8 @@ public class Shop : MonoBehaviour
     [SerializeField]
     private List<ShopItem> _shopItemList = new List<ShopItem>();
 
+    private WarningTxt _warningTxt;
+
     // open
     private bool _isOpen = false;
 
@@ -44,6 +46,7 @@ public class Shop : MonoBehaviour
         SetRandomItem();
         _isOpen = false;
         inven = FindObjectOfType<InventoryActive>();
+        _warningTxt = FindObjectOfType<WarningTxt>();
     }
 
     public void OpenShop()
@@ -75,8 +78,11 @@ public class Shop : MonoBehaviour
 
     public void ReRoll()
     {
-        if(_playerMoney.SpendGold(_reRollGold) == false) return;
-
+        if (_playerMoney.SpendGold(_reRollGold) == false)
+        {
+            _warningTxt.LackMoney();
+            return;
+        }
         SetRandomItem();
 
         _reRollGold += _reRollIncreaseGoldValue;
