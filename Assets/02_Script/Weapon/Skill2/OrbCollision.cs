@@ -5,13 +5,21 @@ using UnityEngine;
 public class OrbCollision : MonoBehaviour
 {
 
+    [SerializeField] private float speed;
+
     private float damage;
     List<IHitAble> hits = new List<IHitAble>();
+
     public void SetDamage(float damage)
     {
 
         this.damage = damage;
 
+    }
+
+    private void Update()
+    {
+        transform.position += transform.up * speed * Time.deltaTime;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -27,7 +35,7 @@ public class OrbCollision : MonoBehaviour
             h.Hit(damage * 1.2f);
             h.Hit(damage * 1.5f);
             hits.Add(h);
-            
+
         }
 
     }
