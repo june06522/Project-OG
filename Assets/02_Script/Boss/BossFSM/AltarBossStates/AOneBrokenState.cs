@@ -82,7 +82,6 @@ public class AOneBrokenState : BossBaseState
                 if (Vector3.Distance(_boss.transform.localPosition, _boss.V_originPos) < f_maxMoveDistance)
                 {
                     Vector3 dir = (GameManager.Instance.player.transform.position - _boss.transform.position).normalized;
-                    Debug.Log(dir);
 
                     _boss.transform.localPosition = Vector2.MoveTowards(_boss.transform.localPosition, _boss.transform.localPosition + dir * f_maxMoveDistance, Time.deltaTime * f_speed);
                 }
