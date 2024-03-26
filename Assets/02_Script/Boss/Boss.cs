@@ -22,7 +22,6 @@ public class Boss : MonoBehaviour, IHitAble
     public BossDataSO bossSo;
 
     public FeedbackPlayer feedbackPlayer { get; set; }
-
     public Vector3 V_originPos;
 
     public event Action DeadEvt;
@@ -51,13 +50,13 @@ public class Boss : MonoBehaviour, IHitAble
         trans.position = Vector2.MoveTowards(trans.position, trans.position, Time.deltaTime);
     }
 
-    public void Hit(float damage)
+    public bool Hit(float damage)
     {
         float critical = UnityEngine.Random.Range(0.25f, 1.75f);
         damage += critical;
 
         if (B_dead)
-            return;
+            return false;
 
         F_currentHp -= damage;
         feedbackPlayer.Play(damage);
@@ -67,8 +66,10 @@ public class Boss : MonoBehaviour, IHitAble
         {
             DeadEvt?.Invoke();
 
-            return;
+            return false;
         }
+    
+        return true;
     }
 
     private void DieEvent()

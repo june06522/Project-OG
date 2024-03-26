@@ -17,9 +17,9 @@ public class PlayerHP : MonoBehaviour, IHitAble
 
     private bool _isDead = false;
 
-    public void Hit(float damage)
+    public bool Hit(float damage)
     {
-        if (_isDead) return;
+        if (_isDead) return false;
 
         feedbackPlayer?.Play(damage);
         CurrentHP -= (int)damage;
@@ -29,8 +29,10 @@ public class PlayerHP : MonoBehaviour, IHitAble
         if (CurrentHP <= 0)
         {
             Die();
-            return;
+            return false;
         }
+         
+        return true;
     }
 
     public void RestoreHP(int plusHP)
