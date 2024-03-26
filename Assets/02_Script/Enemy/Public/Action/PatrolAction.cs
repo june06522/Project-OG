@@ -35,7 +35,7 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
         debuggingTrm = debugTarget;
 
         nextPos = controller.transform.position;
-        patrolRadius = controller.EnemyDataSO.Range;
+        patrolRadius = controller.EnemyDataSO.AttackAbleRange / 2;
         aiData = controller.AIdata;
         idleTime = controller.EnemyDataSO.IdleTime;
         idleTimer = 1f;
@@ -49,8 +49,11 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
         startPos = controller.transform.position;
         if (behaviours[0] is PatrolBehaviour)
         {
+            int randomSeed = Random.Range(10, 25);
             patrolBehaviour = behaviours[0] as PatrolBehaviour;
-            patrolBehaviour.Setting(startPos, Random.Range(10, 25));
+            patrolBehaviour.Setting(startPos, randomSeed);
+
+            Debug.Log(randomSeed);
         }
         else
         {

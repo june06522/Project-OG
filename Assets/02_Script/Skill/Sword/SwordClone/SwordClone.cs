@@ -10,7 +10,6 @@ public enum ECloneType
     BIG,
 }
 
-
 public abstract class SwordClone : MonoBehaviour
 {
     [SerializeField]
