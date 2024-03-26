@@ -2508,6 +2508,7 @@ MonoBehaviour:
   bossSo: {fileID: 11400000, guid: 0099b2f9b2e2542478e8e07f5da3ebda, type: 2}
   V_originPos: {x: 0, y: 0, z: 0}
   G_slateOnlyCollector: {fileID: 599669600}
+  F_minimiAwayDistance: 3
 --- !u!61 &1258470300
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9556,6 +9557,22 @@ PrefabInstance:
     - target: {fileID: 2492076193010013946, guid: 8051333dfe762b8418c692b47d613a94, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2492076193455481989, guid: 8051333dfe762b8418c692b47d613a94, type: 3}
+      propertyPath: poolData.Array.size
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2492076193455481989, guid: 8051333dfe762b8418c692b47d613a94, type: 3}
+      propertyPath: poolData.Array.data[14].prefab
+      value: 
+      objectReference: {fileID: 7798504290126705943, guid: 9f6b8d87c0e2aae479ccda058e0fca1d, type: 3}
+    - target: {fileID: 2492076193455481989, guid: 8051333dfe762b8418c692b47d613a94, type: 3}
+      propertyPath: poolData.Array.data[14].ObjectType
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2492076193455481989, guid: 8051333dfe762b8418c692b47d613a94, type: 3}
+      propertyPath: poolData.Array.data[14].prefabCount
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2492076193636751587, guid: 8051333dfe762b8418c692b47d613a94, type: 3}
       propertyPath: m_AnchorMax.x

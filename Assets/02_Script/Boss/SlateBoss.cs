@@ -6,6 +6,8 @@ public class SlateBoss : Boss
 {
     public GameObject G_slateOnlyCollector;
 
+    public float F_minimiAwayDistance;
+
     private enum BossState
     {
         Idle,

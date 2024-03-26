@@ -9,13 +9,21 @@ public class AFreeState : BossBaseState
 {
     private bool b_wasHealing;
     private bool b_nowMove;
+    private bool b_allThrow;
+
+    private float f_rotatingBallRegenTime;
+    private float f_curWaitingRegenTime;
+
     private AltarBoss _altarBoss;
 
     public AFreeState(AltarBoss boss) : base(boss)
     {
         b_wasHealing = false;
         b_nowMove = false;
+        b_allThrow = false;
         _altarBoss = boss;
+        f_rotatingBallRegenTime = 10;
+        f_curWaitingRegenTime = 0;
     }
 
     public override void OnBossStateExit()
@@ -32,6 +40,18 @@ public class AFreeState : BossBaseState
 
     public override void OnBossStateUpdate()
     {
+        if(b_allThrow)
+        {
+            f_curWaitingRegenTime += Time.deltaTime;
+        }
+
+        if(f_curWaitingRegenTime >= f_rotatingBallRegenTime)
+        {
+            _boss.StartCoroutine(RotatingBall(3, 100, _boss.transform, 3, 5, 5, 0.5f));
+            f_curWaitingRegenTime = 0;
+            b_allThrow = false;
+        }
+
         if(!_boss.B_isStop && !_boss.B_blocked && b_nowMove)
         {
             if (!DontNeedToFollow())
@@ -157,15 +177,17 @@ public class AFreeState : BossBaseState
 
         b_nowMove = true;
 
-        _boss.StartCoroutine(RotatingBall(3, 100, _boss.transform, 3));
+        _boss.StartCoroutine(RotatingBall(3, 100, _boss.transform, 3, 5, 5, 0.5f));
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime * 2));
     }
 
-    private IEnumerator RotatingBall(int bulletCount, float speed, Transform trans, float r) // 롤 - 리메이크 전 아우솔 패시브 (주위를 도는 유성)
+    // 시간 지나면 돌다가 플레이어 방향으로 날아가라 그리고 또 다시 생기고 돌고 던지고 반복 + 메테리얼 이용해서 태양 느낌 레츠고
+    private IEnumerator RotatingBall(int bulletCount, float speed, Transform trans, float r, float waitTime, float throwSpeed, float throwWaitTime) // 롤 - 리메이크 전 아우솔 패시브 (주위를 도는 유성)
     {
         float deg = 0; // 각도
-        float timeCounting = 0;
+        float curTime = 0;
         GameObject[] bullets = new GameObject[bulletCount];
+
 
         for (int i = 0; i < bullets.Length; i++)
         {
@@ -174,10 +196,10 @@ public class AFreeState : BossBaseState
         }
 
 
-        while (!_boss.B_isDead)
+        while (curTime < waitTime)
         {
             deg += Time.deltaTime * speed;
-            timeCounting += Time.deltaTime;
+            curTime += Time.deltaTime;
 
             if (deg < 360)
             {
@@ -195,6 +217,18 @@ public class AFreeState : BossBaseState
 
             yield return new WaitForSeconds(Time.deltaTime);
         }
+
+        for (int i = 0; i < bullets.Length; i++)
+        {
+            Vector2 dir = (GameManager.Instance.player.transform.position - bullets[i].transform.position).normalized;
+            bullets[i].transform.SetParent(_altarBoss.G_altarOnlyCollector.transform);
+            bullets[i].GetComponent<Rigidbody2D>().velocity = dir * throwSpeed;
+            _altarBoss.StartCoroutine(ObjectPool.Instance.ReturnObject(bullets[i], 5));
+
+            yield return new WaitForSeconds(throwWaitTime);
+        }
+
+        b_allThrow = true;
     }
 
     // 전방향으로 공격한다 - 플레이어가 근접하기 좋은 패턴

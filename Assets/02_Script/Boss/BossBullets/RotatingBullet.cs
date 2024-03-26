@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class RotatingBullet : BossBullet
 {
+    private Boss _boss;
+
+    protected override void OnEnable()
+    {
+        _boss = GetComponentInParent<Boss>();
+    }
     private void Update()
     {
-        if (GetComponentInParent<Boss>().B_isDead)
+        if (_boss.B_isDead)
         {
             ObjectPool.Instance.ReturnObject(ObjectPoolType.BossBulletType5, this.gameObject);
         }
