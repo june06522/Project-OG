@@ -38,4 +38,13 @@ public class BatStateController : BaseFSM_Controller<EBatState>
         AddState(moveState, EBatState.Move);
         AddState(attackState, EBatState.Attack);
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        PlayerHP player;
+        if(collision.transform.TryGetComponent<PlayerHP>(out player))
+        {
+            player.Hit(EnemyDataSO.AttackPower);
+        }
+    }
 }

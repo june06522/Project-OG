@@ -21,7 +21,7 @@ public class LeafFairyStateController : BaseFSM_Controller<ELeafFariyState>
     [SerializeField]
     public LeafBullet bullet;
 
-
+    GameObject particleOBJ;
     protected override void Start()
     {
         base.Start();
@@ -52,6 +52,8 @@ public class LeafFairyStateController : BaseFSM_Controller<ELeafFariyState>
     public IEnumerator Attack(Action act)
     {
         ParticleSystem insPs = Instantiate(attackEffect, attackPoint.position, Quaternion.identity);
+        particleOBJ = insPs.gameObject;
+
         yield return new WaitForSeconds(1f);
 
         Vector2 dir = (Target.position - attackPoint.position).normalized;
@@ -68,6 +70,14 @@ public class LeafFairyStateController : BaseFSM_Controller<ELeafFariyState>
     public void InstantiateBullet(Vector2 dir, EEnemyBulletSpeedType speedType, EEnemyBulletCurveType curveType = EEnemyBulletCurveType.None)
     {
         Instantiate(bullet, attackPoint.position, Quaternion.identity).Shoot(dir, speedType, curveType);
+    }
+
+    private void OnDestroy()
+    {
+        if(particleOBJ != null)
+        {
+            Destroy(particleOBJ);
+        }   
     }
 
 }
