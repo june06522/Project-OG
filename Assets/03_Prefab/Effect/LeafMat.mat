@@ -7,11 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AppearMat
-  m_Shader: {fileID: 4800000, guid: da8efd605fdd20949a21be6242000625, type: 3}
+  m_Name: LeafMat
+  m_Shader: {fileID: 4800000, guid: 0803c241834332942abfcbd27c498b46, type: 3}
   m_ValidKeywords:
-  - _ENABLEPIXELOUTLINE_ON
-  - _ENABLESQUEEZE_ON
   - _SHADERFADING_NONE
   - _SHADERSPACE_UV
   m_InvalidKeywords: []
@@ -49,10 +47,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MaskMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -108,20 +102,9 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - PixelSnap: 0
     - _AddColorContrast: 0.5
     - _AddColorContrastToggle: 0
     - _AddColorFade: 1
@@ -132,13 +115,12 @@ Material:
     - _AddHueMaskToggle: 0
     - _AddHueSaturation: 1
     - _AddHueSpeed: 1
-    - _AlphaCutoff: 0.5
     - _AlphaTintFade: 1
     - _AlphaTintMinAlpha: 0.02
     - _BakedMaterial: 0
     - _BlackTintFade: 1
     - _BlackTintPower: 4
-    - _Brightness: 5
+    - _Brightness: 1
     - _BurnEdgeNoiseFactor: 0.5
     - _BurnFade: 1
     - _BurnInsideContrast: 2
@@ -211,7 +193,7 @@ Material:
     - _EnableNegative: 0
     - _EnableOuterOutline: 0
     - _EnablePingPongGlow: 0
-    - _EnablePixelOutline: 1
+    - _EnablePixelOutline: 0
     - _EnablePixelate: 0
     - _EnablePoison: 0
     - _EnableRainbow: 0
@@ -233,7 +215,7 @@ Material:
     - _EnableSourceAlphaDissolve: 0
     - _EnableSourceGlowDissolve: 0
     - _EnableSplitToning: 0
-    - _EnableSqueeze: 1
+    - _EnableSqueeze: 0
     - _EnableSquish: 0
     - _EnableStrongTint: 0
     - _EnableUVDistort: 0
@@ -267,7 +249,7 @@ Material:
     - _FrozenHighlightDensity: 1
     - _FrozenSnowContrast: 1
     - _FrozenSnowDensity: 0.25
-    - _FullAlphaDissolveFade: 1
+    - _FullAlphaDissolveFade: 0.5
     - _FullAlphaDissolveWidth: 0.5
     - _FullDistortionFade: 1
     - _FullGlowDissolveFade: 0.5
@@ -299,17 +281,16 @@ Material:
     - _InkSpreadNoiseFactor: 0.5
     - _InkSpreadWidth: 0.2
     - _InnerOutlineDistortionToggle: 0
-    - _InnerOutlineFade: 0.17
+    - _InnerOutlineFade: 1
     - _InnerOutlineOutlineOnlyToggle: 0
     - _InnerOutlineTextureToggle: 0
-    - _InnerOutlineWidth: 0.01
+    - _InnerOutlineWidth: 0.02
     - _MetalContrast: 2
     - _MetalFade: 1
     - _MetalHighlightContrast: 2
     - _MetalHighlightDensity: 1
     - _MetalMaskToggle: 0
     - _NegativeFade: 1
-    - _NormalIntensity: 1
     - _OuterOutlineDistortionToggle: 0
     - _OuterOutlineFade: 1
     - _OuterOutlineOutlineOnlyToggle: 0
@@ -379,8 +360,8 @@ Material:
     - _SineGlowMin: 0
     - _SineMoveFade: 1
     - _SineRotateAngle: 15
-    - _SineRotateFade: 0
-    - _SineRotateFrequency: 0.55
+    - _SineRotateFade: 1
+    - _SineRotateFrequency: 1
     - _SineScaleFrequency: 2
     - _SmokeAlpha: 1
     - _SmokeDarkEdge: 1
@@ -401,7 +382,7 @@ Material:
     - _SplitToningFade: 1
     - _SplitToningShift: 0
     - _SpriteSheetFix: 0
-    - _SqueezeFade: 0.4
+    - _SqueezeFade: 1
     - _SqueezePower: 1
     - _SquishFade: 1
     - _SquishFlip: 0
@@ -424,7 +405,7 @@ Material:
     - _ToggleUnscaledTime: 0
     - _UVDistortFade: 1
     - _UVDistortMaskToggle: 0
-    - _UVRotateSpeed: -1.73
+    - _UVRotateSpeed: 1
     - _VertexTintFirst: 0
     - _VibrateFade: 1
     - _VibrateFrequency: 100
@@ -444,9 +425,9 @@ Material:
     - _WindMinIntensity: -0.4
     - _WindNoiseScale: 0.1
     - _WindNoiseSpeed: 1
-    - _WindRotation: -0.08
-    - _WindRotationWindFactor: 0.96
-    - _WindSquishFactor: 0.63
+    - _WindRotation: 0
+    - _WindRotationWindFactor: 1
+    - _WindSquishFactor: 0.3
     - _WindSquishWindFactor: 0
     - _WindXPosition: 0
     - _WorldTilingPixelsPerUnit: 100
@@ -479,7 +460,6 @@ Material:
     - _DirectionalDistortionNoiseScale: {r: 0.4, g: 0.4, b: 0, a: 0}
     - _DirectionalGlowFadeEdgeColor: {r: 11.98431, g: 0.6901961, b: 0.6901961, a: 0}
     - _DirectionalGlowFadeNoiseScale: {r: 0.4, g: 0.4, b: 0, a: 0}
-    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EnchantedHighColor: {r: 0, g: 0.7098798, b: 4.237095, a: 0}
     - _EnchantedLowColor: {r: 2.996078, g: 0, b: 0, a: 0}
     - _EnchantedScale: {r: 0.1, g: 0.1, b: 0, a: 0}
