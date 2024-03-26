@@ -31,7 +31,8 @@ public class EnemyAnimController : MonoBehaviour
 
     public void Flip(Vector2 dir)
     {
-        spriteRenderer.flipX = dir.x > 0;
+        transform.rotation = dir.x < 0 ? Quaternion.identity : Quaternion.Euler(0, 180, 0);
+        //spriteRenderer.flipX = dir.x > 0;
     }
 
     public void StopAnimator() => SetAnimatorSpeed(0);

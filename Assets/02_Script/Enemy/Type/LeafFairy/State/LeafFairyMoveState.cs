@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MummyGunMoveState : MummyGunRootState
+public class LeafFairyMoveState : LeafFairyRootState
 {
-    ChaseAction<EMummyGunState> chaseAct;
-    public MummyGunMoveState(MummyGunStateController controller) : base(controller)
+    ChaseAction<ELeafFariyState> chaseAct;
+    public LeafFairyMoveState(LeafFairyStateController controller) : base(controller)
     {
         List<SteeringBehaviour> behaviourlist = new List<SteeringBehaviour>() 
         {
             new ObstacleAvoidanceBehaviour(controller.transform),
             new SeekBehaviour(controller.transform)
         };
-        chaseAct = new ChaseAction<EMummyGunState>(controller, 
+        chaseAct = new ChaseAction<ELeafFariyState>(controller, 
                                         behaviourlist, true);
     }
 

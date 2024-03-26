@@ -4,14 +4,14 @@ using UnityEngine;
 
 
 //root°â patrolState
-public class MummyGunRootState : BaseFSM_State<EMummyGunState>
+public class LeafFairyRootState : BaseFSM_State<ELeafFariyState>
 {
-    protected new MummyGunStateController controller;
+    protected new LeafFairyStateController controller;
     protected EnemyDataSO _data => controller.EnemyDataSO;
 
     protected List<Detector> detectors;
 
-    public MummyGunRootState(MummyGunStateController controller) : base(controller)
+    public LeafFairyRootState(LeafFairyStateController controller) : base(controller)
     {
         this.controller = controller;
         

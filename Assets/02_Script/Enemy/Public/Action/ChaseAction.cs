@@ -30,7 +30,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     
     public ChaseAction(BaseFSM_Controller<T> controller, List<SteeringBehaviour> behaviours, bool checkCollision) : base(controller)
     {
-        this.targetTrm = GameManager.Instance.player;
+        this.targetTrm = controller.Target;
         this.behaviours = behaviours;
         //route = new();
 
