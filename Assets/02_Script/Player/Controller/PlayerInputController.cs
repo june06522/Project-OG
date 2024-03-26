@@ -108,9 +108,6 @@ public class PlayerInputController : IDisposable
 
         MoveDir = new Vector2(x, y).normalized;
 
-        if (MoveDir == Vector2.zero)
-            rb2D.velocity = MoveDir;
-
         if (MoveDir != Vector2.zero)
         {
 
