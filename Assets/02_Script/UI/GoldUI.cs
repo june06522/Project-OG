@@ -28,6 +28,8 @@ public class GoldUI : MonoBehaviour
         StopCoroutine("SetGoldUICo");
         StartCoroutine("SetGoldUICo");
 
+        _goldValueText.rectTransform.localScale = Vector3.one;
+        _goldValueText.rectTransform.DOKill();
         _goldValueText.rectTransform.DOShakeScale(_transitionTime, 0.5f, 10);
     }
 
