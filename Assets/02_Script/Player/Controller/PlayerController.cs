@@ -96,7 +96,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
         base.Update();
 
-        inputController.Update();
+        inputController.Update(rb2D);
 
         _animator?.SetBool(idleHash, InputController.MoveDir == Vector2.zero);
         if (InputController.LastMoveDir.x != 0)

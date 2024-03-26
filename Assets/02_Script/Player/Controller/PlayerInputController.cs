@@ -19,10 +19,10 @@ public class PlayerInputController : IDisposable
 
     private PlayerEnerge _playerEnerge;
 
-    public void Update()
+    public void Update(Rigidbody2D rb2D)
     {
 
-        CheckMovementKeyInput();
+        CheckMovementKeyInput(rb2D);
         CheckDashKey();
         CheckInteractable();
 
@@ -92,7 +92,7 @@ public class PlayerInputController : IDisposable
         }
     }
 
-    private void CheckMovementKeyInput()
+    private void CheckMovementKeyInput(Rigidbody2D rb2D)
     {
         float x = 0;// = Input.GetAxisRaw("Horizontal");
         float y = 0;// = Input.GetAxisRaw("Vertical");
@@ -107,6 +107,9 @@ public class PlayerInputController : IDisposable
 
 
         MoveDir = new Vector2(x, y).normalized;
+
+        if (MoveDir == Vector2.zero)
+            rb2D.velocity = MoveDir;
 
         if (MoveDir != Vector2.zero)
         {
