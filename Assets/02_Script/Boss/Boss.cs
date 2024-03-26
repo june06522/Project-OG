@@ -115,7 +115,6 @@ public class Boss : MonoBehaviour, IHitAble
     {
         if (collision.gameObject.tag == "Player")
         {
-            Debug.Log($"{bossSo.Damage} µ•πÃ¡ˆ ¡‹");
             if (collision.gameObject.TryGetComponent<IHitAble>(out var IhitAble))
             {
                 IhitAble.Hit(bossSo.Damage);
