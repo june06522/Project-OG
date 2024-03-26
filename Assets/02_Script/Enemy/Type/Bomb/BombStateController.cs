@@ -64,4 +64,11 @@ public class BombStateController : BaseFSM_Controller<EBombState>
     {
         instShowRangeObj = Instantiate(showRange, transform.position, Quaternion.identity);
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawSphere(transform.position, radius);
+    }
+#endif
 }

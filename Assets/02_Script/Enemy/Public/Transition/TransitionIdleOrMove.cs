@@ -30,7 +30,7 @@ public class TransitionIdleOrMove<T> : BaseFSM_Transition<T> where T : Enum
             Debug.LogError("Only (idle, Move) can!");
 
         
-        playerTrm = GameManager.Instance.player;
+        playerTrm = controller.Target;
 
         #region enum이름으로 데이터 할당
         //string className = $"{nextState.GetType().Name.Remove(1,1)}Controller";
