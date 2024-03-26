@@ -15,7 +15,16 @@ public class ContextSolver
         //Loop through each behaviour
         foreach (SteeringBehaviour behaviour in behaviours)
         {
-            (danger, interest) = behaviour.GetSteering(danger, interest, aiData);
+            float[] tempDanger = new float[8];
+            float[] tempInterest = new float[8];
+
+            (tempDanger, tempInterest) = behaviour.GetSteering(danger, interest, aiData);
+
+            for(int i = 0; i < 8; i++)
+            {
+                danger[i] += tempDanger[i];
+                interest[i] += tempInterest[i];
+            }
         }
         
         //subtract danger values from interest array
