@@ -10,15 +10,18 @@ public class AFreeState : BossBaseState
     private bool b_wasHealing;
     private bool b_nowMove;
     private bool b_allThrow;
+    private bool b_lock;
 
     private float f_rotatingBallRegenTime;
     private float f_curWaitingRegenTime;
+
 
     private AltarBoss _altarBoss;
 
     public AFreeState(AltarBoss boss) : base(boss)
     {
         b_wasHealing = false;
+        b_lock = false;
         b_nowMove = false;
         b_allThrow = false;
         _altarBoss = boss;
@@ -77,7 +80,13 @@ public class AFreeState : BossBaseState
             if(b_wasHealing)
             {
                 rand = Random.Range(1, 6);
-                b_wasHealing = false;
+            }
+        }
+        else if(rand == 5)
+        {
+            if (b_lock)
+            {
+                rand = Random.Range(1, 5);
             }
         }
 
@@ -97,15 +106,14 @@ public class AFreeState : BossBaseState
                 NowCoroutine(OmniGuidPlayerAttack(20, 5, 1, 1));
                 break;
             case 4:
+                NowCoroutine(ThrowEnergyBall(3, 10, 1, 2));
+                break;
+            case 5:
                 _boss.StopImmediately(_boss.transform);
                 _boss.B_isStop = true;
                 NowCoroutine(OmnidirShooting(4, 3, 0.2f, 50));
                 break;
-            case 5:
-                NowCoroutine(ThrowEnergyBall(3, 10, 1, 2));
-                break;
             case 6:
-                b_wasHealing = true;
                 _boss.StopImmediately(_boss.transform);
                 _boss.B_isStop = true;
                 NowCoroutine(Buff(5, 150));
@@ -149,6 +157,20 @@ public class AFreeState : BossBaseState
         }
 
         return null;
+    }
+
+    private IEnumerator LockHeal(float waitTime)
+    {
+        b_wasHealing = true;
+        yield return new WaitForSeconds(waitTime);
+        b_wasHealing = false;
+    }
+
+    private IEnumerator LockAndUnlock(float waitTime)
+    {
+        b_lock = true;
+        yield return new WaitForSeconds(waitTime);
+        b_lock = false;
     }
 
     // 풀린 즉시 한 번만 하는 패턴
@@ -377,6 +399,7 @@ public class AFreeState : BossBaseState
             _altarBoss.ChangeMat();
 
             _boss.B_isStop = false;
+            _boss.StartCoroutine(LockHeal(40));
             _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
         }
         else
@@ -406,7 +429,6 @@ public class AFreeState : BossBaseState
 
         if (p)
         {
-            Debug.Log(_boss.bossSo.Damage);
             if (p.TryGetComponent<IHitAble>(out var IhitAble))
             {
                 IhitAble.Hit(_boss.bossSo.Damage);
@@ -444,6 +466,7 @@ public class AFreeState : BossBaseState
         _altarBoss.ChangeMat();
         _boss.B_isStop = false;
 
+        _boss.StartCoroutine(LockAndUnlock(15));
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
     }
 }
