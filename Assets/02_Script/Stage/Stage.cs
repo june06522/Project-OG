@@ -55,7 +55,27 @@ public class Stage : MonoBehaviour
     public event Action OnStageClearEvent;
     public event Action OnGateEvent;
 
+    [Header("Lighting")]
+    [SerializeField]
+    private bool _useStageLight;
+    [SerializeField, Range(0f, 1f)]
+    private float _stageIntensity;
+
     [Header("Stage Info")]
+    [SerializeField]
+    private Transform _playerSpawnPos;
+
+    public Vector3 playerSpawnPos 
+    {
+        get
+        {
+            if (_playerSpawnPos != null)
+                return _playerSpawnPos.position;
+            else
+                return transform.position;
+        }
+    }
+
     public StageGate stageGate;
     private List<GameObject> stageItems = new List<GameObject>();
 
@@ -70,6 +90,7 @@ public class Stage : MonoBehaviour
 
     [SerializeField]
     private ParticleSystem _enemySpawnParticle;
+    
 
     [Header("Wave Info")]
     // waveInfo, wave count is list count
@@ -197,6 +218,21 @@ public class Stage : MonoBehaviour
         foreach(GameObject obj in stageItems)
         {
             Destroy(obj);
+        }
+    }
+    public void SetGlobalLight()
+    {
+        if(_useStageLight)
+        {
+            
+            GameManager.Instance.GlobalLight.intensity = _stageIntensity;
+
+        }
+        else
+        {
+
+            GameManager.Instance.GlobalLight.intensity = 0.9f;
+
         }
     }
 

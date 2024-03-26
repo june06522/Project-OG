@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,6 +17,16 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] WeaponController weaponController;
     public WeaponController WeaponController => weaponController;
+    #endregion
+
+    #region
+    [SerializeField]
+    private Light2D _globalLight;
+    public Light2D GlobalLight => _globalLight;
+
+    private float _defaultLightValue = 0.9f;
+    public float DefaultLightValue => _defaultLightValue;
+
     #endregion
 
     [NonSerialized] public Transform player;
