@@ -13,7 +13,7 @@ public class Money : MonoBehaviour
 
     private void Awake()
     {
-        #region ½Ì±ÛÅæ
+        #region ì´ˆê¸°í™”
         if (Instance == null)
         {
             Instance = this;

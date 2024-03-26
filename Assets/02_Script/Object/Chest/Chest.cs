@@ -59,10 +59,8 @@ public class Chest : MonoBehaviour, IInteractable
 
     public void Open()
     {
-        Debug.Log("1");
         if (_isOpen)
             return;
-        Debug.Log("2");
         _collider.enabled = false;
         _isOpen = true;
 
