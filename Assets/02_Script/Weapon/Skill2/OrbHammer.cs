@@ -13,7 +13,6 @@ public class OrbHammer : Skill
         var temp = Instantiate(hammerEffect, weaponTrm.position, Quaternion.Euler(0, 0, angle));
 
         temp.GetComponent<OrbCollision>().SetDamage(power * 10);
-        temp.GetComponent<Bullet>().Shoot(power * 15);
         Destroy(temp, 10f);
 
     }
