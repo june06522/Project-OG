@@ -18,7 +18,7 @@ public class PatrolBehaviour : SteeringBehaviour
     {
         this.startPoint = startPoint;
         this.randomSeed = randomSeed;
-        this.randomTime = Random.value;
+        this.randomTime = Random.Range(0f, 100f);
     }
 
     public override (float[] danger, float[] interest) GetSteering(float[] danger, float[] interest, AIData aiData)

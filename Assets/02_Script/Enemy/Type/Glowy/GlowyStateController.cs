@@ -1,4 +1,5 @@
 using FSM_System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,7 @@ public enum EGlowyState
 
 public class GlowyStateController : BaseFSM_Controller<EGlowyState>
 {
+    [NonSerialized]
     public Transform attackPoint;
     LaserBullet laserBullet;
     LaserPointer pointer;
@@ -59,10 +61,12 @@ public class GlowyStateController : BaseFSM_Controller<EGlowyState>
 
     public void SetLaserPointerActive(bool value) => pointer.SetActive(value);
 
-    public void Shoot(Vector2 endPos)
+    public IEnumerator Shoot(Vector2 endPos)
     {
         Vector2 dir = (endPos - (Vector2)attackPoint.position);
         laserBullet.Shoot(attackPoint.position, endPos);
+
+        yield return new WaitForSeconds(0.2f);
         RaycastHit2D hit = 
             Physics2D.Raycast(attackPoint.position, dir.normalized, dir.magnitude, LayerMask.GetMask("Player"));
         if (hit.collider != null)
@@ -74,5 +78,10 @@ public class GlowyStateController : BaseFSM_Controller<EGlowyState>
                 Debug.Log("Hit");
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
     }
 }

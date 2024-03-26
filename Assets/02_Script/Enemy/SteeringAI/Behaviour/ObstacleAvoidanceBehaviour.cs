@@ -42,6 +42,7 @@ public class ObstacleAvoidanceBehaviour : SteeringBehaviour
             Vector2 directionToObstacleNormalized = directionToObstacle.normalized;
 
             bool isWall = obstacleCollider.gameObject.layer == LayerMask.NameToLayer("Wall");
+            if (isWall) weight += 1;
             //Add obstacle parameters to the danger array
             for (int i = 0; i < Directions.eightDirections.Count; i++)
             {
@@ -53,11 +54,6 @@ public class ObstacleAvoidanceBehaviour : SteeringBehaviour
                 if (valueToPutIn > danger[i])
                 {
                     danger[i] = valueToPutIn;
-                }
-                else
-                {
-                    //if (isWall)
-                    //    interest[i] = 1 - result;
                 }
             }
         }
