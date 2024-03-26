@@ -15,16 +15,20 @@ public enum EEnemyBulletCurveType
 public enum EEnemyBulletSpeedType
 {
     Linear = 1 << 0,
+    Wind  = 1 << 1,
     Expo = 1 << 5,
 }
 
 
 public class EnemyBullet : MonoBehaviour
 {
+    [SerializeField]
     float speed = 3;
+    [SerializeField]
     float endSpeed = 15;
-    float curSpeed = 0;
+    [SerializeField]
     float duration = 0.75f;
+    float curSpeed = 0;
     //юс╫ц
     public void Shoot(Vector2 dir, EEnemyBulletSpeedType speedType = EEnemyBulletSpeedType.Linear, EEnemyBulletCurveType curveType = EEnemyBulletCurveType.None)
     {
@@ -35,9 +39,13 @@ public class EnemyBullet : MonoBehaviour
             case EEnemyBulletSpeedType.Linear:
                 curSpeed = Mathf.Lerp(speed, endSpeed, 0.5f);
                 break;
+            case EEnemyBulletSpeedType.Wind:
+                DOTween.To(() => speed, x => curSpeed = x, endSpeed, duration).SetEase(Ease.InOutBack);
+                break;
             case EEnemyBulletSpeedType.Expo:
                 DOTween.To(() => speed, x => curSpeed = x, endSpeed, duration).SetEase(Ease.InExpo);
                 break;
+
         }
 
         switch (curveType)

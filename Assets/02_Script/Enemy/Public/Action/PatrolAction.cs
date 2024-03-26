@@ -191,6 +191,6 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     }
     public void SetTarget(Vector2 target)
     {
-        this.debuggingTrm.position = target;
+        //this.debuggingTrm.position = target;
     }
 }
