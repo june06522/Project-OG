@@ -6,6 +6,8 @@ public class SlateBoss : Boss
 {
     public GameObject G_slateOnlyCollector;
 
+    public List<Material> L_materials;
+
     public float F_minimiAwayDistance;
 
     private enum BossState
@@ -19,8 +21,6 @@ public class SlateBoss : Boss
     private BossState _curBossState;
 
     private BossFSM _bossFSM;
-
-
 
     void Start()
     {
