@@ -32,8 +32,8 @@ public class SoundManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(Instance);
-            SceneManager.sceneLoaded += OnSceneLoded;
+            BGMPlay();
+            //SceneManager.sceneLoaded += OnSceneLoded;
         }
         else
         {
@@ -45,6 +45,16 @@ public class SoundManager : MonoBehaviour
     {
         _data = DataManager.Instance.soundData;
         InitVolumeValue();
+    }
+
+    public void BGMPlay()
+    {
+        for (int i = 0; i < _bgList.Length; i++)
+        {
+            if (SceneManager.GetActiveScene().name == _bgList[i].name)
+                BgSoundPlay(_bgList[i]);
+
+        }
     }
 
     private void OnSceneLoded(Scene arg0, LoadSceneMode arg1)
@@ -106,6 +116,7 @@ public class SoundManager : MonoBehaviour
     public void BgSoundPlay(AudioClip clip, float volume = 1f)
     {
         _bgSound.outputAudioMixerGroup = _mixer.FindMatchingGroups("BGSound")[0];
+
         _bgSound.clip = clip;
         _bgSound.loop = true;
         _bgSound.volume = volume;
