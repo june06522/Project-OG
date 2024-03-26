@@ -21,7 +21,6 @@ public class ShopTest : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
-        Debug.Log("상호작용");
         _shop.OpenShop();
     }
 }

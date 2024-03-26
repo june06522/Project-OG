@@ -33,7 +33,6 @@ public class SwordYondo : MonoBehaviour
     Transform ownerTrm;
     Transform targetTrm;
 
-    //시작 설정되있는 값
     Vector3 startLocalPos;
     Quaternion startRot;
 
@@ -140,7 +139,7 @@ public class SwordYondo : MonoBehaviour
 
     private void Attach()
     {
-        if (attachTrigger == false) //한번만 실행할 것들
+        if (attachTrigger == false)
         {
             attachTrigger = true;
             rb.velocity = Vector2.zero;
@@ -192,7 +191,7 @@ public class SwordYondo : MonoBehaviour
         //    }
         //    else
         //    {
-        //        Debug.Log("앞");
+        //        Debug.Log("占쏙옙");
         //    }
         //}
 
@@ -207,8 +206,8 @@ public class SwordYondo : MonoBehaviour
         isRotating = true;
         completlyAttach = false;
 
-        float distance = Vector3.Distance(ownerTrm.position, targetTrm.position);
-        float rotateTime = Mathf.Lerp(minRotateTime, maxRotateTime, distance / radius);
+        //float distance = Vector3.Distance(ownerTrm.position, targetTrm.position);
+        //float rotateTime = Mathf.Lerp(minRotateTime, maxRotateTime, distance / radius);
 
         //StopAllCoroutines();
         //StartCoroutine(Rotate(
