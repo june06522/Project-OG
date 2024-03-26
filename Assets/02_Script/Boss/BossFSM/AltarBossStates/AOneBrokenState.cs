@@ -26,8 +26,6 @@ public class AOneBrokenState : BossBaseState
         _altarBoss.B_isOneBroken = true;
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime * 2));
         _boss.StartCoroutine(OneBrokenMove());
-        Debug.Log($"boss Pos : {_boss.transform.localPosition}");
-        Debug.Log($"need Go Pos : {_boss.V_originPos}");
     }
 
     public override void OnBossStateUpdate()

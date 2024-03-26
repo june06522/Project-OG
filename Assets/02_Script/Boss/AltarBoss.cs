@@ -287,9 +287,7 @@ public class AltarBoss : Boss
         i_restraintIndex++;
         if(i_restraintIndex == 1)
         {
-            // 사슬이 뿜어져 나오는 그 기준 기둥을 체인콜렉터 자식 어때
             V_originPos = g_restraints[i_restraintIndex].transform.localPosition;
-            Debug.Log($"V_originPos set : {g_restraints[i_restraintIndex].transform.localPosition}");
         }
 
         yield return null;

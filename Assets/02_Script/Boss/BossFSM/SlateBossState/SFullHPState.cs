@@ -5,11 +5,17 @@ using UnityEngine;
 public class SFullHPState : BossBaseState
 {
     private SlateBoss _slate;
-    private GameObject[] g_minimis = new GameObject[4]; 
+    private GameObject[] g_minimis = new GameObject[4];
+    private LineRenderer _line;
+    private LineRenderer[] _minimiLaserLineRenderer = new LineRenderer[4];
+    Vector2 dir = Vector2.zero;
 
     public SFullHPState(SlateBoss boss) : base(boss)
     {
         _slate = boss;
+        _line = _slate.GetComponent<LineRenderer>();
+        _line.material = _slate.L_materials[0];
+        _line.material.color = new Color(1, 0, 0, 0.1f);
     }
 
     public override void OnBossStateExit()
@@ -38,6 +44,8 @@ public class SFullHPState : BossBaseState
                 g_minimis[i / 2].transform.position = new Vector3(Mathf.Cos(Mathf.PI * 2 * i / 8), Mathf.Sin(Mathf.PI * 2 * i / 8)).normalized * _slate.F_minimiAwayDistance;
                 g_minimis[i / 2].gameObject.name = (i / 2).ToString();
                 g_minimis[i / 2].transform.rotation = Quaternion.identity;
+                _minimiLaserLineRenderer[i / 2] = g_minimis[i / 2].GetComponent<LineRenderer>();
+                _minimiLaserLineRenderer[i / 2].material = _slate.L_materials[1];
             }
         }
     }
@@ -51,7 +59,7 @@ public class SFullHPState : BossBaseState
         switch(rand)
         {
             case 1:
-                NowCoroutine(Laser(2, 100));
+                NowCoroutine(Laser(1, 100));
                 break;
         }
     }
@@ -60,54 +68,156 @@ public class SFullHPState : BossBaseState
     private IEnumerator Laser(float warningTime, float fireTime)
     {
         float curTime = 0;
-        GameObject warning = ObjectPool.Instance.GetObject(ObjectPoolType.WarningType0, _slate.G_slateOnlyCollector.transform);
-        warning.transform.position = _slate.transform.position;
+        float deg = 0;
+        float subDeg = 0;
+        bool isLaser = false;
+        _line.SetPosition(0, _slate.transform.position);
+        _line.startWidth = 0.1f;
 
-        while(curTime < warningTime)
+        ShowLineRenderer(_slate.transform.position, _line, Vector2.right, 0.1f);
+
+        while (curTime < fireTime)
         {
             curTime += Time.deltaTime;
-            warning.transform.Rotate(Vector3.forward);
-            yield return null;
-        }
+            deg += Time.deltaTime * 100;
 
-        ObjectPool.Instance.ReturnObject(ObjectPoolType.WarningType0, warning);
-        GameObject[] minimiLasers = new GameObject[g_minimis.Length];
-
-        for(int i = 0; i < g_minimis.Length; i++)
-        {
-            minimiLasers[i] = ObjectPool.Instance.GetObject(ObjectPoolType.SlateMinimiLaser, _slate.G_slateOnlyCollector.transform);
-            minimiLasers[i].GetComponent<BossBullet>().Attack(_slate.bossSo.Damage);
-            minimiLasers[i].transform.position = g_minimis[i].transform.position;
-            minimiLasers[i].transform.rotation = Quaternion.identity;
-        }
-        GameObject laser = ObjectPool.Instance.GetObject(ObjectPoolType.Laser, _slate.G_slateOnlyCollector.transform);
-        laser.GetComponentInChildren<BossBullet>().Attack(_slate.bossSo.Damage);
-        laser.transform.position = _slate.transform.position;
-        laser.transform.rotation = warning.transform.rotation;
-        curTime = 0;
-
-        while(curTime < fireTime)
-        {
-            curTime += Time.deltaTime;
-            laser.transform.Rotate(Vector3.forward);
-            for(int i = 0; i < g_minimis.Length; i++)
+            if(curTime >= warningTime && !isLaser)
             {
-                if(i == 0 || i == 3)
+                _line.material = _slate.L_materials[1];
+                isLaser = true;
+                for(int i = 0; i < g_minimis.Length; i++)
                 {
-                    minimiLasers[i].transform.Rotate(Vector3.back * Time.deltaTime * 20);
+                    _minimiLaserLineRenderer[i].SetPosition(0, g_minimis[i].transform.position);
+                    _minimiLaserLineRenderer[i].startWidth = 0.1f;
+                    ShowLineRenderer(g_minimis[i].transform.position, _minimiLaserLineRenderer[i], dir, 0.1f);
                 }
-                else
-                {
-                    minimiLasers[i].transform.Rotate(Vector3.forward * Time.deltaTime * 20);
-                }
+                curTime = 0;
             }
+
+            if (isLaser)
+            {
+                // 피해 주는 코드
+                for(int i = 0; i < _minimiLaserLineRenderer.Length; i++)
+                {
+                    RayPlayerCheck(g_minimis[i].transform.position, dir);
+                }
+                RayPlayerCheck(_slate.transform.position, dir);
+            }
+
+            if (deg < 360)
+            {
+                var rad = Mathf.Deg2Rad * (deg + 360);
+                var x = Mathf.Cos(rad);
+                var y = Mathf.Sin(rad);
+
+                dir = new Vector2(x, y).normalized;
+                if(isLaser)
+                {
+                    subDeg = deg / 2;
+                    if(subDeg < 360)
+                    {
+                        for (int i = 0; i < _minimiLaserLineRenderer.Length; i++)
+                        {
+                            // 이거는 조건문 길이 줄이는 방법 좀 생각하자
+                            var subRad = Mathf.Deg2Rad * (deg + 360);
+                            if(i == 0)
+                            {
+                                var subX = Mathf.Cos(subRad);
+                                var subY = Mathf.Sin(subRad);
+
+                                Vector2 subDir = new Vector2(subX, subY).normalized;
+                                _minimiLaserLineRenderer[i].SetPosition(1, RayWallCheck(g_minimis[i].transform.position, subDir));
+                            }
+                            else if (i == 1)
+                            {
+                                var subX = -Mathf.Cos(subRad);
+                                var subY = Mathf.Sin(subRad);
+
+                                Vector2 subDir = new Vector2(subX, subY).normalized;
+                                _minimiLaserLineRenderer[i].SetPosition(1, RayWallCheck(g_minimis[i].transform.position, subDir));
+                            }
+                            else if(i == 2)
+                            {
+                                var subX = -Mathf.Cos(subRad);
+                                var subY = -Mathf.Sin(subRad);
+
+                                Vector2 subDir = new Vector2(subX, subY).normalized;
+                                _minimiLaserLineRenderer[i].SetPosition(1, RayWallCheck(g_minimis[i].transform.position, subDir));
+                            }
+                            else
+                            {
+                                var subX = Mathf.Cos(subRad);
+                                var subY = -Mathf.Sin(subRad);
+
+                                Vector2 subDir = new Vector2(subX, subY).normalized;
+                                _minimiLaserLineRenderer[i].SetPosition(1, RayWallCheck(g_minimis[i].transform.position, subDir));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        subDeg = 0;
+                    }
+                }
+                _line.SetPosition(1, RayWallCheck(_slate.transform.position, dir));
+            }
+            else
+            {
+                deg = 0;
+            }
+
             yield return null;
         }
 
-        ObjectPool.Instance.ReturnObject(ObjectPoolType.Laser, laser);
-        for(int i = 0; i < g_minimis.Length; i++)
+        for(int i = 0; i < _minimiLaserLineRenderer.Length; i++)
         {
-            ObjectPool.Instance.ReturnObject(ObjectPoolType.SlateMinimiLaser, minimiLasers[i]);
+            _minimiLaserLineRenderer[i].enabled = false;
         }
+        _line.enabled = false;
+    }
+
+    private void ShowLineRenderer(Vector3 pos, LineRenderer line, Vector2 dir, float scale)
+    {
+        if (RayWallCheck(pos, dir) != Vector2.zero)
+        {
+            line.enabled = true;
+            line.SetPosition(1, RayWallCheck(pos, dir));
+            line.endWidth = scale;
+        }
+        else
+        {
+            line.enabled = false;
+        }
+    }
+
+    private void RayPlayerCheck(Vector3 pos, Vector2 dir)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(pos, dir, Mathf.Infinity, LayerMask.GetMask("Player"));
+
+        if(hit.collider != null)
+        {
+            if (hit.collider.TryGetComponent<IHitAble>(out var hitAble))
+            {
+                Debug.Log("레이저");
+                hitAble.Hit(_slate.bossSo.Damage);
+            }
+            else
+            {
+                Debug.Log(hit.collider.name);
+            }
+        }
+
+    }
+
+    private Vector2 RayWallCheck(Vector3 pos, Vector2 dir)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(pos, dir, Mathf.Infinity, LayerMask.GetMask("Wall"));
+
+        if (hit.collider != null)
+        {
+            return hit.point;
+        }
+
+        return Vector2.zero;
     }
 }

@@ -223,7 +223,7 @@ public class AFreeState : BossBaseState
             Vector2 dir = (GameManager.Instance.player.transform.position - bullets[i].transform.position).normalized;
             bullets[i].transform.SetParent(_altarBoss.G_altarOnlyCollector.transform);
             bullets[i].GetComponent<Rigidbody2D>().velocity = dir * throwSpeed;
-            _altarBoss.StartCoroutine(ObjectPool.Instance.ReturnObject(bullets[i], 5));
+            _altarBoss.StartCoroutine(ObjectPool.Instance.ReturnObject(bullets[i], 7));
 
             yield return new WaitForSeconds(throwWaitTime);
         }
