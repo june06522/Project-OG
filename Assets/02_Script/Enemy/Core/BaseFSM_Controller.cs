@@ -29,7 +29,8 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
         EnemyDataSO = Instantiate(EnemyDataSO);
         Nav = new(Enemy);
         Solver = new();
-        Target = GameManager.Instance.player;
+        //    Target = GameManager.Instance.player;
+        Target = GameObject.Find("Player").transform;
     }
 
     protected override void Update()

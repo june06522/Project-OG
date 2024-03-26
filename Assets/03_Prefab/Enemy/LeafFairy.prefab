@@ -23,13 +23,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 67698770405232663}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.24, y: 0.097, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.78, y: 0.43, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2356515405765779038}
-  m_RootOrder: 1
+  m_Father: {fileID: 5167196551445744791}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2356515405765779046
 GameObject:
@@ -44,9 +44,9 @@ GameObject:
   - component: {fileID: 2356515405765778977}
   - component: {fileID: 171642250}
   - component: {fileID: 2356515405765779035}
-  - component: {fileID: 5629869324805043374}
+  - component: {fileID: 3442533037361006961}
   m_Layer: 14
-  m_Name: MummyGunEnemy
+  m_Name: LeafFairy
   m_TagString: HitAble
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65,7 +65,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5167196551445744791}
-  - {fileID: 67698770405232662}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -85,7 +84,6 @@ MonoBehaviour:
   acceleration: 50
   deacceleration: 100
   currentSpeed: 0
-  MyZone: {fileID: 0}
 --- !u!114 &2356515405765778977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,16 +93,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2356515405765779046}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b402d4bd19ac1f345a56fb51ec523181, type: 3}
+  m_Script: {fileID: 11500000, guid: 37518d9428154214a83cc7e8d7b46e63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <EnemyDataSO>k__BackingField: {fileID: 11400000, guid: 16e35be596fdcd849b935211c69eeba6, type: 2}
   enemyFindEffect: {fileID: -6713558889965095767, guid: 11f2f1a4a9d7af04298f2fc1435e6a51, type: 3}
-  AIdata: {fileID: 0}
-  Target: {fileID: 0}
-  DebugTile: {fileID: 0}
+  attackEffect: {fileID: 0}
   attackPoint: {fileID: 67698770405232662}
-  bullet: {fileID: 8299640922602903309, guid: 0be16fc4bc182ee4da726eb2dd90f23e, type: 3}
+  bullet: {fileID: 0}
 --- !u!114 &171642250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,8 +138,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!70 &5629869324805043374
-CapsuleCollider2D:
+--- !u!58 &3442533037361006961
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -155,9 +151,9 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.070645064, y: -0.05780053}
-  m_Size: {x: 0.6412901, y: 1.4238706}
-  m_Direction: 0
+  m_Offset: {x: 0.037680805, y: 0.037680797}
+  serializedVersion: 2
+  m_Radius: 0.28647536
 --- !u!1 &7113090586515351776
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,7 +185,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 67698770405232662}
   m_Father: {fileID: 2356515405765779038}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -232,9 +229,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 86297143
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 3
-  m_Sprite: {fileID: 37738365, guid: fbddfa9d7c0db104d84bc905e1904f2a, type: 3}
+  m_Sprite: {fileID: 1893988866, guid: d45c2ed72e9d5824c97acde09a3399ab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

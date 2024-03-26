@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MummyGunPatrolState : MummyGunRootState
+public class LeafFairyPatrolState : LeafFairyRootState
 {
-    PatrolAction<EMummyGunState> patrolAct;
-    public MummyGunPatrolState(MummyGunStateController controller) : base(controller)
+    PatrolAction<ELeafFariyState> patrolAct;
+    public LeafFairyPatrolState(LeafFairyStateController controller) : base(controller)
     {
         //behaviour
         List<SteeringBehaviour> behaviourlist = new List<SteeringBehaviour>()
@@ -14,7 +14,7 @@ public class MummyGunPatrolState : MummyGunRootState
             new ObstacleAvoidanceBehaviour(controller.transform)
         };
 
-        patrolAct = new PatrolAction<EMummyGunState>(controller, behaviourlist, controller.DebugTile);
+        patrolAct = new PatrolAction<ELeafFariyState>(controller, behaviourlist, null);
     }
 
     protected override void EnterState()

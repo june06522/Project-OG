@@ -10,7 +10,7 @@ public class MoveToAttackTransition<T> : BaseFSM_Transition<T> where T : Enum
 
     public MoveToAttackTransition(BaseFSM_Controller<T> controller, T nextState, bool checkObstacle) : base(controller, nextState)
     {
-        targetTrm = GameManager.Instance.player;
+        targetTrm = controller.Target;
         this.checkObstacle = checkObstacle;
     }
 
