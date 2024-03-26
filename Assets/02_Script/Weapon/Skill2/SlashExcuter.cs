@@ -1,4 +1,5 @@
 using DG.Tweening;
+using NavMeshPlus.Editors.Components;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -48,22 +49,23 @@ public class SlashExcuter : MonoBehaviour
 
     IEnumerator Attack(GameObject obj)
     {
-        
+
         foreach (var item in Physics2D.OverlapCircleAll(obj.transform.position, 2.5f, hitableLayer))
         {
 
-            if (item.TryGetComponent<IHitAble>(out var h))
-            {
-
-                for (int i = 0; i < 3; i++)
+            if (item != null)
+                if (item.TryGetComponent<IHitAble>(out var h))
                 {
-                    
-                    yield return new WaitForSeconds(0.1f);
-                    h.Hit(10);
+
+                    for (int i = 0; i < 3; i++)
+                    {
+
+                        yield return new WaitForSeconds(0.1f);
+                        h.Hit(10);
+
+                    }
 
                 }
-
-            }
 
         }
 
