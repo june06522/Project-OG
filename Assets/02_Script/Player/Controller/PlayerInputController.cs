@@ -96,20 +96,21 @@ public class PlayerInputController : IDisposable
     {
         float x = 0;// = Input.GetAxisRaw("Horizontal");
         float y = 0;// = Input.GetAxisRaw("Vertical");
-        if (Input.GetKey(KeyCode.W))
-            y += 1;
-        if (Input.GetKey(KeyCode.S))
-            y -= 1;
-        if (Input.GetKey(KeyCode.D))
-            x += 1;
-        if (Input.GetKey(KeyCode.A))
-            x -= 1;
+
+        if (!GameManager.Instance.InventoryActive.IsOn)
+        {
+            if (Input.GetKey(KeyCode.W))
+                y += 1;
+            if (Input.GetKey(KeyCode.S))
+                y -= 1;
+            if (Input.GetKey(KeyCode.D))
+                x += 1;
+            if (Input.GetKey(KeyCode.A))
+                x -= 1;
+        }
 
 
         MoveDir = new Vector2(x, y).normalized;
-
-        if (MoveDir == Vector2.zero)
-            rb2D.velocity = MoveDir;
 
         if (MoveDir != Vector2.zero)
         {
@@ -124,7 +125,7 @@ public class PlayerInputController : IDisposable
     private void CheckDashKey()
     {
 
-        isDashKeyPressed = Input.GetKeyDown(KeyCode.Space);
+        isDashKeyPressed = Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.InventoryActive.IsOn;
 
         // if (isDashKeyPressed && _playerEnerge.ConsumeEnerge(10))
         if (isDashKeyPressed)
