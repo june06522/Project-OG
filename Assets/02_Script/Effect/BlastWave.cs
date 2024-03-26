@@ -45,7 +45,7 @@ public class BlastWave : MonoBehaviour
         {
             float angle = i * angleBetweenPoints * Mathf.Deg2Rad;
             Vector3 direction = new Vector3(Mathf.Sin(angle), Mathf.Cos(angle), 0f);
-            Vector3 position = direction * currentRadius;
+            Vector3 position = transform.position + direction * currentRadius;
 
             lineRenderer.SetPosition(i, position);
         }
