@@ -29,7 +29,7 @@ public class WeaponInventory : MonoBehaviour
     [field: SerializeField] public int Width { get; private set; }
     [field: SerializeField] public int Height { get; private set; }
 
-    private WeaponInventoryViewer viewer;
+    public WeaponInventoryViewer viewer { get; private set; }
     private List<SlotData> invenslots = new();
     private List<InventoryObjectData> container = new();
 
