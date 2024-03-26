@@ -25,7 +25,7 @@ public class GlowyAttackState : GlowyRootState
     private IEnumerator Attack()
     {
         yield return new WaitForSeconds(0.5f);
-        pointerOn =false;
+        pointerOn = false;
         yield return new WaitForSeconds(0.1f);
         controller.SetLaserPointerActive(false);
         controller.Shoot(endPos);
