@@ -45,7 +45,8 @@ public class StageGate : MonoBehaviour, IInteractable
         if(NextStage != null )
         {
 
-            GameManager.Instance.player.position = NextStage.transform.position;
+            GameManager.Instance.player.position = NextStage.playerSpawnPos;
+            NextStage.SetGlobalLight();
 
         }
         OnGateEvent?.Invoke();
