@@ -16,7 +16,7 @@ public class InventoryActive : MonoBehaviour
     {
         if(canOpen)
         {
-            if(Input.GetKeyDown(KeyCode.E) || (Input.GetKeyDown(KeyCode.Escape) && isOn))
+            if(Input.GetKeyDown(KeyCode.Tab) || (Input.GetKeyDown(KeyCode.Escape) && isOn))
             {
                 isOn = !isOn;
             }
