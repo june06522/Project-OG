@@ -8,6 +8,7 @@ public class PlaySceneEffectSound : MonoBehaviour
 
     [SerializeField] private AudioClip _invenEat;
     [SerializeField] private AudioClip _invenDragAndDrop;
+    [SerializeField] private AudioClip _btnClick;
 
     private void Awake()
     {
@@ -25,4 +26,7 @@ public class PlaySceneEffectSound : MonoBehaviour
     public void PlayItemEat() => SoundManager.Instance.SFXPlay("ItemEat", _invenEat);
 
     public void PlayDragAndDrop() => SoundManager.Instance.SFXPlay("ItemEat", _invenDragAndDrop);
+
+    public void PlayBtnClickSound() =>
+        SoundManager.Instance.SFXPlay("BtnClick",_btnClick);
 }
