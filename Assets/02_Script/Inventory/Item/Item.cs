@@ -27,6 +27,7 @@ public class Item : MonoBehaviour, IInteractable
         var point = inventory.CheckItemAuto(brick.InvenObject);
         if (point != null)
         {
+            PlaySceneEffectSound.Instancce.PlayItemEat();
 
             var obj = Instantiate(brick, Vector3.zero, Quaternion.identity, parent);
             obj.GetComponent<Image>().enabled = false;

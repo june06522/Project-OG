@@ -345,7 +345,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &44958170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4375,7 +4375,6 @@ Transform:
   m_Children:
   - {fileID: 1820449262}
   - {fileID: 44958171}
-  - {fileID: 1870927982}
   - {fileID: 2032517163}
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -7418,6 +7417,8 @@ MonoBehaviour:
   _settingPanel: {fileID: 262969990}
   _controlPanel: {fileID: 1449237043}
   _audioPanel: {fileID: 1209564074}
+  _btnClick: {fileID: 8300000, guid: a3230ecdfbb09474db44b3f255c625aa, type: 3}
+  volume: 0.7
 --- !u!1 &1844973743
 GameObject:
   m_ObjectHideFlags: 0
@@ -7510,7 +7511,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!82 &1870927980
 AudioSource:
   m_ObjectHideFlags: 0
@@ -7622,7 +7623,8 @@ MonoBehaviour:
   _mixer: {fileID: 24100000, guid: 367c14b19879c1648ac6683070d89558, type: 2}
   _bgSound: {fileID: 1870927980}
   _bgList:
-  - {fileID: 8300000, guid: 9aa88215e6f4c3b4c85b618aa48fc4e7, type: 3}
+  - {fileID: 8300000, guid: 75d01fb3b0e18fa4d85ae33e5405d68a, type: 3}
+  - {fileID: 8300000, guid: 2ccb17f088ed9fd4492a6eac90263f4e, type: 3}
   _mainSlider: {fileID: 364489562}
   _BGMSlider: {fileID: 1568709105}
   _SFXSlider: {fileID: 861330324}
@@ -7634,12 +7636,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1870927979}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 80, y: 10, z: 10}
+  m_LocalPosition: {x: 80, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1094550527}
-  m_RootOrder: 2
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1876498010
 GameObject:
@@ -8140,7 +8142,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1094550527}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2032517164
 MonoBehaviour:

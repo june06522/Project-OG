@@ -72,8 +72,10 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public virtual void OnPointerUp(PointerEventData eventData)
     {
         if (inventoryActive.IsOn)
+        {
+            PlaySceneEffectSound.Instancce.PlayDragAndDrop();
             SetPos();
-
+        }
     }
 
     protected void SetPos()
