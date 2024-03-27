@@ -1,5 +1,7 @@
 using DG.Tweening;
+using System;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class HammerClone : MonoBehaviour
 {
@@ -24,12 +26,13 @@ public class HammerClone : MonoBehaviour
         this.rotateSpeed = rotateSpeed;
         this.dissolveTime = dissolveTime;
         this.damage = damage;
+        this.CurAngle = initAngle;
     }
 
     public void Dissolve(bool on)
     {
         float initValue = on == true ? 0 : 1;
-  
+
         material.SetFloat("_SourceGlowDissolveFade", initValue);
 
         float value = initValue;
@@ -48,9 +51,17 @@ public class HammerClone : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         IHitAble hitAble;
-        if(collision.TryGetComponent<IHitAble>(out hitAble))
+        if (collision.TryGetComponent<IHitAble>(out hitAble))
         {
             hitAble.Hit(damage);
         }
+    }
+
+    public void Move(Vector2 movePos)
+    {
+        //float angle = Mathf.Atan2(weaponTrm.right.y, weaponTrm.right.x) * Mathf.Rad2Deg;
+        Vector2 dir = movePos.normalized;
+        transform.up = dir;
+        transform.localPosition = movePos;
     }
 }

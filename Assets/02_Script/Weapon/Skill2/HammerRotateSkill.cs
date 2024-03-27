@@ -56,7 +56,10 @@ public class HammerRotateSkill : Skill
                 }
                 else
                 {
-                    clones[i].CurAngle += addRotateValue;   
+                    clones[i].CurAngle += addRotateValue;
+                    Vector3 pos = Eclipse.GetElipsePos(transform.position, clones[i].CurAngle * Mathf.Deg2Rad,
+                                  width, height, this.theta);
+                    clones[i].Move(pos);
                 }
             }
 
@@ -78,6 +81,7 @@ public class HammerRotateSkill : Skill
             return;
         }
 
+        rotateTimer = 0;
         // 스킬이 사용되고 있지 않는 상태면
         for(int i = 0; i < hammerCount; i++) 
         {
@@ -86,7 +90,7 @@ public class HammerRotateSkill : Skill
             Vector2 pos = Eclipse.GetElipsePos(Vector2.zero, angle * Mathf.Deg2Rad, this.width, this.height, this.theta);
             HammerClone clone = Instantiate(hammerClone, GameManager.Instance.player.transform);
             clone.transform.localPosition = pos;
-            clone.transform.Rotate(new Vector3(0,0, angle + 90));
+            clone.transform.up = pos.normalized;
             clone.Dissolve(true);
             clone.Init(rotateSpeed, dissolveTime, power, angle);
             clones.Add(clone);
