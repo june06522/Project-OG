@@ -26,7 +26,7 @@ public class ItemInfoSO : ScriptableObject
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        Brick = Brick.GetComponent<InvenBrick>();
+        //Brick = Brick.GetComponent<InvenBrick>();
         if (Brick == null)
             Debug.LogError("Don't find Item Class");
         else
