@@ -8,6 +8,8 @@ public class SlateBoss : Boss
 
     public List<Material> L_materials;
 
+    public int I_minimiCount;
+
     public float F_minimiAwayDistance;
 
     private enum BossState
@@ -46,8 +48,16 @@ public class SlateBoss : Boss
                 ChangeBossState(BossState.FullHP);
                 break;
             case BossState.FullHP:
+                if (F_currentHp < bossSo.MaxHP / 2)
+                {
+                    ChangeBossState(BossState.HalfHP);
+                }
                 break;
             case BossState.HalfHP:
+                if(B_isDead)
+                {
+                    ChangeBossState(BossState.Dead);
+                }
                 break;
         }
     }
@@ -62,7 +72,7 @@ public class SlateBoss : Boss
                 _bossFSM.ChangeBossState(new SFullHPState(this));
                 break;
             case BossState.HalfHP:
-                _bossFSM.ChangeBossState(new SHalfState(this));
+                _bossFSM.ChangeBossState(new SHalfHPState(this));
                 break;
             case BossState.Dead:
                 _bossFSM.ChangeBossState(new SDeadState(this));

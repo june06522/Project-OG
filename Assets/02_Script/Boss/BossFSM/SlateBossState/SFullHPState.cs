@@ -5,13 +5,14 @@ using UnityEngine;
 public class SFullHPState : BossBaseState
 {
     private SlateBoss _slate;
-    private GameObject[] g_minimis = new GameObject[2];
-    private LineRenderer[] _minimiLaserLineRenderer = new LineRenderer[2];
-    Vector2 dir = Vector2.zero;
+    private GameObject[] g_minimis;
+    private LineRenderer[] _minimiLaserLineRenderer;
 
     public SFullHPState(SlateBoss boss) : base(boss)
     {
         _slate = boss;
+        g_minimis = new GameObject[_slate.I_minimiCount];
+        _minimiLaserLineRenderer = new LineRenderer[_slate.I_minimiCount];
     }
 
     public override void OnBossStateExit()
@@ -73,8 +74,9 @@ public class SFullHPState : BossBaseState
     {
         float curTime = 0;
         float deg = 0;
+        Vector2 dir = Vector2.zero;
 
-        for(int i = 0; i < g_minimis.Length; i++)
+        for (int i = 0; i < g_minimis.Length; i++)
         {
             g_minimis[i].GetComponent<SpriteRenderer>().material = _slate.L_materials[1];
         }
@@ -114,7 +116,6 @@ public class SFullHPState : BossBaseState
                 {
                     if (i == 0)
                     {
-                        bool once = false;
                         var x = Mathf.Cos(rad);
                         var y = Mathf.Sin(rad);
 
@@ -124,7 +125,6 @@ public class SFullHPState : BossBaseState
                     }
                     else
                     {
-                        bool once = false;
                         var x = -Mathf.Cos(rad);
                         var y = -Mathf.Sin(rad);
 
@@ -174,10 +174,6 @@ public class SFullHPState : BossBaseState
             {
                 Debug.Log("∑π¿Ã¿˙");
                 hitAble.Hit(_slate.bossSo.Damage);
-            }
-            else
-            {
-                Debug.Log(hit.collider.name);
             }
         }
 
@@ -360,29 +356,33 @@ public class SFullHPState : BossBaseState
         yield return new WaitForSeconds(time);
 
         int counting = 0;
-        int aCount = 0;
 
         while (returnCounting < burstCount)
         {
+            for (int i = 0; i < bulletCount; i++)
+            {
+                Rigidbody2D rigid = bullets[counting, i].GetComponent<Rigidbody2D>();
+                rigid.velocity = Vector2.zero;
+            }
+
             if (counting > 0)
+            {
+                Debug.Log(counting - 1);
                 for (int i = 0; i < bulletCount; i++)
                 {
                     Rigidbody2D rigid = bullets[counting - 1, i].GetComponent<Rigidbody2D>();
                     Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / bulletCount), Mathf.Sin(Mathf.PI * 2 * i / bulletCount));
                     rigid.velocity = dir.normalized * speed;
                 }
+            }
             else if (counting == 0)
+            {
                 for (int i = 0; i < bulletCount; i++)
                 {
                     Rigidbody2D rigid = bullets[burstCount - 1, i].GetComponent<Rigidbody2D>();
                     Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / bulletCount), Mathf.Sin(Mathf.PI * 2 * i / bulletCount));
                     rigid.velocity = dir.normalized * speed;
                 }
-
-            for (int i = 0; i < bulletCount; i++)
-            {
-                Rigidbody2D rigid = bullets[counting, i].GetComponent<Rigidbody2D>();
-                rigid.velocity = Vector2.zero;
             }
 
             if (counting >= burstCount - 1)
@@ -390,11 +390,19 @@ public class SFullHPState : BossBaseState
             else
                 counting++;
 
-            aCount++;
+            returnCounting++;
 
             yield return new WaitForSeconds(time);
         }
 
+        yield return new WaitForSeconds(time);
+
+        for (int i = 0; i < bulletCount; i++)
+        {
+            Rigidbody2D rigid = bullets[burstCount - 2, i].GetComponent<Rigidbody2D>();
+            Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / bulletCount), Mathf.Sin(Mathf.PI * 2 * i / bulletCount));
+            rigid.velocity = dir.normalized * speed;
+        }
         _slate.StartCoroutine(RandomPattern(_slate.bossSo.PatternChangeTime));
     }
 }
