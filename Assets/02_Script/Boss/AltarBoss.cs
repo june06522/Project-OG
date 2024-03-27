@@ -22,6 +22,7 @@ public class AltarBoss : Boss
 
     public bool B_isTied;
     public bool B_isOneBroken;
+    public bool B_isDashing;
 
     private BossState _curBossState;
 
@@ -51,6 +52,8 @@ public class AltarBoss : Boss
         i_shortenChainIndex = 0;
         V_originPos = Vector2.zero;
         B_isTied = true;
+        B_isOneBroken = false;
+        B_isDashing = false;
 
         ChainSetting();
 
@@ -320,11 +323,16 @@ public class AltarBoss : Boss
     protected override void OnCollisionEnter2D(Collision2D collision)
     {
         base.OnCollisionEnter2D(collision);
-    }
-
-    protected override void OnCollisionStay2D(Collision2D collision)
-    {
-        base.OnCollisionStay2D(collision);
+        if (collision.gameObject.tag == "Player")
+        {
+            if(B_isDashing)
+            {
+                if (collision.gameObject.TryGetComponent<IHitAble>(out var IhitAble))
+                {
+                    IhitAble.Hit(bossSo.Damage);
+                }
+            }
+        }
     }
 
 }
