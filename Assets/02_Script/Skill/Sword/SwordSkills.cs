@@ -93,13 +93,13 @@ public class SwordSkills : MonoBehaviour
                 }
                 else
                 {
-                    Vector3 pos = GetElipsePos(makePos, angle, tempWidth, tempHeight);
-                    clone.CurAngle = angle;
-                    angle += 360 / instantiateCount * Mathf.Deg2Rad;
+                    Vector3 pos = Eclipse.GetElipsePos(makePos, clone.CurAngle, 
+                                    tempWidth, tempHeight, this.theta);
+                    float t = Time.deltaTime * rotateSpeed;
+                    clone.CurAngle += t;
                     clone.Move(pos);
                 }
             }
-            t += Time.deltaTime * rotateSpeed;
         }
 
         if (t > rotateTime && isAttack == false)
@@ -134,7 +134,7 @@ public class SwordSkills : MonoBehaviour
                 SwordClone clone = clones[i];
                 float x = UnityEngine.Random.Range(-1f, 1f);
                 float y = UnityEngine.Random.Range(-1f, 1f);
-                Vector2 _targetPos = GetElipsePos(targetPos, clone.CurAngle, tempWidth / 1.5f, tempHeight / 1.5f);
+                Vector2 _targetPos = Eclipse.GetElipsePos(targetPos, clone.CurAngle, tempWidth / 1.5f, tempHeight / 1.5f, theta);
                 clone.Attack(_targetPos);
                 yield return new WaitForSeconds(0.07f);
             }
@@ -191,10 +191,11 @@ public class SwordSkills : MonoBehaviour
         for (int i = 0; i < instantiateCount; i++)
         {
             float angle = 360 / instantiateCount * Mathf.Deg2Rad * i;
-            Vector2 dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-
-            SwordClone clone = Instantiate(smallSwordClone, GetElipsePos(makePos, angle, this.width, this.height), Quaternion.Euler(0, 0, 270));
+            Vector2 pos = Eclipse.GetElipsePos(makePos, angle, this.width, this.height, this.theta);
+            
+            SwordClone clone = Instantiate(smallSwordClone, pos, Quaternion.Euler(0, 0, 270));
             clone.Setting(dissolveTime, width, height, makePos);
+            clone.CurAngle = angle;
 
             clones.Add(clone);
             yield return new WaitForSeconds(delayTime);
@@ -210,22 +211,5 @@ public class SwordSkills : MonoBehaviour
             DOTween.To(() => tempHeight, (curHeight) => tempHeight = curHeight, targetHeight, rotateTime).SetEase(Ease.InOutQuint);
         }
         makeDone = true;
-    }
-
-    public Vector2 GetElipsePos(Vector2 centerPos, float angle, float width, float height)
-    {
-        float cx = centerPos.x;
-        float cy = centerPos.y;
-
-        float theta = this.theta;
-
-        float weight = angle;
-        float x = cx + width * Mathf.Cos(t + weight);
-        float y = cy + height * Mathf.Sin(t + weight);
-
-        float dx = cx + (x - cx) * Mathf.Cos(theta) - (y - cy) * Mathf.Sin(theta);
-        float dy = cy + (x - cx) * Mathf.Sin(theta) + (y - cy) * Mathf.Cos(theta);
-
-        return new Vector2(dx, dy);
     }
 }
