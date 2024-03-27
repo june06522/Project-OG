@@ -28,7 +28,7 @@ public class DamageText : MonoBehaviour
         Sequence seq = DOTween.Sequence();
 
         seq.Append(transform.DOMoveY(transform.position.y + 0.2f, 0.25f).SetEase(Ease.InOutElastic));
-        seq.Join(transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBounce));
+        seq.Join(transform.DOScale(Vector3.one * 1.8f, 0.2f).SetEase(Ease.OutBounce));
         seq.Append(transform.DOScale(new Vector3(0.6f, 1.75f), 0.1f).SetEase(Ease.InOutBounce));
         seq.Append(transform.DOScale(Vector3.one, 0.1f).SetEase(Ease.OutBounce));
         seq.InsertCallback(0.2f, () =>
