@@ -176,6 +176,7 @@ public class AFreeState : BossBaseState
     // 풀린 즉시 한 번만 하는 패턴
     private IEnumerator Dash(float maxDistance, float speed, float waitTime, float dashTime)
     {
+        _altarBoss.B_isDashing = true;
         float curTime = 0;
 
         Vector3 dir = (GameManager.Instance.player.transform.position - _boss.transform.position).normalized;
@@ -198,7 +199,7 @@ public class AFreeState : BossBaseState
         yield return new WaitForSeconds(waitTime);
 
         b_nowMove = true;
-
+        _altarBoss.B_isDashing = false;
         _boss.StartCoroutine(RotatingBall(3, 100, _boss.transform, 3, 5, 5, 0.5f));
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime * 2));
     }

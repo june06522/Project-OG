@@ -113,12 +113,6 @@ public class Boss : MonoBehaviour, IHitAble
 
     protected virtual void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Player")
-        {
-            if (collision.gameObject.TryGetComponent<IHitAble>(out var IhitAble))
-            {
-                IhitAble.Hit(bossSo.Damage);
-            }
-        }
+        
     }
 }
