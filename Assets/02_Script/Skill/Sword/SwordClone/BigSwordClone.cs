@@ -39,8 +39,8 @@ public class BigSwordClone : SwordClone
             if (!IsInElipse(enemyCol.transform.position, TargetPos))
                 continue;
 
-            Enemy enemy;
-            if (enemyCol.TryGetComponent<Enemy>(out enemy))
+            IHitAble enemy;
+            if (enemyCol.TryGetComponent<IHitAble>(out enemy))
             {
                 enemy.Hit(damage);
                 Debug.Log("Gang");
