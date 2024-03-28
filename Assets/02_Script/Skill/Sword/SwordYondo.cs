@@ -133,7 +133,7 @@ public class SwordYondo : MonoBehaviour
     {
         curSpeed = 0;
         rb.velocity = Vector2.zero;
-        transform.position = ownerTrm.position + startLocalPos;
+        transform.localPosition = startLocalPos;
         attachTrigger = false;
     }
 
