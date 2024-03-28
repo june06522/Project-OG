@@ -32,7 +32,6 @@ public class HammerClone : MonoBehaviour
 
     public void Dissolve(bool on)
     {
-        if (on) return;
         float initValue = on == true ? 0 : 1;
 
         material.SetFloat("_FullGlowDissolveFade", initValue);
