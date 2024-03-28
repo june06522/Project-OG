@@ -31,7 +31,9 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public bool IsDrag => isDrag;
 
     protected RectTransform rectTransform;
+    public RectTransform RectTransform => rectTransform;
     protected Image image;
+    public Image Image => image;
 
 
     protected virtual void Awake()
