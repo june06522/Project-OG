@@ -2,6 +2,7 @@ using DG.Tweening;
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.VFX;
 
 public class HammerClone : MonoBehaviour
 {
@@ -33,11 +34,11 @@ public class HammerClone : MonoBehaviour
     {
         float initValue = on == true ? 0 : 1;
 
-        material.SetFloat("_SourceGlowDissolveFade", initValue);
+        material.SetFloat("_FullGlowDissolveFade", initValue);
 
-        float value = initValue;
+        float value = initValue;    
         float endValue = Mathf.Abs(1 - initValue);
-        DOTween.To(() => value, x => material.SetFloat("_SourceGlowDissolveFade", x), endValue, dissolveTime)
+        DOTween.To(() => value, x => material.SetFloat("_FullGlowDissolveFade", x), endValue, dissolveTime)
            .OnComplete(() =>
            {
                EndDissolve = true;
@@ -57,11 +58,22 @@ public class HammerClone : MonoBehaviour
         }
     }
 
-    public void Move(Vector2 movePos)
+    public void Move(Vector3 movePos, bool Tween)
     {
         //float angle = Mathf.Atan2(weaponTrm.right.y, weaponTrm.right.x) * Mathf.Rad2Deg;
-        Vector2 dir = movePos.normalized;
-        transform.up = dir;
-        transform.localPosition = movePos;
+        Vector3 dir = movePos.normalized;
+        dir.z = 0;
+
+        if(Tween) 
+        {
+            DOTween.To(() => transform.up, (vec) => transform.up = vec, dir, 0.25f).SetEase(Ease.InOutBack);
+            DOTween.To(() => transform.localPosition, (vec) => transform.localPosition = vec, movePos, 0.25f).SetEase(Ease.InOutBack).OnComplete(()=>Dissolve(false));
+            
+        }
+        else
+        {
+            transform.up = dir;
+            transform.localPosition = movePos;
+        }
     }
 }
