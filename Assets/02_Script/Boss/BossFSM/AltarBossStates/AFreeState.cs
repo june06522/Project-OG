@@ -7,7 +7,6 @@ using DG.Tweening;
 // 플레이어를 따라가다가 플레이어가 벽 쪽에 붙으면 좀 문제가 생김
 public class AFreeState : BossBaseState
 {
-    private bool b_wasHealing;
     private bool b_nowMove;
     private bool b_allThrow;
     private bool b_lock;
@@ -20,7 +19,6 @@ public class AFreeState : BossBaseState
 
     public AFreeState(AltarBoss boss) : base(boss)
     {
-        b_wasHealing = false;
         b_lock = false;
         b_nowMove = false;
         b_allThrow = false;
@@ -57,7 +55,7 @@ public class AFreeState : BossBaseState
 
         if(!_boss.B_isStop && !_boss.B_blocked && b_nowMove)
         {
-            if (!DontNeedToFollow())
+            if (!_altarBoss.DontNeedToFollow())
             {
                 _boss.transform.position = Vector2.MoveTowards(_boss.transform.position, GameManager.Instance.player.transform.position, Time.deltaTime * _boss.bossSo.Speed);
             }
@@ -73,20 +71,13 @@ public class AFreeState : BossBaseState
     {
         yield return new WaitForSeconds(waitTime);
 
-        int rand = Random.Range(1, 7);
+        int rand = Random.Range(1, 5);
 
-        if(rand == 6)
-        {
-            if(b_wasHealing)
-            {
-                rand = Random.Range(1, 6);
-            }
-        }
-        else if(rand == 5)
+        if (rand == 4)
         {
             if (b_lock)
             {
-                rand = Random.Range(1, 5);
+                rand = Random.Range(1, 4);
             }
         }
 
@@ -98,72 +89,17 @@ public class AFreeState : BossBaseState
                 NowCoroutine(OmnidirAttack(20, 5, 1, 1));
                 break;
             case 2:
-                _boss.StopImmediately(_boss.transform);
-                _boss.B_isStop = true;
-                NowCoroutine(SoundAttack(6, 1));
-                break;
-            case 3:
                 NowCoroutine(OmniGuidPlayerAttack(20, 5, 1, 1));
                 break;
-            case 4:
+            case 3:
                 NowCoroutine(ThrowEnergyBall(3, 10, 1, 2));
                 break;
-            case 5:
+            case 4:
                 _boss.StopImmediately(_boss.transform);
                 _boss.B_isStop = true;
                 NowCoroutine(OmnidirShooting(4, 3, 0.2f, 50));
                 break;
-            case 6:
-                _boss.StopImmediately(_boss.transform);
-                _boss.B_isStop = true;
-                NowCoroutine(Buff(5, 150));
-                break;
         }
-    }
-
-    private bool DontNeedToFollow()
-    {
-        if (CheckPlayerCircleCastB(_boss.bossSo.StopRadius))
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private bool CheckPlayerCircleCastB(float radius)
-    {
-        RaycastHit2D[] hit = Physics2D.CircleCastAll(_boss.transform.position, radius, Vector2.zero);
-        foreach (var h in hit)
-        {
-            if (h.collider.gameObject.tag == "Player")
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private GameObject CheckPlayerCircleCastG(float radius)
-    {
-        RaycastHit2D[] hit = Physics2D.CircleCastAll(_boss.transform.position, radius, Vector2.zero);
-        foreach (var h in hit)
-        {
-            if (h.collider.gameObject.tag == "Player")
-            {
-                return h.collider.gameObject;
-            }
-        }
-
-        return null;
-    }
-
-    private IEnumerator LockHeal(float waitTime)
-    {
-        b_wasHealing = true;
-        yield return new WaitForSeconds(waitTime);
-        b_wasHealing = false;
     }
 
     private IEnumerator LockAndUnlock(float waitTime)
@@ -375,70 +311,6 @@ public class AFreeState : BossBaseState
 
             yield return new WaitForSeconds(waitTime);
         }
-
-        _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
-    }
-
-    // 버프기 - 체력 회복 및 공격력 영구 증가
-    private IEnumerator Buff(int division, float speed)
-    {
-        int heal = (int)(_boss.bossSo.MaxHP / division);
-        float currentHeal = 0;
-
-        if (_boss.F_currentHp < _boss.bossSo.MaxHP - heal)
-        {
-            _altarBoss.ChangeMat(1);
-
-            while (currentHeal < heal)
-            {
-                currentHeal += Time.deltaTime * speed;
-                _boss.F_currentHp += Time.deltaTime * speed;
-
-                yield return null;
-            }
-
-            _altarBoss.ChangeMat();
-
-            _boss.B_isStop = false;
-            _boss.StartCoroutine(LockHeal(40));
-            _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
-        }
-        else
-        {
-            b_wasHealing = false;
-            _boss.B_isStop = false;
-            _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
-        }
-        
-    }
-
-    // 범위안에 플레이어가 있으면 피해를 준다 - 플레이어가 멀어져야 좋은 패턴
-    private IEnumerator SoundAttack(int radius, float waitTime)
-    {
-        GameObject warning = ObjectPool.Instance.GetObject(ObjectPoolType.WarningType1, _boss.G_bulletCollector.transform);
-        warning.transform.localScale = warning.transform.localScale * radius * 2;
-        warning.transform.position = _boss.transform.position;
-        warning.transform.rotation = Quaternion.identity;
-
-        yield return new WaitForSeconds(waitTime);
-
-        _boss.StartCoroutine(CameraManager.Instance.CameraShake(1, 0.5f));
-
-        ObjectPool.Instance.ReturnObject(ObjectPoolType.WarningType1, warning);
-
-        GameObject p = CheckPlayerCircleCastG(radius);
-
-        if (p)
-        {
-            if (p.TryGetComponent<IHitAble>(out var IhitAble))
-            {
-                IhitAble.Hit(_boss.bossSo.Damage);
-            }
-        }
-
-        yield return new WaitForSeconds(0.5f);
-
-        _boss.B_isStop = false;
 
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
     }

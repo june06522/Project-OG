@@ -56,7 +56,7 @@ public class ATiedState : BossBaseState
 
         yield return new WaitForSeconds(waitTime);
 
-        int rand = Random.Range(1, 4);
+        int rand = Random.Range(1, 3);
 
         _boss.B_isRunning = true;
 
@@ -66,11 +66,6 @@ public class ATiedState : BossBaseState
                 NowCoroutine(OmnidirAttack(20, 5, 1, 1));
                 break;
             case 2:
-                _boss.StopImmediately(_boss.transform);
-                _boss.B_isStop = true;
-                NowCoroutine(SoundAttack(6, 1));
-                break;
-            case 3:
                 NowCoroutine(OmniGuidPlayerAttack(20, 5, 1, 1));
                 break;
         }
@@ -114,20 +109,6 @@ public class ATiedState : BossBaseState
         Vector3 newPatrolPos =  new Vector2(Random.Range(-f_maxMoveDistance, f_maxMoveDistance), Random.Range(-f_maxMoveDistance, f_maxMoveDistance));
 
         return newPatrolPos;
-    }
-
-    private GameObject CheckPlayerCircleCastG(float radius)
-    {
-        RaycastHit2D[] hit = Physics2D.CircleCastAll(_boss.transform.position, radius, Vector2.zero);
-        foreach (var h in hit)
-        {
-            if (h.collider.gameObject.tag == "Player")
-            {
-                return h.collider.gameObject;
-            }
-        }
-
-        return null;
     }
 
     // 전방향으로 공격한다 - 플레이어가 근접하기 좋은 패턴
@@ -227,41 +208,6 @@ public class ATiedState : BossBaseState
 
         yield return new WaitForSeconds(time);
 
-        _boss.B_isRunning = false;
-
-        _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
-    }
-
-    // 범위안에 플레이어가 있으면 피해를 준다 - 플레이어가 멀어져야 좋은 패턴
-    private IEnumerator SoundAttack(int radius, float waitTime)
-    {
-        if (!_altarBoss.B_isTied)
-            yield break;
-
-        GameObject warning = ObjectPool.Instance.GetObject(ObjectPoolType.WarningType1, _boss.G_bulletCollector.transform);
-        warning.transform.localScale = warning.transform.localScale * radius * 2;
-        warning.transform.position = _boss.transform.position;
-        warning.transform.rotation = Quaternion.identity;
-
-        yield return new WaitForSeconds(waitTime);
-
-        _boss.StartCoroutine(CameraManager.Instance.CameraShake(1, 0.5f));
-
-        ObjectPool.Instance.ReturnObject(ObjectPoolType.WarningType1, warning);
-
-        GameObject p = CheckPlayerCircleCastG(radius);
-
-        if (p)
-        {
-            if (p.TryGetComponent<IHitAble>(out var IhitAble))
-            {
-                IhitAble.Hit(_boss.bossSo.Damage);
-            }
-        }
-
-        yield return new WaitForSeconds(0.5f);
-
-        _boss.B_isStop = false;
         _boss.B_isRunning = false;
 
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));

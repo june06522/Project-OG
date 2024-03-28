@@ -22,6 +22,6 @@ public enum ObjectPoolType
     AltarDeadEffect,
 
     SlateMinimi,
-    SlateMinimiLaser,
-    SlateDeadEffect
+    SlateDeadEffect,
+    SlateBullet
 }
