@@ -7,6 +7,7 @@ public class SlateBoss : Boss
     public int MinimiCount { get => i_minimiCount; set => i_minimiCount = value; }
 
     public GameObject G_slateOnlyCollector;
+    public GameObject G_minimisPositions;
 
     public List<Material> L_materials;
     public List<Sprite> L_sprite;
@@ -41,6 +42,7 @@ public class SlateBoss : Boss
         _bossFSM = new BossFSM(new BossIdleState(this));
 
         ChangeState();
+        StartCoroutine(BossPatorl(bossSo.StopTime, bossSo.MoveX, bossSo.MoveY, bossSo.Speed));
     }
 
     protected override void Update()
@@ -57,20 +59,8 @@ public class SlateBoss : Boss
 
         if (!B_isDead)
         {
-            if (!B_isRunning)
-            {
-                ChangeState();
-            }
+            ChangeState();
             _bossFSM.UpdateBossState();
-
-            if(!DontNeedToFollow() && !B_isStop)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, GameManager.Instance.player.transform.position, Time.deltaTime * bossSo.Speed);
-            }
-            else
-            {
-                StopImmediately(transform);
-            }
         }
     }
 
@@ -111,6 +101,14 @@ public class SlateBoss : Boss
             case BossState.Dead:
                 _bossFSM.ChangeBossState(new SDeadState(this));
                 break;
+        }
+    }
+
+    public void ReturnMinimi(GameObject[] objs)
+    {
+        for (int i = 0; i < objs.Length; i++)
+        {
+            ObjectPool.Instance.ReturnObject(ObjectPoolType.SlateMinimi, objs[i]);
         }
     }
 

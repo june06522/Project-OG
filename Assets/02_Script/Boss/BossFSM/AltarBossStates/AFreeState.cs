@@ -7,20 +7,17 @@ using DG.Tweening;
 // 플레이어를 따라가다가 플레이어가 벽 쪽에 붙으면 좀 문제가 생김
 public class AFreeState : BossBaseState
 {
-    private bool b_nowMove;
     private bool b_allThrow;
     private bool b_lock;
 
     private float f_rotatingBallRegenTime;
     private float f_curWaitingRegenTime;
 
-
     private AltarBoss _altarBoss;
 
     public AFreeState(AltarBoss boss) : base(boss)
     {
         b_lock = false;
-        b_nowMove = false;
         b_allThrow = false;
         _altarBoss = boss;
         f_rotatingBallRegenTime = 10;
@@ -34,6 +31,7 @@ public class AFreeState : BossBaseState
 
     public override void OnBossStateOn()
     {
+        _altarBoss.B_patorl = false;
         _boss.B_isStop = false;
         _boss.B_blocked = false;
         _boss.StartCoroutine(Dash(10, 20, 0.5f, 0.5f));
@@ -51,20 +49,7 @@ public class AFreeState : BossBaseState
             _boss.StartCoroutine(RotatingBall(3, 100, _boss.transform, 3, 5, 5, 0.5f));
             f_curWaitingRegenTime = 0;
             b_allThrow = false;
-        }
-
-        if(!_boss.B_isStop && !_boss.B_blocked && b_nowMove)
-        {
-            if (!_altarBoss.DontNeedToFollow())
-            {
-                _boss.transform.position = Vector2.MoveTowards(_boss.transform.position, GameManager.Instance.player.transform.position, Time.deltaTime * _boss.bossSo.Speed);
-            }
-            else
-            {
-                _boss.StopImmediately(_boss.transform);
-            }
-        }
-            
+        }   
     }
 
     public IEnumerator RandomPattern(float waitTime)
@@ -134,10 +119,10 @@ public class AFreeState : BossBaseState
 
         yield return new WaitForSeconds(waitTime);
 
-        b_nowMove = true;
         _altarBoss.B_isDashing = false;
         _boss.StartCoroutine(RotatingBall(3, 100, _boss.transform, 3, 5, 5, 0.5f));
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime * 2));
+        _boss.StartCoroutine(_boss.BossPatorl(_altarBoss.bossSo.StopTime, _altarBoss.bossSo.MoveX, _altarBoss.bossSo.MoveY, _altarBoss.bossSo.Speed));
     }
 
     // 시간 지나면 돌다가 플레이어 방향으로 날아가라 그리고 또 다시 생기고 돌고 던지고 반복 + 메테리얼 이용해서 태양 느낌 레츠고

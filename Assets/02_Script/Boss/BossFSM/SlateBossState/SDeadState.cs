@@ -22,7 +22,7 @@ public class SDeadState : BossBaseState
         _slate.StopAllCoroutines();
         _slate.ReturnAll();
         _slate.LaserReturnAll();
-        _slate.StartCoroutine(Dying(2, 0.5f));
+        _slate.StartCoroutine(Dying(2, 0.5f, 3, 0.5f));
     }
 
     public override void OnBossStateUpdate()
@@ -30,12 +30,18 @@ public class SDeadState : BossBaseState
         
     }
 
-    private IEnumerator Dying(float disappearingTime, float disappearSpeed)
+    private IEnumerator Dying(float disappearingTime, float disappearSpeed, int explosionCount, float explosionWaitTime)
     {
         float curTime = 0;
         float a = 1;
-        GameObject effect = ObjectPool.Instance.GetObject(ObjectPoolType.SlateDeadEffect);
-        effect.transform.position = _boss.transform.position;
+        for(int i = 0; i < explosionCount; i++)
+        {
+            GameObject effect = ObjectPool.Instance.GetObject(ObjectPoolType.SlateDeadEffect);
+            effect.transform.position = _boss.transform.position;
+
+            yield return new WaitForSeconds(explosionWaitTime);
+        }
+        
         while (curTime < disappearingTime)
         {
             curTime += Time.deltaTime;
