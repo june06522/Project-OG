@@ -37,7 +37,7 @@ public class PlayerHP : MonoBehaviour, IHitAble
 
     public void RestoreHP(int plusHP)
     {
-        CurrentHP += plusHP;
+        CurrentHP = Math.Clamp(CurrentHP + plusHP, 0, MaxHP);
         OnChangeHPEvent?.Invoke(MaxHP, CurrentHP);
     }
     public void SetPlayerHP(int maxHP, int currentHP = 0)

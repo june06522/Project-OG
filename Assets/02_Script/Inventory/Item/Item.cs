@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,8 @@ public class Item : MonoBehaviour, IInteractable
 
     private WeaponInventory inventory;
     private Transform parent;
+
+    public event Action<Transform> OnInteractItem;
 
     private void Awake()
     {
@@ -37,7 +40,10 @@ public class Item : MonoBehaviour, IInteractable
             obj.transform.localPosition += new Vector3((obj.GetComponent<RectTransform>().rect.width - 100) / 2, (obj.GetComponent<RectTransform>().rect.height - 100) / 2);
 
             if (one == true)
+            {
+                OnInteractItem?.Invoke(transform);
                 Destroy(gameObject);
+            }
         }
     }
 }
