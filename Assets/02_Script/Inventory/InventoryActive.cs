@@ -22,6 +22,10 @@ public class InventoryActive : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.Tab) || (Input.GetKeyDown(KeyCode.Escape) && isOn))
             {
                 isOn = !isOn;
+                if(isOn)
+                    ShowInven();
+                else
+                    ShowUI();
                 _weaponExplainPanel.SetActive(isOn);
                 _playerUI.SetActive(!isOn);
             }
@@ -33,5 +37,15 @@ public class InventoryActive : MonoBehaviour
 
             image.enabled = isOn;
         }
+    }
+
+    private void ShowInven()
+    {
+
+    }
+
+    private void ShowUI()
+    {
+
     }
 }
