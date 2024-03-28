@@ -54,39 +54,37 @@ public class ConnectVisible : MonoBehaviour
             Destroy(line.gameObject);
         }
 
-        if (inventoryActive.IsOn)
+        brickList = GetComponentsInChildren<InvenBrick>();
+        List<InvenBrick> generatorList = new List<InvenBrick>();
+        foreach (var brick in brickList)
         {
-            brickList = GetComponentsInChildren<InvenBrick>();
-            List<InvenBrick> generatorList = new List<InvenBrick>();
-            foreach (var brick in brickList)
+            if (brick.Type == ItemType.Generator && !brick.IsDrag)
+                generatorList.Add(brick);
+        }
+
+        foreach (var generator in generatorList)
+        {
+            LineRenderer line = Instantiate(tempObj, transform).GetComponent<LineRenderer>();
+            line.material = lineRenderMat;
+            lendererList.Add(line);
+
+            line.positionCount += 1;
+            Vector3 pos = generator.transform.position;
+            pos.z = -4;
+            line.SetPosition(line.positionCount - 1, pos);
+
+            foreach (var vec in generator.InvenObject.sendPoints)
             {
-                if (brick.Type == ItemType.Generator && !brick.IsDrag)
-                    generatorList.Add(brick);
-            }
-
-            foreach (var generator in generatorList)
-            {
-                LineRenderer line = Instantiate(tempObj, transform).GetComponent<LineRenderer>();
-                line.material = lineRenderMat;
-                lendererList.Add(line);
-
-                line.positionCount += 1;
-                Vector3 pos = generator.transform.position;
-                pos.z = -4;
-                line.SetPosition(line.positionCount - 1, pos);
-
-                foreach (var vec in generator.InvenObject.sendPoints)
-                {
-                    Dictionary<ConnectInfo, bool> dic = new Dictionary<ConnectInfo, bool>();
-                    Connect(line, generator.InvenObject.originPos + vec.dir + vec.point, vec.dir, pos, dic);
-                }
+                Dictionary<ConnectInfo, bool> dic = new Dictionary<ConnectInfo, bool>();
+                Connect(line, generator.InvenObject.originPos + vec.dir + vec.point, vec.dir, pos, dic);
             }
         }
+
     }
 
     void Connect(LineRenderer line, Vector2 pos, Vector2Int dir, Vector2 originpos, Dictionary<ConnectInfo, bool> isVisited)
     {
-        Vector2 tempVec = originpos + new Vector2(dir.x *mulX, dir.y * mulY);
+        Vector2 tempVec = originpos + new Vector2(dir.x * mulX, dir.y * mulY);
         ConnectInfo info = new ConnectInfo(pos, dir);
         #region 스택 오버 플로우 방지 <- 방문한곳 체크
         if (isVisited.ContainsKey(info) && isVisited[info])
@@ -134,7 +132,7 @@ public class ConnectVisible : MonoBehaviour
                 #endregion
 
                 //연결된 블록 순회
-                BrickCircuit(b,tempVec, line, data, isVisited);
+                BrickCircuit(b, tempVec, line, data, isVisited);
             }
         }
     }
@@ -186,7 +184,7 @@ public class ConnectVisible : MonoBehaviour
                     BrickPoint b;
                     b.point = point.point;
                     b.dir = point.dir;
-                    
+
                     BrickCircuit(b, tempVec, line, data, isVisited);
 
                     tempVec -= new Vector2(v.x * mulX, v.y * mulY);
