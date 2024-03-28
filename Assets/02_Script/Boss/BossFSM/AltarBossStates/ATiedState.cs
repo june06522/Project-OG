@@ -11,19 +11,16 @@ public class ATiedState : BossBaseState
 
     private AltarBoss _altarBoss;
 
-    private Vector3 v_patrolPos;
-
     public ATiedState(AltarBoss boss) : base(boss)
     {
         f_maxMoveDistance = 1;
         f_movingDelay = 1;
-        v_patrolPos = _boss.transform.localPosition;
         _altarBoss = boss;
     }
 
     public override void OnBossStateExit()
     {
-        
+        _altarBoss.B_patorl = true;
     }
 
     public override void OnBossStateOn()
@@ -31,7 +28,7 @@ public class ATiedState : BossBaseState
         _boss.B_isStop = false;
         _altarBoss.B_isTied = true;
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
-        _boss.StartCoroutine(TiedPatorl(f_movingDelay));
+        _altarBoss.StartCoroutine(_altarBoss.BossPatorl(f_movingDelay, f_maxMoveDistance, f_maxMoveDistance, 2));
     }
 
     public override void OnBossStateUpdate()
@@ -44,7 +41,6 @@ public class ATiedState : BossBaseState
 
         if(_boss.B_blocked)
         {
-            v_patrolPos = MakeNewPatrolPos();
             _boss.B_blocked = false;
         }
     }
@@ -70,47 +66,6 @@ public class ATiedState : BossBaseState
                 break;
         }
     }
-
-    private IEnumerator TiedPatorl(float waitTime)
-    {
-        while(_altarBoss.B_isTied)
-        {
-            if (Arrive(_boss.transform.localPosition, v_patrolPos))
-            {
-                yield return new WaitForSeconds(waitTime);
-                v_patrolPos = MakeNewPatrolPos();
-            }
-            else
-            {
-                if (_boss.B_isStop)
-                {
-                    v_patrolPos = _boss.transform.localPosition;
-                }
-                else
-                {
-                    _boss.transform.localPosition = Vector2.MoveTowards(_boss.transform.localPosition, v_patrolPos, Time.deltaTime);
-                }
-            }
-
-            yield return null;
-        }
-    }
-
-    private bool Arrive(Vector3 myPos, Vector3 targetPos)
-    {
-        if (Mathf.Abs(Vector3.Distance(myPos, targetPos)) <= 0.5f)
-            return true;
-
-        return false;
-    }
-
-    private Vector3 MakeNewPatrolPos()
-    {
-        Vector3 newPatrolPos =  new Vector2(Random.Range(-f_maxMoveDistance, f_maxMoveDistance), Random.Range(-f_maxMoveDistance, f_maxMoveDistance));
-
-        return newPatrolPos;
-    }
-
     // 전방향으로 공격한다 - 플레이어가 근접하기 좋은 패턴
     private IEnumerator OmnidirAttack(int bulletCount, float speed, float time, int burstCount)
     {

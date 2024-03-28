@@ -6,7 +6,8 @@ public class SFullHPState : BossBaseState
 {
     private SlateBoss _slate;
     private GameObject[] g_minimis;
-    private LineRenderer[,] _minimiLaserLineRenderer;
+    private LineRenderer[] _minimiLaserLineRenderer;
+    private Vector3[] v_originPos;
 
     public SFullHPState(SlateBoss boss) : base(boss)
     {
@@ -15,8 +16,14 @@ public class SFullHPState : BossBaseState
 
     public override void OnBossStateExit()
     {
-        ReturnMinimi();
+        GameObject effect = ObjectPool.Instance.GetObject(ObjectPoolType.SlateDeadEffect);
+        effect.transform.position = _slate.transform.position;
+        _slate.ReturnMinimi(g_minimis);
         StopThisCoroutine();
+        _slate.StopAllCoroutines();
+        _slate.ReturnAll();
+        _slate.LaserReturnAll();
+        _slate.B_isStop = true;
         _slate.B_fullHP = false;
         _slate.B_halfHP = true;
         _slate.MinimiCount = g_minimis.Length + 1;
@@ -24,8 +31,10 @@ public class SFullHPState : BossBaseState
 
     public override void OnBossStateOn()
     {
+        _slate.B_isStop = false;
         g_minimis = new GameObject[_slate.MinimiCount];
-        _minimiLaserLineRenderer = new LineRenderer[_slate.MinimiCount, 2];
+        _minimiLaserLineRenderer = new LineRenderer[_slate.MinimiCount];
+        v_originPos = new Vector3[_slate.MinimiCount];
         CreateMinimi();
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
     }
@@ -41,22 +50,12 @@ public class SFullHPState : BossBaseState
         {
             g_minimis[i] = ObjectPool.Instance.GetObject(ObjectPoolType.SlateMinimi, _boss.transform);
             g_minimis[i].GetComponent<SpriteRenderer>().material = _slate.L_materials[5];
-            g_minimis[i].transform.localPosition = new Vector3(Mathf.Cos(Mathf.PI * 2 * i / g_minimis.Length), Mathf.Sin(Mathf.PI * 2 * i / g_minimis.Length)).normalized * _slate.F_minimiAwayDistance;
+            v_originPos[i] = new Vector3(Mathf.Cos(Mathf.PI * 2 * i / g_minimis.Length), Mathf.Sin(Mathf.PI * 2 * i / g_minimis.Length)).normalized * _slate.F_minimiAwayDistance;
+            g_minimis[i].transform.localPosition = v_originPos[i];
             g_minimis[i].transform.rotation = Quaternion.identity;
-            for(int j = 0; j < _minimiLaserLineRenderer.GetLength(1); j++)
-            {
-                _minimiLaserLineRenderer[i, j] = g_minimis[i].GetComponent<LineRenderer>();
-                _minimiLaserLineRenderer[i, j].material = _slate.L_materials[2];
-            }
-            
-        }
-    }
+            _minimiLaserLineRenderer[i] = g_minimis[i].GetComponent<LineRenderer>();
+            _minimiLaserLineRenderer[i].material = _slate.L_materials[2];
 
-    private void ReturnMinimi()
-    {
-        for (int i = 0; i < g_minimis.Length; i++)
-        {
-            ObjectPool.Instance.ReturnObject(ObjectPoolType.SlateMinimi, g_minimis[i]);
         }
     }
 
@@ -67,14 +66,12 @@ public class SFullHPState : BossBaseState
 
         yield return new WaitForSeconds(waitTime);
 
-        int rand = 1;// Random.Range(1, 6);
-
-        _slate.B_isRunning = true;
+        int rand = Random.Range(1, 6);
 
         switch (rand)
         {
             case 1:
-                NowCoroutine(Laser(1, 5));
+                NowCoroutine(Laser(1, 5, 50, 1, 50));
                 break;
             case 2:
                 NowCoroutine(TornadoShot(15, 5, 0.1f, 3));
@@ -91,7 +88,7 @@ public class SFullHPState : BossBaseState
         }
     }
 
-    private IEnumerator Laser(float warningTime, float fireTime)
+    private IEnumerator Laser(float warningTime, float fireTime, float speed, float goBackTime, float minimiMoveSpeed)
     {
         if (!_slate.B_fullHP)
             yield break;
@@ -99,45 +96,87 @@ public class SFullHPState : BossBaseState
         _slate.B_isStop = true;
 
         float curTime = 0;
-        float deg = 0;
+        float deg = 90;
         Vector2 dir = Vector2.zero;
 
         for (int i = 0; i < g_minimis.Length; i++)
         {
             g_minimis[i].GetComponent<SpriteRenderer>().material = _slate.L_materials[1];
+            g_minimis[i].transform.SetParent(null);
+        }
+
+        Vector3[] target = new Vector3[g_minimis.Length];
+
+        int rand = Random.Range(0, 2);
+
+        if(rand == 0)
+        {
+            for (int i = 0; i < g_minimis.Length; i++)
+            {
+                if (i == 0)
+                {
+                    target[i] = _slate.G_minimisPositions.transform.GetChild(rand).transform.position;
+                }
+                else
+                {
+                    target[i] = _slate.G_minimisPositions.transform.GetChild(rand + 4).transform.position;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < g_minimis.Length; i++)
+            {
+                if (i == 0)
+                {
+                    target[i] = _slate.G_minimisPositions.transform.GetChild(rand + 1).transform.position;
+                }
+                else
+                {
+                    target[i] = _slate.G_minimisPositions.transform.GetChild(rand + 5).transform.position;
+                }
+            }
+        }
+
+        while (curTime < warningTime / 2)
+        {
+            curTime += Time.deltaTime;
+            for(int i = 0; i < g_minimis.Length; i++)
+            {
+                if(i == 0)
+                {
+                    g_minimis[i].transform.position = Vector3.MoveTowards(g_minimis[i].transform.position, target[i], Time.deltaTime * minimiMoveSpeed);
+                }
+                else
+                {
+                    g_minimis[i].transform.position = Vector3.MoveTowards(g_minimis[i].transform.position, target[i], Time.deltaTime * minimiMoveSpeed);
+                }
+            }
+
+            yield return null;
+        }
+
+        for (int i = 0; i < g_minimis.Length; i++)
+        {
+            SetLineMaterial(_slate.L_materials[1]);
+            _minimiLaserLineRenderer[i].SetPosition(0, RayWallCheck(g_minimis[i].transform.position, Vector2.down));
+            _minimiLaserLineRenderer[i].startWidth = 0.05f;
+            ShowLineRenderer(g_minimis[i].transform.position, _minimiLaserLineRenderer[i], Vector2.up, 0.05f);
         }
 
         yield return new WaitForSeconds(warningTime);
 
+        curTime = 0;
+        SetLineMaterial(_slate.L_materials[2]);
         for (int i = 0; i < g_minimis.Length; i++)
         {
             g_minimis[i].GetComponent<SpriteRenderer>().material = _slate.L_materials[0];
         }
 
-        for (int i = 0; i < g_minimis.Length; i++)
-        {
-            for(int j = 0; j < _minimiLaserLineRenderer.GetLength(1); j++)
-            {
-                _minimiLaserLineRenderer[i, j].SetPosition(0, g_minimis[i].transform.position);
-                _minimiLaserLineRenderer[i, j].startWidth = 0.1f;
-                if (i % 2 == 0)
-                {
-                    ShowLineRenderer(g_minimis[i].transform.position, _minimiLaserLineRenderer[i, j], Vector2.right, 0.1f);
-                }
-                else
-                {
-                    ShowLineRenderer(g_minimis[i].transform.position, _minimiLaserLineRenderer[i, j], Vector2.left, 0.1f);
-                }
-            }
-            
-            
-        }
-
-
         while (curTime < fireTime)
         {
             curTime += Time.deltaTime;
-            deg += Time.deltaTime * 100;
+            deg += Time.deltaTime * speed;
 
             if (deg < 360)
             {
@@ -145,42 +184,28 @@ public class SFullHPState : BossBaseState
 
                 for (int i = 0; i < g_minimis.Length; i++)
                 {
-                    for(int j = 0; j < _minimiLaserLineRenderer.GetLength(1); j++)
+                    if (i == 0)
                     {
-                        if (i == 0)
-                        {
-                            var x = Mathf.Cos(rad);
-                            var y = Mathf.Sin(rad);
+                        var x = Mathf.Cos(rad);
+                        var y = Mathf.Sin(rad);
 
-                            if(j == 1)
-                            {
-                                dir = -new Vector2(x, y).normalized;
-                            }
-                            else
-                            {
-                                dir = new Vector2(x, y).normalized;
-                            }
-                            _minimiLaserLineRenderer[i, j].SetPosition(1, RayWallCheck(g_minimis[i].transform.position, dir));
-                            RayPlayerCheck(g_minimis[i].transform.position, dir);
-                        }
-                        else
-                        {
-                            var x = -Mathf.Cos(rad);
-                            var y = -Mathf.Sin(rad);
-
-                            if (j == 1)
-                            {
-                                dir = -new Vector2(x, y).normalized;
-                            }
-                            else
-                            {
-                                dir = new Vector2(x, y).normalized;
-                            }
-                            _minimiLaserLineRenderer[i, j].SetPosition(1, RayWallCheck(g_minimis[i].transform.position, dir));
-                            RayPlayerCheck(g_minimis[i].transform.position, dir);
-                        }
+                        dir = new Vector2(x, y).normalized;
+                        _minimiLaserLineRenderer[i].SetPosition(0, RayWallCheck(g_minimis[i].transform.position, -dir));
+                        _minimiLaserLineRenderer[i].SetPosition(1, RayWallCheck(g_minimis[i].transform.position, dir));
+                        RayPlayerCheck(g_minimis[i].transform.position, -dir);
+                        RayPlayerCheck(g_minimis[i].transform.position, dir);
                     }
-                    
+                    else
+                    {
+                        var x = -Mathf.Cos(rad);
+                        var y = Mathf.Sin(rad);
+
+                        dir = new Vector2(x, y).normalized;
+                        _minimiLaserLineRenderer[i].SetPosition(0, RayWallCheck(g_minimis[i].transform.position, -dir));
+                        _minimiLaserLineRenderer[i].SetPosition(1, RayWallCheck(g_minimis[i].transform.position, dir));
+                        RayPlayerCheck(g_minimis[i].transform.position, -dir);
+                        RayPlayerCheck(g_minimis[i].transform.position, dir);
+                    }
                 }
             }
             else
@@ -193,19 +218,52 @@ public class SFullHPState : BossBaseState
 
         for(int i = 0; i < g_minimis.Length; i++)
         {
-            for(int j = 0; j < _minimiLaserLineRenderer.GetLength(1); j++)
-            {
-                _minimiLaserLineRenderer[i, j].enabled = false;
-            }
+            _minimiLaserLineRenderer[i].enabled = false;
+            g_minimis[i].GetComponent<SpriteRenderer>().material = _slate.L_materials[6];
         }
+
+        yield return new WaitForSeconds(goBackTime);
+
         for (int i = 0; i < g_minimis.Length; i++)
+        {
+            g_minimis[i].transform.SetParent(_slate.transform);
+        }
+
+        curTime = 0;
+
+        while (curTime < warningTime / 2)
+        {
+            curTime += Time.deltaTime;
+            for (int i = 0; i < g_minimis.Length; i++)
+            {
+                if (i == 0)
+                {
+                    g_minimis[i].transform.localPosition = Vector3.MoveTowards(g_minimis[i].transform.localPosition, v_originPos[i], Time.deltaTime * minimiMoveSpeed);
+                }
+                else
+                {
+                    g_minimis[i].transform.localPosition = Vector3.MoveTowards(g_minimis[i].transform.localPosition, v_originPos[i], Time.deltaTime * minimiMoveSpeed);
+                }
+            }
+
+            yield return null;
+        }
+
+        for(int i = 0; i < g_minimis.Length; i++)
         {
             g_minimis[i].GetComponent<SpriteRenderer>().material = _slate.L_materials[5];
         }
 
         _slate.B_isStop = false;
-        _slate.B_isRunning = false;
         _slate.StartCoroutine(RandomPattern(_slate.bossSo.PatternChangeTime));
+    }
+
+    private void SetLineMaterial(Material mat)
+    {
+        for(int i = 0; i < g_minimis.Length; i++)
+        {
+            _minimiLaserLineRenderer[i].material = mat;
+        }
     }
 
     private void ShowLineRenderer(Vector3 pos, LineRenderer line, Vector2 dir, float scale)
@@ -227,12 +285,12 @@ public class SFullHPState : BossBaseState
     {
         RaycastHit2D hit = Physics2D.Raycast(pos, dir, Mathf.Infinity, LayerMask.GetMask("Player"));
 
-        if(hit.collider != null)
+        if (hit.collider != null)
         {
             if (hit.collider.TryGetComponent<IHitAble>(out var hitAble))
             {
-                Debug.Log("∑π¿Ã¿˙");
-                hitAble.Hit(_slate.bossSo.Damage);
+                Debug.Log("laser");
+                hitAble.Hit(1);
             }
         }
 
@@ -275,7 +333,6 @@ public class SFullHPState : BossBaseState
             }
         }
 
-        _slate.B_isRunning = false;
         _slate.StartCoroutine(RandomPattern(_slate.bossSo.PatternChangeTime));
     }
 
@@ -329,7 +386,6 @@ public class SFullHPState : BossBaseState
         }
 
         _slate.B_isStop = false;
-        _slate.B_isRunning = false;
         _slate.StartCoroutine(RandomPattern(_slate.bossSo.PatternChangeTime));
     }
 
@@ -402,7 +458,6 @@ public class SFullHPState : BossBaseState
             }
         }
 
-        _slate.B_isRunning = false;
         _slate.StartCoroutine(RandomPattern(_slate.bossSo.PatternChangeTime));
     }
 
@@ -502,7 +557,6 @@ public class SFullHPState : BossBaseState
             rigid.velocity = dir.normalized * speed;
         }
 
-        _slate.B_isRunning = false;
         _slate.StartCoroutine(RandomPattern(_slate.bossSo.PatternChangeTime));
     }
 }

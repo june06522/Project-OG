@@ -4,6 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+public enum BossType
+{
+    Altar = 0,
+    Slate = 1,
+    End = 2
+}
+
 public class Boss : MonoBehaviour, IHitAble
 {
     public GameObject G_bulletCollector;
@@ -16,6 +24,7 @@ public class Boss : MonoBehaviour, IHitAble
     public bool B_blocked;
     public bool B_isRunning;
     public bool B_awakening;
+    public bool B_patorl;
 
     public float F_currentHp;
 
@@ -34,6 +43,7 @@ public class Boss : MonoBehaviour, IHitAble
         feedbackPlayer = GetComponent<FeedbackPlayer>();
         B_isStop = false;
         B_dead = false;
+        B_patorl = false;
         F_currentHp = bossSo.MaxHP;
         DeadEvt += DieEvent;
         bossHpSlider.value = F_currentHp / bossSo.MaxHP;
@@ -72,15 +82,78 @@ public class Boss : MonoBehaviour, IHitAble
         return true;
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, bossSo.StopRadius);
-    }
-
     private void DieEvent()
     {
         B_dead = true;
         bossHpSlider.value = 0;
+    }
+
+    public IEnumerator BossPatorl(float waitTime, float randX, float randY, float speed)
+    {
+        Vector3 targetpatrolPos = transform.localPosition;
+        bool wallChecked = false;
+
+        while (!B_patorl)
+        {
+            if (RayWallCheckForMove(transform.position, bossSo.WallCheckRadius) && !wallChecked)
+            {
+                wallChecked = true;
+                yield return new WaitForSeconds(waitTime);
+                targetpatrolPos = (GameManager.Instance.player.transform.position - transform.position).normalized;
+            }
+
+            if (Arrive(transform.localPosition, targetpatrolPos))
+            {
+                if(wallChecked)
+                {
+                    wallChecked = false;
+                }
+                yield return new WaitForSeconds(waitTime);
+                targetpatrolPos = MakeNewPatrolPos(randX, randY);
+            }
+            else
+            {
+                if (B_isStop)
+                {
+                    targetpatrolPos = transform.localPosition;
+                }
+                else
+                {
+                    transform.localPosition = Vector2.MoveTowards(transform.localPosition, targetpatrolPos, Time.deltaTime * speed);
+                }
+            }
+
+            yield return null;
+        }
+    }
+
+    private bool RayWallCheckForMove(Vector3 originPos, float radius)
+    {
+        Collider2D hit = Physics2D.OverlapCircle(originPos, radius, LayerMask.GetMask("Wall"));
+
+        if(hit)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private bool Arrive(Vector3 myPos, Vector3 targetPos)
+    {
+        if (Mathf.Abs(Vector3.Distance(myPos, targetPos)) <= 0.5f)
+            return true;
+
+        return false;
+    }
+
+    private Vector3 MakeNewPatrolPos(float randX, float randY)
+    {
+        Vector3 newPatrolPos = new Vector2(UnityEngine.Random.Range(-randX, randX), UnityEngine.Random.Range(-randY, randY));
+
+        return newPatrolPos;
     }
 
     public bool DontNeedToFollow()
