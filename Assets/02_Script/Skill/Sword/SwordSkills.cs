@@ -65,9 +65,7 @@ public class SwordSkills : MonoBehaviour
         clones = new();
         //ownerTrm = GameManager.Instance.player.transform;
         ownerTrm = GameObject.Find("Player").transform;
-#if UNITY_EDITOR
-        Debug.Log("Running");
-#endif
+
         Make();
     }
 
