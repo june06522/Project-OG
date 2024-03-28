@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     public WeaponController WeaponController => weaponController;
     #endregion
 
-    #region
+    #region 라이트 관련
     [SerializeField]
     private Light2D _globalLight;
     public Light2D GlobalLight => _globalLight;
@@ -28,6 +28,10 @@ public class GameManager : MonoBehaviour
     private float _defaultLightValue = 0.9f;
     public float DefaultLightValue => _defaultLightValue;
 
+    #endregion
+
+    #region 상태 관련
+    [HideInInspector] public bool isShopOpen = false;
     #endregion
 
     [NonSerialized] public Transform player;

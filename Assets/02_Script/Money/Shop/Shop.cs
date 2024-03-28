@@ -30,7 +30,7 @@ public class Shop : MonoBehaviour
 
     // open
     private bool _isOpen = false;
-
+    public bool isOpen => _isOpen;
     [Header("Item Info")]
     [SerializeField]
     private ItemInfoListSO _itemInfoListSO;
@@ -53,6 +53,7 @@ public class Shop : MonoBehaviour
     {
         if(_isOpen || inven.IsOn) return;
 
+        GameManager.Instance.isShopOpen = true;
         inven.canOpen = false;
         _isOpen = true;
         _playerMoney.GoldChangedEvent += UpdatePlayerGoldUI;
@@ -65,6 +66,7 @@ public class Shop : MonoBehaviour
     {
         if (_isOpen == false) return;
 
+        GameManager.Instance.isShopOpen = false;
         inven.canOpen = true;
         _isOpen = false;
         _playerMoney.GoldChangedEvent -= UpdatePlayerGoldUI;

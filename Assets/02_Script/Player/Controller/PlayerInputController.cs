@@ -97,7 +97,7 @@ public class PlayerInputController : IDisposable
         float x = 0;// = Input.GetAxisRaw("Horizontal");
         float y = 0;// = Input.GetAxisRaw("Vertical");
 
-        if (!GameManager.Instance.InventoryActive.IsOn)
+        if (!GameManager.Instance.InventoryActive.IsOn && !GameManager.Instance.isShopOpen)
         {
             if (Input.GetKey(KeyCode.W))
                 y += 1;
