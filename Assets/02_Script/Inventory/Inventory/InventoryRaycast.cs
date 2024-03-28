@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class InventoryRaycast : MonoBehaviour
 {
     private InvenBrick[] invenBricks;
+    public InvenBrick[] InvenBricks => invenBricks;
 
     private void Update()
     {
