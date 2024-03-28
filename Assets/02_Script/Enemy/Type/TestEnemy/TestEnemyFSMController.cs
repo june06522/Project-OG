@@ -11,19 +11,22 @@ public enum ETestEnemyState
     Dash = 3,
 }
 
-public class TestEnemyFSMController : BaseFSM_Controller<ETestEnemyState>
+public class TestEnemyFSMController : BaseFSM_Controller<ETestEnemyState>, IHitAble
 {
     [SerializeField] public GameObject grid;
     [SerializeField] public EnemyBullet bullet;
 
+    public FeedbackPlayer feedbackPlayer { get; set; }
+
     protected override void Awake()
     {
+        feedbackPlayer = GetComponent<FeedbackPlayer>();    
         base.Awake();
         var idleState = new TestEnemyRootState(this);
         var idleToMove = new TransitionIdleOrMove<ETestEnemyState>(this, ETestEnemyState.Move);
         
-        idleState
-            .AddTransition<ETestEnemyState>(idleToMove);
+        //idleState
+        //    .AddTransition<ETestEnemyState>(idleToMove);
         
         var moveState = new TestEnemyMoveState(this);
         var moveToIdle = new TransitionIdleOrMove<ETestEnemyState>(this, ETestEnemyState.Idle);

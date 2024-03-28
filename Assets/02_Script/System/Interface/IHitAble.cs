@@ -8,6 +8,6 @@ public interface IHitAble
     public bool Hit(float damage)
     {
         feedbackPlayer.Play(damage + Random.Range(0.25f, 1.75f));
-        return false;
+        return true;
     }
 }

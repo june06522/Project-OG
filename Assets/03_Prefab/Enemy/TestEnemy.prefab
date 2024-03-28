@@ -61,9 +61,7 @@ GameObject:
   - component: {fileID: 4276035789087533741}
   - component: {fileID: 4276035789087533738}
   - component: {fileID: 4276035789087533739}
-  - component: {fileID: 4276035789087533718}
   - component: {fileID: 4276035789087533742}
-  - component: {fileID: 4276035789087533729}
   - component: {fileID: 1436639130209289763}
   m_Layer: 14
   m_Name: TestEnemy
@@ -85,7 +83,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 473439353}
-  - {fileID: 5781277186452676475}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -202,58 +199,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableFeedback: 21
   prefab: {fileID: 2728001201958583583, guid: f856cdcf62a2e60449713591a22ae8be, type: 3}
---- !u!114 &4276035789087533718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4276035789087533719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce0ee38807031174fb28c10bd18be1f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _shadowData:
-    shadow:
-      pivotOffset: {x: 0, y: 0}
-      shadowCaster: {fileID: 4276035789087533743}
-      shadow: {fileID: 0}
-      shadowPivot: {fileID: 0}
-      shadowSr: {fileID: 0}
-      shadowCasterSr: {fileID: 4276035789087533740}
-      pivotMode: 0
-      pivotObject: {fileID: 0}
-      flipX: 0
-      customShadowLayer: 0
-      shadowLayer: 
-      casterComponent: {fileID: 4276035789087533718}
-  flipShadowX:
-    _value: 0
-  _shadowColor:
-    _value: {r: 0, g: 0, b: 0, a: 0}
-  _shadowReflectiveness:
-    _value: 0
-  _shadowAlpha:
-    _value: 0
-  _shadowNarrowing:
-    _value: 0
-  _shadowFalloff:
-    _value: 0
-  _pivotOffsetX:
-    _value: 0
-  _pivotOffsetY:
-    _value: 0
-  customShadowLayer:
-    _value: 0
-  customShadowLayerName:
-    _value: 
-  extendedProperties: 0
-  overrideCustomPivot:
-    _value: 0
-  customPivot: 0
-  customPivotTransform: {fileID: 0}
-  rebuildShadowsBF_2_0_1_v: 0
 --- !u!114 &4276035789087533742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,22 +215,6 @@ MonoBehaviour:
   enemyFindEffect: {fileID: 0}
   grid: {fileID: 6246323163108542239, guid: 425b95e43d37e474c8edc0b7ea2b6c53, type: 3}
   bullet: {fileID: 8299640922602903309, guid: 0be16fc4bc182ee4da726eb2dd90f23e, type: 3}
---- !u!114 &4276035789087533729
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4276035789087533719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e43b0d2fd8fdd26488ab187340d8a1fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyDataSO: {fileID: 11400000, guid: b6eb78df6c91ab94590fae25e184f076, type: 2}
-  acceleration: 50
-  deacceleration: 100
-  currentSpeed: 0
 --- !u!114 &1436639130209289763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,136 +231,3 @@ MonoBehaviour:
   obstacles: []
   currentTarget: {fileID: 0}
   IsOutOfDistance: 0
---- !u!1 &5282828811957633414
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4173114675006929306}
-  - component: {fileID: 1755653931798594638}
-  m_Layer: 0
-  m_Name: 'TestEnemy : shadow'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4173114675006929306
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5282828811957633414}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5781277186452676475}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &1755653931798594638
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5282828811957633414}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
-  m_Sprite: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
---- !u!1 &5867240374996509326
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5781277186452676475}
-  - component: {fileID: 4777295841711193300}
-  m_Layer: 0
-  m_Name: 'TestEnemy : shadowPivot'
-  m_TagString: Shadow
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5781277186452676475
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5867240374996509326}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4173114675006929306}
-  m_Father: {fileID: 4276035789087533743}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &4777295841711193300
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5867240374996509326}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.3
