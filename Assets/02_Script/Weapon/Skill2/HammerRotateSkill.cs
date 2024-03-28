@@ -51,7 +51,7 @@ public class HammerRotateSkill : Skill
                 {
                     float reRotateValue = Mathf.Clamp(addRotateValue * 30, 0, 60);
                     clones[i].CurAngle -= reRotateValue;
-                    Vector3 pos = Eclipse.GetElipsePos(transform.position, clones[i].CurAngle * Mathf.Deg2Rad,
+                    Vector3 pos = Eclipse.GetElipsePos(Vector2.zero, clones[i].CurAngle * Mathf.Deg2Rad,
                                   width, height, this.theta);
                     clones[i].Move(pos, true);
                     clones.Remove(clones[i]);
@@ -61,7 +61,7 @@ public class HammerRotateSkill : Skill
                 else
                 {
                     clones[i].CurAngle += addRotateValue;
-                    Vector3 pos = Eclipse.GetElipsePos(transform.position, clones[i].CurAngle * Mathf.Deg2Rad,
+                    Vector3 pos = Eclipse.GetElipsePos(Vector2.zero, clones[i].CurAngle * Mathf.Deg2Rad,
                                   width, height, this.theta);
                     clones[i].Move(pos, false);
                 }
