@@ -11,19 +11,12 @@ public class InvenSelectBrickShow : MonoBehaviour
     [SerializeField] Image _showUI;
 
     bool isOpen = false;
-    private void Awake()
+    
+    public void Init()
     {
-        if (_showUI == null)
-        {
-            Debug.LogError($"{transform} : _showUI is null!");
-        }
-
+        _showUI.transform.parent = transform;
         _rect = _showUI.GetComponent<RectTransform>();
         _invenRaycast = GetComponent<InventoryRaycast>();
-    }
-
-    private void Start()
-    {
         SetDefalut();
     }
 

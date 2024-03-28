@@ -63,6 +63,7 @@ public class WeaponInventory : MonoBehaviour
             }
 
         }
+        FindObjectOfType<InvenSelectBrickShow>().Init();
         camerasetting?.Invoke();
     }
 

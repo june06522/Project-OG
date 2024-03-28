@@ -50,7 +50,7 @@ public class WeaponBrick : InvenBrick
         if (weaponGuid != Guid.Empty)
         {
 
-            Destroy(weapon.gameObject);
+            Destroy(weapon.gameObject); 
             weapon = null;
             weaponController.RemoveWeapon(weaponGuid);
 
