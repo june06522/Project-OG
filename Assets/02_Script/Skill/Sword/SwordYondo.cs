@@ -24,12 +24,6 @@ public class SwordYondo : MonoBehaviour
     [Header("Speed")]
     [SerializeField] float speed = 500f;
 
-    [Header("ETC")]
-    [SerializeField] LayerMask layerMask;
-    [SerializeField] float radius = 10f;
-    [SerializeField] float damage = 5f;
-    [SerializeField]
-
     Transform ownerTrm;
     Transform targetTrm;
 
@@ -39,7 +33,9 @@ public class SwordYondo : MonoBehaviour
     Action AttackStartAction;
     AnimationCurve curve;
 
-
+    private LayerMask layerMask;
+    private float damage;
+    private float radius;
     private float curSpeed;
     ESwordYondoState curState;
     bool isRotating;
@@ -73,6 +69,25 @@ public class SwordYondo : MonoBehaviour
 
         curSpeed = speed;
         curState = ESwordYondoState.Idle;
+    }
+
+    public void Init(LayerMask layerMask, float power, float radius, float coolTime)
+    {
+        this.radius = radius;
+        this.damage = power;
+        this.layerMask = layerMask;
+        //this.ownerTrm = ownerTrm;
+
+        startLocalPos = transform.localPosition;
+        startRot = transform.localRotation;
+
+        StartCoroutine("DestroyThisObj", coolTime);
+    }
+
+    IEnumerator DestroyThisObj(float coolTime)
+    {
+        yield return new WaitForSeconds(coolTime);
+        Destroy(this.gameObject);
     }
 
     private void FixedUpdate()
@@ -160,6 +175,7 @@ public class SwordYondo : MonoBehaviour
         if (targetTrm == null || targetTrm.gameObject.activeSelf == false)
         {
             ChangeState(ESwordYondoState.Attach);
+            Destroy(this.gameObject);
             return;
         }
 
@@ -265,6 +281,11 @@ public class SwordYondo : MonoBehaviour
                 SetTarget();
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
     }
 
     //#if UNITY_EDITOR

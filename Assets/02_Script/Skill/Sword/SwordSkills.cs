@@ -100,6 +100,7 @@ public class SwordSkills : MonoBehaviour
                     clone.Move(pos);
                 }
             }
+            this.t += Time.deltaTime;
         }
 
         if (t > rotateTime && isAttack == false)
