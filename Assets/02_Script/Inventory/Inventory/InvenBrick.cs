@@ -31,7 +31,9 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public bool IsDrag => isDrag;
 
     protected RectTransform rectTransform;
+    public RectTransform RectTransform => rectTransform;
     protected Image image;
+    public Image Image => image;
 
 
     protected virtual void Awake()
@@ -59,10 +61,9 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
         if (isDrag)
         {
-
             transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             rectTransform.position = new Vector3(rectTransform.position.x, rectTransform.position.y, 0);
-            if (!inventoryActive.IsOn)
+            if (!inventoryActive.IsOn )
             {
                 SetPos();
             }
@@ -71,7 +72,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     public virtual void OnPointerUp(PointerEventData eventData)
     {
-        if (inventoryActive.IsOn)
+        if (inventoryActive.IsOn && isDrag)
         {
             PlaySceneEffectSound.Instance.PlayDragAndDrop();
             SetPos();
@@ -84,7 +85,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         ItemExplain.Instance.isDrag = false;
 
         Vector3 tempPos = rectTransform.localPosition;
-        tempPos.x += (rectTransform.rect.width / 100  % 2 == 0) ? 50 : 0;
+        tempPos.x += (rectTransform.rect.width / 100 % 2 == 0) ? 50 : 0;
         tempPos.y += (rectTransform.rect.height / 100 % 2 == 0) ? 50 : 0;
 
         //드래그앤 드랍 여기 건들여야 함
@@ -100,8 +101,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
         if (point == null)
         {
-            GameObject obj = Instantiate(origin);
-            obj.transform.position = GameManager.Instance.player.position;
+            GameObject obj = Instantiate(origin, GameManager.Instance.player.position,Quaternion.identity);
             Destroy(gameObject);
             return;
 

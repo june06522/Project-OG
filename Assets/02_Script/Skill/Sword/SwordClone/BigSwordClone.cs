@@ -32,7 +32,7 @@ public class BigSwordClone : SwordClone
         float radius = Width;
         
         Collider2D[] enemyCols = Physics2D.OverlapCircleAll(TargetPos, radius,
-             LayerMask.GetMask("Enemy", "TriggerEnemy"));
+             LayerMask.GetMask("Enemy", "TriggerEnemy", "Boss"));
 
         foreach (var enemyCol in enemyCols)
         {
