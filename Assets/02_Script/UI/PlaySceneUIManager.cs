@@ -100,6 +100,6 @@ public class PlaySceneUIManager : MonoBehaviour
 
     private void PlayEFF()
     {
-        PlaySceneEffectSound.Instancce.PlayBtnClickSound();
+        PlaySceneEffectSound.Instance.PlayBtnClickSound();
     }
 }

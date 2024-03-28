@@ -130,6 +130,9 @@ public class Stage : MonoBehaviour
 
     private void AppearChest()
     {
+        // Box Sound
+        //PlaySceneEffectSound.Instance.PlayChestOpenSound();
+
         if (_stageChest != null)
         {
 
@@ -167,6 +170,8 @@ public class Stage : MonoBehaviour
 
     public void AppearGate()
     {
+        //Gate Sound
+        //PlaySceneEffectSound.Instance.PlayGateSound();
 
         // appear Gate ...it need tween
         if(_stageType == StageType.BossStage || NextStage.Count == 0)
@@ -307,7 +312,7 @@ public class Stage : MonoBehaviour
         // Delayed Spawn
         for(int idx = 0; idx < waveInfo.delayedSpawnMobInfo.Count; ++idx)
         {
-            // µô·¹ÀÌ
+            // ï¿½ï¿½ï¿½ï¿½ï¿½
             yield return new WaitForSeconds(waveInfo.delayedSpawnMobInfo[idx].delay);
 
             // spawn Points Suffle
@@ -343,7 +348,7 @@ public class Stage : MonoBehaviour
                 spawnEnemies[randomIdx] = tempSpawnEnemy;
             }
 
-            // ÆÄÆ¼Å¬ ÀÛ¾÷
+            // ï¿½ï¿½Æ¼Å¬ ï¿½Û¾ï¿½
             for (int i = 0; i < minValue; ++i)
             {
                 Instantiate(_enemySpawnParticle, delaySpawnList[i].position, Quaternion.identity).Play();
@@ -351,7 +356,7 @@ public class Stage : MonoBehaviour
 
             yield return new WaitForSeconds(0.2f);
 
-            // ½ºÆù ¿¬¼ÓÀ¸·Î ÁøÇà
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             for (int i = 0; i < minValue; ++i)
             {
                 monsterCount++;

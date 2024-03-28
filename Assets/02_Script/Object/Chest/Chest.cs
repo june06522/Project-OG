@@ -64,6 +64,10 @@ public class Chest : MonoBehaviour, IInteractable
         _collider.enabled = false;
         _isOpen = true;
 
+        //ChestOpenSound
+        //PlaySceneEffectSound.Instance.PlayChestOpenSound();
+        PlaySceneEffectSound.Instance.PlayMoneyDropSound();
+
         _spriteRenderer.sprite = _openSprite;
 
         ItemInfoSO item = RandomItem();
