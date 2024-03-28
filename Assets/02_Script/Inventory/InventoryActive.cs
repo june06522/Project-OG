@@ -10,6 +10,9 @@ public class InventoryActive : MonoBehaviour
 
     public bool canOpen = true;
     bool isOn = false;
+
+    [SerializeField] GameObject _playerUI;
+    [SerializeField] GameObject _weaponExplainPanel;
     public bool IsOn => isOn;
 
     private void Update()
@@ -19,6 +22,8 @@ public class InventoryActive : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.Tab) || (Input.GetKeyDown(KeyCode.Escape) && isOn))
             {
                 isOn = !isOn;
+                _weaponExplainPanel.SetActive(isOn);
+                _playerUI.SetActive(!isOn);
             }
         }
 
