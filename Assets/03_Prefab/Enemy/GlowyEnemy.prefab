@@ -121,7 +121,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.027723432, y: 0.06930858}
+  m_Offset: {x: 0.027723432, y: -0.5}
   m_Size: {x: 0.72178745, y: 1.6376392}
   m_Direction: 0
 --- !u!1 &925319829429610020
@@ -252,6 +252,7 @@ GameObject:
   - component: {fileID: 1060187430749296748}
   - component: {fileID: 7768096242055335962}
   - component: {fileID: 6212841962037225685}
+  - component: {fileID: 6677351322716959901}
   m_Layer: 13
   m_Name: Visual
   m_TagString: Untagged
@@ -374,6 +375,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableFeedback: 21
   prefab: {fileID: 2728001201958583583, guid: f856cdcf62a2e60449713591a22ae8be, type: 3}
+--- !u!114 &6677351322716959901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5424956707676481717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a552e63d4da03d64ca3a6595ad06dfbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5552379292721887799
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,8 +750,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.028749943, y: 0.08220005, z: 0}
-    m_Extent: {x: 5.51155, y: 6.0612, z: 0}
+    m_Center: {x: 0.036900043, y: 0.08529997, z: 0}
+    m_Extent: {x: 5.5178, y: 6.0702, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
