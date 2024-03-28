@@ -676,6 +676,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   images: []
   canOpen: 1
+  _playerUI: {fileID: 0}
+  _weaponExplainPanel: {fileID: 0}
 --- !u!114 &280314064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -917,7 +919,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   yondo: {fileID: 7443248907822983009, guid: 3f697d94cf5101b41b15923ab031bb33, type: 3}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
   coolTime: 5
+  radius: 50
 --- !u!1 &411742801
 GameObject:
   m_ObjectHideFlags: 0
@@ -2503,9 +2509,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f81247e31e1b7be4eb79944a83c96c67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panelImage: {fileID: 0}
   weaponExplain: {fileID: 827314830}
   generatorExplain: {fileID: 518751531}
   isDrag: 0
+  useMove: 0
 --- !u!1 &487527618
 GameObject:
   m_ObjectHideFlags: 0
@@ -3792,7 +3800,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1802658064}
   m_RootOrder: 1
@@ -4526,6 +4534,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   images: []
   canOpen: 1
+  _playerUI: {fileID: 0}
+  _weaponExplainPanel: {fileID: 0}
 --- !u!114 &1456529291
 MonoBehaviour:
   m_ObjectHideFlags: 0
