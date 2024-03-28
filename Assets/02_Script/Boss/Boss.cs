@@ -72,10 +72,39 @@ public class Boss : MonoBehaviour, IHitAble
         return true;
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, bossSo.StopRadius);
+    }
+
     private void DieEvent()
     {
         B_dead = true;
         bossHpSlider.value = 0;
+    }
+
+    public bool DontNeedToFollow()
+    {
+        if (CheckPlayerCircleCastB(bossSo.StopRadius))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool CheckPlayerCircleCastB(float radius)
+    {
+        RaycastHit2D[] hit = Physics2D.CircleCastAll(transform.position, radius, Vector2.zero);
+        foreach (var h in hit)
+        {
+            if (h.collider.gameObject.tag == "Player")
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void ReturnAll()

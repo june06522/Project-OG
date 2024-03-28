@@ -45,6 +45,7 @@ public class AltarBoss : Boss
 
     private void OnEnable()
     {
+        gameObject.layer = LayerMask.NameToLayer("Boss");
         f_currentTime = 0;
         i_restraintIndex = 0;
         i_restrainCount = g_restraints.Length;
@@ -63,11 +64,6 @@ public class AltarBoss : Boss
         ChangeBossState(BossState.Tied);
 
         StartCoroutine(ShortenChain());
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, bossSo.StopRadius);
     }
 
     protected override void Update()

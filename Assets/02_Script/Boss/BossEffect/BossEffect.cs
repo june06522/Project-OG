@@ -6,6 +6,6 @@ public class BossEffect : MonoBehaviour
 {
     protected virtual void OnDisable()
     {
-        
+        ObjectPool.Instance.ReturnObject(gameObject, 2);
     }
 }

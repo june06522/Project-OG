@@ -4,11 +4,20 @@ using UnityEngine;
 
 public class SlateBoss : Boss
 {
+    public int MinimiCount { get => i_minimiCount; set => i_minimiCount = value; }
+
     public GameObject G_slateOnlyCollector;
 
     public List<Material> L_materials;
+    public List<Sprite> L_sprite;
 
     public float F_minimiAwayDistance;
+
+    public bool B_fullHP;
+    public bool B_halfHP;
+
+    [SerializeField]
+    private int i_minimiCount;
 
     private enum BossState
     {
@@ -22,8 +31,12 @@ public class SlateBoss : Boss
 
     private BossFSM _bossFSM;
 
-    void Start()
+    private void OnEnable()
     {
+        transform.gameObject.layer = LayerMask.NameToLayer("Boss");
+        transform.GetComponent<SpriteRenderer>().sprite = L_sprite[0];
+        B_fullHP = true;
+        B_halfHP = false;
         _curBossState = BossState.Idle;
         _bossFSM = new BossFSM(new BossIdleState(this));
 
@@ -34,20 +47,51 @@ public class SlateBoss : Boss
     {
         base.Update();
 
-        ChangeState();
-        _bossFSM.UpdateBossState();
+        if (B_dead && !B_isDead)
+        {
+            B_isDead = true;
+            B_fullHP = false;
+            B_halfHP = false;
+            ChangeBossState(BossState.Dead);
+        }
+
+        if (!B_isDead)
+        {
+            if (!B_isRunning)
+            {
+                ChangeState();
+            }
+            _bossFSM.UpdateBossState();
+
+            if(!DontNeedToFollow() && !B_isStop)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, GameManager.Instance.player.transform.position, Time.deltaTime * bossSo.Speed);
+            }
+            else
+            {
+                StopImmediately(transform);
+            }
+        }
     }
 
     private void ChangeState()
     {
-        switch(_curBossState)
+        switch (_curBossState)
         {
             case BossState.Idle:
                 ChangeBossState(BossState.FullHP);
                 break;
             case BossState.FullHP:
+                if (F_currentHp < bossSo.MaxHP / 2)
+                {
+                    ChangeBossState(BossState.HalfHP);
+                }
                 break;
             case BossState.HalfHP:
+                if (B_isDead)
+                {
+                    ChangeBossState(BossState.Dead);
+                }
                 break;
         }
     }
@@ -62,7 +106,7 @@ public class SlateBoss : Boss
                 _bossFSM.ChangeBossState(new SFullHPState(this));
                 break;
             case BossState.HalfHP:
-                _bossFSM.ChangeBossState(new SHalfState(this));
+                _bossFSM.ChangeBossState(new SHalfHPState(this));
                 break;
             case BossState.Dead:
                 _bossFSM.ChangeBossState(new SDeadState(this));
