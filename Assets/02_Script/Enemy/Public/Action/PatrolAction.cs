@@ -52,8 +52,6 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
             int randomSeed = Random.Range(10, 25);
             patrolBehaviour = behaviours[0] as PatrolBehaviour;
             patrolBehaviour.Setting(startPos, randomSeed);
-
-            Debug.Log(randomSeed);
         }
         else
         {
