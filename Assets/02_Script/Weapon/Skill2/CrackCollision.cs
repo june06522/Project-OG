@@ -1,13 +1,20 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class CrackCollision : MonoBehaviour
 {
     private float damage;
+    [SerializeField] VisualEffect vfx;
 
     public void SetDamage(float damage)
     {
         
         this.damage = damage;
+
+    }
+
+    public void SetColor(Color color)
+    {
 
     }
 
@@ -28,3 +35,4 @@ public class CrackCollision : MonoBehaviour
     }
 
 }
+    
