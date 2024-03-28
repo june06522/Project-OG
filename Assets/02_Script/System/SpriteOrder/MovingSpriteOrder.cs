@@ -20,6 +20,6 @@ public class MovingSpriteOrder : SpriteOrder
 
     public void SetSprite()
     {
-        _spriteRenderer.sortingOrder = -Mathf.RoundToInt(transform.position.y * 100);
+        _spriteRenderer.sortingOrder = -Mathf.RoundToInt((transform.position.y + _orderOffset) * 100);
     }
 }

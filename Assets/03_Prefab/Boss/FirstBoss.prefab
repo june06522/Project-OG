@@ -450,7 +450,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ca207b1b1c99d5428a7eb082e030076, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 0}
 --- !u!1 &2492076193852493652
 GameObject:
   m_ObjectHideFlags: 0
@@ -753,6 +752,7 @@ GameObject:
   - component: {fileID: 2492076194134851020}
   - component: {fileID: 2492076194134851019}
   - component: {fileID: 2492076194134851018}
+  - component: {fileID: 3811637015637737344}
   m_Layer: 15
   m_Name: AltarBoss
   m_TagString: HitAble
@@ -890,7 +890,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fe6ebec847276b429636612564ed7fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  G_player: {fileID: 0}
   G_bulletCollector: {fileID: 2492076193557834724}
   bossHpSlider: {fileID: 2492076193852493650}
   B_isStop: 0
@@ -912,6 +911,7 @@ MonoBehaviour:
   G_altarOnlyCollector: {fileID: 2492076193010013946}
   B_isTied: 0
   B_isOneBroken: 0
+  B_isDashing: 0
   f_restraintDistance: 5
   f_unChainTime: 30
 --- !u!114 &2492076194134851019
@@ -949,6 +949,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3811637015637737344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2492076194134851010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a552e63d4da03d64ca3a6595ad06dfbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _orderOffset: -1.7
 --- !u!1 &2492076194143778683
 GameObject:
   m_ObjectHideFlags: 0
