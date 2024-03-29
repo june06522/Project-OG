@@ -4,17 +4,16 @@ using UnityEngine;
 
 public abstract class InvenWeapon : Weapon
 {
-    protected SendData sendDatas;
-
+    protected Dictionary<SendData, int> sendDataList = new Dictionary<SendData, int>();
     public abstract void GetSignal(object signal);
 
     protected void LateUpdate()
     {
-        if (sendDatas != null)
+        foreach (var item in sendDataList)
         {
-            SkillContainer.Instance.GetSKill((int)id, (int)sendDatas.GeneratorID)?.Excute(transform, target, sendDatas.Power);
-            sendDatas = null;
+            SkillContainer.Instance.GetSKill((int)id, (int)item.Key.GeneratorID)?.Excute(transform, target, item.Value);
         }
+        sendDataList = new Dictionary<SendData, int>();
 
     }
 }
