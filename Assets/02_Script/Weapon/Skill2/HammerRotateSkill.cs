@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class HammerRotateSkill : Skill
 {
-    [SerializeField] float rotateTime = 5f;
+    [SerializeField] float minRotateTime = 5f;
+    [SerializeField] float maxRotateTime = 15f;
+    [SerializeField] float minRotateSpeed = 100f;
+    [SerializeField] float maxRotateSpeed = 1000f;
+
     [SerializeField] float dissolveTime = 0.5f;
-    [SerializeField] float rotateSpeed = 20f;
-    [SerializeField] float radius = 15f;
+    [SerializeField] float damage = 10f;
+    [SerializeField] int power = 1;
 
     [Header("Eclipse")]
     [SerializeField] float width;
@@ -15,16 +19,29 @@ public class HammerRotateSkill : Skill
     [SerializeField] float theta;
 
     [SerializeField] HammerClone hammerClone;
-    public int hammerCount = 6;
+    public int minHammerCount = 6;
 
     private List<HammerClone> clones;
     private float rotateTimer;
 
+    private int curhammerCount;
+    private float curhammerRotateSpeed;
+    private float curhammerRotateTime;
+
+    private float curWidth;
+    private float curHeight;
+    private float curTheta;
+
+    private float curDamage;
+
     private bool running;
 
+    private bool isFrozen;
+
+    private Vector2 cloneScale;
     private void Awake()
     {
-        clones = new List<HammerClone>(hammerCount);
+        clones = new List<HammerClone>(minHammerCount);
     }
 
     private void OnEnable()
@@ -37,14 +54,14 @@ public class HammerRotateSkill : Skill
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            Excute(null, null, 10);
+            Excute(null, null, power);
         }
 
         if(running) 
         {
-            bool endRotate = rotateTimer > rotateTime;
+            bool endRotate = rotateTimer > curhammerRotateTime;
 
-            float addRotateValue = rotateSpeed * Time.deltaTime;
+            float addRotateValue = curhammerRotateSpeed * Time.deltaTime;
             for(int i = 0; i < clones.Count; i++) 
             {
                 if(endRotate)
@@ -52,7 +69,7 @@ public class HammerRotateSkill : Skill
                     float reRotateValue = Mathf.Clamp(addRotateValue * 30, 0, 60);
                     clones[i].CurAngle -= reRotateValue;
                     Vector3 pos = Eclipse.GetElipsePos(Vector2.zero, clones[i].CurAngle * Mathf.Deg2Rad,
-                                  width, height, this.theta);
+                                  curWidth, curHeight, curTheta);
                     clones[i].Move(pos, true);
                     clones.Remove(clones[i]);
                     i -= 1;
@@ -62,7 +79,7 @@ public class HammerRotateSkill : Skill
                 {
                     clones[i].CurAngle += addRotateValue;
                     Vector3 pos = Eclipse.GetElipsePos(Vector2.zero, clones[i].CurAngle * Mathf.Deg2Rad,
-                                  width, height, this.theta);
+                                  curWidth, curHeight, curTheta);
                     clones[i].Move(pos, false);
                 }
             }
@@ -79,6 +96,8 @@ public class HammerRotateSkill : Skill
 
     public override void Excute(Transform weaponTrm, Transform target, int power)
     {
+        CurPowerInit(power);
+
         if(clones.Count > 0)
         {
             rotateTimer = 0;
@@ -87,16 +106,16 @@ public class HammerRotateSkill : Skill
 
         rotateTimer = 0;
         // 스킬이 사용되고 있지 않는 상태면
-        for(int i = 0; i < hammerCount; i++) 
+        for(int i = 0; i < curhammerCount; i++) 
         {
-            float angle = 360 / hammerCount * i;
+            float angle = 360 / curhammerCount * i;
 
-            Vector2 pos = Eclipse.GetElipsePos(Vector2.zero, angle * Mathf.Deg2Rad, this.width, this.height, this.theta);
+            Vector2 pos = Eclipse.GetElipsePos(Vector2.zero, angle * Mathf.Deg2Rad, curWidth, curHeight, curTheta);
             HammerClone clone = Instantiate(hammerClone, GameManager.Instance.player.transform);
             clone.transform.localPosition = pos;
             clone.transform.up = pos.normalized;
 
-            clone.Init(rotateSpeed, dissolveTime, power, angle);
+            clone.Init(curhammerRotateSpeed, dissolveTime, damage, angle, isFrozen);
             clones.Add(clone);
         }
 
@@ -109,4 +128,74 @@ public class HammerRotateSkill : Skill
         yield return new WaitForSeconds(dissolveTime);
         running = true;
     }
+
+    //Power Init
+    public override void Power1()
+    {
+        curhammerCount = minHammerCount;
+        curhammerRotateSpeed = minRotateSpeed;
+        curhammerRotateTime = minRotateTime;
+        curWidth = width;
+        curHeight = height;
+        curTheta = theta;
+        curDamage = damage;
+        cloneScale = Vector2.one;
+        isFrozen = false;
+    }
+
+    public override void Power2()
+    {
+        curhammerCount = minHammerCount + 1;
+        curhammerRotateSpeed = Mathf.Lerp(minRotateSpeed, maxRotateSpeed, 0.2f);
+        curhammerRotateTime = Mathf.Lerp(minRotateTime, maxRotateTime, 0.2f);
+        curWidth = width * 1.1f;
+        curHeight = height * 1.1f;
+        curTheta = theta;
+        curDamage = damage;
+        cloneScale = Vector2.one;
+        isFrozen = false;
+    }
+
+    public override void Power3()
+    {
+        curhammerCount = minHammerCount;
+        curhammerRotateSpeed = Mathf.Lerp(minRotateSpeed, maxRotateSpeed, 0f);
+        curhammerRotateTime = Mathf.Lerp(minRotateTime, maxRotateTime, 0.5f);
+        curWidth = width;
+        curHeight = height;
+        curTheta = theta;
+        curDamage = damage * 1.5f;
+        cloneScale = Vector2.one * 1.2f;
+        isFrozen = true;
+    }
+
+    public override void Power4()
+    {
+        curhammerCount = minHammerCount + 2;
+        curhammerRotateSpeed = Mathf.Lerp(minRotateSpeed, maxRotateSpeed, 0.5f);
+        curhammerRotateTime = Mathf.Lerp(minRotateTime, maxRotateTime, 0.5f);
+        curWidth = width * 1.5f;
+        curHeight = height * 1.5f;
+        curTheta = theta;
+        curDamage = damage * 2.5f;
+        cloneScale = Vector2.one * 1.2f;
+
+        isFrozen = true;
+    }
+
+    public override void Power5()
+    {
+        curhammerCount = 1;
+        curhammerRotateSpeed = Mathf.Lerp(minRotateSpeed, maxRotateSpeed, 0f);
+        curhammerRotateTime = Mathf.Lerp(minRotateTime, maxRotateTime, 0.5f);
+        curWidth = 2f;
+        curHeight = 2f;
+        curTheta = theta;
+
+        curDamage = damage * 10f;
+        cloneScale = Vector2.one * 10f;
+        isFrozen = true;
+    }
+
+
 }
