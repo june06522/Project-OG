@@ -21,6 +21,8 @@ public class SHalfHPState : BossBaseState
 
     public override void OnBossStateOn()
     {
+        _slate.B_patorl = true;
+        _slate.B_isStop = false;
         g_minimis = new GameObject[_slate.MinimiCount];
         _minimiLaserLineRenderer = new LineRenderer[_slate.MinimiCount];
         v_originPos = new Vector3[_slate.MinimiCount];
@@ -28,6 +30,7 @@ public class SHalfHPState : BossBaseState
         CreateMinimi();
         _slate.StartCoroutine(NowMove(0.5f));
         _slate.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
+        _slate.StartCoroutine(_slate.BossPatorl(_slate.bossSo.StopTime, _slate.bossSo.MoveX, _slate.bossSo.MoveY, _slate.bossSo.Speed));
     }
 
     public override void OnBossStateUpdate()
@@ -273,7 +276,6 @@ public class SHalfHPState : BossBaseState
         {
             if (hit.collider.TryGetComponent<IHitAble>(out var hitAble))
             {
-                Debug.Log("laser");
                 hitAble.Hit(1);
             }
         }

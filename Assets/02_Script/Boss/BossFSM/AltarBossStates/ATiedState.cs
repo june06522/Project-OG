@@ -20,11 +20,12 @@ public class ATiedState : BossBaseState
 
     public override void OnBossStateExit()
     {
-        _altarBoss.B_patorl = true;
+        _altarBoss.B_patorl = false;
     }
 
     public override void OnBossStateOn()
     {
+        _altarBoss.B_patorl = false;
         _boss.B_isStop = false;
         _altarBoss.B_isTied = true;
         _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));

@@ -31,7 +31,7 @@ public class AFreeState : BossBaseState
 
     public override void OnBossStateOn()
     {
-        _altarBoss.B_patorl = false;
+        _altarBoss.B_patorl = true;
         _boss.B_isStop = false;
         _boss.B_blocked = false;
         _boss.StartCoroutine(Dash(10, 20, 0.5f, 0.5f));
@@ -121,7 +121,7 @@ public class AFreeState : BossBaseState
 
         _altarBoss.B_isDashing = false;
         _boss.StartCoroutine(RotatingBall(3, 100, _boss.transform, 3, 5, 5, 0.5f));
-        _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime * 2));
+        _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
         _boss.StartCoroutine(_boss.BossPatorl(_altarBoss.bossSo.StopTime, _altarBoss.bossSo.MoveX, _altarBoss.bossSo.MoveY, _altarBoss.bossSo.Speed));
     }
 

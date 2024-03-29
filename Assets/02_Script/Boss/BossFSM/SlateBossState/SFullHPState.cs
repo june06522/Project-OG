@@ -31,6 +31,7 @@ public class SFullHPState : BossBaseState
 
     public override void OnBossStateOn()
     {
+        _slate.B_patorl = true;
         _slate.B_isStop = false;
         g_minimis = new GameObject[_slate.MinimiCount];
         _minimiLaserLineRenderer = new LineRenderer[_slate.MinimiCount];
@@ -289,7 +290,6 @@ public class SFullHPState : BossBaseState
         {
             if (hit.collider.TryGetComponent<IHitAble>(out var hitAble))
             {
-                Debug.Log("laser");
                 hitAble.Hit(1);
             }
         }

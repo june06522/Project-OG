@@ -118,7 +118,7 @@ public class Stage : MonoBehaviour
         {
             _bossObject.gameObject.SetActive(true);
             monsterCount++;
-            _bossObject.DeadEvt += HandleWaveClearCheck;
+            _bossObject.DeadEndEvt += HandleWaveClearCheck;
             // After Creating Boss, Delete AppearGate
             return;
         }

@@ -34,6 +34,7 @@ public class Boss : MonoBehaviour, IHitAble
     public Vector3 V_originPos;
 
     public event Action DeadEvt;
+    public event Action DeadEndEvt;
 
     protected Material m_mat;
 
@@ -43,10 +44,15 @@ public class Boss : MonoBehaviour, IHitAble
         feedbackPlayer = GetComponent<FeedbackPlayer>();
         B_isStop = false;
         B_dead = false;
-        B_patorl = false;
+        B_patorl = true;
         F_currentHp = bossSo.MaxHP;
         DeadEvt += DieEvent;
         bossHpSlider.value = F_currentHp / bossSo.MaxHP;
+    }
+
+    protected virtual void OnDisable()
+    {
+        DeadEndEvt?.Invoke();
     }
 
     protected virtual void Update()
@@ -93,7 +99,7 @@ public class Boss : MonoBehaviour, IHitAble
         Vector3 targetpatrolPos = transform.localPosition;
         bool wallChecked = false;
 
-        while (!B_patorl)
+        while (B_patorl)
         {
             if (RayWallCheckForMove(transform.position, bossSo.WallCheckRadius) && !wallChecked)
             {
@@ -211,10 +217,5 @@ public class Boss : MonoBehaviour, IHitAble
             StopImmediately(transform);
             B_blocked = true;
         }
-    }
-
-    protected virtual void OnCollisionStay2D(Collision2D collision)
-    {
-        
     }
 }

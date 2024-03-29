@@ -24,7 +24,7 @@ public class AOneBrokenState : BossBaseState
     {
         _boss.B_isStop = false;
         _altarBoss.B_isOneBroken = true;
-        _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime * 2));
+        _boss.StartCoroutine(RandomPattern(_boss.bossSo.PatternChangeTime));
         _boss.StartCoroutine(OneBrokenMove());
     }
 

@@ -45,15 +45,24 @@ public class SlateBoss : Boss
         StartCoroutine(BossPatorl(bossSo.StopTime, bossSo.MoveX, bossSo.MoveY, bossSo.Speed));
     }
 
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+    }
+
     protected override void Update()
     {
         base.Update();
+
+        Debug.Log(B_patorl);
 
         if (B_dead && !B_isDead)
         {
             B_isDead = true;
             B_fullHP = false;
             B_halfHP = false;
+            B_isStop = true;
+            B_patorl = false;
             ChangeBossState(BossState.Dead);
         }
 
@@ -136,10 +145,5 @@ public class SlateBoss : Boss
     protected override void OnCollisionEnter2D(Collision2D collision)
     {
         base.OnCollisionEnter2D(collision);
-    }
-
-    protected override void OnCollisionStay2D(Collision2D collision)
-    {
-        base.OnCollisionStay2D(collision);
     }
 }
