@@ -18,19 +18,12 @@ public interface IDebuffReciever
     public EDebuffType  DebuffType { get; set; }
     public float    DebuffCoolTime { get; set; }
 
-    public void SetDebuff(EDebuffType debuffType)
+    public void SetDebuff(EDebuffType debuffType, float coolTime)
     {
         this.DebuffType = debuffType;
-        DebuffEffect(debuffType);
+        this.DebuffCoolTime = coolTime;
     }
 
-    void DebuffEffect(EDebuffType debuffType);
+    void DebuffEffect(EDebuffType debuffType, float coolTime);
     void DisposeDebuff();
-
-    IEnumerator DebuffCor(float coolTime)
-    {
-        yield return new WaitForSeconds(DebuffCoolTime);
-        DisposeDebuff();
-    }
-
 }

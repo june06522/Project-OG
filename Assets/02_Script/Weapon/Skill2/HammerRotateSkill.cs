@@ -115,7 +115,7 @@ public class HammerRotateSkill : Skill
             clone.transform.localPosition = pos;
             clone.transform.up = pos.normalized;
 
-            clone.Init(curhammerRotateSpeed, dissolveTime, damage, angle, isFrozen);
+            clone.Init(curhammerRotateSpeed, dissolveTime, curDamage, angle, cloneScale, isFrozen, isMaxPower);
             clones.Add(clone);
         }
 
@@ -140,7 +140,9 @@ public class HammerRotateSkill : Skill
         curTheta = theta;
         curDamage = damage;
         cloneScale = Vector2.one;
+
         isFrozen = false;
+        isMaxPower = false;
     }
 
     public override void Power2()
@@ -153,48 +155,54 @@ public class HammerRotateSkill : Skill
         curTheta = theta;
         curDamage = damage;
         cloneScale = Vector2.one;
+
         isFrozen = false;
+        isMaxPower = false;
     }
 
     public override void Power3()
     {
-        curhammerCount = minHammerCount;
-        curhammerRotateSpeed = Mathf.Lerp(minRotateSpeed, maxRotateSpeed, 0f);
+        curhammerCount = minHammerCount + 1;
+        curhammerRotateSpeed = Mathf.Lerp(minRotateSpeed, maxRotateSpeed, 0.25f);
         curhammerRotateTime = Mathf.Lerp(minRotateTime, maxRotateTime, 0.5f);
-        curWidth = width;
-        curHeight = height;
+        curWidth = width * 1.3f;
+        curHeight = height * 1.3f;
         curTheta = theta;
         curDamage = damage * 1.5f;
-        cloneScale = Vector2.one * 1.2f;
+        cloneScale = Vector2.one * 1.5f;
+
         isFrozen = true;
+        isMaxPower = false;
     }
 
     public override void Power4()
     {
-        curhammerCount = minHammerCount + 2;
-        curhammerRotateSpeed = Mathf.Lerp(minRotateSpeed, maxRotateSpeed, 0.5f);
+        curhammerCount = minHammerCount + 3;
+        curhammerRotateSpeed = Mathf.Lerp(minRotateSpeed, maxRotateSpeed, 0.25f);
         curhammerRotateTime = Mathf.Lerp(minRotateTime, maxRotateTime, 0.5f);
         curWidth = width * 1.5f;
         curHeight = height * 1.5f;
         curTheta = theta;
         curDamage = damage * 2.5f;
-        cloneScale = Vector2.one * 1.2f;
+        cloneScale = Vector2.one * 2f;
 
         isFrozen = true;
+        isMaxPower = false;
     }
 
     public override void Power5()
     {
-        curhammerCount = 1;
-        curhammerRotateSpeed = Mathf.Lerp(minRotateSpeed, maxRotateSpeed, 0f);
+        curhammerCount = 3;
+        curhammerRotateSpeed = Mathf.Lerp(minRotateSpeed, maxRotateSpeed, 0.2f);
         curhammerRotateTime = Mathf.Lerp(minRotateTime, maxRotateTime, 0.5f);
         curWidth = 2f;
         curHeight = 2f;
         curTheta = theta;
 
-        curDamage = damage * 10f;
-        cloneScale = Vector2.one * 10f;
-        isFrozen = true;
+        curDamage = damage * 5f;
+        cloneScale = Vector2.one * 5f;
+        isFrozen = false;
+        isMaxPower = true;
     }
 
 

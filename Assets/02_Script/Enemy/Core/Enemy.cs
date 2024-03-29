@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
 
-public class Enemy : MonoBehaviour, IHitAble
+public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
 {
     [SerializeField] EnemyDataSO enemyDataSO;
     public EnemyDataSO EnemyDataSO => enemyDataSO;
@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour, IHitAble
     float acceleration = 50, deacceleration = 100;
     [SerializeField]
     private float currentSpeed = 0;
+    private float speedRatio = 1;
     
     private Vector2 oldMovementInput;
     private Vector2 movementInput;
@@ -37,30 +38,33 @@ public class Enemy : MonoBehaviour, IHitAble
     public Collider2D Collider => collider;
     public Rigidbody2D Rigidbody => rigidbody;
 
-    //public RoomInfo RoomInfo { get; private set; }
-    
+    public EDebuffType DebuffType { get; set; }
+    public float DebuffCoolTime { get; set; }
+
+    private SpriteRenderer spriteRender;
+
+    public Color frozenColor = new Color(0.7584906f, 0.9797822f, 1, 1);
+
+    public bool IsDebuffing;
+
     private void Awake()
     {
         collider = GetComponent<Collider2D>();
         rigidbody = GetComponent<Rigidbody2D>();
-        feedbackPlayer = transform.Find("Visual").GetComponent<FeedbackPlayer>();
-       
-        enemyAnimController = transform.Find("Visual").GetComponent<EnemyAnimController>();
-        //Debug.Log(_mainMap.cellBounds);
 
-        //RoomInfo roomInfo = new RoomInfo()
-        //{
-        //    bound = _mainMap.cellBounds,
-        //    pos = _mainMap.transform.position,
-        //};
-        
-        //SetRoomInfo(roomInfo);
+        Transform visualTrm = transform.Find("Visual");
+        spriteRender = visualTrm.GetComponent<SpriteRenderer>();
+        feedbackPlayer = visualTrm.GetComponent<FeedbackPlayer>();
+        enemyAnimController = visualTrm.GetComponent<EnemyAnimController>();
     }
 
     private void Start()
     {
+        DebuffType = EDebuffType.None;
         curHp = enemyDataSO.MaxHP;
         DeadEvent += DieEvent;
+        speedRatio = 1;
+        IsDebuffing = false;
     }
 
     private void Update()
@@ -74,7 +78,7 @@ public class Enemy : MonoBehaviour, IHitAble
 
     private void FixedUpdate()
     {
-        float maxSpeed = EnemyDataSO.Speed;
+        float maxSpeed = EnemyDataSO.Speed * speedRatio;
         if (MovementInput.magnitude > 0 && currentSpeed >= 0)
         {
             oldMovementInput = MovementInput;
@@ -120,8 +124,59 @@ public class Enemy : MonoBehaviour, IHitAble
         Destroy(gameObject);
     }
 
-    //public void SetRoomInfo(RoomInfo curRoom)
-    //{
-    //    RoomInfo = curRoom;
-    //}
+    public void DisposeDebuff()
+    {
+        if (DebuffType.HasFlag(EDebuffType.Frozen))
+        {
+            speedRatio = 1f;
+        }
+        else if (DebuffType.HasFlag(EDebuffType.Burn))
+        {
+
+        }
+        else if (DebuffType.HasFlag(EDebuffType.Poison))
+        {
+
+        }
+        spriteRender.color = Color.white;
+
+        IsDebuffing = false;
+    }
+
+
+    public void DebuffEffect(EDebuffType debuffType, float coolTime)
+    {
+        if (IsDebuffing)
+            return;
+
+        Debug.Log(debuffType);
+        if(debuffType == EDebuffType.None)
+        {
+            return;
+        }
+        else if(debuffType.HasFlag(EDebuffType.Frozen))
+        {
+            Debug.Log("Gang");
+            spriteRender.color = frozenColor;
+            speedRatio = 0.2f;
+        }
+        else if (debuffType.HasFlag(EDebuffType.Burn))
+        {
+
+        }
+        else if (debuffType.HasFlag(EDebuffType.Poison))
+        {
+
+        }
+
+
+        IsDebuffing = true;
+        StopAllCoroutines();
+        StartCoroutine(DebuffCor(coolTime));
+    }
+    IEnumerator DebuffCor(float coolTime)
+    {
+        yield return new WaitForSeconds(coolTime);
+        DisposeDebuff();
+    }
 }

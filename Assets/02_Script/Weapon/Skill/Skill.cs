@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class Skill : MonoBehaviour
 {
-
+    protected bool isMaxPower;
     public virtual void Excute(Transform weaponTrm, Transform target, int power)
     {
 
