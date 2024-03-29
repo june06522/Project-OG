@@ -46,6 +46,8 @@ public class SwordYondo : MonoBehaviour
     private SwordTargetDetector detector;
     private float lerpAngleValue;
 
+    private float isMaxPower ;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -174,8 +176,9 @@ public class SwordYondo : MonoBehaviour
     {
         if (targetTrm == null || targetTrm.gameObject.activeSelf == false)
         {
-            ChangeState(ESwordYondoState.Attach);
-            Destroy(this.gameObject);
+            //ChangeState(ESwordYondoState.Attach);
+            if(!SetTarget())
+                Destroy(this.gameObject);
             return;
         }
 
@@ -214,7 +217,7 @@ public class SwordYondo : MonoBehaviour
         rb.velocity = transform.right * curSpeed;
     }
 
-    private void SetTarget()
+    private bool SetTarget()
     {
         targetTrm = FindClosestEnemy();
         detector.CurTargetTrm = targetTrm;
@@ -222,6 +225,7 @@ public class SwordYondo : MonoBehaviour
         isRotating = true;
         completlyAttach = false;
 
+        return targetTrm != null;
         //float distance = Vector3.Distance(ownerTrm.position, targetTrm.position);
         //float rotateTime = Mathf.Lerp(minRotateTime, maxRotateTime, distance / radius);
 
