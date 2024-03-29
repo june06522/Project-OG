@@ -28,13 +28,13 @@ public class Kunai : InvenWeapon
     {
         var data = (SendData)signal;
 
-        if (!sendDataList.ContainsKey(data))
+        if (!sendDataList.ContainsKey(data.GeneratorID))
         {
-            sendDataList.Add(data, data.Power);
+            sendDataList.Add(data.GeneratorID, data);
         }
         else
         {
-            sendDataList[data] = sendDataList[data] > data.Power ? sendDataList[data] : data.Power;
+            sendDataList[data.GeneratorID].Power = sendDataList[data.GeneratorID].Power > data.Power ? sendDataList[data.GeneratorID].Power : data.Power;
         }
     }
 
