@@ -36,8 +36,19 @@ public class Hammer : InvenWeapon
     public override void GetSignal([BindParameterType(typeof(SendData))] object signal)
     {
 
+        //var data = (SendData)signal;
+        //SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
+
         var data = (SendData)signal;
-        SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
+
+        if (!sendDataList.ContainsKey(data))
+        {
+            sendDataList.Add(data, data.Power);
+        }
+        else
+        {
+            sendDataList[data] = sendDataList[data] > data.Power ? sendDataList[data] : data.Power;
+        }
 
     }
 
