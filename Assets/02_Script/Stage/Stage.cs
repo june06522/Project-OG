@@ -148,6 +148,7 @@ public class Stage : MonoBehaviour
         monsterCount--;
         if(monsterCount <= 0 && isMonsterSpawning == false)
         {
+            GameManager.Instance.InventoryActive.isPlaying = false;
             if(_stageType == StageType.BossStage)
             {
                 OnStageClearEvent?.Invoke();

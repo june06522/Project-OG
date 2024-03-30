@@ -31,7 +31,7 @@ public class StageGate : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
-        if (_interactCheck) return;
+        if (_interactCheck || GameManager.Instance.InventoryActive.IsOn) return;
         
         _interactCheck = true;
 
@@ -51,7 +51,7 @@ public class StageGate : MonoBehaviour, IInteractable
         }
         else
             GameManager.Instance.ResetGlobalLight();
-
+        GameManager.Instance.InventoryActive.isPlaying = true;
         OnGateEvent?.Invoke();
         yield return new WaitForSeconds(0.5f);
         stageTransition.EndTransition();
@@ -59,7 +59,6 @@ public class StageGate : MonoBehaviour, IInteractable
 
         if (NextStage != null)
         {
-
             NextStage?.StartWave();
 
         }
