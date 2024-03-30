@@ -15,7 +15,7 @@ public class KeyData
     public KeyCode left = KeyCode.A;
     public KeyCode right = KeyCode.D;
     public KeyCode dash = KeyCode.Space;
-    public KeyCode inven = KeyCode.E;
+    public KeyCode inven = KeyCode.Tab;
     public KeyCode action = KeyCode.F;
     public KeyCode map = KeyCode.M;
 }
