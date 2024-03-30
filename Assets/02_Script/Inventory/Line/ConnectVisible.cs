@@ -82,13 +82,13 @@ public class ConnectVisible : MonoBehaviour
 
     }
 
-    void Connect(LineRenderer line, Vector2 pos, Vector2Int dir, Vector2 originpos, Dictionary<ConnectInfo, bool> isVisited)
+    bool Connect(LineRenderer line, Vector2 pos, Vector2Int dir, Vector2 originpos, Dictionary<ConnectInfo, bool> isVisited)
     {
         Vector2 tempVec = originpos + new Vector2(dir.x * mulX, dir.y * mulY);
         ConnectInfo info = new ConnectInfo(pos, dir);
         #region 스택 오버 플로우 방지 <- 방문한곳 체크
         if (isVisited.ContainsKey(info) && isVisited[info])
-            return;
+            return false;
 
         isVisited[info] = true;
         #endregion
@@ -128,16 +128,18 @@ public class ConnectVisible : MonoBehaviour
                     }
                 }
 
-                if (!isConnect) return;
+                if (!isConnect) return false;
                 #endregion
 
                 //연결된 블록 순회
-                BrickCircuit(b, tempVec, line, data, isVisited);
+                return BrickCircuit(b, tempVec, line, data, isVisited);
             }
         }
+
+        return false;
     }
 
-    private void BrickCircuit(BrickPoint tmpVec, Vector2 tempVec, LineRenderer line, InventoryObjectData data, Dictionary<ConnectInfo, bool> isVisited)
+    private bool BrickCircuit(BrickPoint tmpVec, Vector2 tempVec, LineRenderer line, InventoryObjectData data, Dictionary<ConnectInfo, bool> isVisited)
     {
 
         //라인 렌더러에 추가
@@ -145,7 +147,7 @@ public class ConnectVisible : MonoBehaviour
 
         #region 무기면 리턴
         if (tmpVec.dir == null)
-            return;
+            return true;
         #endregion
 
         #region 연결된 곳 순회
@@ -192,6 +194,7 @@ public class ConnectVisible : MonoBehaviour
                 }
             }
         }
+        return false;
         #endregion
     }
 
