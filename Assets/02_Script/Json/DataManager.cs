@@ -65,7 +65,7 @@ public class DataManager : MonoBehaviour
             keyData.left = KeyCode.A;
             keyData.right = KeyCode.D;
             keyData.dash = KeyCode.Space;
-            keyData.inven = KeyCode.E;
+            keyData.inven = KeyCode.Tab;
             keyData.action = KeyCode.F;
             keyData.map = KeyCode.M;
             SaveKey();

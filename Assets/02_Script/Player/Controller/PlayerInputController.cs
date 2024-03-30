@@ -82,7 +82,8 @@ public class PlayerInputController : IDisposable
         }
 
         // interact
-        if (Input.GetKeyDown(KeyCode.F))
+        if ((KeyManager.Instance == null && Input.GetKeyDown(KeyCode.F)) || 
+            (KeyManager.Instance != null && Input.GetKeyDown(KeyManager.Instance.action)))
         {
             IInteractable interact;
             if (nearObject.TryGetComponent<IInteractable>(out interact))
@@ -99,14 +100,28 @@ public class PlayerInputController : IDisposable
 
         if (!GameManager.Instance.InventoryActive.IsOn && !GameManager.Instance.isShopOpen)
         {
-            if (Input.GetKey(KeyCode.W))
-                y += 1;
-            if (Input.GetKey(KeyCode.S))
-                y -= 1;
-            if (Input.GetKey(KeyCode.D))
-                x += 1;
-            if (Input.GetKey(KeyCode.A))
-                x -= 1;
+            if (KeyManager.Instance == null)
+            {
+                if (Input.GetKey(KeyCode.W))
+                    y += 1;
+                if (Input.GetKey(KeyCode.S))
+                    y -= 1;
+                if (Input.GetKey(KeyCode.D))
+                    x += 1;
+                if (Input.GetKey(KeyCode.A))
+                    x -= 1;
+            }
+            else
+            {
+                if (Input.GetKey(KeyManager.Instance.up))
+                    y += 1;
+                if (Input.GetKey(KeyManager.Instance.down))
+                    y -= 1;
+                if (Input.GetKey(KeyManager.Instance.right))
+                    x += 1;
+                if (Input.GetKey(KeyManager.Instance.left))
+                    x -= 1;
+            }
         }
 
 
@@ -124,8 +139,10 @@ public class PlayerInputController : IDisposable
 
     private void CheckDashKey()
     {
-
-        isDashKeyPressed = Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.InventoryActive.IsOn;
+        if(KeyManager.Instance == null)
+            isDashKeyPressed = Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.InventoryActive.IsOn;
+        else
+            isDashKeyPressed = Input.GetKeyDown(KeyManager.Instance.dash) && !GameManager.Instance.InventoryActive.IsOn;
 
         // if (isDashKeyPressed && _playerEnerge.ConsumeEnerge(10))
         if (isDashKeyPressed)

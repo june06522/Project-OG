@@ -45,7 +45,9 @@ public class InventoryActive : MonoBehaviour
     {
         if (canOpen)
         {
-            if ((Input.GetKeyDown(KeyCode.Tab) || (Input.GetKeyDown(KeyCode.Escape) && isOn)) && isAnimation)
+            if (((KeyManager.Instance == null && Input.GetKeyDown(KeyCode.Tab)) ||
+                (KeyManager.Instance != null && Input.GetKeyDown(KeyManager.Instance.inven)) || 
+                (Input.GetKeyDown(KeyCode.Escape) && isOn)) && isAnimation)
             {
                 isAnimation = false;
                 isOn = !isOn;

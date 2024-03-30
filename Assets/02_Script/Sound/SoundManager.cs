@@ -32,8 +32,8 @@ public class SoundManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            BGMPlay();
-            //SceneManager.sceneLoaded += OnSceneLoded;
+            //BGMPlay();
+            SceneManager.sceneLoaded += OnSceneLoded;
         }
         else
         {
