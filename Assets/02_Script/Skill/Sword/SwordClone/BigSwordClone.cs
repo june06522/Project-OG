@@ -51,8 +51,8 @@ public class BigSwordClone : SwordClone
     public bool IsInElipse(Vector2 centerPos, Vector2 targetPos)
     {
         //0.5는 보정치
-        float width = Width + 0.5f;
-        float height = Height + 0.5f;
+        float width = Width + 0.75f;
+        float height = Height + 0.75f;
 
         Vector2 dot1 = targetPos;
         dot1.x -= Mathf.Sqrt(width * width - height * height);
