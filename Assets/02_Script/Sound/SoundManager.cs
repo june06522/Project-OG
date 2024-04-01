@@ -21,9 +21,9 @@ public class SoundManager : MonoBehaviour
 
     public static SoundManager Instance { get; private set; }
 
-    [SerializeField] Slider _mainSlider;
-    [SerializeField] Slider _BGMSlider;
-    [SerializeField] Slider _SFXSlider;
+    public Slider _mainSlider;
+    public Slider _BGMSlider;
+    public Slider _SFXSlider;
 
     SoundData _data;
 
@@ -63,6 +63,7 @@ public class SoundManager : MonoBehaviour
         {
             if (arg0.name == _bgList[i].name)
                 BgSoundPlay(_bgList[i]);
+
 
         }
     }
@@ -156,4 +157,4 @@ public class SoundManager : MonoBehaviour
             yield return new WaitForSeconds(0.15f);
         }
     }
-}   
+}
