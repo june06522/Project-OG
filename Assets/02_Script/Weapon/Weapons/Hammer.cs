@@ -6,6 +6,7 @@ using UnityEngine;
 public class Hammer : InvenWeapon
 {
 
+    [SerializeField] AudioClip clip;
     [SerializeField] ParticleSelfDestroyer effect;
     private bool isAttack = false;
 
@@ -16,6 +17,7 @@ public class Hammer : InvenWeapon
             Append(transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z - 90 * transform.localScale.y), 0.1f).SetEase(Ease.Linear)).
             Append(transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z), 0.1f).SetEase(Ease.Linear));
 
+        SoundManager.Instance?.SFXPlay("Hammer", clip);
         StartCoroutine(AttackTween());
 
     }
@@ -28,7 +30,7 @@ public class Hammer : InvenWeapon
         var obj = Instantiate(effect, transform.position + transform.up * 1.5f * transform.localScale.y, Quaternion.identity);
         obj.Attack(Data.AttackDamage.GetValue());
         yield return new WaitForSeconds(0.21f);
-        isAttack = false;   
+        isAttack = false;
 
     }
 
