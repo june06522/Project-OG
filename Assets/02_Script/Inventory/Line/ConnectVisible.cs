@@ -25,7 +25,6 @@ public class ConnectVisible : MonoBehaviour
 
     List<LineRenderer> lendererList = new List<LineRenderer>();
     [SerializeField] Material lineRenderMat;
-    Vector3 startPos = new Vector3();
 
     private float mulX = 2.0f;
     private float mulY = 2.0f;
@@ -67,27 +66,33 @@ public class ConnectVisible : MonoBehaviour
         {
             maxCnt = 0;
 
-            LineRenderer line = CreateLine();
-
-            line.positionCount += 1;
-            Vector3 pos = generator.transform.position;
-            pos.z = -4;
-            line.SetPosition(line.positionCount - 1, pos);
 
             foreach (var vec in generator.InvenObject.sendPoints)
             {
-                Dictionary<ConnectInfo, bool> dic = new Dictionary<ConnectInfo, bool>();
                 Dictionary<Vector2Int, int> weaponData = new();
-                startPos = pos;
-                Connect(ref line, generator.InvenObject.originPos + vec.dir + vec.point, vec.dir, pos, dic, maxCnt, weaponData);
+                InventoryObjectData b = null;
+                do
+                {
+                    Dictionary<ConnectInfo, bool> dic = new Dictionary<ConnectInfo, bool>();
+                    LineRenderer line = CreateLine();
+
+                    line.positionCount += 1;
+                    Vector3 pos = generator.transform.position;
+                    pos.z = -4;
+                    line.SetPosition(line.positionCount - 1, pos);
+
+                    b = null;
+                    Connect(ref line, generator.InvenObject.originPos + vec.dir + vec.point, vec.dir, pos, dic, maxCnt, ref weaponData, ref b);
+                    AddLineRenderPoint(line, pos);
+                    Debug.Log(b);
+                } while (b != null);
             }
 
-            AddLineRenderPoint(line, pos);
         }
 
     }
 
-    bool Connect(ref LineRenderer line, Vector2 pos, Vector2Int dir, Vector2 originpos, Dictionary<ConnectInfo, bool> isVisited, int cnt, Dictionary<Vector2Int, int> weaponData)
+    bool Connect(ref LineRenderer line, Vector2 pos, Vector2Int dir, Vector2 originpos, Dictionary<ConnectInfo, bool> isVisited, int cnt, ref Dictionary<Vector2Int, int> weaponData, ref InventoryObjectData findWeapon)
     {
         Vector2 tempVec = originpos + new Vector2(dir.x * mulX, dir.y * mulY);
         ConnectInfo info = new ConnectInfo(pos);
@@ -119,7 +124,7 @@ public class ConnectVisible : MonoBehaviour
                     {
                         copiedDict.Add(kvp.Key, kvp.Value);
                     }
-                    isconnect = BrickCircuit(b, tempVec, ref line, data, copiedDict, cnt + 1, weaponData);
+                    isconnect = BrickCircuit(b, tempVec, ref line, data, copiedDict, cnt + 1, ref weaponData, ref findWeapon);
                 }
                 #endregion
 
@@ -142,7 +147,7 @@ public class ConnectVisible : MonoBehaviour
                                     copiedDict.Add(kvp.Key, kvp.Value);
                                 }
 
-                                if (BrickCircuit(b, tempVec, ref line, data, copiedDict, cnt + 1, weaponData))
+                                if (BrickCircuit(b, tempVec, ref line, data, copiedDict, cnt + 1, ref weaponData, ref findWeapon))
                                 {
                                     isconnect = true;
                                     AddLineRenderPoint(line, tempVec);
@@ -170,27 +175,28 @@ public class ConnectVisible : MonoBehaviour
         return false;
     }
 
-    private bool BrickCircuit(BrickPoint tmpVec, Vector2 tempVec, ref LineRenderer line, InventoryObjectData data, Dictionary<ConnectInfo, bool> isVisited, int cnt, Dictionary<Vector2Int, int> weaponData)
+    private bool BrickCircuit(BrickPoint tmpVec, Vector2 tempVec, ref LineRenderer line, InventoryObjectData data, Dictionary<ConnectInfo, bool> isVisited, int cnt, ref Dictionary<Vector2Int, int> weaponData, ref InventoryObjectData findWeapon)
     {
-
         //라인 렌더러에 추가
         AddLineRenderPoint(line, tempVec);
+
         bool isConnect = false;
 
         #region 무기면 리턴
         if (tmpVec.dir == null)
         {
-            if (line.GetPosition(0) != startPos)
+            if (findWeapon != null && findWeapon != data)
             {
                 DeleteLineRenderPoint(line);
                 return false;
-
             }
             if (weaponData.ContainsKey(data.originPos))
             {
                 if (weaponData[data.originPos] < cnt)
                 {
+                    findWeapon = data;
                     weaponData[data.originPos] = cnt;
+                    line.positionCount = 0;
                     line = CreateLine();
                     AddLineRenderPoint(line, tempVec);
                     return true;
@@ -204,7 +210,9 @@ public class ConnectVisible : MonoBehaviour
             }
             else
             {
+                findWeapon = data;
                 weaponData.Add(data.originPos, cnt);
+                line.positionCount = 0;
                 line = CreateLine();
                 AddLineRenderPoint(line, tempVec);
                 return true;
@@ -243,9 +251,8 @@ public class ConnectVisible : MonoBehaviour
                         copiedDict.Add(kvp.Key, kvp.Value);
                     }
 
-                    if (BrickCircuit(b, tempVec, ref line, data, copiedDict, cnt, weaponData))
+                    if (BrickCircuit(b, tempVec, ref line, data, copiedDict, cnt, ref weaponData, ref findWeapon))
                     {
-                        Debug.Log(tempPos);
                         AddLineRenderPoint(line, tempVec);
                         isConnect = true;
                     }
@@ -268,7 +275,7 @@ public class ConnectVisible : MonoBehaviour
                     copiedDict.Add(kvp.Key, kvp.Value);
                 }
 
-                if (Connect(ref line, tempPos1, point1.dir, tempVec, copiedDict, cnt + 1, weaponData))
+                if (Connect(ref line, tempPos1, point1.dir, tempVec, copiedDict, cnt + 1, ref weaponData, ref findWeapon))
                 {
                     AddLineRenderPoint(line, tempVec);
                     isConnect = true;
