@@ -4,12 +4,12 @@ using UnityEngine.VFX;
 
 public class Slash : MonoBehaviour
 {
-    [SerializeField] VisualEffect effect;
+    public VisualEffect effect;
     [SerializeField] Transform swordParent;
     [SerializeField] AudioClip clip;
     private void OnEnable()
     {
-        Play();        
+        Play();
     }
 
     [ContextMenu("Play")]
@@ -21,7 +21,7 @@ public class Slash : MonoBehaviour
         float originAngle = swordParent.rotation.eulerAngles.z;
         float originY = swordParent.eulerAngles.y;
 
-        SoundManager.Instance.SFXPlay("slash", clip);
+        //SoundManager.Instance.SFXPlay("slash", clip);
         Sequence seq = DOTween.Sequence();
         seq.Append(swordParent.DORotate(new Vector3(0, originY, originAngle + 90), 0.3f * 0.2f).SetEase(Ease.Linear)).
             Append(swordParent.DORotate(new Vector3(0, originY, originAngle + 180), 0.3f * 0.2f).SetEase(Ease.Linear)).
@@ -30,7 +30,7 @@ public class Slash : MonoBehaviour
             {
                 gameObject.SetActive(false);
             });
-        
+
     }
 
 }
