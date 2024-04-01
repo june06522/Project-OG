@@ -251,7 +251,8 @@ public class AltarBoss : Boss
             f_currentTime += time;
         else
         {
-            StartCoroutine(CameraManager.Instance.CameraShake(3, 0.5f));
+            SoundManager.Instance.SFXPlay("UnChain", audios[0], 1);
+            StartCoroutine(CameraManager.Instance.CameraShake(5, 1f));
             StartCoroutine(UnChain(3));
             f_currentTime = 0;
         }

@@ -68,7 +68,11 @@ public class SlateBoss : Boss
 
         if (!B_isDead)
         {
-            ChangeState();
+            if(!B_isRunning)
+            {
+                ChangeState();
+            }
+            
             _bossFSM.UpdateBossState();
         }
     }
