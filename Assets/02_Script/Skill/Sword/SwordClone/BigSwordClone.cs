@@ -9,6 +9,13 @@ public class BigSwordClone : SwordClone
     ShockWaveEffect shockWaveEffect;
     [SerializeField]
     BlastWave blastWave;
+    [SerializeField]
+    AudioClip takeDownSound, appearSound;
+
+    protected override void Awake()
+    {
+        SoundManager.Instance.SFXPlay("AppearSound", appearSound);
+    }
 
     public override void Attack(Vector3 targetPos)
     {
@@ -24,6 +31,8 @@ public class BigSwordClone : SwordClone
     {
         Instantiate(blastWave, TargetPos, Quaternion.identity).Play();
         shockWaveEffect.Play(TargetPos);
+        SoundManager.Instance.SFXPlay("TakeDown", takeDownSound);
+
         base.AttackEndEvt();
     }
 
