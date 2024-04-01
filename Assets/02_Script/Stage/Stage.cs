@@ -175,7 +175,10 @@ public class Stage : MonoBehaviour
         //PlaySceneEffectSound.Instance.PlayGateSound();
 
         // appear Gate ...it need tween
-        if(_stageType == StageType.BossStage || NextStage.Count == 0)
+
+        GameManager.Instance.InventoryActive.isPlaying = false;
+
+        if (_stageType == StageType.BossStage || NextStage.Count == 0)
         {
             SpawnGate(null);
         }

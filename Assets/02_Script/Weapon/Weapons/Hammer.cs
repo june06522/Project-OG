@@ -41,13 +41,13 @@ public class Hammer : InvenWeapon
 
         var data = (SendData)signal;
 
-        if (!sendDataList.ContainsKey(data.GeneratorID))
+        if (!sendDataList.ContainsKey(data.GetHashCode()))
         {
-            sendDataList.Add(data.GeneratorID, data);
+            sendDataList.Add(data.GetHashCode(), data);
         }
         else
         {
-            sendDataList[data.GeneratorID].Power = sendDataList[data.GeneratorID].Power > data.Power ? sendDataList[data.GeneratorID].Power : data.Power;
+            sendDataList[data.GetHashCode()].Power = sendDataList[data.GetHashCode()].Power > data.Power ? sendDataList[data.GetHashCode()].Power : data.Power;
         }
 
     }

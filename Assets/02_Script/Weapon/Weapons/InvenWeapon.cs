@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class InvenWeapon : Weapon
 {
-    protected Dictionary<GeneratorID, SendData> sendDataList = new Dictionary<GeneratorID, SendData>();
+    protected Dictionary<int, SendData> sendDataList = new Dictionary<int, SendData>();
     public abstract void GetSignal(object signal);
 
     protected void LateUpdate()
@@ -13,7 +13,7 @@ public abstract class InvenWeapon : Weapon
         {
             SkillContainer.Instance.GetSKill((int)id, (int)item.Value.GeneratorID)?.Excute(transform, target, item.Value.Power);
         }
-        sendDataList = new Dictionary<GeneratorID, SendData>();
+        sendDataList = new Dictionary<int, SendData>();
 
     }
 }
