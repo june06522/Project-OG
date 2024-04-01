@@ -201,7 +201,11 @@ public class Boss : MonoBehaviour, IHitAble
             ObjectPool.Instance.ReturnObject(objs[i]);
         }
 
-        Destroy(G_bulletCollector.transform.GetChild(0).gameObject);
+        if(G_bulletCollector.transform.childCount > 0)
+        {
+            Destroy(G_bulletCollector.transform.GetChild(0).gameObject);
+        }
+        
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
