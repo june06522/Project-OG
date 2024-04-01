@@ -14,6 +14,7 @@ public class BigSwordClone : SwordClone
 
     protected override void Awake()
     {
+        base.Awake();
         SoundManager.Instance.SFXPlay("AppearSound", appearSound);
     }
 
