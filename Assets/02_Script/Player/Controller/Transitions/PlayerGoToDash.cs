@@ -27,7 +27,7 @@ public class PlayerGoToDash : FSM_Transition<EnumPlayerState>
 
         }
 
-        return inputController.isDashKeyPressed && !data[PlayerCoolDownType.Dash] & _playerEnerge.ConsumeEnerge(10);
+        return inputController.isDashKeyPressed && !data[PlayerCoolDownType.Dash] && _playerEnerge.ConsumeEnerge(10);
 
     }
 
