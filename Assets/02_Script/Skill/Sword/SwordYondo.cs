@@ -73,10 +73,10 @@ public class SwordYondo : MonoBehaviour
         curState = ESwordYondoState.Idle;
     }
 
-    public void Init(LayerMask layerMask, float power, float radius, float coolTime)
+    public void Init(LayerMask layerMask, float power, float radius, float coolTime, float damage)
     {
         this.radius = radius;
-        this.damage = power;
+        this.damage = damage;
         this.layerMask = layerMask;
         //this.ownerTrm = ownerTrm;
 

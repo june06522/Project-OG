@@ -195,6 +195,6 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
     private void DiscoverEvent()
     {
-        controller.PlayDiscoverAnim();
+        //controller.PlayDiscoverAnim();
     }
 }

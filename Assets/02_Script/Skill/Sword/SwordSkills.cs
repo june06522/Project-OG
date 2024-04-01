@@ -58,23 +58,20 @@ public class SwordSkills : MonoBehaviour
     private float tempWidth;
     private float tempHeight;
 
+    private float damage;
     float t = 0;
 
     private void Awake()
     {
         clones = new();
-        //ownerTrm = GameManager.Instance.player.transform;
-        ownerTrm = GameObject.Find("Player").transform;
-
-        Make();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            Make();
-        }
+        //if (Input.GetKeyDown(KeyCode.B))
+        //{
+        //    Make();
+        //}
 
         if (makeDone)
         {
@@ -146,16 +143,20 @@ public class SwordSkills : MonoBehaviour
         Vector2 bigClonePos = new Vector2(makePos.x, makePos.y + 2f);
 
         SwordClone bigClone = Instantiate(bigSwordClone, bigClonePos, Quaternion.Euler(new Vector3(0, 0, 270)));
-        bigClone.Setting(warningZoneFadeTime * 2f, width * 1.5f, height * 1.5f, makePos);
+        bigClone.Setting(warningZoneFadeTime * 2f, width * 1.5f, height * 1.5f, makePos, damage);
         bigClone.transform.DOMoveY(bigClone.transform.position.y - 1f, warningZoneFadeTime + 0.5f).SetEase(Ease.OutQuad)
             .OnComplete(() => bigClone.Attack(targetPos));
     }
 
     //angle : radian
 
-    private void Make()
+    public void Make(Transform ownerTrm, float damage, Vector2 radius)
     {
         clones.Clear();
+
+        this.ownerTrm = ownerTrm;
+        this.damage = damage;
+
         makeDone = false;
         isAttack = false;
 
@@ -193,7 +194,7 @@ public class SwordSkills : MonoBehaviour
             Vector2 pos = Eclipse.GetElipsePos(makePos, angle, this.width, this.height, this.theta);
             
             SwordClone clone = Instantiate(smallSwordClone, pos, Quaternion.Euler(0, 0, 270));
-            clone.Setting(dissolveTime, width, height, makePos);
+            clone.Setting(dissolveTime, width, height, makePos, damage / 5);
             clone.CurAngle = angle;
 
             clones.Add(clone);

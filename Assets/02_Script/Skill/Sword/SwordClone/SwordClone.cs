@@ -52,11 +52,12 @@ public abstract class SwordClone : MonoBehaviour
         IsAttack = false;
     }
 
-    public virtual void Setting(float dissolveTime, float width, float height, Vector2 makePos)
+    public virtual void Setting(float dissolveTime, float width, float height, Vector2 makePos, float damage)
     {
         this.Width = width; //0.5f는 판정 널널히 주기 위함
         this.Height = height;
         this.makePos = makePos;
+        this.damage = damage;
 
         float initValue = CloneType == ECloneType.BIG ? 1f : 0f;
         float endValue = Mathf.Abs(initValue - 1);
