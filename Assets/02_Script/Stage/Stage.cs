@@ -55,6 +55,10 @@ public class Stage : MonoBehaviour
     public event Action OnStageClearEvent;
     public event Action OnGateEvent;
 
+    [Header("Sound Info")]
+    [SerializeField]
+    private AudioClip _monsterSpawnClip;
+
     [Header("Lighting")]
     [SerializeField]
     private bool _useStageLight;
@@ -245,6 +249,12 @@ public class Stage : MonoBehaviour
         }
     }
 
+    private void PlayMonsterSpawnSound()
+    {
+        if (_monsterSpawnClip == null) return;
+
+        SoundManager.Instance.SFXPlay("MonsterSpawn", _monsterSpawnClip, 0.4f);
+    }
     IEnumerator MonsterSpawn()
     {
         isMonsterSpawning = true;
@@ -285,6 +295,8 @@ public class Stage : MonoBehaviour
         int minValue = Math.Min(enemyList.Count, spawnPoints.Count);
         #endregion
         #region Multi Spawn
+
+        PlayMonsterSpawnSound();
         // SpawnPoint Particle
         for (int i = 0; i < minValue; ++i)
         {
@@ -342,6 +354,7 @@ public class Stage : MonoBehaviour
             // setting monster
             minValue = Math.Min(delaySpawnList.Count, spawnEnemies.Count);
 
+
             // Shuffle enemy List
             for (int i = 0; i < spawnEnemies.Count; ++i)
             {
@@ -352,6 +365,7 @@ public class Stage : MonoBehaviour
                 spawnEnemies[randomIdx] = tempSpawnEnemy;
             }
 
+            PlayMonsterSpawnSound();
             // ��ƼŬ �۾�
             for (int i = 0; i < minValue; ++i)
             {
