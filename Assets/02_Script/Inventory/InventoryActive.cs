@@ -30,7 +30,7 @@ public class InventoryActive : MonoBehaviour
     private int moveXVal = 650;
     private int moveYVal = 2000;
 
-    private float time = 0.7f;
+    private float time = 0.4f;
 
     private void Start()
     {
@@ -74,9 +74,9 @@ public class InventoryActive : MonoBehaviour
         //DOTween.Kill(seq);
 
         seq = DOTween.Sequence();
-        seq.Append(_invenPanel.transform.DOLocalMoveY(_inveny, time));
-        seq.Join(_invenInfoPanel.transform.DOLocalMoveY(_inveny, time));
-        seq.Append(_invenInfoPanel.transform.DOLocalMoveX(_infox, time));
+        seq.Append(_invenPanel.transform.DOLocalMoveY(_inveny, time)).SetEase(Ease.OutBounce);
+        seq.Join(_invenInfoPanel.transform.DOLocalMoveY(_inveny, time)).SetEase(Ease.OutBounce);
+        seq.Append(_invenInfoPanel.transform.DOLocalMoveX(_infox, time)).SetEase(Ease.OutBounce);
         seq.Join(_playerUI.transform.DOMoveX(_uix - moveXVal, time));
         seq.AppendCallback(() => { isAnimation = true; });
     }
@@ -85,11 +85,11 @@ public class InventoryActive : MonoBehaviour
     {
         //DOTween.Kill(seq);
 
-        _playerUI.transform.DOMoveX(_uix, time);
+        _playerUI.transform.DOMoveX(_uix, time).SetEase(Ease.OutBack);
         seq = DOTween.Sequence();
-        seq.Append(_invenInfoPanel.transform.DOLocalMoveX(_invenx + moveXVal, time));
-        seq.Append(_invenPanel.transform.DOLocalMoveY(_inveny + moveYVal, time));
-        seq.Join(_invenInfoPanel.transform.DOLocalMoveY(_inveny + moveYVal, time));
+        seq.Append(_invenInfoPanel.transform.DOLocalMoveX(_invenx + moveXVal, time)).SetEase(Ease.OutBack);
+        seq.Append(_invenPanel.transform.DOLocalMoveY(_inveny + moveYVal, time)).SetEase(Ease.OutBack);
+        seq.Join(_invenInfoPanel.transform.DOLocalMoveY(_inveny + moveYVal, time)).SetEase(Ease.OutBack);
         seq.AppendCallback(() => { isAnimation = true; });
 
     }
