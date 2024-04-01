@@ -102,7 +102,7 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
     {
         if (Dead) return false;
 
-        SoundManager.Instance.SFXPlay("HitEnemy", _hitSound);
+        SoundManager.Instance.SFXPlay("HitEnemy", _hitSound, 0.55f);
         feedbackPlayer?.Play(damage + UnityEngine.Random.Range(0.25f, 1.75f));
         curHp -= (int)damage;
 

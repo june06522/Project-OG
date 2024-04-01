@@ -61,7 +61,7 @@ public class LeafFairyStateController : BaseFSM_Controller<ELeafFariyState>
 
         Vector2 dir = (Target.position - attackPoint.position).normalized;
         InstantiateBullet(dir, EEnemyBulletSpeedType.Wind, EEnemyBulletCurveType.Curve90);
-        SoundManager.Instance.SFXPlay("InsLeaf", _attackSound, 0.3f);
+        SoundManager.Instance.SFXPlay("InsLeaf", _attackSound, 0.5f);
         act?.Invoke();
 
         yield return new WaitForSeconds(0.3f);
