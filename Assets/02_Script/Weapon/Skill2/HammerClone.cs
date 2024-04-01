@@ -5,6 +5,8 @@ using UnityEngine.VFX;
 
 public class HammerClone : MonoBehaviour
 {
+    [SerializeField]
+    private AudioClip _clip;
     private float rotateSpeed = 20f;
     private float damage = 10f;
     private float dissolveTime;
@@ -98,6 +100,7 @@ public class HammerClone : MonoBehaviour
         IHitAble hitAble;
         if (collision.TryGetComponent<IHitAble>(out hitAble))
         {
+            SoundManager.Instance.SFXPlay("HitHammerRotate", _clip, 0.25f);
             if(Frozen)
             {
                 IDebuffReciever debuffReciever;

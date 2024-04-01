@@ -21,8 +21,7 @@ public class SFullHPState : BossBaseState
         _slate.ReturnMinimi(g_minimis);
         StopThisCoroutine();
         _slate.StopAllCoroutines();
-        _slate.ReturnAll();
-        _slate.LaserReturnAll();
+        _slate.B_isRunning = false;
         _slate.B_isStop = true;
         _slate.B_fullHP = false;
         _slate.B_halfHP = true;
@@ -68,6 +67,8 @@ public class SFullHPState : BossBaseState
         yield return new WaitForSeconds(waitTime);
 
         int rand = Random.Range(1, 6);
+
+        _slate.B_isRunning = true;
 
         switch (rand)
         {
@@ -174,6 +175,8 @@ public class SFullHPState : BossBaseState
             g_minimis[i].GetComponent<SpriteRenderer>().material = _slate.L_materials[0];
         }
 
+        SoundManager.Instance.SFXPlay("Laser", _slate.audios[2], _boss.G_bulletCollector.transform, 0.3f);
+
         while (curTime < fireTime)
         {
             curTime += Time.deltaTime;
@@ -255,6 +258,7 @@ public class SFullHPState : BossBaseState
             g_minimis[i].GetComponent<SpriteRenderer>().material = _slate.L_materials[5];
         }
 
+        _slate.B_isRunning = false;
         _slate.B_isStop = false;
         _slate.StartCoroutine(RandomPattern(_slate.bossSo.PatternChangeTime));
     }
@@ -315,6 +319,7 @@ public class SFullHPState : BossBaseState
 
         for (int i = 0; i < turnCount; i++)
         {
+            SoundManager.Instance.SFXPlay("Fire", _slate.audios[1]);
             for (int j = 0; j < bulletCount; j++)
             {
                 for(int k = 0; k < g_minimis.Length; k++)
@@ -333,6 +338,7 @@ public class SFullHPState : BossBaseState
             }
         }
 
+        _slate.B_isRunning = false;
         _slate.StartCoroutine(RandomPattern(_slate.bossSo.PatternChangeTime));
     }
 
@@ -360,6 +366,7 @@ public class SFullHPState : BossBaseState
 
         for (int i = 0; i < burstCount; i++)
         {
+            SoundManager.Instance.SFXPlay("Fire", _slate.audios[1]);
             for (int j = 0; j < bulletCount; j++)
             {
                 if (r > 1.1f)
@@ -385,6 +392,7 @@ public class SFullHPState : BossBaseState
             yield return new WaitForSeconds(time);
         }
 
+        _slate.B_isRunning = false;
         _slate.B_isStop = false;
         _slate.StartCoroutine(RandomPattern(_slate.bossSo.PatternChangeTime));
     }
@@ -398,6 +406,7 @@ public class SFullHPState : BossBaseState
 
         for (int i = 0; i < burstCount; i++)
         {
+            SoundManager.Instance.SFXPlay("Fire", _slate.audios[1]);
             for (int j = 0; j < bulletCount; j++)
             {
                 for (int k = 0; k < g_minimis.Length; k++)
@@ -458,6 +467,7 @@ public class SFullHPState : BossBaseState
             }
         }
 
+        _slate.B_isRunning = false;
         _slate.StartCoroutine(RandomPattern(_slate.bossSo.PatternChangeTime));
     }
 
@@ -465,12 +475,14 @@ public class SFullHPState : BossBaseState
     {
         if (!_slate.B_fullHP)
             yield break;
+
         GameObject[,] bullets = new GameObject[burstCount, bulletCount];
 
         int returnCounting = 1;
 
         for (int i = 0; i < burstCount; i++)
         {
+            SoundManager.Instance.SFXPlay("Fire", _slate.audios[1]);
             for (int j = 0; j < bulletCount; j++)
             {
                 bullets[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _slate.G_bulletCollector.transform);
@@ -557,6 +569,7 @@ public class SFullHPState : BossBaseState
             rigid.velocity = dir.normalized * speed;
         }
 
+        _slate.B_isRunning = false;
         _slate.StartCoroutine(RandomPattern(_slate.bossSo.PatternChangeTime));
     }
 }

@@ -24,6 +24,7 @@ public class SwordYondo : MonoBehaviour
     [Header("Speed")]
     [SerializeField] float speed = 500f;
 
+    [SerializeField] AudioClip audioClip;
     Transform ownerTrm;
     Transform targetTrm;
 
@@ -278,8 +279,10 @@ public class SwordYondo : MonoBehaviour
         IHitAble hitAble;
         if(collision.TryGetComponent<IHitAble>(out hitAble))
         {
+
+            SoundManager.Instance.SFXPlay("Yondu", audioClip, 0.2f);
             // 적이 죽었으면
-            if(hitAble.Hit(damage) == false)
+            if (hitAble.Hit(damage) == false)
             {
                 //새로이 타겟 설정
                 SetTarget();

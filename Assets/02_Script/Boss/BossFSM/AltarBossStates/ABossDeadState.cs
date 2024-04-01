@@ -34,6 +34,7 @@ public class ABossDeadState : BossBaseState
     {
         float curTime = 0;
         float a = 1;
+        SoundManager.Instance.SFXPlay("Dead", _altarBoss.audios[3], 1);
         _altarBoss.ChangeMat(4);
         yield return new WaitForSeconds(dyingEffectTime);
         GameObject effect = ObjectPool.Instance.GetObject(ObjectPoolType.AltarDeadEffect);

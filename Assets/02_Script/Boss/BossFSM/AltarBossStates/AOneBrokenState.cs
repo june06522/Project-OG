@@ -96,6 +96,7 @@ public class AOneBrokenState : BossBaseState
         if (!_altarBoss.B_isOneBroken)
             yield break;
 
+        SoundManager.Instance.SFXPlay("Fire", _altarBoss.audios[1], 1);
         Vector3 originSize = _boss.transform.localScale;
 
         _boss.transform.DOScale(originSize * 1.1f, 0.2f)
@@ -136,6 +137,7 @@ public class AOneBrokenState : BossBaseState
         if (!_altarBoss.B_isOneBroken)
             yield break;
 
+        SoundManager.Instance.SFXPlay("Fire", _altarBoss.audios[1], 1);
         Vector3 originSize = _boss.transform.localScale;
         GameObject[,] bullets = new GameObject[burstCount, bulletCount];
 
@@ -204,6 +206,7 @@ public class AOneBrokenState : BossBaseState
 
         for (int i = 0; i < burstCount; i++)
         {
+            SoundManager.Instance.SFXPlay("Fire", _altarBoss.audios[1], 1);
             _boss.transform.DOScale(originSize * 1.1f, 0.2f)
             .SetEase(Ease.OutQuad)
             .OnComplete(() =>
