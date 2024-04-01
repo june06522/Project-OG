@@ -130,4 +130,9 @@ public class HammerClone : MonoBehaviour
             transform.localPosition = movePos;
         }
     }
+
+    public void DestroyThis()
+    {
+        Destroy(this.gameObject);
+    }
 }

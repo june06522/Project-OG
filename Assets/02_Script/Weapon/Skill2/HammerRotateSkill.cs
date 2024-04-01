@@ -39,6 +39,8 @@ public class HammerRotateSkill : Skill
     private bool isFrozen;
 
     private Vector2 cloneScale;
+
+    private float curPower;
     private void Awake()
     {
         clones = new List<HammerClone>(minHammerCount);
@@ -48,6 +50,7 @@ public class HammerRotateSkill : Skill
     {
         rotateTimer = 0;
         running = false;
+        curPower = -1;
     }
 
     private void Update()
@@ -86,6 +89,7 @@ public class HammerRotateSkill : Skill
 
             if(endRotate)
             {
+                curPower = -1f;
                 running = false;
                 clones.Clear();
             }
@@ -96,8 +100,20 @@ public class HammerRotateSkill : Skill
 
     public override void Excute(Transform weaponTrm, Transform target, int power)
     {
-        CurPowerInit(power);
-
+        if(power > curPower)
+        {
+            if(clones != null)
+            {
+                for(int i = 0; i < clones.Count; i++)
+                {
+                    clones[i].DestroyThis();
+                }
+                clones.Clear();
+                curPower = power;
+            }
+            CurPowerInit(power);
+        }
+        
         if(clones.Count > 0)
         {
             rotateTimer = 0;
@@ -199,7 +215,7 @@ public class HammerRotateSkill : Skill
         curHeight = 2f;
         curTheta = theta;
 
-        curDamage = damage * 5f;
+        curDamage = damage * 10f;
         cloneScale = Vector2.one * 5f;
         isFrozen = false;
         isMaxPower = true;
