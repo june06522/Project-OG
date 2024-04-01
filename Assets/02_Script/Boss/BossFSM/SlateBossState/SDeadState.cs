@@ -32,6 +32,7 @@ public class SDeadState : BossBaseState
 
     private IEnumerator Dying(float disappearingTime, float disappearSpeed, int explosionCount, float explosionWaitTime)
     {
+        SoundManager.Instance.SFXPlay("Dead", _slate.audios[0], 1);
         float curTime = 0;
         float a = 1;
         for(int i = 0; i < explosionCount; i++)

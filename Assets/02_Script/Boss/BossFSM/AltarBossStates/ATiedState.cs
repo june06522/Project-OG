@@ -73,6 +73,7 @@ public class ATiedState : BossBaseState
         if (!_altarBoss.B_isTied)
             yield break;
 
+        SoundManager.Instance.SFXPlay("Fire", _altarBoss.audios[1], 1);
         Vector3 originSize = _boss.transform.localScale;
         _boss.transform.DOScale(originSize * 1.1f, 0.2f)
             .SetEase(Ease.OutQuad)
@@ -111,6 +112,7 @@ public class ATiedState : BossBaseState
         if (!_altarBoss.B_isTied)
             yield break;
 
+        SoundManager.Instance.SFXPlay("Fire", _altarBoss.audios[1], 1);
         Vector3 originSize = _boss.transform.localScale;
         GameObject[,] bullets = new GameObject[burstCount, bulletCount];
 

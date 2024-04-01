@@ -97,6 +97,7 @@ public class AFreeState : BossBaseState
     // 풀린 즉시 한 번만 하는 패턴
     private IEnumerator Dash(float maxDistance, float speed, float waitTime, float dashTime)
     {
+        SoundManager.Instance.SFXPlay("Dash", _altarBoss.audios[2]);
         _altarBoss.B_isDashing = true;
         float curTime = 0;
 
@@ -139,7 +140,7 @@ public class AFreeState : BossBaseState
             bullets[i].GetComponent<BossBullet>().Attack(_boss.bossSo.Damage);
         }
 
-
+        SoundManager.Instance.SFXPlay("Burn", _altarBoss.audios[4], _boss.G_bulletCollector.transform, 1);
         while (curTime < waitTime)
         {
             deg += Time.deltaTime * speed;
@@ -180,6 +181,7 @@ public class AFreeState : BossBaseState
     {
         Vector3 originSize = _boss.transform.localScale;
 
+        SoundManager.Instance.SFXPlay("Fire", _altarBoss.audios[1], 1);
         _boss.transform.DOScale(originSize * 1.1f, 0.2f)
             .SetEase(Ease.OutQuad)
             .OnComplete(() =>
@@ -213,6 +215,7 @@ public class AFreeState : BossBaseState
     // 전방향으로 탄막을 날리고 잠시 뒤 탄막들이 플레이어 방향으로 날아간다 - 플레이어가 근접하기 좋은 패턴
     private IEnumerator OmniGuidPlayerAttack(int bulletCount, float speed, float time, int burstCount)
     {
+        SoundManager.Instance.SFXPlay("Fire", _altarBoss.audios[1], 1);
         Vector3 originSize = _boss.transform.localScale;
         GameObject[,] bullets = new GameObject[burstCount, bulletCount];
 
@@ -276,6 +279,7 @@ public class AFreeState : BossBaseState
 
         for (int i = 0; i < burstCount; i++)
         {
+            SoundManager.Instance.SFXPlay("Fire", _altarBoss.audios[1], 1);
             _boss.transform.DOScale(originSize * 1.1f, 0.2f)
             .SetEase(Ease.OutQuad)
             .OnComplete(() =>
@@ -307,6 +311,7 @@ public class AFreeState : BossBaseState
 
         for (int i = 0; i < turnCount; i++)
         {
+            SoundManager.Instance.SFXPlay("Fire", _altarBoss.audios[1], 1);
             for (int j = 0; j < bulletCount; j++)
             {
                 GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _boss.G_bulletCollector.transform);
