@@ -21,6 +21,9 @@ public class LeafFairyStateController : BaseFSM_Controller<ELeafFariyState>
     [SerializeField]
     public LeafBullet bullet;
 
+    [SerializeField]
+    private AudioClip _attackSound;
+
     GameObject particleOBJ;
     protected override void Start()
     {
@@ -58,7 +61,7 @@ public class LeafFairyStateController : BaseFSM_Controller<ELeafFariyState>
 
         Vector2 dir = (Target.position - attackPoint.position).normalized;
         InstantiateBullet(dir, EEnemyBulletSpeedType.Wind, EEnemyBulletCurveType.Curve90);
-        
+        SoundManager.Instance.SFXPlay("InsLeaf", _attackSound, 0.3f);
         act?.Invoke();
 
         yield return new WaitForSeconds(0.3f);
