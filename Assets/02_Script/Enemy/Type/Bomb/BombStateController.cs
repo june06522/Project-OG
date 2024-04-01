@@ -16,6 +16,8 @@ public class BombStateController : BaseFSM_Controller<EBombState>
     public GameObject showRange;
     public float radius = 3f;
     private GameObject instShowRangeObj;
+    [SerializeField]
+    private AudioClip _bombClip;
 
     protected override void Start()
     {
@@ -62,6 +64,7 @@ public class BombStateController : BaseFSM_Controller<EBombState>
 
     public void InstantiateRange()
     {
+        SoundManager.Instance.SFXPlay("bomb", _bombClip, 0.2f);
         instShowRangeObj = Instantiate(showRange, transform.position, Quaternion.identity);
     }
 

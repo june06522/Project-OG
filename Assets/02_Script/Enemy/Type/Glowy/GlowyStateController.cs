@@ -19,6 +19,9 @@ public class GlowyStateController : BaseFSM_Controller<EGlowyState>
     LaserBullet laserBullet;
     LaserPointer pointer;
 
+    [SerializeField]
+    private AudioClip _lazerClip;
+
     protected override void Awake()
     {
         base.Awake();
@@ -63,6 +66,7 @@ public class GlowyStateController : BaseFSM_Controller<EGlowyState>
 
     public IEnumerator Shoot(Vector2 endPos)
     {
+        SoundManager.Instance.SFXPlay("Lazer", _lazerClip);
         Vector2 dir = (endPos - (Vector2)attackPoint.position);
         laserBullet.Shoot(attackPoint.position, endPos);
 

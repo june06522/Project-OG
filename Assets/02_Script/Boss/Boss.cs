@@ -5,18 +5,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public enum BossType
-{
-    Altar = 0,
-    Slate = 1,
-    End = 2
-}
-
 public class Boss : MonoBehaviour, IHitAble
 {
     public GameObject G_bulletCollector;
 
     public Slider bossHpSlider;
+
+    public List<AudioClip> audios;
 
     public bool B_isStop;
     public bool B_dead;
@@ -205,6 +200,8 @@ public class Boss : MonoBehaviour, IHitAble
                 continue;
             ObjectPool.Instance.ReturnObject(objs[i]);
         }
+
+        Destroy(G_bulletCollector.transform.GetChild(0).gameObject);
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)

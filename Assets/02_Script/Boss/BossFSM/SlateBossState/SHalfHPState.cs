@@ -160,6 +160,8 @@ public class SHalfHPState : BossBaseState
             g_minimis[i].GetComponent<SpriteRenderer>().material = _slate.L_materials[0];
         }
 
+        SoundManager.Instance.SFXPlay("Laser", _slate.audios[2], _boss.G_bulletCollector.transform, 0.3f);
+
         while (curTime < fireTime)
         {
             curTime += Time.deltaTime;
@@ -301,6 +303,7 @@ public class SHalfHPState : BossBaseState
 
         for (int i = 0; i < turnCount; i++)
         {
+            SoundManager.Instance.SFXPlay("Fire", _slate.audios[1]);
             for (int j = 0; j < bulletCount; j++)
             {
                 for (int k = 0; k < g_minimis.Length; k++)
@@ -346,6 +349,7 @@ public class SHalfHPState : BossBaseState
 
         for (int i = 0; i < burstCount; i++)
         {
+            SoundManager.Instance.SFXPlay("Fire", _slate.audios[1]);
             for (int j = 0; j < bulletCount; j++)
             {
                 if (r > 1.1f)
@@ -384,6 +388,7 @@ public class SHalfHPState : BossBaseState
 
         for (int i = 0; i < burstCount; i++)
         {
+            SoundManager.Instance.SFXPlay("Fire", _slate.audios[1]);
             for (int j = 0; j < bulletCount; j++)
             {
                 for (int k = 0; k < g_minimis.Length; k++)
@@ -457,6 +462,7 @@ public class SHalfHPState : BossBaseState
 
         for (int i = 0; i < burstCount; i++)
         {
+            SoundManager.Instance.SFXPlay("Fire", _slate.audios[1]);
             for (int j = 0; j < bulletCount; j++)
             {
                 bullets[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _slate.G_bulletCollector.transform);

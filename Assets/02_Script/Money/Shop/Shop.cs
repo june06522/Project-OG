@@ -37,6 +37,10 @@ public class Shop : MonoBehaviour
     private List<ItemInfoSO> _items = new List<ItemInfoSO>();
     private InventoryActive inven;
 
+    [Header("Sound Info")]
+    [SerializeField] private AudioClip _reRollClip;
+    [SerializeField] private AudioClip _buyItemClip;
+
     private void Awake()
     {
         _playerMoney = FindObjectOfType<Money>();
@@ -86,6 +90,7 @@ public class Shop : MonoBehaviour
             return;
         }
         SetRandomItem();
+        SoundManager.Instance.SFXPlay("ReRoll", _reRollClip, 0.9f);
 
         _reRollGold += _reRollIncreaseGoldValue;
         _reRollGoldText.text = $"{_reRollGold}G";
@@ -113,7 +118,7 @@ public class Shop : MonoBehaviour
 
         for(int i = 0; i < 4; ++i)
         {
-            _shopItemList[i].SetShopItem(_items[i]);
+            _shopItemList[i].SetShopItem(_items[i], _buyItemClip);
         }
     }
 }

@@ -29,6 +29,8 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
     public bool Dead { get; private set; } = false;
     public event Action DeadEvent;
 
+    [SerializeField]
+    private AudioClip _hitSound;
     //ETC
     public FeedbackPlayer feedbackPlayer { get; set; }
     public EnemyAnimController enemyAnimController { get; set; }
@@ -99,7 +101,8 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
     public bool Hit(float damage)
     {
         if (Dead) return false;
-        
+
+        SoundManager.Instance.SFXPlay("HitEnemy", _hitSound, 0.55f);
         feedbackPlayer?.Play(damage + UnityEngine.Random.Range(0.25f, 1.75f));
         curHp -= (int)damage;
 
