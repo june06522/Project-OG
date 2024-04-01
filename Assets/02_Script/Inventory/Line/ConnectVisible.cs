@@ -6,12 +6,10 @@ using UnityEngine;
 public struct ConnectInfo
 {
     public Vector2 pos;
-    public Vector2Int dir;
 
-    public ConnectInfo(Vector2 pos, Vector2Int dir)
+    public ConnectInfo(Vector2 pos)
     {
         this.pos = pos;
-        this.dir = dir;
     }
 }
 
@@ -27,9 +25,12 @@ public class ConnectVisible : MonoBehaviour
 
     List<LineRenderer> lendererList = new List<LineRenderer>();
     [SerializeField] Material lineRenderMat;
+    Vector3 startPos = new Vector3();
 
     private float mulX = 2.0f;
     private float mulY = 2.0f;
+
+    private int maxCnt = 0;
 
     private void Awake()
     {
@@ -64,9 +65,9 @@ public class ConnectVisible : MonoBehaviour
 
         foreach (var generator in generatorList)
         {
-            LineRenderer line = Instantiate(tempObj, transform).GetComponent<LineRenderer>();
-            line.material = lineRenderMat;
-            lendererList.Add(line);
+            maxCnt = 0;
+
+            LineRenderer line = CreateLine();
 
             line.positionCount += 1;
             Vector3 pos = generator.transform.position;
@@ -76,16 +77,20 @@ public class ConnectVisible : MonoBehaviour
             foreach (var vec in generator.InvenObject.sendPoints)
             {
                 Dictionary<ConnectInfo, bool> dic = new Dictionary<ConnectInfo, bool>();
-                Connect(line, generator.InvenObject.originPos + vec.dir + vec.point, vec.dir, pos, dic);
+                Dictionary<Vector2Int, int> weaponData = new();
+                startPos = pos;
+                Connect(ref line, generator.InvenObject.originPos + vec.dir + vec.point, vec.dir, pos, dic, maxCnt, weaponData);
             }
+
+            AddLineRenderPoint(line, pos);
         }
 
     }
 
-    bool Connect(LineRenderer line, Vector2 pos, Vector2Int dir, Vector2 originpos, Dictionary<ConnectInfo, bool> isVisited)
+    bool Connect(ref LineRenderer line, Vector2 pos, Vector2Int dir, Vector2 originpos, Dictionary<ConnectInfo, bool> isVisited, int cnt, Dictionary<Vector2Int, int> weaponData)
     {
         Vector2 tempVec = originpos + new Vector2(dir.x * mulX, dir.y * mulY);
-        ConnectInfo info = new ConnectInfo(pos, dir);
+        ConnectInfo info = new ConnectInfo(pos);
         #region 스택 오버 플로우 방지 <- 방문한곳 체크
         if (isVisited.ContainsKey(info) && isVisited[info])
             return false;
@@ -95,8 +100,6 @@ public class ConnectVisible : MonoBehaviour
 
         Vector2Int fillCheckVec = new Vector2Int((int)pos.x, (int)pos.y);
 
-
-
         if (inventory.CheckFill2(fillCheckVec))
         {
             InventoryObjectData data = inventory.GetObjectData2(fillCheckVec, dir);
@@ -105,13 +108,23 @@ public class ConnectVisible : MonoBehaviour
 
                 BrickPoint b = new BrickPoint();
                 bool isConnect = false;
+                bool isconnect = false;
 
                 #region 무기 예외처리
                 if (data.sendPoints.Count == 0)
+                {
                     isConnect = true;
+                    Dictionary<ConnectInfo, bool> copiedDict = new Dictionary<ConnectInfo, bool>();
+                    foreach (var kvp in isVisited)
+                    {
+                        copiedDict.Add(kvp.Key, kvp.Value);
+                    }
+                    isconnect = BrickCircuit(b, tempVec, ref line, data, copiedDict, cnt + 1, weaponData);
+                }
                 #endregion
 
                 #region 연결된 블록 있으면 스택에 추가 없으면 리턴
+
                 foreach (var point in data.inputPoints)
                 {
                     if (point.dir == dir && point.point == fillCheckVec - data.originPos)
@@ -122,6 +135,18 @@ public class ConnectVisible : MonoBehaviour
                             {
                                 b.point = point.point;
                                 b.dir = point1.dir;
+
+                                Dictionary<ConnectInfo, bool> copiedDict = new Dictionary<ConnectInfo, bool>();
+                                foreach (var kvp in isVisited)
+                                {
+                                    copiedDict.Add(kvp.Key, kvp.Value);
+                                }
+
+                                if (BrickCircuit(b, tempVec, ref line, data, copiedDict, cnt + 1, weaponData))
+                                {
+                                    isconnect = true;
+                                    AddLineRenderPoint(line, tempVec);
+                                }
                             }
                         }
                         isConnect = true;
@@ -131,37 +156,63 @@ public class ConnectVisible : MonoBehaviour
                 if (!isConnect) return false;
                 #endregion
 
+                //isconnect = BrickCircuit(b, tempVec, line, data, isVisited, cnt + 1);
+                //if (isconnect)
+                //{
+                //    AddLineRenderPoint(line, tempVec);
+                //}
+
+                return isconnect;
                 //연결된 블록 순회
-                return BrickCircuit(b, tempVec, line, data, isVisited);
             }
         }
 
         return false;
     }
 
-    private bool BrickCircuit(BrickPoint tmpVec, Vector2 tempVec, LineRenderer line, InventoryObjectData data, Dictionary<ConnectInfo, bool> isVisited)
+    private bool BrickCircuit(BrickPoint tmpVec, Vector2 tempVec, ref LineRenderer line, InventoryObjectData data, Dictionary<ConnectInfo, bool> isVisited, int cnt, Dictionary<Vector2Int, int> weaponData)
     {
 
         //라인 렌더러에 추가
         AddLineRenderPoint(line, tempVec);
+        bool isConnect = false;
 
         #region 무기면 리턴
         if (tmpVec.dir == null)
-            return true;
+        {
+            if (line.GetPosition(0) != startPos)
+            {
+                DeleteLineRenderPoint(line);
+                return false;
+
+            }
+            if (weaponData.ContainsKey(data.originPos))
+            {
+                if (weaponData[data.originPos] < cnt)
+                {
+                    weaponData[data.originPos] = cnt;
+                    line = CreateLine();
+                    AddLineRenderPoint(line, tempVec);
+                    return true;
+                }
+                else
+                {
+                    DeleteLineRenderPoint(line);
+                    return false;
+
+                }
+            }
+            else
+            {
+                weaponData.Add(data.originPos, cnt);
+                line = CreateLine();
+                AddLineRenderPoint(line, tempVec);
+                return true;
+            }
+
+        }
         #endregion
 
-        #region 연결된 곳 순회
-        foreach (SignalPoint point1 in data.sendPoints)
-        {
-            if (point1.point == tmpVec.point)
-            {
-                Vector2 tempPos1 = data.originPos + point1.dir + point1.point;
-                Connect(line, tempPos1, point1.dir, tempVec, isVisited);
-
-                //라인 렌더러에 추가
-                AddLineRenderPoint(line, tempVec);
-            }
-        }
         //이친구와 이어진 블록 연결
         foreach (BrickPoint point in data.bricks)
         {
@@ -171,8 +222,9 @@ public class ConnectVisible : MonoBehaviour
                 //전블록과 이어지면 연결
                 if (point.point == tmpVec.point + v)// 0,0 1,1
                 {
+
                     Vector2 tempPos = data.originPos + point.point;
-                    ConnectInfo info = new ConnectInfo(tempPos, v);
+                    ConnectInfo info = new ConnectInfo(tempPos);
 
                     if (isVisited.ContainsKey(info) && isVisited[info])
                         continue;
@@ -181,24 +233,59 @@ public class ConnectVisible : MonoBehaviour
 
 
                     tempVec += new Vector2(v.x * mulX, v.y * mulY);
-                    AddLineRenderPoint(line, tempVec);
-
                     BrickPoint b;
                     b.point = point.point;
                     b.dir = point.dir;
 
-                    BrickCircuit(b, tempVec, line, data, isVisited);
+                    Dictionary<ConnectInfo, bool> copiedDict = new Dictionary<ConnectInfo, bool>();
+                    foreach (var kvp in isVisited)
+                    {
+                        copiedDict.Add(kvp.Key, kvp.Value);
+                    }
+
+                    if (BrickCircuit(b, tempVec, ref line, data, copiedDict, cnt, weaponData))
+                    {
+                        Debug.Log(tempPos);
+                        AddLineRenderPoint(line, tempVec);
+                        isConnect = true;
+                    }
 
                     tempVec -= new Vector2(v.x * mulX, v.y * mulY);
-                    AddLineRenderPoint(line, tempVec);
                 }
             }
         }
+
+        #region 연결된 곳 순회
+        foreach (SignalPoint point1 in data.sendPoints)
+        {
+            if (point1.point == tmpVec.point)
+            {
+                Vector2 tempPos1 = data.originPos + point1.dir + point1.point;
+
+                Dictionary<ConnectInfo, bool> copiedDict = new Dictionary<ConnectInfo, bool>();
+                foreach (var kvp in isVisited)
+                {
+                    copiedDict.Add(kvp.Key, kvp.Value);
+                }
+
+                if (Connect(ref line, tempPos1, point1.dir, tempVec, copiedDict, cnt + 1, weaponData))
+                {
+                    AddLineRenderPoint(line, tempVec);
+                    isConnect = true;
+                }
+
+                //라인 렌더러에 추가
+            }
+        }
+        if (isConnect)
+            return true;
+
+        DeleteLineRenderPoint(line);
         return false;
         #endregion
     }
 
-    private void AddLineRenderPoint(LineRenderer line, Vector3 pos)
+    private void AddLineRenderPoint(LineRenderer line, Vector3 pos, int index = -1)
     {
         line.positionCount += 1;
         pos.x = (int)(pos.x * 100);
@@ -208,6 +295,22 @@ public class ConnectVisible : MonoBehaviour
         pos.y /= 100;
 
         pos.z = -4;
-        line.SetPosition(line.positionCount - 1, pos);
+        if (index == -1)
+            line.SetPosition(line.positionCount - 1, pos);
+        else
+            line.SetPosition(index, pos);
+    }
+
+    private void DeleteLineRenderPoint(LineRenderer line)
+    {
+        line.positionCount -= 1;
+    }
+
+    private LineRenderer CreateLine()
+    {
+        LineRenderer line = Instantiate(tempObj, transform).GetComponent<LineRenderer>();
+        line.material = lineRenderMat;
+        lendererList.Add(line);
+        return line;
     }
 }
