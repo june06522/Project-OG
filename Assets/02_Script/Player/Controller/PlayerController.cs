@@ -23,6 +23,8 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
     private PlayerHP _playerHP;
     private PlayerEnerge _playerEnerge;
 
+    public AudioClip _audioClip;
+
     [field: SerializeField] public PlayerDataSO playerData { get; protected set; }
 
     private static PlayerInputController inputController;
@@ -43,11 +45,12 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
         _playerHP = GetComponent<PlayerHP>();
         _playerEnerge = GetComponent<PlayerEnerge>();
 
-
         inputController = new PlayerInputController();
         eventController = new PlayerEventController();
 
-        if(_interactKey != null)
+        inputController.clip = _audioClip;
+
+        if (_interactKey != null)
             inputController.SetInteractUI(_interactKey);
 
         playerData = Instantiate(playerData);
