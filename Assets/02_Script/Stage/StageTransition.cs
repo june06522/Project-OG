@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class StageTransition : MonoBehaviour
 {
+    [SerializeField]
+    private AudioClip _stageTransitionClip;
 
     Animator _stageAnimator;
     Image _transitionImage;
@@ -22,6 +24,9 @@ public class StageTransition : MonoBehaviour
     public void StartTransition()
     {
         RandomTransitionValue();
+
+        if(_stageTransitionClip != null)
+            SoundManager.Instance.SFXPlay("Transition", _stageTransitionClip, 1f);
 
         //_stageAnimator.ResetTrigger(_startHash);
         _transitionImage.color = Color.white;
