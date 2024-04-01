@@ -32,7 +32,6 @@ public class KeyManager : MonoBehaviour
             Instance = this;
         else
         {
-            Debug.LogError($"{transform} : KeyManager is Multiple running!");
             Destroy(gameObject);
         }
     }

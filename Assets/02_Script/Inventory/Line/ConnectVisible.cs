@@ -84,7 +84,6 @@ public class ConnectVisible : MonoBehaviour
                     b = null;
                     Connect(ref line, generator.InvenObject.originPos + vec.dir + vec.point, vec.dir, pos, dic, maxCnt, ref weaponData, ref b);
                     AddLineRenderPoint(line, pos);
-                    Debug.Log(b);
                 } while (b != null);
             }
 

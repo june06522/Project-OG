@@ -28,7 +28,7 @@ public class PlaySceneEffectSound : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"{transform} : is multiply running!");
+            //Debug.LogError($"{transform} : is multiply running!");
             Destroy(gameObject);
         }    
     }
