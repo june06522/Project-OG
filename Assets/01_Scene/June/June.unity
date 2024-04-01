@@ -1507,6 +1507,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   images: []
   canOpen: 1
+  isPlaying: 0
   _playerUI: {fileID: 662321625}
   _invenPanel: {fileID: 1872877257}
   _invenInfoPanel: {fileID: 512207422}
@@ -3697,8 +3698,9 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 57344
-  coolTime: 5
+  minCoolTime: 3
   radius: 50
+  minDamage: 3
 --- !u!1 &662321625
 GameObject:
   m_ObjectHideFlags: 0
@@ -9571,7 +9573,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80de576d3ef47004989d160213aa70bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 7443248907822983009, guid: af45fd3b667e8854ea07e5d25c811de4, type: 3}
+  prefab: {fileID: 7443248907822983016, guid: af45fd3b667e8854ea07e5d25c811de4, type: 3}
+  damage: 20
 --- !u!1 &1599587056
 GameObject:
   m_ObjectHideFlags: 0
@@ -33659,6 +33662,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22173e9312beb324c8afcfb11174f610, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _monsterSpawnClip: {fileID: 0}
   _useStageLight: 0
   _stageIntensity: 0
   _playerSpawnPos: {fileID: 0}
