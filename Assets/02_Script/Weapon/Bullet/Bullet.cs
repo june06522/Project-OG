@@ -7,16 +7,15 @@ public class Bullet : MonoBehaviour
 
     [SerializeField] private BulletDataSO data;
 
-    private float curDamage;
-    private bool isAdd;
+    protected float curDamage;
+    protected bool isAdd;
 
-    public BulletData Data { get; protected set; }
+    public BulletData Data { get; set; }
 
     private void Awake()
     {
 
         Data = data.CreateBulletData();
-
     }
 
     public void Shoot(float weaponDamage)
