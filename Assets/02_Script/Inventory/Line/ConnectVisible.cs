@@ -26,8 +26,10 @@ public class ConnectVisible : MonoBehaviour
     List<LineRenderer> lendererList = new List<LineRenderer>();
     [SerializeField] Material lineRenderMat;
 
-    private float mulX = 2.0f;
-    private float mulY = 2.0f;
+
+    [HideInInspector] public float mulX = 2.0f;
+    [HideInInspector] public float mulY = 2.0f;
+    [HideInInspector] public float width = 0.2f;
 
     private int maxCnt = 0;
 
@@ -46,6 +48,11 @@ public class ConnectVisible : MonoBehaviour
     }
 
     private void Update()
+    {
+        VisibleLine();
+    }
+
+    public void VisibleLine()
     {
         for (int i = lendererList.Count - 1; i >= 0; i--)
         {
@@ -88,7 +95,6 @@ public class ConnectVisible : MonoBehaviour
             }
 
         }
-
     }
 
     bool Connect(ref LineRenderer line, Vector2 pos, Vector2Int dir, Vector2 originpos, Dictionary<ConnectInfo, bool> isVisited, int cnt, ref Dictionary<Vector2Int, int> weaponData, ref InventoryObjectData findWeapon)
@@ -316,6 +322,7 @@ public class ConnectVisible : MonoBehaviour
     {
         LineRenderer line = Instantiate(tempObj, transform).GetComponent<LineRenderer>();
         line.material = lineRenderMat;
+        line.startWidth = width;
         lendererList.Add(line);
         return line;
     }

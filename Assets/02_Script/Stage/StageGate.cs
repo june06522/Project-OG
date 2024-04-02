@@ -14,7 +14,7 @@ public class StageGate : MonoBehaviour, IInteractable
 
     private void Awake()
     {
-        stageTransition = GameObject.Find("StageTransition").GetComponent<StageTransition>();
+        stageTransition = FindObjectOfType<StageTransition>();
     }
 
     //test

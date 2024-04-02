@@ -11,7 +11,7 @@ public class InvenSelectBrickShow : MonoBehaviour
     [SerializeField] Image _showUI;
 
     bool isOpen = false;
-    
+
     public void Init()
     {
         _showUI.transform.parent = transform;
@@ -36,6 +36,12 @@ public class InvenSelectBrickShow : MonoBehaviour
                 Vector3 tempPos = v.RectTransform.localPosition;
                 tempPos.x += (v.RectTransform.rect.width / 100 % 2 == 0) ? 50 : 0;
                 tempPos.y += (v.RectTransform.rect.height / 100 % 2 == 0) ? 50 : 0;
+
+                if (GameManager.Instance.Inventory.Width % 2 == 0)
+                    tempPos.x -= 50;
+                if (GameManager.Instance.Inventory.Height % 2 == 0)
+                    tempPos.y -= 50;
+
                 Vector3Int p = Vector3Int.RoundToInt(tempPos / 100);
                 p.x -= (int)(v.RectTransform.rect.width / 200);
                 p.y -= (int)(v.RectTransform.rect.height / 200);
@@ -55,11 +61,16 @@ public class InvenSelectBrickShow : MonoBehaviour
 
                     _rect.localPosition += new Vector3((_rect.rect.width - 100) / 2, (_rect.rect.height - 100) / 2);
 
+                    if (GameManager.Instance.Inventory.Width % 2 == 0)
+                        _rect.localPosition += new Vector3(50, 0);
+                    if (GameManager.Instance.Inventory.Height % 2 == 0)
+                        _rect.localPosition += new Vector3(0, 50);
+
                 }
             }
         }
 
-        if(!isOpen)
+        if (!isOpen)
         {
             SetDefalut();
         }

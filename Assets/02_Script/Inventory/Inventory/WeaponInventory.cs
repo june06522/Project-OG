@@ -69,7 +69,7 @@ public class WeaponInventory : MonoBehaviour
 
     public void CheckTileLen()
     {
-        tileRength = viewer.parent.GetChild(1).transform.position.y  - viewer.parent.GetChild(0).transform.position.y;
+        tileRength = 100;
     }
     private void Update()
     {
@@ -224,5 +224,7 @@ public class WeaponInventory : MonoBehaviour
         return Vector2Int.FloorToInt(c.invenPoint);
 
     }
+
+    public int GetInvenSize() => Mathf.Max(Width, Height);
 
 }

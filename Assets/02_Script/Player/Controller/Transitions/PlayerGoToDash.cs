@@ -32,7 +32,7 @@ public class PlayerGoToDash : FSM_Transition<EnumPlayerState>
         bool returnVal = inputController.isDashKeyPressed && !data[PlayerCoolDownType.Dash] && _playerEnerge.ConsumeEnerge(10);
 
         if(returnVal)
-            SoundManager.Instance?.SFXPlay("Dash", clip);
+            SoundManager.Instance?.SFXPlay("Dash", clip,0.4f);
 
         return returnVal;
 
