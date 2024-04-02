@@ -6,7 +6,6 @@ using UnityEngine;
 public abstract class Weapon : MonoBehaviour
 {
     public WeaponID id;
-    public WeaponType weaponType;
 
     protected Transform target;
     private float chargeValue;
