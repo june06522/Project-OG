@@ -67,7 +67,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
         }
         
 
-        var goToDash = new PlayerGoToDash(this, _playerEnerge);
+        var goToDash = new PlayerGoToDash(this, _playerEnerge,_audioClip);
 
         var idleState = new PlayerRootState(this);
         var idleToMove = new PlayerTransitionByMoveDir(this, EnumPlayerState.Move, Vector2.zero, TransitionCheckType.Greater);

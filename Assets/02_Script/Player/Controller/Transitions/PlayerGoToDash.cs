@@ -9,12 +9,14 @@ public class PlayerGoToDash : FSM_Transition<EnumPlayerState>
 
     private PlayerDataSO data;
     private PlayerInputController inputController => PlayerController.InputController;
+    private AudioClip clip;
 
-    public PlayerGoToDash(PlayerController controller, PlayerEnerge playerEnerge) : base(controller, EnumPlayerState.Dash)
+    public PlayerGoToDash(PlayerController controller, PlayerEnerge playerEnerge, AudioClip clip) : base(controller, EnumPlayerState.Dash)
     {
 
         data = controller.playerData;
         _playerEnerge = playerEnerge;
+        this.clip = clip;
     }
 
     protected override bool CheckTransition()
@@ -27,7 +29,12 @@ public class PlayerGoToDash : FSM_Transition<EnumPlayerState>
 
         }
 
-        return inputController.isDashKeyPressed && !data[PlayerCoolDownType.Dash] && _playerEnerge.ConsumeEnerge(10);
+        bool returnVal = inputController.isDashKeyPressed && !data[PlayerCoolDownType.Dash] && _playerEnerge.ConsumeEnerge(10);
+
+        if(returnVal)
+            SoundManager.Instance?.SFXPlay("Dash", clip);
+
+        return returnVal;
 
     }
 
