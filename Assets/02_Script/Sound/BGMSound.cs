@@ -16,7 +16,7 @@ public class BGMSound : MonoBehaviour
     {
         if (SoundManager.Instance != null)
         {
-            SoundManager.Instance._BGMSlider = slider;
+            SoundManager.Instance.BGMSlider = slider;
             slider.onValueChanged.AddListener(SoundManager.Instance.BGSoundVolume);
         }
     }

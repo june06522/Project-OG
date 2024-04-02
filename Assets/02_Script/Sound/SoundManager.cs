@@ -21,9 +21,9 @@ public class SoundManager : MonoBehaviour
 
     public static SoundManager Instance { get; private set; }
 
-    public Slider _mainSlider;
-    public Slider _BGMSlider;
-    public Slider _SFXSlider;
+    public Slider MainSlider;
+    public Slider BGMSlider;
+    public Slider SFXSlider;
 
     SoundData _data;
 
@@ -73,9 +73,9 @@ public class SoundManager : MonoBehaviour
         _mixer.SetFloat("Master", Mathf.Log10(_data.MasterSoundVal) * 20);
         _mixer.SetFloat("BGSound", Mathf.Log10(_data.BGMSoundVal) * 20);
         _mixer.SetFloat("SFXvolume", Mathf.Log10(_data.SFXSoundVal) * 20);
-        _mainSlider.value = _data.MasterSoundVal;
-        _BGMSlider.value = _data.BGMSoundVal;
-        _SFXSlider.value = _data.SFXSoundVal;
+        MainSlider.value = _data.MasterSoundVal;
+        BGMSlider.value = _data.BGMSoundVal;
+        SFXSlider.value = _data.SFXSoundVal;
     }
 
     public void MasterSoundVolume(float val)

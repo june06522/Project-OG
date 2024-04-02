@@ -151,7 +151,7 @@ public class PlayerInputController : IDisposable
             //var module = Particle.main;
             //module.startLifetime = 0.3f;
 
-            SoundManager.Instance?.SFXPlay("Dash", clip);
+            //SoundManager.Instance?.SFXPlay("Dash", clip);
             OnDashKeyPressed?.Invoke();
             
             
