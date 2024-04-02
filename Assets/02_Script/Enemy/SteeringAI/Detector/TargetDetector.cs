@@ -49,7 +49,8 @@ public class TargetDetector : Detector
                 }
                 else
                 {
-                    colliders = null;
+                    colliders = new List<Transform>() { GameManager.Instance.player.transform };
+                    //colliders = null;
                 }
             }
             else

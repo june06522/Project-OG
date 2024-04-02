@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 4729665105537801447}
   - component: {fileID: 316001206}
   - component: {fileID: 4729665105537801373}
-  - component: {fileID: 5479890625482268552}
+  - component: {fileID: 2589478356598443545}
   m_Layer: 14
   m_Name: MummyEnemy
   m_TagString: HitAble
@@ -194,8 +194,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!70 &5479890625482268552
-CapsuleCollider2D:
+--- !u!61 &2589478356598443545
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -207,9 +207,19 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.61083066}
-  m_Size: {x: 0.5, y: 0.80397725}
-  m_Direction: 0
+  m_Offset: {x: 0, y: -1}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.8, y: 0.1}
+  m_EdgeRadius: 0
 --- !u!1 &5260165441854198155
 GameObject:
   m_ObjectHideFlags: 0
