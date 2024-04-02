@@ -17,6 +17,8 @@ public class PlayerInputController : IDisposable
     public GameObject _interactUI { get; private set; }
     private bool _isDetectIntractObj = false;
 
+    public AudioClip clip;
+
     private PlayerEnerge _playerEnerge;
 
     public void Update(Rigidbody2D rb2D)
@@ -136,7 +138,6 @@ public class PlayerInputController : IDisposable
 
     }
 
-
     private void CheckDashKey()
     {
         if(KeyManager.Instance == null)
@@ -150,7 +151,10 @@ public class PlayerInputController : IDisposable
             //var module = Particle.main;
             //module.startLifetime = 0.3f;
 
+            //SoundManager.Instance?.SFXPlay("Dash", clip);
             OnDashKeyPressed?.Invoke();
+            
+            
 
         }
 

@@ -47,12 +47,4 @@ public class MummyStateController : BaseFSM_Controller<EMummyState>
         AddState(attackState, EMummyState.Attack);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        PlayerHP player;
-        if (collision.transform.TryGetComponent<PlayerHP>(out player))
-        {
-            player.Hit(EnemyDataSO.AttackPower);
-        }
-    }
 }

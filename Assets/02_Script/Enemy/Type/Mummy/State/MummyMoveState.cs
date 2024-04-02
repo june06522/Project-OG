@@ -6,7 +6,7 @@ public class MummyMoveState : MummyRootState
 {
     ChaseAction<EMummyState> chaseAct;
 
-    public MummyMoveState(MummyStateController controller) : base(controller)
+    public MummyMoveState(BaseFSM_Controller<EMummyState> controller) : base(controller)
     {
         List<SteeringBehaviour> behaviourlist = new List<SteeringBehaviour>()
         {

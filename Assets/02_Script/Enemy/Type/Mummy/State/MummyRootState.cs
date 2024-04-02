@@ -4,13 +4,12 @@ using System.Collections.Generic;
 //root°â patrolState
 public class MummyRootState : BaseFSM_State<EMummyState>
 {
-    protected new MummyStateController controller;
     protected EnemyDataSO _data => controller.EnemyDataSO;
 
     PatrolAction<EMummyState> patrolAct;
     protected List<Detector> detectors;
 
-    public MummyRootState(MummyStateController controller) : base(controller)
+    public MummyRootState(BaseFSM_Controller<EMummyState> controller) : base(controller)
     {
         this.controller = controller;
 

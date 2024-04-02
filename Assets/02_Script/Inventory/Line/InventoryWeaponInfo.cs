@@ -162,14 +162,26 @@ public class InventoryWeaponInfo : MonoBehaviour
 
             bool isfind = false;
 
-            //무기 찾음
+            //생성기 찾음
             if (tempData.skills.Length > 0)
             {
                 foreach (var brick in tempData.sendPoints)
                 {
                     if (dir + brick.dir == Vector2Int.zero)
                     {
-                        isfind = true;
+                        //블록 갖고와야댐
+                        Vector2Int tmpPos = tempData.originPos - dir;
+                        InventoryObjectData tmpData = inventory.GetObjectData2(tmpPos, dir);
+                        if(tmpData != null)
+                        {
+                            foreach (SignalPoint item in tmpData.sendPoints)
+                            {
+                                if(tmpPos == item.point + tmpData.originPos &&
+                                    item.dir - dir == Vector2Int.zero)
+                                    isfind = true;
+                            }
+                        }
+
                     }
 
                 }
