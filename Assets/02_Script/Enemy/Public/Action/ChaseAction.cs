@@ -64,11 +64,15 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
         if (dir.magnitude > _data.AttackAbleRange)
         {
+            if(controller.Enemy.enemyAnimController.IsMove == false)
+                controller.Enemy.enemyAnimController.SetMove(true);
             Vector2 movementInput = controller.Solver.GetDirectionToMove(behaviours, controller.AIdata);
             controller.Enemy.MovementInput = movementInput;
         }
         else
+        {
             controller.StopImmediately();
+        }
     }
 
     public override void OnUpdate()

@@ -1,21 +1,16 @@
 using FSM_System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public enum EMummyState
+public class RangeSkeletonStateController : BaseFSM_Controller<EMummyState>
 {
-    Idle = 0,
-    Patrol = 1,
-    Move = 2,
-    Attack
-}
-
-public class MummyStateController : BaseFSM_Controller<EMummyState>
-{
-
     public Transform target;
-    
+
     [SerializeField]
-    public Transform attackPoint;
+    private EnemyBullet _bullet;
+    [SerializeField]
+    private Transform _weapon;
 
     protected override void Start()
     {
@@ -39,12 +34,12 @@ public class MummyStateController : BaseFSM_Controller<EMummyState>
             .AddTransition<EMummyState>(moveToIdle)
             .AddTransition<EMummyState>(moveToAttack);
 
-        var attackState = new MummyAttackState(this);
+        // ½ºÄÌ·¹Åæ ¾îÅÃ
+        var attackState = new BulletAttackState(this, _bullet, _weapon);
 
         AddState(rootState, EMummyState.Idle);
         AddState(patrolState, EMummyState.Patrol);
         AddState(moveState, EMummyState.Move);
         AddState(attackState, EMummyState.Attack);
     }
-
 }

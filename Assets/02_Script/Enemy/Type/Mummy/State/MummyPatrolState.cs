@@ -5,7 +5,7 @@ using UnityEngine;
 public class MummyPatrolState : MummyRootState
 {
     PatrolAction<EMummyState> patrolAct;
-    public MummyPatrolState(MummyStateController controller) : base(controller)
+    public MummyPatrolState(BaseFSM_Controller<EMummyState> controller) : base(controller)
     {
         //behaviour
         List<SteeringBehaviour> behaviourlist = new List<SteeringBehaviour>()

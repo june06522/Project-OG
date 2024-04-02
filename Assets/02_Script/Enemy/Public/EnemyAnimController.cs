@@ -11,6 +11,8 @@ public class EnemyAnimController : MonoBehaviour
     private readonly int MoveHash = Animator.StringToHash("Move");
     private readonly int AttackHash = Animator.StringToHash("Attack");
 
+    public bool IsMove => animator.GetBool(MoveHash);
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();

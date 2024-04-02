@@ -6,9 +6,12 @@ using UnityEngine;
 public class MummyAttackState : MummyRootState
 {
     Transform targetTrm;
+    Transform _attackPoint;
+
     public MummyAttackState(MummyStateController controller) : base(controller)
     {
         targetTrm = GameManager.Instance.player.transform;
+        _attackPoint = controller.attackPoint;
     }
 
     protected override void EnterState()
@@ -35,7 +38,7 @@ public class MummyAttackState : MummyRootState
 
     private void CheckHit()
     {
-        Collider2D col = Physics2D.OverlapCircle(controller.attackPoint.position, 0.25f, LayerMask.GetMask("Player"));
+        Collider2D col = Physics2D.OverlapCircle(_attackPoint.position, 0.4f, LayerMask.GetMask("Player"));
         if (col)
         {
             IHitAble hitAble;

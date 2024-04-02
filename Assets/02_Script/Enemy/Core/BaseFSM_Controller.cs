@@ -47,6 +47,8 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
 
     public void StopImmediately()
     {
+        if(Enemy.enemyAnimController.IsMove)
+            Enemy.enemyAnimController.SetMove(false);
         Enemy.MovementInput = Vector2.zero;
     }
 
