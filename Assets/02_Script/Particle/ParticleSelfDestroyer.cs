@@ -20,6 +20,7 @@ public class ParticleSelfDestroyer : MonoBehaviour
 
             if (col.TryGetComponent<IHitAble>(out var item))
             {
+
                 item.Hit(damage);
 
             }
