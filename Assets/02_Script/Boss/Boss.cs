@@ -7,42 +7,40 @@ using UnityEngine.UI;
 
 public class Boss : MonoBehaviour, IHitAble
 {
-    public GameObject G_bulletCollector;
-
-    public Slider bossHpSlider;
-
-    public List<AudioClip> audios;
-
-    public bool B_isStop;
-    public bool B_dead;
-    public bool B_isDead;
-    public bool B_blocked;
-    public bool B_isRunning;
-    public bool B_awakening;
-    public bool B_patorl;
-
-    public float F_currentHp;
-
-    public BossDataSO bossSo;
-
     public FeedbackPlayer feedbackPlayer { get; set; }
-    public Vector3 V_originPos;
 
-    public event Action DeadEvt;
+    public GameObject bulletCollector;
+
+    public BossMove bossMove;
+
+    public BossDataSO so;
+
+    public Slider bossHPSlider;
+
+    public event Action DieEvt;
     public event Action DeadEndEvt;
 
-    protected Material m_mat;
+    public bool isStop;
+    public bool isAttacking;
+    public bool isDead;
 
-    private void Awake()
+    public bool IsDie
     {
-        m_mat = transform.GetComponent<SpriteRenderer>().material;
+        get { return _isDie; }
+    }
+
+    protected float _currentHP;
+
+    private bool _isDie;
+
+    protected virtual void OnEnable()
+    {
+        _isDie = false;
+        isStop = false;
+        isDead = false;
+        _currentHP = so.MaxHP;
+        DieEvt += DieEvent;
         feedbackPlayer = GetComponent<FeedbackPlayer>();
-        B_isStop = false;
-        B_dead = false;
-        B_patorl = true;
-        F_currentHp = bossSo.MaxHP;
-        DeadEvt += DieEvent;
-        bossHpSlider.value = F_currentHp / bossSo.MaxHP;
     }
 
     protected virtual void OnDisable()
@@ -52,13 +50,13 @@ public class Boss : MonoBehaviour, IHitAble
 
     protected virtual void Update()
     {
-        transform.GetComponent<SpriteRenderer>().material = m_mat;
-        bossHpSlider.value = F_currentHp / bossSo.MaxHP;
+        bossHPSlider.value = _currentHP / so.MaxHP;
     }
 
-    public void StopImmediately(Transform trans)
+    private void DieEvent()
     {
-        trans.position = Vector2.MoveTowards(trans.position, trans.position, Time.deltaTime);
+        _isDie = true;
+        bossHPSlider.value = 0;
     }
 
     public bool Hit(float damage)
@@ -66,132 +64,40 @@ public class Boss : MonoBehaviour, IHitAble
         float critical = UnityEngine.Random.Range(0.25f, 1.75f);
         damage += critical;
 
-        if (B_dead)
+        if (_isDie)
             return false;
 
-        F_currentHp -= damage;
+        _currentHP -= damage;
         feedbackPlayer.Play(damage);
-        //Debug.Log(currentHp + "," + damage);
-        
-        if(F_currentHp < 0)
+
+        if (_currentHP < 0)
         {
-            DeadEvt?.Invoke();
+            DieEvt?.Invoke();
 
             return false;
         }
-    
+
         return true;
     }
 
-    private void DieEvent()
+    public void ChangeMaterial(Material mat)
     {
-        B_dead = true;
-        bossHpSlider.value = 0;
+        transform.GetComponent<SpriteRenderer>().material = mat;
     }
 
-    public IEnumerator BossPatorl(float waitTime, float randX, float randY, float speed)
+    public void StopImmediately(Transform trans)
     {
-        Vector3 targetpatrolPos = transform.localPosition;
-        bool wallChecked = false;
-
-        while (B_patorl)
-        {
-            if (RayWallCheckForMove(transform.position, bossSo.WallCheckRadius) && !wallChecked)
-            {
-                wallChecked = true;
-                yield return new WaitForSeconds(waitTime);
-                targetpatrolPos = (GameManager.Instance.player.transform.position - transform.position).normalized;
-            }
-
-            if (Arrive(transform.localPosition, targetpatrolPos))
-            {
-                if(wallChecked)
-                {
-                    wallChecked = false;
-                }
-                yield return new WaitForSeconds(waitTime);
-                targetpatrolPos = MakeNewPatrolPos(randX, randY);
-            }
-            else
-            {
-                if (B_isStop)
-                {
-                    targetpatrolPos = transform.localPosition;
-                }
-                else
-                {
-                    transform.localPosition = Vector2.MoveTowards(transform.localPosition, targetpatrolPos, Time.deltaTime * speed);
-                }
-            }
-
-            yield return null;
-        }
-    }
-
-    private bool RayWallCheckForMove(Vector3 originPos, float radius)
-    {
-        Collider2D hit = Physics2D.OverlapCircle(originPos, radius, LayerMask.GetMask("Wall"));
-
-        if(hit)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    private bool Arrive(Vector3 myPos, Vector3 targetPos)
-    {
-        if (Mathf.Abs(Vector3.Distance(myPos, targetPos)) <= 0.5f)
-            return true;
-
-        return false;
-    }
-
-    private Vector3 MakeNewPatrolPos(float randX, float randY)
-    {
-        Vector3 newPatrolPos = new Vector2(UnityEngine.Random.Range(-randX, randX), UnityEngine.Random.Range(-randY, randY));
-
-        return newPatrolPos;
-    }
-
-    public bool DontNeedToFollow()
-    {
-        if (CheckPlayerCircleCastB(bossSo.StopRadius))
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private bool CheckPlayerCircleCastB(float radius)
-    {
-        RaycastHit2D[] hit = Physics2D.CircleCastAll(transform.position, radius, Vector2.zero);
-        foreach (var h in hit)
-        {
-            if (h.collider.gameObject.tag == "Player")
-            {
-                return true;
-            }
-        }
-
-        return false;
+        trans.position = Vector2.MoveTowards(trans.position, trans.position, Time.deltaTime);
     }
 
     public void ReturnAll()
     {
-        int childCount = 0;
-        GameObject[] objs;
-
-        childCount = G_bulletCollector.transform.childCount;
-        objs = new GameObject[childCount];
+        int childCount = bulletCollector.transform.childCount;
+        GameObject[] objs = new GameObject[childCount];
 
         for (int i = 0; i < childCount; i++)
         {
-            objs[i] = G_bulletCollector.transform.GetChild(i).gameObject;
+            objs[i] = bulletCollector.transform.GetChild(i).gameObject;
         }
         
         for(int i = 0; i < childCount; i++)
@@ -201,18 +107,9 @@ public class Boss : MonoBehaviour, IHitAble
             ObjectPool.Instance.ReturnObject(objs[i]);
         }
 
-        Destroy(G_bulletCollector.transform.GetChild(0).gameObject);
-    }
-
-    protected virtual void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
+        if(bulletCollector.transform.childCount > 0)
         {
-            Vector2 dir = (collision.gameObject.transform.position - transform.position).normalized;
-
-            transform.position = Vector2.MoveTowards(transform.position, -dir * 2, Time.deltaTime);
-            StopImmediately(transform);
-            B_blocked = true;
+            Destroy(bulletCollector.transform.GetChild(0).gameObject);
         }
     }
 }

@@ -12,7 +12,7 @@ public class RotatingBullet : BossBullet
     }
     private void Update()
     {
-        if (_boss.B_isDead)
+        if (_boss.IsDie)
         {
             ObjectPool.Instance.ReturnObject(ObjectPoolType.BossBulletType5, this.gameObject);
         }

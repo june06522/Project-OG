@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class BossIdleState : BossBaseState
 {
-    public BossIdleState(Boss boss) : base(boss)
+    private Boss _boss;
+    public BossIdleState(Boss boss, BossPatternBase pattern) : base(boss, pattern)
     {
+        _boss = boss;
     }
 
     public override void OnBossStateExit()
@@ -15,7 +17,7 @@ public class BossIdleState : BossBaseState
 
     public override void OnBossStateOn()
     {
-        _boss.transform.localPosition = _boss.V_originPos;
+        _boss.transform.localPosition = Vector3.zero;
         _boss.StopImmediately(_boss.transform);
     }
 
