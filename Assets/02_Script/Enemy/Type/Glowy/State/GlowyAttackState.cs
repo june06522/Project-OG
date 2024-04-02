@@ -28,7 +28,7 @@ public class GlowyAttackState : GlowyRootState
         pointerOn = false;
         yield return new WaitForSeconds(0.1f);
         controller.SetLaserPointerActive(false);
-        StartCoroutine(controller.Shoot(endPos));
+        controller.Shoot(endPos);
 
         yield return new WaitForSeconds(0.5f);
         _data.SetCoolDown();

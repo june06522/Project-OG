@@ -9,48 +9,15 @@ using UnityEngine;
 // 무기가 가지고 있는거
 // 자기 타입, 자기 ID
 
-// 무기 타입
-[Flags]
-[Serializable]
-public enum WeaponType
-{
-    Gun = 1 << 0,       // 총기류
-    Bow = 1 << 1,       // 활
-    Throw = 1 << 2,     // 투척류
-    Sword = 1 << 3,     // 검
-    Spear = 1 << 4,     // 창
-    Sickle = 1 << 5,    // 낫
-    Blunt = 1 << 6,     // 둔기류
-    Whip = 1 << 7,      // 채찍류
-}
-
 // 무기별 ID
 [Serializable]
 public enum WeaponID
 {
     None,       // 아무것도 아님
-    Shotgun,    // 샷건
     Pistol,     // 피스톨
-    Crossbow,   // 석궁
-    Bow,        // 활
-    Slingshot,  // 새총
-    Stone,      // 짱돌
-    Kunai,      // 쿠나이
-    Monkey,     // 몽키스패너
-    WaterBang,  // 물풍선
-    Bomb,       // 폭탄
     Katana,     // 카타나
-    Branch,     // 나뭇가지
-    Tennis,     // 테니스라켓
-    Spear,      // 창
-    Cane,       // 지팡이
-    Golfclub,   // 골프채
-    Sickle,     // 낫
     Hammer,     // 망치
-    Pickaxe,    // 곡괭이
-    Bat,        // 빠따
-    Rope,       // 로프
-    Chain,      // 쇠사슬
+    Book,
 }
 
 // 생성기별 ID
