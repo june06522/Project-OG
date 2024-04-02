@@ -16,7 +16,7 @@ public class SFXSound : MonoBehaviour
     {
         if (SoundManager.Instance != null)
         {
-            SoundManager.Instance._SFXSlider = slider;
+            SoundManager.Instance.SFXSlider = slider;
             slider.onValueChanged.AddListener(SoundManager.Instance.SFXVolume);
         }
     }

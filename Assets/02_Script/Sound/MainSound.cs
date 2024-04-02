@@ -16,7 +16,7 @@ public class MainSound : MonoBehaviour
     {
         if (SoundManager.Instance != null)
         {
-            SoundManager.Instance._mainSlider = slider;
+            SoundManager.Instance.MainSlider = slider;
             slider.onValueChanged.AddListener(SoundManager.Instance.MasterSoundVolume);
         }
     }
