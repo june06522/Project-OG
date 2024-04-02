@@ -13,7 +13,6 @@ public class BossMove : MonoBehaviour
 
         while (!boss.IsDie)
         {
-            
             if (RayWallCheckForMove(transform.position, wallCheckRadius) && !wallChecked)
             {
                 wallChecked = true;

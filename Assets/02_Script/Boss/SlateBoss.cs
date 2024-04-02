@@ -23,6 +23,7 @@ public class SlateBoss : Boss
     public Material laserMat;
     public Material hologramMinimiMat;
     public Material bulletMat;
+    public Material StopMat;
 
     public float minimiAwayDistance;
 
@@ -48,6 +49,8 @@ public class SlateBoss : Boss
 
     protected override void OnEnable()
     {
+        base.OnEnable();
+
         transform.gameObject.layer = LayerMask.NameToLayer("Boss");
         _pattern = GetComponent<SlatePattern>();
         transform.GetComponent<SpriteRenderer>().sprite = fullHPSprite;
@@ -55,7 +58,6 @@ public class SlateBoss : Boss
         halfHP = false;
         _curBossState = BossState.Idle;
         _bossFSM = new BossFSM(new BossIdleState(this, _pattern));
-        StartCoroutine(bossMove.BossMovement(so.StopTime, so.MoveX, so.MoveY, so.Speed, so.WallCheckRadius));
 
         ChangeState();
     }
@@ -69,7 +71,7 @@ public class SlateBoss : Boss
     {
         base.Update();
 
-        if (IsDie)
+        if (IsDie && !isDead)
         {
             fullHP = false;
             halfHP = false;
@@ -77,13 +79,12 @@ public class SlateBoss : Boss
             ChangeBossState(BossState.Dead);
         }
 
-        if (!IsDie)
+        if (!isDead)
         {
             if(!isAttacking)
             {
                 ChangeState();
             }
-            
             _bossFSM.UpdateBossState();
         }
     }
@@ -123,6 +124,7 @@ public class SlateBoss : Boss
                 _bossFSM.ChangeBossState(new SHalfHPState(this, _pattern));
                 break;
             case BossState.Dead:
+                isDead = true;
                 _bossFSM.ChangeBossState(new SDeadState(this, _pattern));
                 break;
         }

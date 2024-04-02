@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class SlatePattern : BossPatternBase
 {
-    public IEnumerator Laser(SlateBoss boss, GameObject[] objs, LineRenderer[] lines, Vector3[] pos, float warningTime, float fireTime, float speed, float goBackTime, float minimiMoveSpeed)
+    public IEnumerator Laser(SlateBoss boss, GameObject[] objs, LineRenderer[] lines, Vector3[] pos, float warningTime, float fireTime, float speed, float goBackTime, float minimiMoveSpeed, bool breaker)
     {
-        if (!boss.fullHP)
+        if (!breaker)
             yield break;
 
         boss.isStop = true;
@@ -17,40 +17,26 @@ public class SlatePattern : BossPatternBase
 
         for (int i = 0; i < objs.Length; i++)
         {
-            //objs[i].GetComponent<SpriteRenderer>().material = boss.L_materials[1];
+            objs[i].GetComponent<SpriteRenderer>().material = boss.warningMat;
             objs[i].transform.SetParent(null);
         }
 
         Vector3[] target = new Vector3[objs.Length];
 
-        int rand = Random.Range(0, 2);
+        int rand = Random.Range(0, 8);
+        int sum = 0;
 
-        if (rand == 0)
+        for (int i = 0; i < objs.Length; i++)
         {
-            for (int i = 0; i < objs.Length; i++)
+            if (rand + sum + i <= 7)
             {
-                if (i == 0)
-                {
-                    target[i] = boss.minimisPositions.transform.GetChild(rand).transform.position;
-                }
-                else
-                {
-                    target[i] = boss.minimisPositions.transform.GetChild(rand + 4).transform.position;
-                }
+                target[i] = boss.minimisPositions.transform.GetChild(rand + sum + i).transform.position;
+                sum += i + 1;
             }
-        }
-        else
-        {
-            for (int i = 0; i < objs.Length; i++)
+            else
             {
-                if (i == 0)
-                {
-                    target[i] = boss.minimisPositions.transform.GetChild(rand + 1).transform.position;
-                }
-                else
-                {
-                    target[i] = boss.minimisPositions.transform.GetChild(rand + 5).transform.position;
-                }
+                target[i] = boss.minimisPositions.transform.GetChild(rand + sum + i - 8).transform.position;
+                sum += i + 1;
             }
         }
 
@@ -74,7 +60,7 @@ public class SlatePattern : BossPatternBase
 
         for (int i = 0; i < objs.Length; i++)
         {
-            //SetLineMaterial(boss.L_materials[1]);
+            SetLineMaterial(boss.warningMat, objs, lines);
             lines[i].SetPosition(0, RayWallCheck(objs[i].transform.position, Vector2.down));
             lines[i].startWidth = 0.05f;
             ShowLineRenderer(objs[i].transform.position, lines[i], Vector2.up, 0.05f);
@@ -83,13 +69,13 @@ public class SlatePattern : BossPatternBase
         yield return new WaitForSeconds(warningTime);
 
         curTime = 0;
-        //SetLineMaterial(boss.L_materials[2]);
+        SetLineMaterial(boss.laserMat, objs, lines);
         for (int i = 0; i < objs.Length; i++)
         {
-            //objs[i].GetComponent<SpriteRenderer>().material = boss.L_materials[0];
+            objs[i].GetComponent<SpriteRenderer>().material = boss.StopMat;
         }
 
-        //SoundManager.Instance.SFXPlay("Laser", boss.audios[2], boss.bulletCollector.transform, 0.3f);
+        SoundManager.Instance.SFXPlay("Laser", boss.laserClip, boss.bulletCollector.transform, 0.3f);
 
         while (curTime < fireTime)
         {
@@ -137,7 +123,7 @@ public class SlatePattern : BossPatternBase
         for (int i = 0; i < objs.Length; i++)
         {
             lines[i].enabled = false;
-            //objs[i].GetComponent<SpriteRenderer>().material = objs.L_materials[6];
+            objs[i].GetComponent<SpriteRenderer>().material = boss.hologramMinimiMat;
         }
 
         yield return new WaitForSeconds(goBackTime);
@@ -169,7 +155,7 @@ public class SlatePattern : BossPatternBase
 
         for (int i = 0; i < objs.Length; i++)
         {
-            //objs[i].GetComponent<SpriteRenderer>().material = boss.L_materials[5];
+            objs[i].GetComponent<SpriteRenderer>().material = boss.minimiBasicMat;
         }
 
         boss.isAttacking = false;
@@ -225,14 +211,14 @@ public class SlatePattern : BossPatternBase
         return Vector2.zero;
     }
 
-    public IEnumerator TornadoShot(SlateBoss boss, GameObject[] objs, int bulletCount, float speed, float time, int turnCount)
+    public IEnumerator TornadoShot(SlateBoss boss, GameObject[] objs, int bulletCount, float speed, float time, int turnCount, bool breaker)
     {
-        if (!boss.fullHP)
+        if (!breaker)
             yield break;
 
         for (int i = 0; i < turnCount; i++)
         {
-            //SoundManager.Instance.SFXPlay("Fire", boss.audios[1]);
+            SoundManager.Instance.SFXPlay("Fire", boss.fireClip);
             for (int j = 0; j < bulletCount; j++)
             {
                 for (int k = 0; k < objs.Length; k++)
@@ -258,7 +244,7 @@ public class SlatePattern : BossPatternBase
     {
         GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
         bullet.GetComponent<BossBullet>().Attack(boss.so.Damage);
-        //bullet.GetComponent<SpriteRenderer>().material = boss.L_materials[3];
+        bullet.GetComponent<SpriteRenderer>().material = boss.bulletMat;
         bullet.transform.position = pos;
         bullet.transform.rotation = Quaternion.identity;
 
@@ -267,9 +253,9 @@ public class SlatePattern : BossPatternBase
         rigid.velocity = dir.normalized * speed;
     }
 
-    public IEnumerator StarAttack(SlateBoss boss, int bulletCount, float speed, float time, int burstCount)
+    public IEnumerator StarAttack(SlateBoss boss, int bulletCount, float speed, float time, int burstCount, bool breaker)
     {
-        if (!boss.fullHP)
+        if (!breaker)
             yield break;
 
         boss.isStop = true;
@@ -278,7 +264,7 @@ public class SlatePattern : BossPatternBase
 
         for (int i = 0; i < burstCount; i++)
         {
-            //SoundManager.Instance.SFXPlay("Fire", boss.audios[1]);
+            SoundManager.Instance.SFXPlay("Fire", boss.fireClip);
             for (int j = 0; j < bulletCount; j++)
             {
                 if (r > 1.1f)
@@ -287,7 +273,7 @@ public class SlatePattern : BossPatternBase
                     plus = true;
                 GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
                 bullet.GetComponent<BossBullet>().Attack(boss.so.Damage);
-                //bullet.GetComponent<SpriteRenderer>().material = boss.L_materials[3];
+                bullet.GetComponent<SpriteRenderer>().material = boss.bulletMat;
                 bullet.transform.position = boss.transform.position;
                 bullet.transform.rotation = Quaternion.identity;
 
@@ -308,23 +294,23 @@ public class SlatePattern : BossPatternBase
         boss.isStop = false;
     }
 
-    public IEnumerator RandomMoveAttack(SlateBoss boss, GameObject[] objs, int bulletCount, float speed, float time, int burstCount)
+    public IEnumerator RandomMoveAttack(SlateBoss boss, GameObject[] objs, int bulletCount, float speed, float time, int burstCount, bool breaker)
     {
-        if (!boss.fullHP)
+        if (!breaker)
             yield break;
 
         GameObject[,,] bullets = new GameObject[objs.Length, burstCount, bulletCount];
 
         for (int i = 0; i < burstCount; i++)
         {
-            //SoundManager.Instance.SFXPlay("Fire", boss.audios[1]);
+            SoundManager.Instance.SFXPlay("Fire", boss.fireClip);
             for (int j = 0; j < bulletCount; j++)
             {
                 for (int k = 0; k < objs.Length; k++)
                 {
                     bullets[k, i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.SlateBullet, boss.bulletCollector.transform);
                     bullets[k, i, j].GetComponent<BossBullet>().Attack(boss.so.Damage);
-                    //bullets[k, i, j].GetComponent<SpriteRenderer>().material = boss.L_materials[3];
+                    bullets[k, i, j].GetComponent<SpriteRenderer>().material = boss.bulletMat;
                     bullets[k, i, j].transform.position = objs[k].transform.position;
                     bullets[k, i, j].transform.rotation = Quaternion.identity;
 
@@ -381,9 +367,9 @@ public class SlatePattern : BossPatternBase
         boss.isAttacking = false;
     }
 
-    public IEnumerator StopAndGoAttack(SlateBoss boss, int bulletCount, float speed, float time, int burstCount)
+    public IEnumerator StopAndGoAttack(SlateBoss boss, int bulletCount, float speed, float time, int burstCount, bool breaker)
     {
-        if (!boss.fullHP)
+        if (!breaker)
             yield break;
 
         GameObject[,] bullets = new GameObject[burstCount, bulletCount];
@@ -392,12 +378,12 @@ public class SlatePattern : BossPatternBase
 
         for (int i = 0; i < burstCount; i++)
         {
-            //SoundManager.Instance.SFXPlay("Fire", boss.audios[1]);
+            SoundManager.Instance.SFXPlay("Fire", boss.fireClip);
             for (int j = 0; j < bulletCount; j++)
             {
                 bullets[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
                 bullets[i, j].GetComponent<BossBullet>().Attack(boss.so.Damage);
-                //bullets[i, j].GetComponent<SpriteRenderer>().material = boss.L_materials[3];
+                bullets[i, j].GetComponent<SpriteRenderer>().material = boss.bulletMat;
                 bullets[i, j].transform.position = boss.transform.position;
                 bullets[i, j].transform.rotation = Quaternion.identity;
 
@@ -411,7 +397,7 @@ public class SlatePattern : BossPatternBase
             if (i > 0)
                 for (int j = 0; j < bulletCount; j++)
                 {
-                    //bullets[i - 1, j].GetComponent<SpriteRenderer>().material = boss.L_materials[3];
+                    bullets[i - 1, j].GetComponent<SpriteRenderer>().material = boss.bulletMat;
                     Rigidbody2D rigid = bullets[i - 1, j].GetComponent<Rigidbody2D>();
                     Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * j / bulletCount), Mathf.Sin(Mathf.PI * 2 * j / bulletCount));
                     rigid.velocity = dir.normalized * speed;
@@ -419,7 +405,7 @@ public class SlatePattern : BossPatternBase
 
             for (int j = 0; j < bulletCount; j++)
             {
-                //bullets[i, j].GetComponent<SpriteRenderer>().material = boss.L_materials[4];
+                bullets[i, j].GetComponent<SpriteRenderer>().material = boss.StopMat;
                 Rigidbody2D rigid = bullets[i, j].GetComponent<Rigidbody2D>();
                 rigid.velocity = Vector2.zero;
             }
@@ -433,7 +419,7 @@ public class SlatePattern : BossPatternBase
         {
             for (int i = 0; i < bulletCount; i++)
             {
-                //bullets[counting, i].GetComponent<SpriteRenderer>().material = boss.L_materials[4];
+                bullets[counting, i].GetComponent<SpriteRenderer>().material = boss.StopMat;
                 Rigidbody2D rigid = bullets[counting, i].GetComponent<Rigidbody2D>();
                 rigid.velocity = Vector2.zero;
             }
@@ -442,7 +428,7 @@ public class SlatePattern : BossPatternBase
             {
                 for (int i = 0; i < bulletCount; i++)
                 {
-                    //bullets[counting - 1, i].GetComponent<SpriteRenderer>().material = boss.L_materials[3];
+                    bullets[counting - 1, i].GetComponent<SpriteRenderer>().material = boss.bulletMat;
                     Rigidbody2D rigid = bullets[counting - 1, i].GetComponent<Rigidbody2D>();
                     Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / bulletCount), Mathf.Sin(Mathf.PI * 2 * i / bulletCount));
                     rigid.velocity = dir.normalized * speed;
@@ -452,7 +438,7 @@ public class SlatePattern : BossPatternBase
             {
                 for (int i = 0; i < bulletCount; i++)
                 {
-                    //bullets[burstCount - 1, i].GetComponent<SpriteRenderer>().material = boss.L_materials[3];
+                    bullets[burstCount - 1, i].GetComponent<SpriteRenderer>().material = boss.bulletMat;
                     Rigidbody2D rigid = bullets[burstCount - 1, i].GetComponent<Rigidbody2D>();
                     Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / bulletCount), Mathf.Sin(Mathf.PI * 2 * i / bulletCount));
                     rigid.velocity = dir.normalized * speed;
@@ -469,11 +455,9 @@ public class SlatePattern : BossPatternBase
             yield return new WaitForSeconds(time);
         }
 
-        yield return new WaitForSeconds(time);
-
         for (int i = 0; i < bulletCount; i++)
         {
-            //bullets[burstCount - 1, i].GetComponent<SpriteRenderer>().material = boss.L_materials[3];
+            bullets[burstCount - 1, i].GetComponent<SpriteRenderer>().material = boss.bulletMat;
             Rigidbody2D rigid = bullets[burstCount - 1, i].GetComponent<Rigidbody2D>();
             Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / bulletCount), Mathf.Sin(Mathf.PI * 2 * i / bulletCount));
             rigid.velocity = dir.normalized * speed;

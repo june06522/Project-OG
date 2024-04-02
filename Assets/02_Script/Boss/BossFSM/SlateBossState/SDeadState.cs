@@ -18,7 +18,7 @@ public class SDeadState : BossBaseState
     public override void OnBossStateOn()
     {
         _slate.gameObject.layer = LayerMask.NameToLayer("Default");
-        //_slate.GetComponent<SpriteRenderer>().sprite = _slate.L_sprite[2];
+        _slate.GetComponent<SpriteRenderer>().sprite = _slate.deadSprite;
         _slate.StopAllCoroutines();
         _slate.ReturnAll();
         _slate.LaserReturnAll();
@@ -32,7 +32,7 @@ public class SDeadState : BossBaseState
 
     private IEnumerator Dying(float disappearingTime, float disappearSpeed, int explosionCount, float explosionWaitTime)
     {
-        //SoundManager.Instance.SFXPlay("Dead", _slate.audios[0], 1);
+        SoundManager.Instance.SFXPlay("Dead", _slate.deadClip, 1);
         float curTime = 0;
         float a = 1;
         for(int i = 0; i < explosionCount; i++)
