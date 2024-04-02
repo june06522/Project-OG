@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 4990930975405970200}
   - component: {fileID: 6675986348196730646}
   - component: {fileID: 2091635520943571005}
-  - component: {fileID: 1200672517490426664}
+  - component: {fileID: 6580592212243090350}
   m_Layer: 14
   m_Name: SkeletonEnemy
   m_TagString: HitAble
@@ -197,8 +197,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!70 &1200672517490426664
-CapsuleCollider2D:
+--- !u!61 &6580592212243090350
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -210,9 +210,19 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.61083066}
-  m_Size: {x: 0.5, y: 0.80397725}
-  m_Direction: 0
+  m_Offset: {x: 0, y: -1}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.8, y: 0.1}
+  m_EdgeRadius: 0
 --- !u!1 &3500078759199392359
 GameObject:
   m_ObjectHideFlags: 0
