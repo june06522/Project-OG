@@ -5,7 +5,6 @@ using UnityEngine;
 using System;
 public class DashEventReceiver : InventoryEventReceiverBase
 {
-    public WeaponType targetType;
     public GeneratorID generatorID;
 
     protected override void OnInit()
@@ -31,8 +30,8 @@ public class DashEventReceiver : InventoryEventReceiverBase
     private void HandleDash()
     {
 
-        SendData s = new SendData(targetType, generatorID);
-        
+        SendData s = new SendData(generatorID);
+
         GetSignal(s);
 
     }
