@@ -64,24 +64,10 @@ public class GlowyStateController : BaseFSM_Controller<EGlowyState>
 
     public void SetLaserPointerActive(bool value) => pointer.SetActive(value);
 
-    public IEnumerator Shoot(Vector2 endPos)
+    public void Shoot(Vector2 endPos)
     {
         SoundManager.Instance.SFXPlay("Lazer", _lazerClip);
-        Vector2 dir = (endPos - (Vector2)attackPoint.position);
-        laserBullet.Shoot(attackPoint.position, endPos);
-
-        yield return new WaitForSeconds(0.2f);
-        RaycastHit2D hit = 
-            Physics2D.Raycast(attackPoint.position, dir.normalized, dir.magnitude, LayerMask.GetMask("Player"));
-        if (hit.collider != null)
-        {
-            IHitAble hitAble;
-            if(hit.collider.TryGetComponent<IHitAble>(out hitAble))
-            {
-                hitAble.Hit(EnemyDataSO.AttackPower);
-                Debug.Log("Hit");
-            }
-        }
+        laserBullet.Shoot(attackPoint.position, endPos, EnemyDataSO.AttackPower, false);
     }
 
     private void OnDestroy()
