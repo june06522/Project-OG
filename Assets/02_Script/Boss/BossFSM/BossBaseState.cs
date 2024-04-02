@@ -4,11 +4,11 @@ using UnityEngine;
 
 public abstract class BossBaseState
 {
-    protected Boss _boss;
+    private Boss _boss;
 
     protected IEnumerator co;
 
-    protected BossBaseState(Boss boss)
+    protected BossBaseState(Boss boss, BossPatternBase pattern)
     {
         _boss = boss;
     }
@@ -28,7 +28,7 @@ public abstract class BossBaseState
 
     public void StopThisCoroutine()
     {
-        _boss.B_isRunning = false;
+        _boss.isAttacking = false;
         if(co != null)
             _boss.StopCoroutine(co);
     }
