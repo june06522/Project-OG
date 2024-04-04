@@ -47,15 +47,19 @@ public class LaserBullet : MonoBehaviour
         }
 
         Vector2 dir = endPos - startPos;
-        RaycastHit2D hit =
-            Physics2D.CircleCast(startPos, lineWidth / 2, dir.normalized, dir.magnitude, hitMask);
-        if (hit.collider != null)
+        RaycastHit2D[] hits =
+            Physics2D.CircleCastAll(startPos, lineWidth / 2, dir.normalized, dir.magnitude, hitMask);
+        
+        foreach(var hit in hits)
         {
-            IHitAble hitAble;
-            if (hit.collider.TryGetComponent<IHitAble>(out hitAble))
+            if (hit.collider != null)
             {
-                hitAble.Hit(damage);
-                Debug.Log("Hit");
+                IHitAble hitAble;
+                if (hit.collider.TryGetComponent<IHitAble>(out hitAble))
+                {
+                    hitAble.Hit(damage);
+                    Debug.Log("Hit");
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Search;
 using UnityEngine;
 
 [Serializable]
@@ -18,7 +19,7 @@ public class Skill : MonoBehaviour
     /// 현재 연결된 연결부 갯수에 따른 스킬 강화를 진행
     /// </summary>
     /// <param name="power"></param>
-    public void CurPowerInit(int power)
+    protected virtual void CurPowerInit(int power)
     {
         power = Mathf.Clamp(power, 1, 5);
         switch (power) 
@@ -28,7 +29,7 @@ public class Skill : MonoBehaviour
             case 3: Power3(); break;
             case 4: Power4(); break;
             case 5: Power5(); break;
-        }
+        }   
     }
 
     public virtual void Power1() { }    

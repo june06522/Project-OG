@@ -5,16 +5,23 @@ using System.Linq.Expressions;
 using UnityEditor;
 using UnityEngine;
 
+public enum BurstState
+{
+    Normal,
+    Penetrate,
+    Laser
+}
+public struct BurstMember
+{
+    public int _curBurstCount;
+    public int _penetrateCnt;
+    public float _curBurstSpeed;
+    public float _curDamage;
+    public BurstState _curState;
+}
+
 public class BurstSkil : Skill
 {
-    enum BurstState
-    {
-        Normal,
-        Penetrate,
-        Laser
-    }
-    private BurstState _curState;
-
 
     [Header("Prefab")]
     [SerializeField]
@@ -38,12 +45,8 @@ public class BurstSkil : Skill
     [SerializeField] 
     private float _weaponDamage;
 
-    private int _curBurstCount;
-    private int _penetrateCnt;
-    private float _curBurstSpeed;
-    private float _curDamage;
-
     private Dictionary<Transform, bool> _playingDictionary;
+    private Dictionary<Transform, BurstMember> _powerDictionary;
 
     private void OnEnable()
     {
@@ -51,14 +54,18 @@ public class BurstSkil : Skill
             _playingDictionary.Clear();
         else
             _playingDictionary = new Dictionary<Transform, bool>();
+
+
+        if (_powerDictionary != null)
+            _powerDictionary.Clear();
+        else
+            _powerDictionary = new Dictionary<Transform, BurstMember>();
     }
 
     public override void Excute(Transform weaponTrm, Transform target, int power)
     {
-        CurPowerInit(power);
+        _powerDictionary[weaponTrm] = CurPowerInit(power);
 
-
-        Debug.Log("gang");
         bool isPlaying = true;
         if (_playingDictionary.TryGetValue(weaponTrm, out isPlaying))
         {
@@ -66,7 +73,7 @@ public class BurstSkil : Skill
         }
 
 
-        if (_curState == BurstState.Laser)
+        if (_powerDictionary[weaponTrm]._curState == BurstState.Laser)
         {
             StartCoroutine("LaserAttack", weaponTrm);
         }
@@ -81,21 +88,23 @@ public class BurstSkil : Skill
     private IEnumerator BurstAttack(Transform weaponTrm)
     {
         Transform attackTrm = weaponTrm.GetChild(0);
-        for (int i = 0; i < _curBurstCount; i++)
+        BurstMember bM = _powerDictionary[weaponTrm];
+
+        for (int i = 0; i < bM._curBurstCount; i++)
         {
             weaponTrm.DOShakePosition(0.1f, 0.25f);
-            if(_curState == BurstState.Penetrate)
+            if(bM._curState == BurstState.Penetrate)
             {
                 PenetrateBullet bullet = 
                     Instantiate(_penetrateBulletPrefab, attackTrm.position, weaponTrm.rotation);
-                bullet.Init(_penetrateCnt);
-                bullet.Shoot(_curDamage);
+                bullet.Init(bM._penetrateCnt);
+                bullet.Shoot(bM._curDamage);
             }
             else
             {
-                Instantiate(_bulletPrefab, attackTrm.position, weaponTrm.rotation).Shoot(_curDamage);
+                Instantiate(_bulletPrefab, attackTrm.position, weaponTrm.rotation).Shoot(bM._curDamage);
             }
-            yield return new WaitForSeconds(_curBurstSpeed);
+            yield return new WaitForSeconds(bM._curBurstSpeed);
         }
 
         _playingDictionary[weaponTrm] = false;
@@ -106,57 +115,72 @@ public class BurstSkil : Skill
         weaponTrm.DOKill();
         weaponTrm.DOShakePosition(0.5f, 0.5f);
 
+        BurstMember bM = _powerDictionary[weaponTrm];
         Transform attackTrm = weaponTrm.GetChild(0);
       
         Instantiate(_laserPrefab, attackTrm.position, weaponTrm.rotation)
-            .Shoot(attackTrm.position, weaponTrm.right * 30, _curDamage, true);
+            .Shoot(attackTrm.position, weaponTrm.right * 30, bM._curDamage, true);
 
         yield return new WaitForSeconds(1f);
         _playingDictionary[weaponTrm] = false;
     }
 
-
-
-    public override void Power1()
+    protected new BurstMember CurPowerInit(int power)
     {
-        _curBurstCount = _minBurstCount;
-        _curBurstSpeed = _maxBurstSpeed;
-        _curDamage = _weaponDamage;
+        power = Mathf.Clamp(power, 1, 5);
+        BurstMember bM = new();
+        switch (power)
+        {
+            case 1: Power1(ref bM); break;
+            case 2: Power2(ref bM); break;
+            case 3: Power3(ref bM); break;
+            case 4: Power4(ref bM); break;
+            case 5: Power5(ref bM); break;
+        }
 
-        _curState = BurstState.Normal;
+        return bM;
+    }
+
+    private void Power1(ref BurstMember bM)
+    {
+        bM._curBurstSpeed = _minBurstSpeed;
+        bM._curBurstCount = _minBurstCount;
+        bM._curDamage = _weaponDamage;
+        
+        bM._curState = BurstState.Normal;
     } 
 
 
-    public override void Power2()
+    private void Power2(ref BurstMember bM)
     {
-        _curBurstCount = (int)Mathf.Lerp(_minBurstCount, _maxBurstCount, 0.3f);
-        _curBurstSpeed = Mathf.Lerp(_minBurstSpeed, _maxBurstSpeed, 0.5f);
-        _curDamage = _weaponDamage * 1.25f;
-
-        _curState = BurstState.Normal;
+        bM._curBurstCount = (int)Mathf.Lerp(_minBurstCount, _maxBurstCount, 0.3f);
+        bM._curBurstSpeed = Mathf.Lerp(_minBurstSpeed, _maxBurstSpeed, 0.5f);
+        bM._curDamage = _weaponDamage * 1.25f;
+        
+        bM._curState = BurstState.Normal;
     }
 
-    public override void Power3()
+    private void Power3(ref BurstMember bM)
     {
-        _curBurstCount = (int)Mathf.Lerp(_minBurstCount, _maxBurstCount, 0.6f);
-        _curBurstSpeed = Mathf.Lerp(_minBurstSpeed, _maxBurstSpeed, 0.25f);
-        _curDamage = _weaponDamage * 2f;
-        _penetrateCnt = 2;
-        _curState = BurstState.Penetrate;
+        bM._curBurstCount = (int)Mathf.Lerp(_minBurstCount, _maxBurstCount, 0.6f);
+        bM._curBurstSpeed = Mathf.Lerp(_minBurstSpeed, _maxBurstSpeed, 0.25f);
+        bM._curDamage = _weaponDamage * 2f;
+        bM._penetrateCnt = 2;
+        bM._curState = BurstState.Penetrate;
     }
 
-    public override void Power4()
+    private void Power4(ref BurstMember bM)
     {
-        _curBurstCount = _maxBurstCount;
-        _curBurstSpeed = _minBurstSpeed;
-        _curDamage = _weaponDamage * 2.5f;
-        _penetrateCnt = 4;
-        _curState = BurstState.Penetrate;
+        bM._curBurstCount = _maxBurstCount;
+        bM._curBurstSpeed = _minBurstSpeed;
+        bM._curDamage = _weaponDamage * 2.5f;
+        bM._penetrateCnt = 4;
+        bM._curState = BurstState.Penetrate;
     }
 
-    public override void Power5()
+    private void Power5(ref BurstMember bM)
     {
-        _curDamage = _weaponDamage * 10;
-        _curState = BurstState.Laser;
+        bM._curDamage = _weaponDamage * 10;
+        bM._curState = BurstState.Laser;
     }
 }
