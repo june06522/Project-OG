@@ -46,7 +46,10 @@ public enum StageType
 {
     EnemyStage = 0,
     EventStage = 1,
-    BossStage = 2
+    BossStage = 2,
+
+    Shop = 4,
+    Start = 5
 }
 
 public class Stage : MonoBehaviour

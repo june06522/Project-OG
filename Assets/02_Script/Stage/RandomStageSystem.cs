@@ -1,7 +1,16 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+
+[System.Serializable]
+public struct FloorList
+{
+    public List<FloorInfoSO> floors;
+}
 
 public class RandomStageSystem : MonoBehaviour
 {
@@ -9,31 +18,17 @@ public class RandomStageSystem : MonoBehaviour
 
     // Stage changes as difficulty increases
     [SerializeField]
-    private List<StageListSO> _stageLists = new List<StageListSO>();
-    [SerializeField]
-    private List<StageListSO> _bossStageLists = new List<StageListSO>();
-
-    [SerializeField]
-    private StageListSO _eventStageLists;
-
-    [SerializeField]
-    private int _stageCount = 0;
-    [SerializeField]
-    private int _eventStageCount = 0;
-
-    private int _frontStageCount;
-    private int _backStageCount;
-
-    private List<Stage> _randomStageList = new List<Stage>();
-    private List<Stage> _randomEventStageList = new List<Stage>();
+    private List<FloorList> _floorStageList = new List<FloorList>();
 
     [Header("Game Info")]
     [SerializeField]
-    private Stage _startStage;
-    private Stage _firstStage;
+    private TextMeshProUGUI _floorTitle;
+    [SerializeField]
+    private TextMeshProUGUI _floorTipText;
 
+    private Stage _firstStage;
     private int _step = 0;
-    private int _stageInterval = 50;
+    private int _stageInterval = 80;
     private Vector3 _spawnPos = Vector3.zero;
 
     private void Start()
@@ -43,88 +38,95 @@ public class RandomStageSystem : MonoBehaviour
 
     public void CreateStage()
     {
-        _frontStageCount = _stageCount / 2;
-        _backStageCount = _stageCount - _frontStageCount;
-
         _spawnPos = _spawnPos + new Vector3(0, _stageInterval, 0);
         GameManager.Instance.player.position = _spawnPos;
 
+        FloorInfoSO floorInfo = GetRandomFloor(_floorStageList[_step].floors);
+        PrintStage(floorInfo);
+        StartStageEvent(floorInfo);
+    }
+
+    private void StartStageEvent(FloorInfoSO floorInfo)
+    {
+        if (_floorTitle == null || _floorTipText == null)
+            return;
+
+        // Title
+        _floorTitle.text = floorInfo.FloorName;
+
+        // Tip
+        _floorTipText.text = floorInfo.FloorTip[Random.Range(0, floorInfo.FloorTip.Count)];
+
+        // Anim
+        _floorTitle.color = Color.white;
+        _floorTipText.color = Color.white;
+
+        Sequence seq = DOTween.Sequence();
+        seq.Append(_floorTitle.rectTransform.DOScale(Vector3.one * 1.2f, 0.2f).SetEase(Ease.OutElastic));
+        seq.Append(_floorTipText.rectTransform.DOScale(Vector3.one * 1.2f, 0.2f).SetEase(Ease.InOutQuint));
+
+        seq.Append(_floorTitle.rectTransform.DOScale(Vector3.one, 2f))
+            .Join(_floorTitle.DOFade(0f, 2f))
+            .Join(_floorTipText.rectTransform.DOScale(Vector3.one, 2f))
+            .Join(_floorTitle.DOFade(0f, 2f));
+    }
+
+    private void PrintStage(FloorInfoSO floorInfo)
+    {
+
         #region List Setting
-        _randomStageList.Clear();
-        _randomEventStageList.Clear();
+        List<StageType> printStageInfo = floorInfo.PrintStageInfo;
 
-        // shuffle
-        _randomStageList = _stageLists[_step].stages.ToList<Stage>();
-        _randomEventStageList = _eventStageLists.stages.ToList<Stage>();
+        List<Stage> stages = GetStageList(floorInfo, StageType.EnemyStage);
+        List<Stage> eventStages = GetStageList(floorInfo, StageType.EventStage);
+        List<Stage> bossStages = GetStageList(floorInfo, StageType.BossStage);
 
-        for(int i = 0; i < _randomStageList.Count; i++)
-        {
-            int randomIdx = Random.Range(i, _randomStageList.Count);
-
-            Stage temp = _randomStageList[i];
-            _randomStageList[i] = _randomStageList[randomIdx];
-            _randomStageList[randomIdx] = temp;
-        }
-        for (int i = 0; i < _randomEventStageList.Count; ++i)
-        {
-            int randomIdx = Random.Range(i, _randomEventStageList.Count);
-
-            Stage temp = _randomEventStageList[i];
-            _randomEventStageList[i] = _randomEventStageList[randomIdx];
-            _randomEventStageList[randomIdx] = temp;
-        }
+        Queue<Stage> enemyStageQ = ShuffleStageList(stages);
+        Queue<Stage> eventStageQ = ShuffleStageList(eventStages);
+        Queue<Stage> bossStageQ = ShuffleStageList(bossStages);
         #endregion
 
         #region Create Stages
-        _firstStage = Instantiate(_startStage, _spawnPos, Quaternion.identity);
-        Stage lastStage = _firstStage;
-        // Stage before EventStage
-        for (int i = 0; i < _frontStageCount; i++)
+        Stage lastStage = _firstStage = Instantiate(floorInfo.StartStage, _spawnPos, Quaternion.identity);
+        
+
+        for (int i = 0; i < printStageInfo.Count; ++i)
         {
+            if (i == 0 && printStageInfo[i] == StageType.Start)
+                continue;
+
+            // current Spawn Stage
+            Stage stage = null;
+
+            switch (printStageInfo[i])
+            {
+                case StageType.EnemyStage:
+                    stage = enemyStageQ.Dequeue();
+                    break;
+                case StageType.EventStage:
+                    stage = eventStageQ.Dequeue();
+                    break;
+                case StageType.BossStage:
+                    stage = bossStageQ.Dequeue();
+                    break;
+                case StageType.Shop:
+                    stage = floorInfo.ShopStage;
+                    break;
+                case StageType.Start:
+                    stage = floorInfo.StartStage;
+                    break;
+            }
+
             _spawnPos = _spawnPos + new Vector3(0, _stageInterval, 0);
-
-            Stage stage = Instantiate(_randomStageList[i], _spawnPos, Quaternion.identity);
-
+            stage = Instantiate(stage, _spawnPos, Quaternion.identity);
             lastStage.AddNextStage(stage);
             lastStage = stage;
         }
-
-        // EventStage
-        for (int i = 0; i < _eventStageCount; i++)
-        {
-            _spawnPos = _spawnPos + new Vector3(0, _stageInterval, 0);
-
-            Stage stage = Instantiate(_randomEventStageList[i], _spawnPos, Quaternion.identity);
-
-            lastStage.AddNextStage(stage);
-            lastStage = stage;
-        }
-
-        // Stage After EventStage
-        for (int i = 0; i < _backStageCount; i++)
-        {
-            _spawnPos = _spawnPos + new Vector3(0, _stageInterval, 0);
-
-            Stage stage = Instantiate(_randomStageList[i], _spawnPos, Quaternion.identity);
-
-            lastStage.AddNextStage(stage);
-            lastStage = stage;
-        }
-
-        // event - shop
-        _spawnPos = _spawnPos + new Vector3(0, _stageInterval, 0);
-        Stage eventStage = Instantiate(_eventStageLists.stages[0], _spawnPos, Quaternion.identity);
-        lastStage.AddNextStage(eventStage);
-
-        // boss
-        _spawnPos = _spawnPos + new Vector3(0, _stageInterval, 0);
-        Stage bossStage = Instantiate(RandomStage(_bossStageLists[_step]), _spawnPos, Quaternion.identity);
-        eventStage.AddNextStage(bossStage);
         #endregion
 
-        bossStage.OnGateEvent += ClearBossStage;
         _firstStage.AppearGate();
-
+        lastStage.OnGateEvent += ClearBossStage;
+        
     }
 
     public void ClearBossStage()
@@ -140,10 +142,42 @@ public class RandomStageSystem : MonoBehaviour
         _firstStage.DestroyStage();
     }
 
-    private Stage RandomStage(StageListSO stageList)
+    private Queue<Stage> ShuffleStageList(List<Stage> stages)
     {
-        List<Stage> stages = stageList.stages;
-        return stages[Random.Range(0, stages.Count)];
-    }
+        Queue<Stage> stageQueue = new Queue<Stage>();
 
+        for (int i = 0; i < stages.Count; ++i)
+        {
+            int randomIdx = Random.Range(i, stages.Count);
+
+            Stage temp = stages[randomIdx];
+            stages[randomIdx] = stages[i];
+
+            stageQueue.Enqueue(temp);
+        }
+
+        return stageQueue;
+    }
+    private FloorInfoSO GetRandomFloor(List<FloorInfoSO> floorList)
+    {
+        return Instantiate(floorList[Random.Range(0, floorList.Count)]);
+    }
+    private List<Stage> GetStageList(FloorInfoSO floorInfo, StageType stageType)
+    {
+        List<Stage> returnList = null;
+        switch (stageType)
+        {
+            case StageType.EnemyStage:
+                returnList = floorInfo.EnemySpawnStageList.stages.ToList<Stage>();
+                break;
+            case StageType.EventStage:
+                returnList = floorInfo.EventStageList.stages.ToList<Stage>();
+                break;
+            case StageType.BossStage:
+                returnList = floorInfo.BossStageList.stages.ToList<Stage>();
+                break;
+        }
+
+        return returnList;
+    }
 }
