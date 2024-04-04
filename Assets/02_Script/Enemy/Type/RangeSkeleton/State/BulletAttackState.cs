@@ -32,10 +32,14 @@ public class BulletAttackState : MummyRootState
             {
                 EnemyBullet spawnBullet = GameObject.Instantiate(_bullet, _gun.position, Quaternion.identity);
                 spawnBullet.Shoot(_target.transform.position - _gun.transform.position, EEnemyBulletSpeedType.Linear);
-                StartCoroutine(AttackEndEvt());
+                
             });
 
-        seq.Append(_gun.DORotate(new Vector3(0, 0, 0f), 0.3f).SetEase(Ease.InBack));
+        seq.Append(_gun.DORotate(new Vector3(0, 0, 0f), 0.3f).SetEase(Ease.InBack))
+            .OnComplete(() =>
+            {
+                StartCoroutine(AttackEndEvt());
+            });
 
         
     }

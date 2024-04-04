@@ -20,13 +20,19 @@ public class ContextSolver
 
             (tempDanger, tempInterest) = behaviour.GetSteering(danger, interest, aiData);
 
-            for(int i = 0; i < 8; i++)
+            for (int i = 0; i < 8; i++)
             {
                 danger[i] += tempDanger[i];
                 interest[i] += tempInterest[i];
             }
         }
-        
+
+        //foreach (SteeringBehaviour behaviour in behaviours)
+        //{
+        //    (danger, interest) = behaviour.GetSteering(danger, interest, aiData);
+        //}
+
+
         //subtract danger values from interest array
         for (int i = 0; i < 8; i++)
         {

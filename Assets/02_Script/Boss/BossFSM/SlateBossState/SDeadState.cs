@@ -5,7 +5,7 @@ using UnityEngine;
 public class SDeadState : BossBaseState
 {
     private SlateBoss _slate;
-    public SDeadState(SlateBoss boss) : base(boss)
+    public SDeadState(SlateBoss boss, SlatePattern pattern) : base(boss, pattern)
     {
         _slate = boss;
     }
@@ -18,7 +18,7 @@ public class SDeadState : BossBaseState
     public override void OnBossStateOn()
     {
         _slate.gameObject.layer = LayerMask.NameToLayer("Default");
-        _slate.GetComponent<SpriteRenderer>().sprite = _slate.L_sprite[2];
+        _slate.GetComponent<SpriteRenderer>().sprite = _slate.deadSprite;
         _slate.StopAllCoroutines();
         _slate.ReturnAll();
         _slate.LaserReturnAll();
@@ -32,13 +32,13 @@ public class SDeadState : BossBaseState
 
     private IEnumerator Dying(float disappearingTime, float disappearSpeed, int explosionCount, float explosionWaitTime)
     {
-        SoundManager.Instance.SFXPlay("Dead", _slate.audios[0], 1);
+        SoundManager.Instance.SFXPlay("Dead", _slate.deadClip, 1);
         float curTime = 0;
         float a = 1;
         for(int i = 0; i < explosionCount; i++)
         {
             GameObject effect = ObjectPool.Instance.GetObject(ObjectPoolType.SlateDeadEffect);
-            effect.transform.position = _boss.transform.position;
+            effect.transform.position = _slate.transform.position;
 
             yield return new WaitForSeconds(explosionWaitTime);
         }
@@ -48,10 +48,10 @@ public class SDeadState : BossBaseState
             curTime += Time.deltaTime;
             if (a > 0)
             {
-                _boss.gameObject.GetComponent<SpriteRenderer>().material.color = new Color(1, 1, 1, a -= Time.deltaTime * disappearSpeed);
+                _slate.gameObject.GetComponent<SpriteRenderer>().material.color = new Color(1, 1, 1, a -= Time.deltaTime * disappearSpeed);
             }
             yield return null;
         }
-        _boss.gameObject.SetActive(false);
+        _slate.gameObject.SetActive(false);
     }
 }

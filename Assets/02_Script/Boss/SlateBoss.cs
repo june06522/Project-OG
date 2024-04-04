@@ -4,21 +4,36 @@ using UnityEngine;
 
 public class SlateBoss : Boss
 {
-    public int MinimiCount { get => i_minimiCount; set => i_minimiCount = value; }
+    public int MinimiCount { get => _minimiCount; set => _minimiCount = value; }
 
-    public GameObject G_slateOnlyCollector;
-    public GameObject G_minimisPositions;
+    public GameObject slateOnlyCollector;
+    public GameObject minimisPositions;
 
-    public List<Material> L_materials;
-    public List<Sprite> L_sprite;
+    public Sprite fullHPSprite;
+    public Sprite halfHPSprite;
+    public Sprite deadSprite;
 
-    public float F_minimiAwayDistance;
+    public AudioClip deadClip;
+    public AudioClip laserClip;
+    public AudioClip fireClip;
 
-    public bool B_fullHP;
-    public bool B_halfHP;
+    public Material basicMat;
+    public Material minimiBasicMat;
+    public Material warningMat;
+    public Material laserMat;
+    public Material hologramMinimiMat;
+    public Material bulletMat;
+    public Material StopMat;
+
+    public float minimiAwayDistance;
+
+    public bool fullHP;
+    public bool halfHP;
+
+    private SlatePattern _pattern;
 
     [SerializeField]
-    private int i_minimiCount;
+    private int _minimiCount;
 
     private enum BossState
     {
@@ -32,17 +47,19 @@ public class SlateBoss : Boss
 
     private BossFSM _bossFSM;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+
         transform.gameObject.layer = LayerMask.NameToLayer("Boss");
-        transform.GetComponent<SpriteRenderer>().sprite = L_sprite[0];
-        B_fullHP = true;
-        B_halfHP = false;
+        _pattern = GetComponent<SlatePattern>();
+        transform.GetComponent<SpriteRenderer>().sprite = fullHPSprite;
+        fullHP = true;
+        halfHP = false;
         _curBossState = BossState.Idle;
-        _bossFSM = new BossFSM(new BossIdleState(this));
+        _bossFSM = new BossFSM(new BossIdleState(this, _pattern));
 
         ChangeState();
-        StartCoroutine(BossPatorl(bossSo.StopTime, bossSo.MoveX, bossSo.MoveY, bossSo.Speed));
     }
 
     protected override void OnDisable()
@@ -54,25 +71,20 @@ public class SlateBoss : Boss
     {
         base.Update();
 
-        Debug.Log(B_patorl);
-
-        if (B_dead && !B_isDead)
+        if (IsDie && !isDead)
         {
-            B_isDead = true;
-            B_fullHP = false;
-            B_halfHP = false;
-            B_isStop = true;
-            B_patorl = false;
+            fullHP = false;
+            halfHP = false;
+            isStop = true;
             ChangeBossState(BossState.Dead);
         }
 
-        if (!B_isDead)
+        if (!isDead)
         {
-            if(!B_isRunning)
+            if(!isAttacking)
             {
                 ChangeState();
             }
-            
             _bossFSM.UpdateBossState();
         }
     }
@@ -85,13 +97,13 @@ public class SlateBoss : Boss
                 ChangeBossState(BossState.FullHP);
                 break;
             case BossState.FullHP:
-                if (F_currentHp < bossSo.MaxHP / 2)
+                if (_currentHP < so.MaxHP / 2)
                 {
                     ChangeBossState(BossState.HalfHP);
                 }
                 break;
             case BossState.HalfHP:
-                if (B_isDead)
+                if (IsDie)
                 {
                     ChangeBossState(BossState.Dead);
                 }
@@ -106,13 +118,14 @@ public class SlateBoss : Boss
         switch(_curBossState)
         {
             case BossState.FullHP:
-                _bossFSM.ChangeBossState(new SFullHPState(this));
+                _bossFSM.ChangeBossState(new SFullHPState(this, _pattern));
                 break;
             case BossState.HalfHP:
-                _bossFSM.ChangeBossState(new SHalfHPState(this));
+                _bossFSM.ChangeBossState(new SHalfHPState(this, _pattern));
                 break;
             case BossState.Dead:
-                _bossFSM.ChangeBossState(new SDeadState(this));
+                isDead = true;
+                _bossFSM.ChangeBossState(new SDeadState(this, _pattern));
                 break;
         }
     }
@@ -130,12 +143,12 @@ public class SlateBoss : Boss
         int childCount = 0;
         GameObject[] objs;
 
-        childCount = G_slateOnlyCollector.transform.childCount;
+        childCount = slateOnlyCollector.transform.childCount;
         objs = new GameObject[childCount];
 
         for (int i = 0; i < childCount; i++)
         {
-            objs[i] = G_slateOnlyCollector.transform.GetChild(i).gameObject;
+            objs[i] = slateOnlyCollector.transform.GetChild(i).gameObject;
         }
 
         for (int i = 0; i < childCount; i++)
@@ -144,10 +157,5 @@ public class SlateBoss : Boss
                 continue;
             ObjectPool.Instance.ReturnObject(objs[i]);
         }
-    }
-
-    protected override void OnCollisionEnter2D(Collision2D collision)
-    {
-        base.OnCollisionEnter2D(collision);
     }
 }

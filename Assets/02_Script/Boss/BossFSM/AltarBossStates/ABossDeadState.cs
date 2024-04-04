@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class ABossDeadState : BossBaseState
 {
-    private AltarBoss _altarBoss;
+    private AltarBoss _altar;
 
-    public ABossDeadState(AltarBoss boss) : base(boss)
+    public ABossDeadState(AltarBoss boss, AltarPattern pattern) : base(boss, pattern)
     {
-        _altarBoss = boss;
+        _altar = boss;
     }
 
     public override void OnBossStateExit()
@@ -18,10 +18,10 @@ public class ABossDeadState : BossBaseState
 
     public override void OnBossStateOn()
     {
-        _boss.gameObject.layer = LayerMask.NameToLayer("Default");
-        _boss.StopAllCoroutines();
-        _boss.ReturnAll();
-        _altarBoss.ChainReturnAll();
+        _altar.gameObject.layer = LayerMask.NameToLayer("Default");
+        _altar.StopAllCoroutines();
+        _altar.ReturnAll();
+        _altar.ChainReturnAll();
         NowCoroutine(Dying(3, 2, 0.5f));
     }
 
@@ -34,22 +34,22 @@ public class ABossDeadState : BossBaseState
     {
         float curTime = 0;
         float a = 1;
-        SoundManager.Instance.SFXPlay("Dead", _altarBoss.audios[3], 1);
-        _altarBoss.ChangeMat(4);
+        SoundManager.Instance.SFXPlay("Dead", _altar.deadClip, 1);
+        _altar.ChangeMaterial(_altar.dyingMat);
         yield return new WaitForSeconds(dyingEffectTime);
         GameObject effect = ObjectPool.Instance.GetObject(ObjectPoolType.AltarDeadEffect);
-        effect.transform.position = _boss.transform.position;
-        _altarBoss.ChangeMat(5);
+        effect.transform.position = _altar.transform.position;
+        _altar.ChangeMaterial(_altar.deadMat);
         while(curTime < disappearingTime)
         {
             curTime += Time.deltaTime;
             if (a > 0)
             {
-                _boss.gameObject.GetComponent<SpriteRenderer>().material.color = new Color(1, 1, 1, a -= Time.deltaTime * disappearSpeed);
+                _altar.gameObject.GetComponent<SpriteRenderer>().material.color = new Color(1, 1, 1, a -= Time.deltaTime * disappearSpeed);
             }
             yield return null;
         }
-        _boss.gameObject.SetActive(false);
+        _altar.gameObject.SetActive(false);
     }
 
 

@@ -5,11 +5,7 @@ using UnityEngine;
 
 public class AltarBoss : Boss
 {
-    public Material MyMat { get => m_mat; set => m_mat = value; }
-
-    public List<Material> L_mats;
-
-    public GameObject G_altarOnlyCollector;
+    public GameObject _altarCollector;
 
     private enum BossState
     {
@@ -20,46 +16,65 @@ public class AltarBoss : Boss
         Dead
     }
 
-    public bool B_isTied;
-    public bool B_isOneBroken;
-    public bool B_isDashing;
+    public AudioClip fireClip;
+    public AudioClip deadClip;
+    public AudioClip burnClip;
+    public AudioClip dashClip;
+    public AudioClip unChainClip;
+
+    public Material basicMat;
+    public Material dyingMat;
+    public Material deadMat;
+    public Material enchantedMat;
+    public Material glitchMat;
+
+    public bool isTied;
+    public bool isOneBroken;
+    public bool isDashing;
+
+    public Vector3 originPos;
 
     private BossState _curBossState;
 
     private BossFSM _bossFSM;
 
-    private GameObject[] g_restraints = new GameObject[2];
+    private AltarPattern _pattern;
 
-    private GameObject[,] g_chains = new GameObject[2, 10];
+    private GameObject[] _restraints = new GameObject[2];
 
-    private int i_restraintIndex = 0;
-    private int i_restrainCount = 0;
-    private int i_chainCount = 0;
-    private int i_shortenChainIndex = 0;
+    private GameObject[,] _chains = new GameObject[2, 10];
+
+    private int _restraintIndex = 0;
+    private int _restrainCount = 0;
+    private int _chainCount = 0;
+    private int _shortenChainIndex = 0;
 
     [SerializeField]
-    private float f_restraintDistance;
+    private float _restraintDistance;
     [SerializeField]
-    private float f_unChainTime;
-    private float f_currentTime = 0;
+    private float _unChainTime;
+    private float _currentTime = 0;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+        _pattern = GetComponent<AltarPattern>();
+        bossMove = GetComponent<BossMove>();
         gameObject.layer = LayerMask.NameToLayer("Boss");
-        f_currentTime = 0;
-        i_restraintIndex = 0;
-        i_restrainCount = g_restraints.Length;
-        i_chainCount = g_chains.GetLength(1);
-        i_shortenChainIndex = 0;
-        V_originPos = Vector2.zero;
-        B_isTied = true;
-        B_isOneBroken = false;
-        B_isDashing = false;
+        _currentTime = 0;
+        _restraintIndex = 0;
+        _restrainCount = _restraints.Length;
+        _chainCount = _chains.GetLength(1);
+        _shortenChainIndex = 0;
+        isTied = true;
+        isOneBroken = false;
+        isDashing = false;
+        originPos = transform.position;
 
         ChainSetting();
 
         _curBossState = BossState.Idle;
-        _bossFSM = new BossFSM(new BossIdleState(this));
+        _bossFSM = new BossFSM(new BossIdleState(this, _pattern));
 
         ChangeBossState(BossState.Tied);
 
@@ -74,13 +89,17 @@ public class AltarBoss : Boss
     protected override void Update()
     {
         base.Update();
-        if(!B_isDead)
+
+        if(!isDead)
         {
             ChangeState();
+        }
 
-            if (i_restraintIndex < i_restrainCount)
+        if (!IsDie)
+        {
+            if (_restraintIndex < _restrainCount)
             {
-                TimeChecker(Time.deltaTime * (i_restraintIndex + 1));
+                TimeChecker(Time.deltaTime * (_restraintIndex + 1));
             }
 
             ChainsFollowBoss();
@@ -94,12 +113,12 @@ public class AltarBoss : Boss
         int childCount = 0;
         GameObject[] objs;
 
-        childCount = G_altarOnlyCollector.transform.childCount;
+        childCount = _altarCollector.transform.childCount;
         objs = new GameObject[childCount];
 
         for (int i = 0; i < childCount; i++)
         {
-            objs[i] = G_altarOnlyCollector.transform.GetChild(i).gameObject;
+            objs[i] = _altarCollector.transform.GetChild(i).gameObject;
         }
 
         for (int i = 0; i < childCount; i++)
@@ -110,63 +129,58 @@ public class AltarBoss : Boss
         }
     }
 
-    public void ChangeMat(int index = 0)
-    {
-        MyMat = L_mats[index];
-    }
-
     private void ChainSetting()
     {
-        for (int i = 0; i < i_restrainCount; i++)
+        for (int i = 0; i < _restrainCount; i++)
         {
-            g_restraints[i] = ObjectPool.Instance.GetObject(ObjectPoolType.AltarRestraint, G_altarOnlyCollector.transform);
-            var rad = Mathf.Deg2Rad * i * 360 / i_restrainCount;
-            var x = f_restraintDistance * Mathf.Cos(rad);
-            var y = f_restraintDistance * Mathf.Sin(rad);
-            g_restraints[i].transform.position = transform.GetChild(i).position + new Vector3(x, y, 0);
-            g_restraints[i].transform.rotation = Quaternion.identity;
-            for (int j = 0; j < i_chainCount; j++)
+            _restraints[i] = ObjectPool.Instance.GetObject(ObjectPoolType.AltarRestraint, _altarCollector.transform);
+            var rad = Mathf.Deg2Rad * i * 360 / _restrainCount;
+            var x = _restraintDistance * Mathf.Cos(rad);
+            var y = _restraintDistance * Mathf.Sin(rad);
+            _restraints[i].transform.position = transform.GetChild(i).position + new Vector3(x, y, 0);
+            _restraints[i].transform.rotation = Quaternion.identity;
+            for (int j = 0; j < _chainCount; j++)
             {
-                var xx = j * f_restraintDistance / i_chainCount * Mathf.Cos(rad);
-                var yy = j * f_restraintDistance / i_chainCount * Mathf.Sin(rad);
-                g_chains[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.AltarChain, g_restraints[i].transform.GetChild(0).transform);
-                g_chains[i, j].transform.position = transform.GetChild(i).position + new Vector3(xx, yy, 0);
-                g_chains[i, j].transform.rotation = Quaternion.identity;
+                var xx = j * _restraintDistance / _chainCount * Mathf.Cos(rad);
+                var yy = j * _restraintDistance / _chainCount * Mathf.Sin(rad);
+                _chains[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.AltarChain, _restraints[i].transform.GetChild(0).transform);
+                _chains[i, j].transform.position = transform.GetChild(i).position + new Vector3(xx, yy, 0);
+                _chains[i, j].transform.rotation = Quaternion.identity;
             }
         }
     }
 
     private void ChainsFollowBoss()
     {
-        for (int i = 0; i < i_restrainCount; i++)
+        for (int i = 0; i < _restrainCount; i++)
         {
-            float angle = Mathf.Atan2(transform.position.y - g_restraints[i].transform.position.y, transform.position.x - g_restraints[i].transform.position.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(transform.position.y - _restraints[i].transform.position.y, transform.position.x - _restraints[i].transform.position.x) * Mathf.Rad2Deg;
 
-            g_restraints[i].transform.GetChild(0).rotation = Quaternion.AngleAxis(angle + 180 - i * 180, Vector3.forward);
+            _restraints[i].transform.GetChild(0).rotation = Quaternion.AngleAxis(angle + 180 - i * 180, Vector3.forward);
         }
     }
 
     private IEnumerator ShortenChain()
     {
-        while(i_restraintIndex < 2)
+        while(_restraintIndex < 2)
         {
-            if (i_restraintIndex > 0)
+            if (_restraintIndex > 0)
             {
-                if (Vector3.Distance(transform.position, g_chains[i_restraintIndex, i_shortenChainIndex].transform.position) < 0.5f)
+                if (Vector3.Distance(transform.position, _chains[_restraintIndex, _shortenChainIndex].transform.position) < 0.5f)
                 {
-                    if (i_shortenChainIndex < i_chainCount - 1)
+                    if (_shortenChainIndex < _chainCount - 1)
                     {
-                        g_chains[i_restraintIndex, i_shortenChainIndex].gameObject.SetActive(false);
-                        i_shortenChainIndex++;
+                        _chains[_restraintIndex, _shortenChainIndex].gameObject.SetActive(false);
+                        _shortenChainIndex++;
                     }
                     yield return null;
                 }
-                else if (Vector3.Distance(transform.position, g_chains[i_restraintIndex, i_shortenChainIndex].transform.position) > 0.5f)
+                else if (Vector3.Distance(transform.position, _chains[_restraintIndex, _shortenChainIndex].transform.position) > 0.5f)
                 {
-                    if (i_shortenChainIndex > 0)
+                    if (_shortenChainIndex > 0)
                     {
-                        g_chains[i_restraintIndex, i_shortenChainIndex].gameObject.SetActive(true);
-                        i_shortenChainIndex--;
+                        _chains[_restraintIndex, _shortenChainIndex].gameObject.SetActive(true);
+                        _shortenChainIndex--;
                     }
                     yield return null;
                 }
@@ -179,30 +193,30 @@ public class AltarBoss : Boss
 
     private void ChangeState()
     {
-        if(B_dead && !B_isDead)
+        if(IsDie)
         {
-            if(i_restraintIndex < 2)
+            if(_restraintIndex < 2)
                 ReturnRestraintAndChains();
             StartCoroutine(CameraManager.Instance.CameraShake(0, 0));
-            B_isDead = true;
-            B_isTied = false;
-            B_isOneBroken = false;
+            isTied = false;
+            isOneBroken = false;
             ChangeBossState(BossState.Dead);
+            isDead = true;
         }
         else
         {
-            if (!B_isRunning)
+            if (!isAttacking)
             {
                 switch (_curBossState)
                 {
                     case BossState.Tied:
-                        if (i_restraintIndex > 0)
+                        if (_restraintIndex > 0)
                         {
                             ChangeBossState(BossState.OneBroken);
                         }
                         break;
                     case BossState.OneBroken:
-                        if (i_restraintIndex > 1)
+                        if (_restraintIndex > 1)
                         {
                             ChangeBossState(BossState.Free);
                         }
@@ -219,80 +233,80 @@ public class AltarBoss : Boss
         switch (_curBossState)
         {
             case BossState.Idle:
-                _bossFSM.ChangeBossState(new BossIdleState(this));
+                _bossFSM.ChangeBossState(new BossIdleState(this, _pattern));
                 break;
             case BossState.Tied:
-                _bossFSM.ChangeBossState(new ATiedState(this));
+                _bossFSM.ChangeBossState(new ATiedState(this, _pattern));
                 break;
             case BossState.OneBroken:
-                _bossFSM.ChangeBossState(new AOneBrokenState(this));
+                _bossFSM.ChangeBossState(new AOneBrokenState(this, _pattern));
                 break;
             case BossState.Free:
-                _bossFSM.ChangeBossState(new AFreeState(this));
+                _bossFSM.ChangeBossState(new AFreeState(this, _pattern));
                 break;
             case BossState.Dead:
-                _bossFSM.ChangeBossState(new ABossDeadState(this));
+                _bossFSM.ChangeBossState(new ABossDeadState(this, _pattern));
                 break;
         }
     }
 
     private void TimeChecker(float time)
     {
-        if (f_currentTime <= 0)
-            f_currentTime = 0;
+        if (_currentTime <= 0)
+            _currentTime = 0;
 
-        if (f_currentTime >= f_unChainTime - 0.5f && f_currentTime < f_unChainTime)
+        if (_currentTime >= _unChainTime - 0.5f && _currentTime < _unChainTime)
         {
-            B_isTied = false;
-            B_isOneBroken = false;
+            isTied = false;
+            isOneBroken = false;
         }
 
-        if (f_currentTime <= f_unChainTime)
-            f_currentTime += time;
+        if (_currentTime <= _unChainTime)
+            _currentTime += time;
         else
         {
-            SoundManager.Instance.SFXPlay("UnChain", audios[0], 1);
+            SoundManager.Instance.SFXPlay("UnChain", unChainClip, 1);
             StartCoroutine(CameraManager.Instance.CameraShake(5, 1f));
             StartCoroutine(UnChain(3));
-            f_currentTime = 0;
+            _currentTime = 0;
         }
     }
 
     private IEnumerator UnChain(float speed)
     {
-        for (int i = 0; i < i_chainCount; i++)
+        for (int i = 0; i < _chainCount; i++)
         {
-            GameObject chainFragment = ObjectPool.Instance.GetObject(ObjectPoolType.ChainFragment, G_altarOnlyCollector.transform);
-            chainFragment.GetComponent<BossBullet>().Attack(bossSo.Damage);
-            chainFragment.transform.position = g_chains[i_restraintIndex, i].transform.position;
+            GameObject chainFragment = ObjectPool.Instance.GetObject(ObjectPoolType.ChainFragment, _altarCollector.transform);
+            chainFragment.GetComponent<BossBullet>().Attack(so.Damage);
+            chainFragment.transform.position = _chains[_restraintIndex, i].transform.position;
             chainFragment.transform.rotation = Quaternion.identity;
 
             Rigidbody2D rigid = chainFragment.GetComponent<Rigidbody2D>();
             Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * UnityEngine.Random.Range(0, 361) / 360), Mathf.Sin(Mathf.PI * 2 * UnityEngine.Random.Range(0, 361) / 360));
             rigid.velocity = dir.normalized * speed;
         }
-        for(int i = 0; i < i_chainCount; i++)
+        for(int i = 0; i < _chainCount; i++)
         {
-            GameObject split = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, G_altarOnlyCollector.transform);
-            split.GetComponent<BossBullet>().Attack(bossSo.Damage);
-            split.transform.position = g_restraints[i_restraintIndex].transform.position;
+            GameObject split = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _altarCollector.transform);
+            split.GetComponent<BossBullet>().Attack(so.Damage);
+            split.transform.position = _restraints[_restraintIndex].transform.position;
             split.transform.rotation = Quaternion.identity;
 
             Rigidbody2D rigid = split.GetComponent<Rigidbody2D>();
-            Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / i_chainCount), Mathf.Sin(Mathf.PI * 2 * i / i_chainCount));
+            Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / _chainCount), Mathf.Sin(Mathf.PI * 2 * i / _chainCount));
             rigid.velocity = dir.normalized * speed;
         }
 
-        ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarRestraint, g_restraints[i_restraintIndex]);
-        for (int i = 0; i < i_chainCount; i++)
+        ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarRestraint, _restraints[_restraintIndex]);
+        for (int i = 0; i < _chainCount; i++)
         {
-            ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarChain, g_chains[i_restraintIndex, i]);
+            ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarChain, _chains[_restraintIndex, i]);
         }
 
-        i_restraintIndex++;
-        if(i_restraintIndex == 1)
+        _restraintIndex++;
+        if(_restraintIndex == 1)
         {
-            V_originPos = g_restraints[i_restraintIndex].transform.localPosition;
+            originPos = _restraints[_restraintIndex].transform.localPosition;
         }
 
         yield return null;
@@ -300,38 +314,37 @@ public class AltarBoss : Boss
 
     private void ReturnRestraintAndChains()
     {
-        if(i_restraintIndex > 0)
+        if(_restraintIndex > 0)
         {
-            ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarRestraint, g_restraints[i_restraintIndex]);
-            for (int j = 0; j < i_chainCount; j++)
+            ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarRestraint, _restraints[_restraintIndex]);
+            for (int j = 0; j < _chainCount; j++)
             {
-                ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarChain, g_chains[i_restraintIndex, j]);
+                ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarChain, _chains[_restraintIndex, j]);
             }
         }
         else
         {
-            for (int i = 0; i < i_restrainCount; i++)
+            for (int i = 0; i < _restrainCount; i++)
             {
-                ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarRestraint, g_restraints[i]);
-                for (int j = 0; j < i_chainCount; j++)
+                ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarRestraint, _restraints[i]);
+                for (int j = 0; j < _chainCount; j++)
                 {
-                    ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarChain, g_chains[i, j]);
+                    ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarChain, _chains[i, j]);
                 }
             }
         }
         
     }
 
-    protected override void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        base.OnCollisionEnter2D(collision);
         if (collision.gameObject.tag == "Player")
         {
-            if(B_isDashing)
+            if(isDashing)
             {
                 if (collision.gameObject.TryGetComponent<IHitAble>(out var IhitAble))
                 {
-                    IhitAble.Hit(bossSo.Damage);
+                    IhitAble.Hit(so.Damage);
                 }
             }
         }

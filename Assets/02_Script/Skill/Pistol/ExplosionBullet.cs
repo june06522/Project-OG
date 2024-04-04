@@ -9,6 +9,7 @@ public class ExplosionBullet : MonoBehaviour
     private float power = 1;
     [SerializeField] private float speed;
     [SerializeField] ParticleSelfDestroyer explosion;
+    [SerializeField] private LayerMask targetLayer;
 
     public void SetDamage(float damage, float power)
     {
@@ -24,16 +25,17 @@ public class ExplosionBullet : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
 
-        if (collision.TryGetComponent<IHitAble>(out var hit))
-        {
+        if (collision.tag != "Player")
+            if (collision.TryGetComponent<IHitAble>(out var hit))
+            {
 
-            hit.Hit(damage);
-            var obj = Instantiate(explosion, transform.position, Quaternion.identity);
-            obj.transform.localScale = Vector3.one * power;
+                hit.Hit(damage);
+                var obj = Instantiate(explosion, transform.position, Quaternion.identity);
+                obj.transform.localScale = Vector3.one * power;
 
-            Destroy(gameObject);
+                Destroy(gameObject);
 
-        }
+            }
 
     }
 
