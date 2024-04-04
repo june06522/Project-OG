@@ -11,7 +11,6 @@ public class InventoryRaycast : MonoBehaviour
     private void Update()
     {
         invenBricks = GetComponentsInChildren<InvenBrick>();
-
         foreach (InvenBrick brick in invenBricks)
         {
             RectTransform rectTransform = brick.GetComponent<RectTransform>();
@@ -38,7 +37,9 @@ public class InventoryRaycast : MonoBehaviour
             foreach (var v in brick.InvenObject.bricks)
             {
                 if (v.point == invenPos)
+                {
                     isOpen = true;
+                }
             }
             Image image = brick.GetComponent<Image>();
 
@@ -51,7 +52,7 @@ public class InventoryRaycast : MonoBehaviour
 
                 image.raycastTarget = false;
             }
-        }
+        } 
 
     }
 }

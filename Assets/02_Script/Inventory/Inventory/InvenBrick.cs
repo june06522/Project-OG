@@ -63,7 +63,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         {
             transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             rectTransform.position = new Vector3(rectTransform.position.x, rectTransform.position.y, 0);
-            if (!inventoryActive.IsOn )
+            if (!inventoryActive.IsOn)
             {
                 SetPos();
             }
@@ -88,6 +88,12 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         tempPos.x += (rectTransform.rect.width / 100 % 2 == 0) ? 50 : 0;
         tempPos.y += (rectTransform.rect.height / 100 % 2 == 0) ? 50 : 0;
 
+        if (GameManager.Instance.Inventory.Width % 2 == 0)
+            tempPos.x -= 50;
+        if (GameManager.Instance.Inventory.Height % 2 == 0)
+            tempPos.y -= 50;
+
+
         //드래그앤 드랍 여기 건들여야 함
         Vector3Int p = Vector3Int.RoundToInt(tempPos / 100);
         p.x -= (int)(rectTransform.rect.width / 200);
@@ -101,7 +107,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
         if (point == null)
         {
-            GameObject obj = Instantiate(origin, GameManager.Instance.player.position,Quaternion.identity);
+            GameObject obj = Instantiate(origin, GameManager.Instance.player.position, Quaternion.identity);
             Destroy(gameObject);
             return;
 
@@ -116,6 +122,12 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             rectTransform.localPosition = p * 100;
 
             rectTransform.localPosition += new Vector3((rectTransform.rect.width - 100) / 2, (rectTransform.rect.height - 100) / 2);
+
+            if (GameManager.Instance.Inventory.Width % 2 == 0)
+                rectTransform.localPosition += new Vector3(50, 0);
+            if (GameManager.Instance.Inventory.Height % 2 == 0)
+                rectTransform.localPosition += new Vector3(0, 50);
+
             Setting();
             ShowExplain();
         }
