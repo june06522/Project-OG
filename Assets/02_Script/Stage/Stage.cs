@@ -68,9 +68,11 @@ public class Stage : MonoBehaviour
     [SerializeField, Range(0f, 1f)]
     private float _stageIntensity;
 
-    [Header("Stage Info")]
+    [Header("Pos Info")]
     [SerializeField]
     private Transform _playerSpawnPos;
+    [SerializeField]
+    private Transform _gateSpawnPos;
 
     public Vector3 playerSpawnPos 
     {
@@ -83,6 +85,7 @@ public class Stage : MonoBehaviour
         }
     }
 
+    [Header("Stage Info")]
     public StageGate stageGate;
     private List<GameObject> stageItems = new List<GameObject>();
 
@@ -209,7 +212,12 @@ public class Stage : MonoBehaviour
 
     private void SpawnGate(Stage stage, Vector3 offset = new Vector3())
     {
-        StageGate gate = Instantiate(stageGate, transform.position + offset, Quaternion.identity);
+
+        StageGate gate = null;
+        if(_gateSpawnPos == null)
+            gate = Instantiate(stageGate, transform.position + offset, Quaternion.identity);
+        else
+            gate = Instantiate(stageGate, _gateSpawnPos.position + offset, Quaternion.identity);
         gate.OnGateEvent += HandleGateEvent;
         gate.OnMoveEndEvent += HandleDestroyGate;
         stageItems.Add(gate.gameObject);

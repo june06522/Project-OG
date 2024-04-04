@@ -39,7 +39,6 @@ public class RandomStageSystem : MonoBehaviour
     public void CreateStage()
     {
         _spawnPos = _spawnPos + new Vector3(0, _stageInterval, 0);
-        GameManager.Instance.player.position = _spawnPos;
 
         FloorInfoSO floorInfo = GetRandomFloor(_floorStageList[_step].floors);
         PrintStage(floorInfo);
@@ -70,7 +69,7 @@ public class RandomStageSystem : MonoBehaviour
         seq.AppendInterval(1f);
         seq.Append(_floorTipText.DOText(tipText, tipText.Length * 0.2f));
 
-        seq.AppendInterval(2f);
+        seq.AppendInterval(1f);
 
         seq.Append(_floorTitle.DOFade(0f, 2f))
             .Join(_floorTipText.DOFade(0f, 2f));
@@ -130,6 +129,7 @@ public class RandomStageSystem : MonoBehaviour
         }
         #endregion
 
+        GameManager.Instance.player.position = _firstStage.playerSpawnPos;
         _firstStage.AppearGate();
         lastStage.OnGateEvent += ClearBossStage;
         
