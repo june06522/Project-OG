@@ -11,7 +11,6 @@ public class InventoryRaycast : MonoBehaviour
     private void Update()
     {
         invenBricks = GetComponentsInChildren<InvenBrick>();
-        Debug.Log(invenBricks.Length);
         foreach (InvenBrick brick in invenBricks)
         {
             RectTransform rectTransform = brick.GetComponent<RectTransform>();
@@ -25,6 +24,7 @@ public class InventoryRaycast : MonoBehaviour
             Vector2 pos = rectTransform.position;
             pos -= new Vector2(x * len / 2, y * len / 2);
             Vector2 curPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Debug.Log(len);
             while (curPos.x > pos.x)
             {
                 pos.x += len;
@@ -40,7 +40,7 @@ public class InventoryRaycast : MonoBehaviour
                 if (v.point == invenPos)
                 {
                     isOpen = true;
-                }    
+                }
             }
             Image image = brick.GetComponent<Image>();
 
