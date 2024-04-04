@@ -72,7 +72,6 @@ public class SHalfHPState : BossBaseState
             }
 
             yield return new WaitForSeconds(waitTime);
-            Debug.Log("pattern");
 
             int rand = Random.Range(1, 6);
 
