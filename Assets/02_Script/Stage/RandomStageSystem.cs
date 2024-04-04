@@ -55,20 +55,26 @@ public class RandomStageSystem : MonoBehaviour
         _floorTitle.text = floorInfo.FloorName;
 
         // Tip
-        _floorTipText.text = floorInfo.FloorTip[Random.Range(0, floorInfo.FloorTip.Count)];
+        _floorTipText.text = "";
+        string tipText = floorInfo.FloorTip[Random.Range(0, floorInfo.FloorTip.Count)];
 
         // Anim
-        _floorTitle.color = Color.white;
-        _floorTipText.color = Color.white;
+        _floorTitle.rectTransform.localScale = Vector3.one;
+        _floorTitle.color = new Color(1f, 1f, 1f, 0f);
+        _floorTipText.color = new Color(1f, 1f, 1f, 1f);
 
         Sequence seq = DOTween.Sequence();
-        seq.Append(_floorTitle.rectTransform.DOScale(Vector3.one * 1.2f, 0.2f).SetEase(Ease.OutElastic));
-        seq.Append(_floorTipText.rectTransform.DOScale(Vector3.one * 1.2f, 0.2f).SetEase(Ease.InOutQuint));
+        seq.AppendInterval(1f);
+        seq.Append(_floorTitle.rectTransform.DOScale(Vector3.one * 1.2f, 0.2f).SetEase(Ease.OutElastic))
+            .Join(_floorTitle.DOFade(1f, 0.15f));
+        seq.AppendInterval(1f);
+        seq.Append(_floorTipText.DOText(tipText, tipText.Length * 0.2f));
 
-        seq.Append(_floorTitle.rectTransform.DOScale(Vector3.one, 2f))
-            .Join(_floorTitle.DOFade(0f, 2f))
-            .Join(_floorTipText.rectTransform.DOScale(Vector3.one, 2f))
-            .Join(_floorTitle.DOFade(0f, 2f));
+        seq.AppendInterval(2f);
+
+        seq.Append(_floorTitle.DOFade(0f, 2f))
+            .Join(_floorTipText.DOFade(0f, 2f));
+            
     }
 
     private void PrintStage(FloorInfoSO floorInfo)
