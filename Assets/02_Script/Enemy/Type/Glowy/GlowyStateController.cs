@@ -4,15 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EGlowyState
-{
-    Idle = 0,
-    Patrol = 1,
-    Move = 2,
-    Attack,
-}
-
-public class GlowyStateController : BaseFSM_Controller<EGlowyState>
+public class GlowyStateController : BaseFSM_Controller<ENormalPatrolEnemyState>
 {
     [NonSerialized]
     public Transform attackPoint;
@@ -34,27 +26,27 @@ public class GlowyStateController : BaseFSM_Controller<EGlowyState>
     {
         base.Start();
 
-        var rootState = new GlowyRootState(this);
-        var rootToPatrol = new RoomOpenTransitions<EGlowyState>(this, EGlowyState.Patrol);
+        var rootState = new NormalPatrolRootState(this);
+        var rootToPatrol = new RoomOpenTransitions<ENormalPatrolEnemyState>(this, ENormalPatrolEnemyState.Patrol);
         rootState
-            .AddTransition<EGlowyState>(rootToPatrol);
+            .AddTransition<ENormalPatrolEnemyState>(rootToPatrol);
 
-        var patrolState = new GlowyPatrolState(this);
-        var patrolToMove = new PatrolToChaseTransition<EGlowyState>(this, EGlowyState.Move);
+        var patrolState = new NormalPatrolState(this);
+        var patrolToMove = new PatrolToChaseTransition<ENormalPatrolEnemyState>(this, ENormalPatrolEnemyState.Move);
         patrolState
-             .AddTransition<EGlowyState>(patrolToMove);
+             .AddTransition<ENormalPatrolEnemyState>(patrolToMove);
 
-        var moveState = new GlowyChaseState(this);
-        var moveToAttack = new MoveToAttackTransition<EGlowyState>(this, EGlowyState.Attack, true);
+        var moveState = new NormalPatrolChaseStae(this);
+        var moveToAttack = new MoveToAttackTransition<ENormalPatrolEnemyState>(this, ENormalPatrolEnemyState.Attack, true);
         moveState
-            .AddTransition<EGlowyState>(moveToAttack);
+            .AddTransition<ENormalPatrolEnemyState>(moveToAttack);
 
         var attackState = new GlowyAttackState(this);
 
-        AddState(rootState, EGlowyState.Idle);
-        AddState(patrolState, EGlowyState.Patrol);
-        AddState(moveState, EGlowyState.Move);
-        AddState(attackState, EGlowyState.Attack);
+        AddState(rootState, ENormalPatrolEnemyState.Idle);
+        AddState(patrolState, ENormalPatrolEnemyState.Patrol);
+        AddState(moveState, ENormalPatrolEnemyState.Move);
+        AddState(attackState, ENormalPatrolEnemyState.Attack);
     }
 
     public void SetLaserPointer(Vector2 endPos)

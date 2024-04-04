@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkeletonStateController : BaseFSM_Controller<EMummyState>
+public class SkeletonStateController : BaseFSM_Controller<ENormalEnemyState>
 {
     public Transform target;
 
@@ -16,30 +16,21 @@ public class SkeletonStateController : BaseFSM_Controller<EMummyState>
     {
         base.Start();
 
-        var rootState = new MummyRootState(this);
+        var rootState = new NormalRootState(this);
         rootState
-            .AddTransition<EMummyState>(new RoomOpenTransitions<EMummyState>(this, EMummyState.Patrol));
+            .AddTransition<ENormalEnemyState>(new RoomOpenTransitions<ENormalEnemyState>(this, ENormalEnemyState.Move));
 
-        var patrolState = new MummyPatrolState(this);
-        var patrolToMove = new TransitionIdleOrMove<EMummyState>(this, EMummyState.Move);
-
-        patrolState
-           .AddTransition<EMummyState>(patrolToMove);
-
-        var moveState = new MummyMoveState(this);
-        var moveToIdle = new TransitionIdleOrMove<EMummyState>(this, EMummyState.Patrol);
-        var moveToAttack = new MoveToAttackTransition<EMummyState>(this, EMummyState.Attack, true);
+        var moveState = new NormalChaseState(this);
+        var moveToAttack = new MoveToAttackTransition<ENormalEnemyState>(this, ENormalEnemyState.Attack, true);
 
         moveState
-            .AddTransition<EMummyState>(moveToIdle)
-            .AddTransition<EMummyState>(moveToAttack);
+            .AddTransition<ENormalEnemyState>(moveToAttack);
 
         // ½ºÄÌ·¹Åæ ¾îÅÃ
         var attackState = new SkeletonAttackState(this, _attackPoint, _weapon);
 
-        AddState(rootState, EMummyState.Idle);
-        AddState(patrolState, EMummyState.Patrol);
-        AddState(moveState, EMummyState.Move);
-        AddState(attackState, EMummyState.Attack);
+        AddState(rootState, ENormalEnemyState.Idle);
+        AddState(moveState, ENormalEnemyState.Move);
+        AddState(attackState, ENormalEnemyState.Attack);
     }
 }

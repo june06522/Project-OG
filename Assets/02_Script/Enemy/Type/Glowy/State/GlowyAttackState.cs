@@ -1,15 +1,18 @@
+using FSM_System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GlowyAttackState : GlowyRootState
+public class GlowyAttackState : FSM_State<ENormalPatrolEnemyState>
 {
     bool pointerOn;
     Vector2 endPos;
 
+    new GlowyStateController controller;
+
     public GlowyAttackState(GlowyStateController controller) : base(controller)
     {
-
+        this.controller = controller;
     }
 
     protected override void EnterState()
@@ -31,8 +34,8 @@ public class GlowyAttackState : GlowyRootState
         controller.Shoot(endPos);
 
         yield return new WaitForSeconds(0.5f);
-        _data.SetCoolDown();
-        controller.ChangeState(EGlowyState.Idle);
+        controller.EnemyDataSO.SetCoolDown();
+        controller.ChangeState(ENormalPatrolEnemyState.Idle);
     }
 
     protected override void ExitState()

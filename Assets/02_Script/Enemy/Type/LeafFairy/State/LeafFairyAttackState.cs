@@ -4,11 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LeafFairyAttackState : LeafFairyRootState
+public class LeafFairyAttackState : NormalPatrolRootState
 {
     Transform targetTrm;
+    new LeafFairyStateController controller;
     public LeafFairyAttackState(LeafFairyStateController controller) : base(controller)
     {
+        this.controller = controller;
         targetTrm = controller.Target;
     }
 
@@ -31,7 +33,7 @@ public class LeafFairyAttackState : LeafFairyRootState
         yield return new WaitForSeconds(0.3f);
 
         _data.SetCoolDown();
-        controller.ChangeState(ELeafFariyState.Idle);
+        controller.ChangeState(ENormalPatrolEnemyState.Idle);
     }
 
     protected override void ExitState()

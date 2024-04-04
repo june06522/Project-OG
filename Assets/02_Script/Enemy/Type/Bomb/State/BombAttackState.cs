@@ -5,17 +5,18 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BombAttackState : BombRootState
+public class BombAttackState : NormalRootState
 {
-    Action act;
+    private new BombStateController controller;
+
     public BombAttackState(BombStateController controller) : base(controller)
     {
-        act = controller.InstantiateRange;
+        this.controller = controller;
     }
 
     protected override void EnterState()
     {
-        act.Invoke();
+        controller.InstantiateRange();
         controller.StopImmediately();
         float randomTime = 0.5f;
         Attack(randomTime);

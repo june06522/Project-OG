@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MummyMoveState : MummyRootState
+public class NormalChaseState : NormalRootState
 {
-    ChaseAction<EMummyState> chaseAct;
+    ChaseAction<ENormalEnemyState> chaseAct;
 
-    public MummyMoveState(BaseFSM_Controller<EMummyState> controller) : base(controller)
+    public NormalChaseState(BaseFSM_Controller<ENormalEnemyState> controller) : base(controller)
     {
         List<SteeringBehaviour> behaviourlist = new List<SteeringBehaviour>()
         {
             new ObstacleAvoidanceBehaviour(controller.transform),
             new SeekBehaviour(controller.transform)
         };
-        chaseAct = new ChaseAction<EMummyState>(controller, behaviourlist, true);
+        chaseAct = new ChaseAction<ENormalEnemyState>(controller, behaviourlist, true);
     }
 
     protected override void EnterState()
