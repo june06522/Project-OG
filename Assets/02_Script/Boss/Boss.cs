@@ -80,6 +80,11 @@ public class Boss : MonoBehaviour, IHitAble
         return true;
     }
 
+    public virtual void ChangeState()
+    {
+
+    }
+
     public void ChangeMaterial(Material mat)
     {
         transform.GetComponent<SpriteRenderer>().material = mat;
