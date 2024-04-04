@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MummyAttackState : MummyRootState
+public class MummyAttackState : NormalRootState
 {
     Transform targetTrm;
     Transform _attackPoint;
@@ -33,7 +33,7 @@ public class MummyAttackState : MummyRootState
         yield return new WaitForSeconds(0.3f);
 
         _data.SetCoolDown();
-        controller.ChangeState(EMummyState.Move);
+        controller.ChangeState(ENormalEnemyState.Move);
     }
 
     private void CheckHit()

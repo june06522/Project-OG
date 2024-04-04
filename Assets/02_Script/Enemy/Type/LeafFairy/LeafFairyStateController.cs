@@ -3,16 +3,8 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public enum ELeafFariyState
-{
-    Idle = 0,
-    Patrol = 1,
-    Move = 2,
-    Attack,
-    Dead,
-}
 
-public class LeafFairyStateController : BaseFSM_Controller<ELeafFariyState>
+public class LeafFairyStateController : BaseFSM_Controller<ENormalPatrolEnemyState>
 {
     [SerializeField]
     public ParticleSystem attackEffect;
@@ -29,27 +21,27 @@ public class LeafFairyStateController : BaseFSM_Controller<ELeafFariyState>
     {
         base.Start();
 
-        var rootState = new LeafFairyRootState(this);
-        var rootToMove = new RoomOpenTransitions<ELeafFariyState>(this, ELeafFariyState.Patrol); 
+        var rootState = new NormalPatrolRootState(this);
+        var rootToMove = new RoomOpenTransitions<ENormalPatrolEnemyState>(this, ENormalPatrolEnemyState.Patrol); 
         rootState
-            .AddTransition<ELeafFariyState>(rootToMove);
+            .AddTransition<ENormalPatrolEnemyState>(rootToMove);
 
-        var patrolState = new LeafFairyPatrolState(this);
-        var patrolToMove = new PatrolToChaseTransition<ELeafFariyState>(this, ELeafFariyState.Move);
+        var patrolState = new NormalPatrolState(this);
+        var patrolToMove = new PatrolToChaseTransition<ENormalPatrolEnemyState>(this, ENormalPatrolEnemyState.Move);
         patrolState
-             .AddTransition<ELeafFariyState>(patrolToMove);
+             .AddTransition<ENormalPatrolEnemyState>(patrolToMove);
 
-        var moveState = new LeafFairyMoveState(this);
-        var moveToAttack = new MoveToAttackTransition<ELeafFariyState>(this, ELeafFariyState.Attack, true);
+        var moveState = new NormalPatrolChaseStae(this);
+        var moveToAttack = new MoveToAttackTransition<ENormalPatrolEnemyState>(this, ENormalPatrolEnemyState.Attack, true);
         moveState
-            .AddTransition<ELeafFariyState>(moveToAttack);
+            .AddTransition<ENormalPatrolEnemyState>(moveToAttack);
 
         var attackState = new LeafFairyAttackState(this);
 
-        AddState(rootState, ELeafFariyState.Idle);
-        AddState(patrolState, ELeafFariyState.Patrol);
-        AddState(moveState, ELeafFariyState.Move);
-        AddState(attackState, ELeafFariyState.Attack);
+        AddState(rootState, ENormalPatrolEnemyState.Idle);
+        AddState(patrolState, ENormalPatrolEnemyState.Patrol);
+        AddState(moveState, ENormalPatrolEnemyState.Move);
+        AddState(attackState, ENormalPatrolEnemyState.Attack);
     }
 
     public IEnumerator Attack(Action act)

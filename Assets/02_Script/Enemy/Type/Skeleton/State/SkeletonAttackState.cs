@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkeletonAttackState : MummyRootState
+public class SkeletonAttackState : NormalRootState
 {
     Transform _targetTrm;
     Transform _attackPoint;
     Transform _weapon;
 
-    public SkeletonAttackState(BaseFSM_Controller<EMummyState> controller, Transform attackPoint, Transform weapon) : base(controller)
+    public SkeletonAttackState(BaseFSM_Controller<ENormalEnemyState> controller, Transform attackPoint, Transform weapon) : base(controller)
     {
         _targetTrm = GameManager.Instance.player.transform;
         _attackPoint = attackPoint;
@@ -40,7 +40,7 @@ public class SkeletonAttackState : MummyRootState
         yield return new WaitForSeconds(0.3f);
 
         _data.SetCoolDown();
-        controller.ChangeState(EMummyState.Move);
+        controller.ChangeState(ENormalEnemyState.Move);
     }
 
     private void CheckHit()

@@ -1,15 +1,18 @@
 
 using DG.Tweening;
+using FSM_System;
 using System;
 using System.Collections;
 using UnityEngine;
 
-public class BatAttackState : BatEnemyRootState
+public class BatAttackState : FSM_State<ENormalEnemyState>
 {
     Transform targetTrm;
+    private new BatStateController controller;
 
     public BatAttackState(BatStateController controller) : base(controller)
     {
+        this.controller = controller;
         targetTrm = GameManager.Instance.player.transform;
     }
 
@@ -32,8 +35,8 @@ public class BatAttackState : BatEnemyRootState
     {
         yield return new WaitForSeconds(0.3f);
 
-        _data.SetCoolDown();
-        controller.ChangeState(EBatState.Move);
+        controller.EnemyDataSO.SetCoolDown();
+        controller.ChangeState(ENormalEnemyState.Move);
     }
 
     private void CheckHit()
@@ -44,7 +47,7 @@ public class BatAttackState : BatEnemyRootState
             IHitAble hitAble;
             if (col.TryGetComponent<IHitAble>(out hitAble))
             {
-                hitAble.Hit(_data.AttackPower);
+                hitAble.Hit(controller.EnemyDataSO.AttackPower);
             }
             else
                 Debug.Log(col.gameObject.name);

@@ -4,39 +4,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EBatState
-{
-    Idle = 0,
-    Move = 1,
-    Attack
-}
-
-public class BatStateController : BaseFSM_Controller<EBatState>
+public class BatStateController : BaseFSM_Controller<ENormalEnemyState>
 {
     [SerializeField] public Transform attackPoint;
 
     protected override void Start()
     {
         base.Start();
-        var idleState = new BatEnemyRootState(this);
-        var idleToMove = new TransitionIdleOrMove<EBatState>(this, EBatState.Move);
+        var idleState = new NormalRootState(this);
+        var idleToMove = new TransitionIdleOrMove<ENormalEnemyState>(this, ENormalEnemyState.Move);
 
         idleState
-            .AddTransition<EBatState>(idleToMove);
+            .AddTransition<ENormalEnemyState>(idleToMove);
 
-        var moveState = new BatMoveState(this);
-        var moveToIdle = new TransitionIdleOrMove<EBatState>(this, EBatState.Idle);
-        var moveToAttack = new MoveToAttackTransition<EBatState>(this, EBatState.Attack, false);
+        var moveState = new NormalChaseState(this);
+        var moveToAttack = new MoveToAttackTransition<ENormalEnemyState>(this, ENormalEnemyState.Attack, false);
 
         moveState
-            .AddTransition<EBatState>(moveToIdle)
-            .AddTransition<EBatState>(moveToAttack);
+            .AddTransition<ENormalEnemyState>(moveToAttack);
 
         var attackState = new BatAttackState(this);
 
-        AddState(idleState, EBatState.Idle);
-        AddState(moveState, EBatState.Move);
-        AddState(attackState, EBatState.Attack);
+        AddState(idleState, ENormalEnemyState.Idle);
+        AddState(moveState, ENormalEnemyState.Move);
+        AddState(attackState, ENormalEnemyState.Attack);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
