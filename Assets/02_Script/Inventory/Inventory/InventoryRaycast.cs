@@ -24,7 +24,6 @@ public class InventoryRaycast : MonoBehaviour
             Vector2 pos = rectTransform.position;
             pos -= new Vector2(x * len / 2, y * len / 2);
             Vector2 curPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Debug.Log(len);
             while (curPos.x > pos.x)
             {
                 pos.x += len;
