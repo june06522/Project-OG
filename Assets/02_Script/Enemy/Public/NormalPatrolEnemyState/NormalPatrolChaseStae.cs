@@ -2,18 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LeafFairyMoveState : LeafFairyRootState
+public class NormalPatrolChaseStae : NormalPatrolRootState
 {
-    ChaseAction<ELeafFariyState> chaseAct;
-    public LeafFairyMoveState(LeafFairyStateController controller) : base(controller)
+    ChaseAction<ENormalPatrolEnemyState> chaseAct;
+    public NormalPatrolChaseStae(BaseFSM_Controller<ENormalPatrolEnemyState> controller) : base(controller)
     {
-        List<SteeringBehaviour> behaviourlist = new List<SteeringBehaviour>() 
+        List<SteeringBehaviour> behaviourlist = new List<SteeringBehaviour>()
         {
             new ObstacleAvoidanceBehaviour(controller.transform),
             new SeekBehaviour(controller.transform)
         };
-        chaseAct = new ChaseAction<ELeafFariyState>(controller, 
-                                        behaviourlist, true);
+        chaseAct = new ChaseAction<ENormalPatrolEnemyState>(controller, behaviourlist, true);
     }
 
     protected override void EnterState()

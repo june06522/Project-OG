@@ -3,14 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EBombState
-{
-    Idle = 0,
-    Move = 1,
-    Attack,
-}
 
-public class BombStateController : BaseFSM_Controller<EBombState>
+public class BombStateController : BaseFSM_Controller<ENormalEnemyState>
 {
     public EffectAnim bombAnim;
     public GameObject showRange;
@@ -23,20 +17,20 @@ public class BombStateController : BaseFSM_Controller<EBombState>
     {
         base.Start();
 
-        var rootState = new BombRootState(this);
-        var rootToChase = new TransitionIdleOrMove<EBombState>(this, EBombState.Move);
+        var rootState = new NormalRootState(this);
+        var rootToChase = new TransitionIdleOrMove<ENormalEnemyState>(this, ENormalEnemyState.Move);
         rootState.AddTransition(rootToChase);
 
-        var chaseState = new BombChaseState(this);
-        var chaseToAttack = new MoveToAttackTransition<EBombState>(this, EBombState.Attack, true);
+        var chaseState = new NormalChaseState(this);
+        var chaseToAttack = new MoveToAttackTransition<ENormalEnemyState>(this, ENormalEnemyState.Attack, true);
         chaseState
-            .AddTransition<EBombState>(chaseToAttack);
+            .AddTransition<ENormalEnemyState>(chaseToAttack);
 
         var attackState = new BombAttackState(this);
 
-        AddState(rootState, EBombState.Idle);
-        AddState(chaseState, EBombState.Move);
-        AddState(attackState, EBombState.Attack);
+        AddState(rootState, ENormalEnemyState.Idle);
+        AddState(chaseState, ENormalEnemyState.Move);
+        AddState(attackState, ENormalEnemyState.Attack);
     }
 
     public void Boom()

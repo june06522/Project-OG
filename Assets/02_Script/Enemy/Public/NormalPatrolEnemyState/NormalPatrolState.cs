@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MummyPatrolState : MummyRootState
+public class NormalPatrolState : NormalPatrolRootState
 {
-    PatrolAction<EMummyState> patrolAct;
-    public MummyPatrolState(BaseFSM_Controller<EMummyState> controller) : base(controller)
+    PatrolAction<ENormalPatrolEnemyState> patrolAct;
+    public NormalPatrolState(BaseFSM_Controller<ENormalPatrolEnemyState> controller) : base(controller)
     {
         //behaviour
         List<SteeringBehaviour> behaviourlist = new List<SteeringBehaviour>()
@@ -14,7 +14,7 @@ public class MummyPatrolState : MummyRootState
             new ObstacleAvoidanceBehaviour(controller.transform)
         };
 
-        patrolAct = new PatrolAction<EMummyState>(controller, behaviourlist, null);
+        patrolAct = new PatrolAction<ENormalPatrolEnemyState>(controller, behaviourlist, null);
     }
 
     protected override void EnterState()

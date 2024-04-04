@@ -60,7 +60,6 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
     public override void OnFixedUpdate()
     {
-        Debug.Log("ganggag");
         Vector2 dir = (targetTrm.position - controller.transform.position);
 
         if (dir.magnitude > _data.AttackAbleRange)

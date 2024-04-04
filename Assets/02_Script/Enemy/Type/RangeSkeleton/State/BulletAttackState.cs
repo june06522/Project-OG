@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletAttackState : MummyRootState
+public class BulletAttackState : NormalRootState
 {
     private Transform _target;
     private EnemyBullet _bullet;
     private Transform _gun;
 
-    public BulletAttackState(BaseFSM_Controller<EMummyState> controller, EnemyBullet bullet, Transform gun = null) : base(controller)
+    public BulletAttackState(BaseFSM_Controller<ENormalEnemyState> controller, EnemyBullet bullet, Transform gun = null) : base(controller)
     {
         _target = GameManager.Instance.player;
         _bullet = bullet;
@@ -49,7 +49,7 @@ public class BulletAttackState : MummyRootState
         yield return new WaitForSeconds(0.3f);
 
         _data.SetCoolDown();
-        controller.ChangeState(EMummyState.Idle);
+        controller.ChangeState(ENormalEnemyState.Idle);
     }
 
     protected override void ExitState()
