@@ -24,6 +24,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
     private PlayerEnerge _playerEnerge;
 
     public AudioClip _audioClip;
+    [SerializeField] private GameObject visual;
 
     [field: SerializeField] public PlayerDataSO playerData { get; protected set; }
 
@@ -57,19 +58,19 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
         playerData = Instantiate(playerData);
         playerData.SetOwner(this);
-        if(_playerHP != null)
+        if (_playerHP != null)
         {
             _playerHP.SetPlayerHP((int)playerData[PlayerStatsType.MaxHP]);
 
         }
-        if(_playerEnerge != null)
+        if (_playerEnerge != null)
         {
             _playerEnerge.SetPlayerEnerge((int)playerData[PlayerStatsType.MaxEnerge], playerData[PlayerStatsType.RegenEnergePerSec]);
             inputController.SetPlayerEnerge(_playerEnerge);
         }
-        
 
-        var goToDash = new PlayerGoToDash(this, _playerEnerge,_audioClip);
+
+        var goToDash = new PlayerGoToDash(this, _playerEnerge, _audioClip);
 
         var idleState = new PlayerRootState(this);
         var idleToMove = new PlayerTransitionByMoveDir(this, EnumPlayerState.Move, Vector2.zero, TransitionCheckType.Greater);
@@ -78,7 +79,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
             .AddTransition<EnumPlayerState>(idleToMove)
             .AddTransition<EnumPlayerState>(goToDash);
 
-        var moveState = new PlayerMoveState(this);
+        var moveState = new PlayerMoveState(this, visual);
         var moveToIdle = new PlayerTransitionByMoveDir(this, EnumPlayerState.Idle, Vector2.zero, TransitionCheckType.Equal);
 
         moveState
@@ -92,7 +93,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
         AddState(dashState, EnumPlayerState.Dash);
 
         _animator = GetComponent<Animator>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _spriteRenderer = visual.GetComponent<SpriteRenderer>();
 
     }
 
