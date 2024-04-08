@@ -28,6 +28,7 @@ public class AOneBrokenState : BossBaseState
         _altar.isOneBroken = true;
         _altar.StartCoroutine(RandomPattern(_altar.so.PatternChangeTime));
         _altar.StartCoroutine(OneBrokenMove());
+        _altar.ChangeMaterial(_altar.basicMat);
     }
 
     public override void OnBossStateUpdate()
