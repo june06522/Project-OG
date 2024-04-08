@@ -30,7 +30,7 @@ public class InventoryRaycast : MonoBehaviour
             Vector2Int invenPos = new Vector2Int(-1, -1);
             Vector2 pos = rectTransform.position;// * invensize.ratio; 
             pos -= new Vector2(x * len / 2, y * len / 2);
-            Vector2 curPos = Camera.main.WorldToViewportPoint(Input.mousePosition ) ;
+            Vector2 curPos = Camera.main.ScreenToWorldPoint(Input.mousePosition ) ;
             //첫번재 가설 비율이 잘못된다.. 이미 스케일에 적용을했어
 
             //두번째 가설 스케일과 좌표의 적용방식이 다르다.

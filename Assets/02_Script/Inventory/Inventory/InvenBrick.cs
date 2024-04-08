@@ -190,7 +190,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             Vector2Int invenPos = new Vector2Int(-1, -1);
             Vector2 pos = rectTransform.position;// * invensize.ratio;
             pos -= new Vector2(x * len / 2, y * len / 2);
-            Vector2 curPos = Camera.main.WorldToViewportPoint(Input.mousePosition ) ;
+            Vector2 curPos = Camera.main.ScreenToWorldPoint(Input.mousePosition ) ;
             while (curPos.x > pos.x)
             {
                 pos.x += len;

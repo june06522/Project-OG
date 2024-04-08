@@ -140,7 +140,7 @@ public class Stage : MonoBehaviour
         // Wave Start
         stageObjectList.ForEach((s) =>
         {
-            if (s.IsNeedRemove)
+            //if (s.IsNeedRemove)
                 monsterCount++;
         });
 
