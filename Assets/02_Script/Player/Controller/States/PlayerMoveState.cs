@@ -17,7 +17,7 @@ public class PlayerMoveState : PlayerRootState
     protected override void EnterState()
     {
         playerController.moveParticle.Play();
-        rigid.transform.DOScale(new Vector2(0.8f, 1.3f), 0.2f).SetEase(Ease.InOutBack);
+        transform.DOScale(new Vector2(0.8f, 1.3f), 0.2f).SetEase(Ease.InOutBack);
     }
 
     protected override void UpdateState()
@@ -58,10 +58,9 @@ public class PlayerMoveState : PlayerRootState
 
         playerController.moveParticle.Stop();
         DOTween.Sequence()
-            .Append(transform.DOScale(Vector3.one * 1.4f, 0.2f).SetEase(Ease.OutBounce))
+            .Append(transform.DOScale(new Vector2(1.3f, 0.8f), 0.2f).SetEase(Ease.InOutBack))
+            //.Append(transform.DOScale(Vector3.one * 1.4f, 0.2f).SetEase(Ease.OutBounce))
             .Append(transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBounce));
-
-
 
         rigid.velocity = Vector2.zero;
 
