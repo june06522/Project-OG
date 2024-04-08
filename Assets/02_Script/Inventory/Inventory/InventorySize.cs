@@ -50,10 +50,10 @@ public class InventorySize : MonoBehaviour
             inven.localScale = new Vector3(1 / 2f, 1 / 2f);
         }
 
-        ratio = 50f / (pixelSize.assetsPPU);
-        inven.localScale = new Vector3(ratio, ratio);
+        //ratio = 50f / (pixelSize.assetsPPU);
+        //inven.localScale = new Vector3(ratio, ratio);
 
-        positionRatio = (pixelSize.assetsPPU);
+        //positionRatio = (pixelSize.assetsPPU);
     }
 
     private void SettingLineRender()

@@ -87,9 +87,8 @@ public class ConnectVisible : MonoBehaviour
 
                     line.positionCount += 1;
 
-                    Vector3 pos = generator.transform.position / invenSize.positionRatio;
+                    Vector3 pos = generator.transform.position;// / invenSize.positionRatio;
                     
-                    Debug.Log(pos);
                     pos.z = -4;
                     line.SetPosition(line.positionCount - 1, pos);
 
