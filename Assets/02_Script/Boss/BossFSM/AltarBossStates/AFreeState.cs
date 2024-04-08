@@ -9,6 +9,7 @@ public class AFreeState : BossBaseState
 {
     private bool _allThrow;
     private bool _lock;
+    private bool _once;
 
     private float _rotatingBallRegenTime;
     private float _curWaitingRegenTime;
@@ -20,6 +21,7 @@ public class AFreeState : BossBaseState
     {
         _lock = false;
         _allThrow = false;
+        _once = false;
         _altar = boss;
         _pattern = pattern;
         _rotatingBallRegenTime = 10;
@@ -36,6 +38,7 @@ public class AFreeState : BossBaseState
         _altar.isStop = false;
         _altar.StartCoroutine(Dash(10, 20, 0.5f, 0.5f));
         _altar.StartCoroutine(_altar.bossMove.BossMovement(_altar.so.StopTime, _altar.so.MoveX, _altar.so.MoveY, _altar.so.Speed, _altar.so.WallCheckRadius));
+        _altar.ChangeMaterial(_altar.basicMat);
     }
 
     public override void OnBossStateUpdate()
@@ -57,14 +60,15 @@ public class AFreeState : BossBaseState
     {
         while(!_altar.IsDie)
         {
-            if (_altar.isAttacking)
+            if(_altar.isAttacking)
             {
-                if(_lock)
-                {
-                    _altar.StartCoroutine(Unlock(15));
-                }
                 yield return null;
                 continue;
+            }
+
+            if(_lock && !_once)
+            {
+                _altar.StartCoroutine(Unlock(15));
             }
 
             yield return new WaitForSeconds(waitTime);
@@ -104,8 +108,10 @@ public class AFreeState : BossBaseState
 
     private IEnumerator Unlock(float waitTime)
     {
+        _once = true;
         yield return new WaitForSeconds(waitTime);
         _lock = false;
+        _once = false;
     }
 
     private IEnumerator Dash(float maxDistance, float speed, float waitTime, float dashTime)
