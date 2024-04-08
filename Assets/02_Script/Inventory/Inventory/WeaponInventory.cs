@@ -38,7 +38,7 @@ public class WeaponInventory : MonoBehaviour
     public event SlotChanged OnSlotChangeEvent;
 
     [HideInInspector]
-    public float tileRength;
+    public float tileRength = 1000;
 
     private void Awake()
     {
@@ -82,7 +82,7 @@ public class WeaponInventory : MonoBehaviour
     }
     private void Update()
     {
-        //CheckTileLen();
+        CheckTileLen();
     }
 
     public void AddSlot(Vector2Int point)
