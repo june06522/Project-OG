@@ -35,14 +35,6 @@ public class SlateBoss : Boss
     [SerializeField]
     private int _minimiCount;
 
-    private enum BossState
-    {
-        Idle,
-        FullHP,
-        HalfHP,
-        Dead
-    }
-
     private BossState _curBossState;
 
     private BossFSM _bossFSM;

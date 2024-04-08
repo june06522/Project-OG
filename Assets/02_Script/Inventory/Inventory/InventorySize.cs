@@ -11,6 +11,11 @@ public class InventorySize : MonoBehaviour
     WeaponInventory weaponInventory;
     ConnectVisible connectVisible;
 
+    [HideInInspector]
+    public float ratio;
+    [HideInInspector]
+    public float positionRatio;
+
     private void Awake()
     {
         connectVisible = GetComponent<ConnectVisible>();
@@ -44,32 +49,24 @@ public class InventorySize : MonoBehaviour
         {
             inven.localScale = new Vector3(1 / 2f, 1 / 2f);
         }
-        
-            float size = 50f / (pixelSize.assetsPPU);
-            inven.localScale = new Vector3(size, size);
-        
-        // 0 == 2
-        // 50 = 1
-        // 75 == 0.75
-        // 100 = 0.5\
-        // 150
-        // assetsPPU > 50
-        // 1 * (assetsPPU - 50) / 50
-        // assetsPPU < 50
-        //
+
+        ratio = 50f / (pixelSize.assetsPPU);
+        inven.localScale = new Vector3(ratio, ratio);
+
+        positionRatio = (pixelSize.assetsPPU);
     }
 
     private void SettingLineRender()
     {
         if (GameManager.Instance.Inventory.GetInvenSize() > 7)
         {
-            connectVisible.mulX = 2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.16f;
-            connectVisible.mulY = 2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.16f;
+            connectVisible.mulX = (2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.16f) * ratio;
+            connectVisible.mulY = (2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.16f) * ratio;
         }
         else
         {
-            connectVisible.mulX = 2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.25f;
-            connectVisible.mulY = 2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.25f;
+            connectVisible.mulX = (2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.25f) * ratio;
+            connectVisible.mulY = (2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.25f) * ratio;
         }
     }
 }
