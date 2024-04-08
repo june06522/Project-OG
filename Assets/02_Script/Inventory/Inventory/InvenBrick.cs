@@ -183,7 +183,8 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         float x = (int)rectTransform.rect.width / 100;// * invensize.ratio;
         float y = (int)rectTransform.rect.height / 100;// * invensize.ratio;
         float len = GameManager.Instance.Inventory.tileRength;// * invensize.ratio;
-
+        if (len == 0)
+            Debug.LogError("len 0 : 무한루프");
         while (true)
         {
             bool isOpen = false;

@@ -25,7 +25,8 @@ public class InventoryRaycast : MonoBehaviour
             float x = (int)rectTransform.rect.width / 100;// * invensize.ratio;
             float y = (int)rectTransform.rect.height / 100;// * invensize.ratio;
             float len = GameManager.Instance.Inventory.tileRength;// * invensize.ratio;
-
+            if (len == 0)
+                Debug.LogError("len 0 : 무한루프");
             bool isOpen = false;
             Vector2Int invenPos = new Vector2Int(-1, -1);
             Vector2 pos = rectTransform.position;// * invensize.ratio; 
