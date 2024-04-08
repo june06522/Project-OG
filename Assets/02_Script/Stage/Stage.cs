@@ -110,6 +110,10 @@ public class Stage : MonoBehaviour
 
     private bool isMonsterSpawning = false;
 
+    [Header("Object Info")]
+    [SerializeField]
+    private List<IStageObject> stageObjectList = new List<IStageObject>();
+
     public void AddNextStage(Stage stage)
     {
         NextStage.Add(stage);
@@ -134,6 +138,12 @@ public class Stage : MonoBehaviour
         }
 
         // Wave Start
+        stageObjectList.ForEach((s) =>
+        {
+            if (s.IsNeedRemove)
+                monsterCount++;
+        });
+
         StartCoroutine(MonsterSpawn());
         waveCount++;
     }
@@ -145,8 +155,12 @@ public class Stage : MonoBehaviour
 
         if (_stageChest != null)
         {
+            GameObject chest = null;
+            if (_gateSpawnPos == null)
+                chest = Instantiate(_stageChest, transform.position - new Vector3(0, 3, 0), Quaternion.identity).gameObject;
+            else
+                chest = Instantiate(_stageChest, _gateSpawnPos.position - new Vector3(0, 3, 0), Quaternion.identity).gameObject;
 
-            GameObject chest = Instantiate(_stageChest, transform.position - new Vector3(0, 3, 0), Quaternion.identity).gameObject;
             stageItems.Add(chest);
 
         }
@@ -401,5 +415,10 @@ public class Stage : MonoBehaviour
 
 
         isMonsterSpawning = false;
+    }
+
+    public void DiscountMonster()
+    {
+        monsterCount--;
     }
 }
