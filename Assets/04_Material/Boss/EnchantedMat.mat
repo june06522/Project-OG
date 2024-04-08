@@ -10,8 +10,8 @@ Material:
   m_Name: EnchantedMat
   m_Shader: {fileID: 4800000, guid: 0803c241834332942abfcbd27c498b46, type: 3}
   m_ValidKeywords:
-  - _ENABLEENCHANTED_ON
   - _ENABLESTRONGTINT_ON
+  - _ENABLEUVROTATE_ON
   - _ENABLEVIBRATE_ON
   - _SHADERFADING_NONE
   - _SHADERSPACE_UV
@@ -199,7 +199,7 @@ Material:
     - _DirectionalAlphaFadeFade: 0
     - _DirectionalAlphaFadeInvert: 0
     - _DirectionalAlphaFadeNoiseFactor: 0.2
-    - _DirectionalAlphaFadeRotation: 0
+    - _DirectionalAlphaFadeRotation: 9
     - _DirectionalAlphaFadeWidth: 0.2
     - _DirectionalDistortionFade: 0
     - _DirectionalDistortionInvert: 0
@@ -227,7 +227,7 @@ Material:
     - _EnableDirectionalAlphaFade: 0
     - _EnableDirectionalDistortion: 0
     - _EnableDirectionalGlowFade: 0
-    - _EnableEnchanted: 1
+    - _EnableEnchanted: 0
     - _EnableFlame: 0
     - _EnableFrozen: 0
     - _EnableFullAlphaDissolve: 0
@@ -270,7 +270,7 @@ Material:
     - _EnableSquish: 0
     - _EnableStrongTint: 1
     - _EnableUVDistort: 0
-    - _EnableUVRotate: 0
+    - _EnableUVRotate: 1
     - _EnableUVScale: 0
     - _EnableUVScroll: 0
     - _EnableVibrate: 1
@@ -300,7 +300,7 @@ Material:
     - _FrozenHighlightDensity: 1
     - _FrozenSnowContrast: 1
     - _FrozenSnowDensity: 0.25
-    - _FullAlphaDissolveFade: 1
+    - _FullAlphaDissolveFade: 0.5
     - _FullAlphaDissolveWidth: 0.5
     - _FullDistortionFade: 1
     - _FullGlowDissolveFade: 0.5
@@ -467,7 +467,7 @@ Material:
     - _ToggleUnscaledTime: 0
     - _UVDistortFade: 1
     - _UVDistortMaskToggle: 0
-    - _UVRotateSpeed: 1
+    - _UVRotateSpeed: 0.3
     - _UVSec: 0
     - _VertexTintFirst: 0
     - _VibrateFade: 0
