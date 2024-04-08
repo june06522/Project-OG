@@ -5,24 +5,21 @@ using UnityEngine;
 public class WormBulletTest : BossBullet
 {
     [SerializeField]
-    private float f_speed;
-    private float f_deg;
-    private float f_s;
-
-    private bool b_x;
-    private bool b_y;
+    private float _angle;
+    [SerializeField]
+    private float _time;
 
     private Rigidbody2D rigid;
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
-        f_deg = f_s = 0;
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
+        StartCoroutine(Movement());
     }
 
     protected override void OnDisable()
@@ -30,19 +27,18 @@ public class WormBulletTest : BossBullet
         base.OnDisable();
     }
 
-    void Update()
+    private IEnumerator Movement()
     {
-        f_deg += 0.01f * f_speed;
-        f_s = Mathf.Sin(f_deg) * 0.01f;
+        while(true)
+        {
+            rigid.velocity = Quaternion.Euler(0, 0, _angle) * rigid.velocity;
 
-        if (Mathf.Abs(rigid.velocity.x) > Mathf.Abs(rigid.velocity.y))
-        {
-            transform.Translate(new Vector3(0, f_s, 0));
+            yield return new WaitForSeconds(_time);
+
+            rigid.velocity = Quaternion.Euler(0, 0, -_angle) * rigid.velocity;
+
+            yield return new WaitForSeconds(_time);
         }
-        else
-        {
-            transform.Translate(new Vector3(f_s, 0, 0));
-        } 
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)
