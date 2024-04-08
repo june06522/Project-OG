@@ -32,6 +32,8 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
     public static PlayerInputController InputController => inputController;
     public static PlayerEventController EventController => eventController;
+    public ParticleSystem moveParticle;
+
 
     Rigidbody2D rb2D;
 

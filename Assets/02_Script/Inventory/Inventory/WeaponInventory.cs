@@ -82,7 +82,7 @@ public class WeaponInventory : MonoBehaviour
     }
     private void Update()
     {
-        CheckTileLen();
+        //CheckTileLen();
     }
 
     public void AddSlot(Vector2Int point)
