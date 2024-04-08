@@ -22,6 +22,7 @@ public class InventorySize : MonoBehaviour
         rect = GetComponent<RectTransform>();
         pixelSize = FindObjectOfType<PixelPerfectCamera>();
         inven = transform.parent.parent.parent.GetComponent<RectTransform>();
+        Debug.Log(pixelSize);
     }
 
     private void Start()
