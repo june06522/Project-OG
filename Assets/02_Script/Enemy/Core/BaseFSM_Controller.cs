@@ -21,7 +21,7 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
     {
         Enemy = GetComponent<Enemy>();
         AIdata = GetComponent<AIData>();
-        spriteRender = transform.Find("Visual").GetComponent<SpriteRenderer>();
+        //spriteRender = transform.Find("Body").GetComponent<SpriteRenderer>();
     }
 
     protected virtual void Start()

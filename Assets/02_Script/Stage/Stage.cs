@@ -138,11 +138,11 @@ public class Stage : MonoBehaviour
         }
 
         // Wave Start
-        stageObjectList.ForEach((s) =>
-        {
-            //if (s.IsNeedRemove)
-                monsterCount++;
-        });
+        //stageObjectList.ForEach((s) =>
+        //{
+        //    if (s.IsNeedRemove)
+        //        monsterCount++;
+        //});
 
         StartCoroutine(MonsterSpawn());
         waveCount++;
