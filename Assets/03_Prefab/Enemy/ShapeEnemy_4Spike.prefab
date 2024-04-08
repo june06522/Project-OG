@@ -65,6 +65,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyDataSO: {fileID: 11400000, guid: 855214d2a1570994aa607b020e4f07d0, type: 2}
+  _visualTrm: {fileID: 7862876904273112287}
+  <enemyAnimController>k__BackingField: {fileID: 8580832659523150650}
   acceleration: 50
   deacceleration: 100
   currentSpeed: 0
@@ -134,6 +136,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7862876904273112287}
   - component: {fileID: 7862876904273112286}
+  - component: {fileID: 7078019049598505581}
   m_Layer: 0
   m_Name: Eye
   m_TagString: Untagged
@@ -208,6 +211,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7078019049598505581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7862876904273112284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5fe50beff9976e49b5c0574ef0071f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableFeedback: 21
+  prefab: {fileID: 2728001201958583583, guid: f856cdcf62a2e60449713591a22ae8be, type: 3}
 --- !u!1 &7862876904322716543
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,6 +235,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7862876904322716542}
   - component: {fileID: 7618453891337243429}
+  - component: {fileID: 8580832659523150650}
   m_Layer: 0
   m_Name: 4SpikeEnemy
   m_TagString: Untagged
@@ -262,6 +280,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8580832659523150650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7862876904322716543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bd332299282dd5498f9abfe25be18be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7862876904771642126
 GameObject:
   m_ObjectHideFlags: 0

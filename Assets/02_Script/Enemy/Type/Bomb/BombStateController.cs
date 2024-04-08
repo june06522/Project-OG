@@ -51,7 +51,7 @@ public class BombStateController : BaseFSM_Controller<ENormalEnemyState>
             //    AddForce((collider.transform.position- instShowRangeObj.transform.position).normalized * 100, ForceMode2D.Impulse) ;
         }
 
-        bombAnim.Play();
+        Instantiate(bombAnim, transform.position, Quaternion.identity).Play();
 
         if(instShowRangeObj != null)
             Destroy(instShowRangeObj);

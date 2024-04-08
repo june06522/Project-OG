@@ -11,7 +11,12 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
     [SerializeField] EnemyDataSO enemyDataSO;
     public EnemyDataSO EnemyDataSO => enemyDataSO;
 
-    
+    [Header("Visual")]
+    [SerializeField]
+    private Transform _visualTrm;
+    [field: SerializeField]
+    public EnemyAnimController enemyAnimController { get; set; }
+
     [Header("Movement")]
     [SerializeField]
     float acceleration = 50, deacceleration = 100;
@@ -34,9 +39,6 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
     //ETC
     public FeedbackPlayer feedbackPlayer { get; set; }
 
-    [field:SerializeField]
-    public EnemyAnimController enemyAnimController { get; set; }
-
     private new Collider2D collider;
     private new Rigidbody2D rigidbody;
     public Collider2D Collider => collider;
@@ -56,10 +58,8 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
         collider = GetComponent<Collider2D>();
         rigidbody = GetComponent<Rigidbody2D>();
 
-        //Transform visualTrm = transform.Find("Body");
-        //spriteRender = visualTrm.GetComponent<SpriteRenderer>();
-        //feedbackPlayer = visualTrm.GetComponent<FeedbackPlayer>();
-        //enemyAnimController = visualTrm.GetComponent<EnemyAnimController>();
+        spriteRender = _visualTrm.GetComponent<SpriteRenderer>();
+        feedbackPlayer = _visualTrm.GetComponent<FeedbackPlayer>();
     }
 
     private void Start()
