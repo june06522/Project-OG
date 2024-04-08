@@ -35,6 +35,8 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     protected Image image;
     public Image Image => image;
 
+    protected InventorySize invensize;
+
 
     protected virtual void Awake()
     {
@@ -44,6 +46,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         inventory = FindObjectOfType<WeaponInventory>();
         rectTransform = GetComponent<RectTransform>();
         inventoryActive = FindObjectOfType<InventoryActive>();
+        invensize = FindObjectOfType<InventorySize>();
     }
 
     public virtual void Settings()
@@ -177,17 +180,17 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     IEnumerator CheckMouse()
     {
         transform.SetAsLastSibling();
-        int x = (int)rectTransform.rect.width / 100;
-        int y = (int)rectTransform.rect.height / 100;
-        float len = GameManager.Instance.Inventory.tileRength;
+        float x = (int)rectTransform.rect.width / 100;// * invensize.ratio;
+        float y = (int)rectTransform.rect.height / 100;// * invensize.ratio;
+        float len = GameManager.Instance.Inventory.tileRength;// * invensize.ratio;
 
         while (true)
         {
             bool isOpen = false;
             Vector2Int invenPos = new Vector2Int(-1, -1);
-            Vector2 pos = rectTransform.position;
+            Vector2 pos = rectTransform.position;// * invensize.ratio;
             pos -= new Vector2(x * len / 2, y * len / 2);
-            Vector2 curPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 curPos = Camera.main.WorldToViewportPoint(Input.mousePosition ) ;
             while (curPos.x > pos.x)
             {
                 pos.x += len;
