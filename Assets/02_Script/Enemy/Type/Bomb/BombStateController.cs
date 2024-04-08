@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class BombStateController : BaseFSM_Controller<ENormalEnemyState>
 {
-    public EffectAnim bombAnim;
+    public bool explodeDebug = false;
+
+    public ParticleSystem bombAnim;
     public GameObject showRange;
     public float radius = 3f;
     private GameObject instShowRangeObj;
@@ -49,7 +51,7 @@ public class BombStateController : BaseFSM_Controller<ENormalEnemyState>
             //    AddForce((collider.transform.position- instShowRangeObj.transform.position).normalized * 100, ForceMode2D.Impulse) ;
         }
 
-        Instantiate(bombAnim, instShowRangeObj.transform.position, Quaternion.identity);
+        bombAnim.Play();
 
         if(instShowRangeObj != null)
             Destroy(instShowRangeObj);
@@ -65,7 +67,11 @@ public class BombStateController : BaseFSM_Controller<ENormalEnemyState>
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawSphere(transform.position, radius);
+        if(explodeDebug)
+        {
+            Gizmos.color = new Color(1, 0, 0, 0.2f);
+            Gizmos.DrawSphere(transform.position, radius);
+        }
     }
 #endif
 }

@@ -33,6 +33,8 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
     private AudioClip _hitSound;
     //ETC
     public FeedbackPlayer feedbackPlayer { get; set; }
+
+    [field:SerializeField]
     public EnemyAnimController enemyAnimController { get; set; }
 
     private new Collider2D collider;
@@ -54,10 +56,10 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
         collider = GetComponent<Collider2D>();
         rigidbody = GetComponent<Rigidbody2D>();
 
-        Transform visualTrm = transform.Find("Visual");
-        spriteRender = visualTrm.GetComponent<SpriteRenderer>();
-        feedbackPlayer = visualTrm.GetComponent<FeedbackPlayer>();
-        enemyAnimController = visualTrm.GetComponent<EnemyAnimController>();
+        //Transform visualTrm = transform.Find("Body");
+        //spriteRender = visualTrm.GetComponent<SpriteRenderer>();
+        //feedbackPlayer = visualTrm.GetComponent<FeedbackPlayer>();
+        //enemyAnimController = visualTrm.GetComponent<EnemyAnimController>();
     }
 
     private void Start()
