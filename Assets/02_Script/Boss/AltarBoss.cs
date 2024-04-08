@@ -7,15 +7,6 @@ public class AltarBoss : Boss
 {
     public GameObject _altarCollector;
 
-    private enum BossState
-    {
-        Idle,
-        Tied,
-        OneBroken,
-        Free,
-        Dead
-    }
-
     public AudioClip fireClip;
     public AudioClip deadClip;
     public AudioClip burnClip;

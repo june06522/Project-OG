@@ -4,6 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum BossState
+{
+    Idle,
+    Tied,
+    OneBroken,
+    Free,
+
+    FullHP,
+    HalfHP,
+
+    Flowering,
+    FullBloom,
+    Withered,
+    Dead
+}
 
 public class Boss : MonoBehaviour, IHitAble
 {
@@ -78,11 +93,6 @@ public class Boss : MonoBehaviour, IHitAble
         }
 
         return true;
-    }
-
-    public virtual void ChangeState()
-    {
-
     }
 
     public void ChangeMaterial(Material mat)

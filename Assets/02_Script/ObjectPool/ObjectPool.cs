@@ -16,7 +16,6 @@ public class ObjectPool : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-
         Init();
     }
 
