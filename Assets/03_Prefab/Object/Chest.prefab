@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: 86297143
   m_SortingLayer: 4
   m_SortingOrder: -1
-  m_Sprite: {fileID: -1674920504, guid: 5a348615c9f38cf46b17abb0b83d572a, type: 3}
+  m_Sprite: {fileID: 961199969, guid: 285c651980d77604e8c6160dc3c010ca, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -107,7 +107,7 @@ MonoBehaviour:
   _itemList: {fileID: 11400000, guid: b725e5ac41aa7444382995b31e803dbd, type: 2}
   _dropMinGold: 10
   _dropMaxGold: 50
-  _openSprite: {fileID: -336244866, guid: 5a348615c9f38cf46b17abb0b83d572a, type: 3}
+  _openSprite: {fileID: 21300000, guid: 5e0647c0cd804a745aec3c82d12dc05d, type: 3}
   _itemSpawnPos: {fileID: 8878089389317907774}
   _goldEffect: {fileID: 355807675262701839}
 --- !u!58 &4743970590205180781
@@ -177,6 +177,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1527569491287301460}
     m_Modifications:
+    - target: {fileID: 5454107589695975849, guid: d0eaa4bf5eb2b954c856309449bd78f0, type: 3}
+      propertyPath: ShapeModule.angle
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 5454107589695975849, guid: d0eaa4bf5eb2b954c856309449bd78f0, type: 3}
+      propertyPath: ShapeModule.m_Scale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5454107589695975849, guid: d0eaa4bf5eb2b954c856309449bd78f0, type: 3}
+      propertyPath: RotationModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5454107589695975849, guid: d0eaa4bf5eb2b954c856309449bd78f0, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5454107589695975849, guid: d0eaa4bf5eb2b954c856309449bd78f0, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5454107589695975849, guid: d0eaa4bf5eb2b954c856309449bd78f0, type: 3}
+      propertyPath: InitialModule.startSpeed.minScalar
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5454107589695975849, guid: d0eaa4bf5eb2b954c856309449bd78f0, type: 3}
+      propertyPath: UVModule.sprites.Array.data[0].sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 90cf3df7faecc744b96e035b745c8adf, type: 3}
     - target: {fileID: 5454107589695975851, guid: d0eaa4bf5eb2b954c856309449bd78f0, type: 3}
       propertyPath: m_Icon
       value: 
