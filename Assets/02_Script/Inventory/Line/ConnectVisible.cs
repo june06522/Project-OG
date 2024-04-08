@@ -17,6 +17,7 @@ public class ConnectVisible : MonoBehaviour
 {
     private WeaponInventory inventory;
     private InventoryActive inventoryActive;
+    private InventorySize invenSize;
     Canvas canvas;
     private InvenBrick[] brickList;
 
@@ -35,6 +36,7 @@ public class ConnectVisible : MonoBehaviour
 
     private void Awake()
     {
+        invenSize = FindObjectOfType<InventorySize>();
         inventoryActive = FindObjectOfType<InventoryActive>();
         inventory = FindObjectOfType<WeaponInventory>();
         canvas = GetComponentInParent<Canvas>();
@@ -84,7 +86,10 @@ public class ConnectVisible : MonoBehaviour
                     LineRenderer line = CreateLine();
 
                     line.positionCount += 1;
-                    Vector3 pos = generator.transform.position;
+
+                    Vector3 pos = generator.transform.position / invenSize.positionRatio;
+                    
+                    Debug.Log(pos);
                     pos.z = -4;
                     line.SetPosition(line.positionCount - 1, pos);
 
