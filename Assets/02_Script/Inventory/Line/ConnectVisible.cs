@@ -26,6 +26,7 @@ public class ConnectVisible : MonoBehaviour
 
     List<LineRenderer> lendererList = new List<LineRenderer>();
     [SerializeField] Material lineRenderMat;
+    Material curMat = null;
 
 
     [HideInInspector] public float mulX = 2.0f;
@@ -74,7 +75,7 @@ public class ConnectVisible : MonoBehaviour
         foreach (var generator in generatorList)
         {
             maxCnt = 0;
-
+            curMat = generator.InvenObject.colorMat;
 
             foreach (var vec in generator.InvenObject.sendPoints)
             {
@@ -325,7 +326,10 @@ public class ConnectVisible : MonoBehaviour
     private LineRenderer CreateLine()
     {
         LineRenderer line = Instantiate(tempObj, transform).GetComponent<LineRenderer>();
-        line.material = lineRenderMat;
+        if (curMat == null)
+            line.material = lineRenderMat;
+        else
+            line.material = curMat;
         line.startWidth = width;
         lendererList.Add(line);
         return line;
