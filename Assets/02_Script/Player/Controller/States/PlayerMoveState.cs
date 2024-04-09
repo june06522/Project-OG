@@ -6,19 +6,19 @@ using DG.Tweening;
 
 public class PlayerMoveState : PlayerRootState
 {
-    PlayerController playerController;
+    ParticleSystem moveParticle;
     GameObject _visual;
     bool increase = false;
 
-    public PlayerMoveState(PlayerController controller, GameObject visual) : base(controller)
+    public PlayerMoveState(PlayerController controller) : base(controller)
     {
-        playerController = controller;
-        this._visual = visual;
+        moveParticle = GameObject.Find("MoveParticle").GetComponent<ParticleSystem>();
+        _visual = GameObject.Find("Visual");
     }
 
     protected override void EnterState()
     {
-        playerController.moveParticle.Play();
+        moveParticle.Play();
         _visual.transform.DOScale(new Vector2(0.8f, 1.3f), 0.2f).SetEase(Ease.InOutBack);
     }
 
@@ -58,7 +58,7 @@ public class PlayerMoveState : PlayerRootState
     protected override void ExitState()
     {
 
-        playerController.moveParticle.Stop();
+        moveParticle.Stop();
         DOTween.Sequence()
             .Append(_visual.transform.DOScale(new Vector2(1.3f, 0.8f), 0.2f).SetEase(Ease.InOutBack))
             //.Append(transform.DOScale(Vector3.one * 1.4f, 0.2f).SetEase(Ease.OutBounce))
