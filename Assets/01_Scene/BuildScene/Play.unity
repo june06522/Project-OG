@@ -8111,6 +8111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ratio: 0
   positionRatio: 0
+  slotPrt: {fileID: 0}
 --- !u!1 &787663679
 GameObject:
   m_ObjectHideFlags: 0
@@ -8746,6 +8747,7 @@ MonoBehaviour:
   inventoryActive: {fileID: 0}
   inventory: {fileID: 0}
   weaponController: {fileID: 0}
+  invenAddType: {fileID: 0}
   _globalLight: {fileID: 89869449}
   isShopOpen: 0
 --- !u!1 &933640469
@@ -11078,7 +11080,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1410815998}
-  - component: {fileID: 1410815996}
   - component: {fileID: 1410815995}
   - component: {fileID: 1410815994}
   - component: {fileID: 1410815993}
@@ -11171,27 +11172,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!95 &1410815996
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1410815991}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 51257860579ae1a44a80564b96a356be, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &1410815998
 Transform:
   m_ObjectHideFlags: 0
