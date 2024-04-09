@@ -59,13 +59,13 @@ public class InventorySize : MonoBehaviour
     {
         if (GameManager.Instance.Inventory.GetInvenSize() > 7)
         {
-            connectVisible.mulX = (2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.16f) * ratio;
-            connectVisible.mulY = (2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.16f) * ratio;
+            connectVisible.mulX = (2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.16f);// * ratio;
+            connectVisible.mulY = (2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.16f);// * ratio;
         }
         else
         {
-            connectVisible.mulX = (2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.25f) * ratio;
-            connectVisible.mulY = (2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.25f) * ratio;
+            connectVisible.mulX = (2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.25f);// * ratio;
+            connectVisible.mulY = (2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.25f);// * ratio;
         }
     }
 }

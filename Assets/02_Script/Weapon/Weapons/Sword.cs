@@ -17,9 +17,8 @@ public class Sword : InvenWeapon
         base.Awake();
         _spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
         _col = transform.GetComponent<Collider2D>();
-
+        
     }
-
 
     [BindExecuteType(typeof(float))]
     public override void GetSignal([BindParameterType(typeof(float))] object signal)
@@ -73,10 +72,15 @@ public class Sword : InvenWeapon
         if (!isAttack)
         {
 
-            _col.transform.localPosition = new Vector3(1, 0, 0);
+            _col.transform.localPosition = origin;
 
         }
 
+    }
+
+    public override void OnRePosition()
+    {
+        origin = transform.localPosition;
     }
 
     protected override void RotateWeapon(Transform target)

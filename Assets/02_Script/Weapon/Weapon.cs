@@ -14,6 +14,7 @@ public abstract class Weapon : MonoBehaviour
     public Guid WeaponGuid { get; protected set; }
 
     public string explainTxt = "";
+    public Vector3 origin;
 
     protected virtual void Awake()
     {
