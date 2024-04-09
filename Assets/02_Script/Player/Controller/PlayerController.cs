@@ -33,7 +33,6 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
     public static PlayerInputController InputController => inputController;
     public static PlayerEventController EventController => eventController;
-    public ParticleSystem moveParticle;
 
 
     Rigidbody2D rb2D;
@@ -79,7 +78,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
             .AddTransition<EnumPlayerState>(idleToMove)
             .AddTransition<EnumPlayerState>(goToDash);
 
-        var moveState = new PlayerMoveState(this, visual);
+        var moveState = new PlayerMoveState(this);
         var moveToIdle = new PlayerTransitionByMoveDir(this, EnumPlayerState.Idle, Vector2.zero, TransitionCheckType.Equal);
 
         moveState
