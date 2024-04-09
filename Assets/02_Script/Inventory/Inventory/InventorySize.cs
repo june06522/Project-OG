@@ -15,6 +15,8 @@ public class InventorySize : MonoBehaviour
     public float ratio;
     [HideInInspector]
     public float positionRatio;
+    
+    public Transform slotPrt;
 
     private void Awake()
     {

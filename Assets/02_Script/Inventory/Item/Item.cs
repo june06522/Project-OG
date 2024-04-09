@@ -19,10 +19,15 @@ public class Item : MonoBehaviour, IInteractable
 
     private void Awake()
     {
-        
-        inventory = GameManager.Instance.Inventory;
-        parent = FindObjectOfType<WeaponInventoryViewer>().parent;
 
+        inventory = GameManager.Instance.Inventory;
+
+        if (brick.InvenObject.colorMat != null)
+            parent = GameManager.Instance.invenAddType.generator;
+        else if(brick.InvenObject.sendPoints.Count == 0)
+            parent = GameManager.Instance.invenAddType.weapon;
+        else
+            parent = GameManager.Instance.invenAddType.connector;
     }
 
     public void OnInteract()

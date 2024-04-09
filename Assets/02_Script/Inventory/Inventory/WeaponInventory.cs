@@ -69,10 +69,10 @@ public class WeaponInventory : MonoBehaviour
 
     public void CheckTileLen()
     {
-        if (FindObjectOfType<InventorySize>().transform.childCount >= 2)
+        if (FindObjectOfType<InventorySize>().slotPrt.childCount >= 2)
         {
-            Vector3 child1 = FindObjectOfType<InventorySize>().transform.GetChild(0).transform.position;
-            Vector3 child2 = FindObjectOfType<InventorySize>().transform.GetChild(1).transform.position;
+            Vector3 child1 = FindObjectOfType<InventorySize>().slotPrt.GetChild(0).transform.position;
+            Vector3 child2 = FindObjectOfType<InventorySize>().slotPrt.GetChild(1).transform.position;
             float x = Mathf.Abs(child1.x - child2.x);
             float y = Mathf.Abs(child1.y - child2.y);
             tileRength = x + y;

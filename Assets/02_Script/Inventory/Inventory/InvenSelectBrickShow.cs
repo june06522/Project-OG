@@ -14,7 +14,6 @@ public class InvenSelectBrickShow : MonoBehaviour
 
     public void Init()
     {
-        _showUI.transform.parent = transform;
         _rect = _showUI.GetComponent<RectTransform>();
         _invenRaycast = GetComponent<InventoryRaycast>();
         SetDefalut();
