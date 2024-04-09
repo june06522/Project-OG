@@ -20,9 +20,8 @@ public class InventorySize : MonoBehaviour
     {
         connectVisible = GetComponent<ConnectVisible>();
         rect = GetComponent<RectTransform>();
-        pixelSize = FindObjectOfType<PixelPerfectCamera>();
+        //pixelSize = FindObjectOfType<PixelPerfectCamera>();
         inven = transform.parent.parent.parent.GetComponent<RectTransform>();
-        Debug.Log(pixelSize);
     }
 
     private void Start()
@@ -45,10 +44,10 @@ public class InventorySize : MonoBehaviour
         else
             rect.localScale = new Vector3(1 + (7 - x) * 0.12f, 1 + (7 - x) * 0.12f, 1);
 
-        if (pixelSize.assetsPPU == 100)
-        {
-            inven.localScale = new Vector3(1 / 2f, 1 / 2f);
-        }
+        //if (pixelSize.assetsPPU == 100)
+        //{
+        //    inven.localScale = new Vector3(1 / 2f, 1 / 2f);
+        //}
 
         //ratio = 50f / (pixelSize.assetsPPU);
         //inven.localScale = new Vector3(ratio, ratio);
