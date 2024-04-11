@@ -24,7 +24,7 @@ public class FloweringState : BossBaseState
         //NowCoroutine(_pattern.FlowerShapeShot(_flower, 6, 3, 2, 10, 5, 1, false));
         //NowCoroutine(_pattern.ScatterShot(_flower, 6, 5, 3, 45, 1));
         //NowCoroutine(_pattern.RandomOminidirShot(_flower, 2, 20, 3, 1));
-        NowCoroutine(_pattern.WarmShot(_flower, 5, 5, 3, 0.1f));
+        //NowCoroutine(_pattern.WarmShot(_flower, 5, 5, 3, 0.1f));
         //NowCoroutine(_pattern.FullBloomPattern(_flower, 2, 1, 100, 10));
     }
 
