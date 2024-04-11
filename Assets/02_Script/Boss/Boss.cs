@@ -71,6 +71,7 @@ public class Boss : MonoBehaviour, IHitAble
 
     private void DieEvent()
     {
+        Debug.Log("die");
         _isDie = true;
         bossHPSlider.value = 0;
     }

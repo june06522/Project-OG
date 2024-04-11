@@ -196,8 +196,8 @@ public class AltarBoss : Boss
             StartCoroutine(CameraManager.Instance.CameraShake(0, 0));
             isTied = false;
             isOneBroken = false;
-            ChangeBossState(BossState.Dead);
             isDead = true;
+            ChangeBossState(BossState.Dead);
         }
         else
         {
