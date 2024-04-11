@@ -72,7 +72,7 @@ public class AltarBoss : Boss
         _curBossState = BossState.Idle;
         _bossFSM = new BossFSM(new BossIdleState(this, _pattern));
 
-        ChangeBossState(BossState.Dead);
+        ChangeBossState(BossState.Tied);
 
         StartCoroutine(ShortenChain());
     }
