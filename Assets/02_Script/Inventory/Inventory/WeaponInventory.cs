@@ -224,7 +224,7 @@ public class WeaponInventory : MonoBehaviour
         //
         var c = viewer.slots.Find(x =>
         {
-            return Vector2Int.FloorToInt(x.GetComponent<RectTransform>().localPosition / 100) == Vector2Int.FloorToInt(localPoint);
+            return Vector2Int.FloorToInt(Vector2Int.RoundToInt(x.GetComponent<RectTransform>().localPosition) / 100) == Vector2Int.FloorToInt(localPoint);
 
         });
 
