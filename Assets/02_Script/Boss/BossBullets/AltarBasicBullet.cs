@@ -2,34 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotatingBullet : BossBullet
+public class AltarBasicBullet : BossBullet
 {
-    private Boss _boss;
-    private float _deg = 0;
+    private float _deg;
     [SerializeField]
     private float _speed;
-
-
     protected override void OnEnable()
     {
-        _boss = GetComponentInParent<Boss>();
+        base.OnEnable();
     }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+    }
+
     private void Update()
     {
         _deg += Time.deltaTime * _speed;
 
-        if (_deg < 360)
+        if(_deg < 360)
         {
             transform.rotation = Quaternion.Euler(0, 0, _deg * -1);
         }
         else
         {
             _deg = 0;
-        }
-
-        if (_boss.IsDie)
-        {
-            ObjectPool.Instance.ReturnObject(ObjectPoolType.BossBulletType5, this.gameObject);
         }
     }
 

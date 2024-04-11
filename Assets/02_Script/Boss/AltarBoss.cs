@@ -5,7 +5,10 @@ using UnityEngine;
 
 public class AltarBoss : Boss
 {
-    public GameObject _altarCollector;
+    public GameObject altarCollector;
+    public GameObject bigestBody;
+    public GameObject mediumSizeBody;
+    public GameObject smallestBody;
 
     public AudioClip fireClip;
     public AudioClip deadClip;
@@ -18,6 +21,8 @@ public class AltarBoss : Boss
     public Material deadMat;
     public Material enchantedMat;
     public Material glitchMat;
+
+    public Sprite dyingSprite;
 
     public bool isTied;
     public bool isOneBroken;
@@ -67,7 +72,7 @@ public class AltarBoss : Boss
         _curBossState = BossState.Idle;
         _bossFSM = new BossFSM(new BossIdleState(this, _pattern));
 
-        ChangeBossState(BossState.Tied);
+        ChangeBossState(BossState.Dead);
 
         StartCoroutine(ShortenChain());
     }
@@ -104,12 +109,12 @@ public class AltarBoss : Boss
         int childCount = 0;
         GameObject[] objs;
 
-        childCount = _altarCollector.transform.childCount;
+        childCount = altarCollector.transform.childCount;
         objs = new GameObject[childCount];
 
         for (int i = 0; i < childCount; i++)
         {
-            objs[i] = _altarCollector.transform.GetChild(i).gameObject;
+            objs[i] = altarCollector.transform.GetChild(i).gameObject;
         }
 
         for (int i = 0; i < childCount; i++)
@@ -124,7 +129,7 @@ public class AltarBoss : Boss
     {
         for (int i = 0; i < _restrainCount; i++)
         {
-            _restraints[i] = ObjectPool.Instance.GetObject(ObjectPoolType.AltarRestraint, _altarCollector.transform);
+            _restraints[i] = ObjectPool.Instance.GetObject(ObjectPoolType.AltarRestraint, altarCollector.transform);
             var rad = Mathf.Deg2Rad * i * 360 / _restrainCount;
             var x = _restraintDistance * Mathf.Cos(rad);
             var y = _restraintDistance * Mathf.Sin(rad);
@@ -267,7 +272,7 @@ public class AltarBoss : Boss
     {
         for (int i = 0; i < _chainCount; i++)
         {
-            GameObject chainFragment = ObjectPool.Instance.GetObject(ObjectPoolType.ChainFragment, _altarCollector.transform);
+            GameObject chainFragment = ObjectPool.Instance.GetObject(ObjectPoolType.ChainFragment, altarCollector.transform);
             chainFragment.GetComponent<BossBullet>().Attack(so.Damage);
             chainFragment.transform.position = _chains[_restraintIndex, i].transform.position;
             chainFragment.transform.rotation = Quaternion.identity;
@@ -278,7 +283,7 @@ public class AltarBoss : Boss
         }
         for(int i = 0; i < _chainCount; i++)
         {
-            GameObject split = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, _altarCollector.transform);
+            GameObject split = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, altarCollector.transform);
             split.GetComponent<BossBullet>().Attack(so.Damage);
             split.transform.position = _restraints[_restraintIndex].transform.position;
             split.transform.rotation = Quaternion.identity;
@@ -327,8 +332,10 @@ public class AltarBoss : Boss
         
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected override void OnCollisionEnter2D(Collision2D collision)
     {
+        base.OnCollisionEnter2D(collision);
+
         if (collision.gameObject.tag == "Player")
         {
             if(isDashing)

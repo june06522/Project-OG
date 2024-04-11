@@ -38,6 +38,7 @@ public class Boss : MonoBehaviour, IHitAble
     public bool isStop;
     public bool isAttacking;
     public bool isDead;
+    public bool isBlocked;
 
     public bool IsDie
     {
@@ -95,9 +96,9 @@ public class Boss : MonoBehaviour, IHitAble
         return true;
     }
 
-    public void ChangeMaterial(Material mat)
+    public void ChangeMaterial(GameObject obj, Material mat)
     {
-        transform.GetComponent<SpriteRenderer>().material = mat;
+        obj.GetComponent<SpriteRenderer>().material = mat;
     }
 
     public void StopImmediately(Transform trans)
@@ -125,6 +126,14 @@ public class Boss : MonoBehaviour, IHitAble
         if(bulletCollector.transform.childCount > 0)
         {
             Destroy(bulletCollector.transform.GetChild(0).gameObject);
+        }
+    }
+
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
+        {
+            isBlocked = true;
         }
     }
 }
