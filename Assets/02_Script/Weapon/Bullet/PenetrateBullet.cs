@@ -16,29 +16,15 @@ public class PenetrateBullet : Bullet
         Data = bulletData; 
     }
 
-    protected override void OnTriggerEnter2D(Collider2D collision)
+    protected override void HitOther()
     {
-        if(curHitCount < maxHitCount)
+        if (curHitCount < maxHitCount)
         {
-            foreach (var item in Data.HitAbleTag)
-            {
-
-                if (collision.CompareTag(item))
-                {
-                    HitOther();
-                    if (collision.TryGetComponent<IHitAble>(out var hitAble))
-                    {
-
-                        hitAble.Hit(curDamage + Data.Damage);
-
-                    }
-
-                }
-
-            }
             curHitCount++;
         }
         else
-            base.OnTriggerEnter2D(collision);
+        {
+            Release();
+        }
     }
 }

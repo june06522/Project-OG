@@ -64,7 +64,7 @@ public class BurstSkil : Skill
 
     public override void Excute(Transform weaponTrm, Transform target, int power)
     {
-        _powerDictionary[weaponTrm] = CurPowerInit(power);
+        _powerDictionary[weaponTrm] = CurPowerInit(5);
 
         bool isPlaying = true;
         if (_playingDictionary.TryGetValue(weaponTrm, out isPlaying))
