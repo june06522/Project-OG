@@ -96,7 +96,6 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         if (GameManager.Instance.Inventory.Height % 2 == 0)
             tempPos.y -= 50;
 
-
         //드래그앤 드랍 여기 건들여야 함
         Vector3Int p = Vector3Int.RoundToInt(tempPos / 100);
         p.x -= (int)(rectTransform.rect.width / 200);
@@ -106,6 +105,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         Vector2Int p2 = Vector2Int.RoundToInt(tempPos / 100);
         p2.x -= (int)(rectTransform.rect.width / 200);
         p2.y -= (int)(rectTransform.rect.height / 200);
+        Debug.Log(p2.ToString());
         var point = inventory.FindInvenPoint(p2);
 
         if (point == null)
