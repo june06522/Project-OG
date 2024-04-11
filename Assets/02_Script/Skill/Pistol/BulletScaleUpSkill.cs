@@ -8,7 +8,7 @@ public class BulletScaleUpSkill : Skill
     [SerializeField] int power;
     public override void Excute(Transform weaponTrm, Transform target, int power)
     {
-        power = this.power;
+        //power = this.power;
         CurPowerInit(power);
         
         var obj = Instantiate(_scaleUpBullet, weaponTrm.position, weaponTrm.rotation);
