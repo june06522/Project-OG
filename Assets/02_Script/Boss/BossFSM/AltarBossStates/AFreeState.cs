@@ -38,7 +38,7 @@ public class AFreeState : BossBaseState
         _altar.isStop = false;
         _altar.StartCoroutine(Dash(10, 20, 0.5f, 0.5f));
         _altar.StartCoroutine(_altar.bossMove.BossMovement(_altar.so.StopTime, _altar.so.MoveX, _altar.so.MoveY, _altar.so.Speed, _altar.so.WallCheckRadius));
-        _altar.ChangeMaterial(_altar.basicMat);
+        //_altar.ChangeMaterial(_altar.basicMat);
     }
 
     public override void OnBossStateUpdate()
@@ -50,7 +50,7 @@ public class AFreeState : BossBaseState
 
         if(_curWaitingRegenTime >= _rotatingBallRegenTime)
         {
-            _altar.StartCoroutine(RotatingBall(3, 100, _altar.transform, 3, 5, 5, 0.5f));
+            _altar.StartCoroutine(RotatingBall(3, 100, _altar.transform, 5, 5, 5, 0.5f));
             _curWaitingRegenTime = 0;
             _allThrow = false;
         }   
@@ -122,7 +122,7 @@ public class AFreeState : BossBaseState
 
         Vector3 dir = (GameManager.Instance.player.transform.position - _altar.transform.position).normalized;
 
-        while (curTime < dashTime)
+        while (curTime < dashTime && !_altar.isBlocked)
         {
             
             curTime += Time.deltaTime;
@@ -135,7 +135,7 @@ public class AFreeState : BossBaseState
         yield return new WaitForSeconds(waitTime);
 
         _altar.isDashing = false;
-        _altar.StartCoroutine(RotatingBall(3, 100, _altar.transform, 3, 5, 5, 0.5f));
+        _altar.StartCoroutine(RotatingBall(3, 100, _altar.transform, 5, 5, 5, 0.5f));
         _altar.StartCoroutine(RandomPattern(_altar.so.PatternChangeTime));
     }
 
@@ -164,7 +164,7 @@ public class AFreeState : BossBaseState
                 {
                     var rad = Mathf.Deg2Rad * (deg + i * 360 / bullets.Length);
                     var x = r * Mathf.Cos(rad);
-                    var y = r * Mathf.Sin(rad) + 1f;
+                    var y = r * Mathf.Sin(rad);
                     bullets[i].transform.position = trans.position + new Vector3(x, y);
                 }
             }
@@ -177,7 +177,7 @@ public class AFreeState : BossBaseState
         for (int i = 0; i < bullets.Length; i++)
         {
             Vector2 dir = (GameManager.Instance.player.transform.position - bullets[i].transform.position).normalized;
-            bullets[i].transform.SetParent(_altar._altarCollector.transform);
+            bullets[i].transform.SetParent(_altar.altarCollector.transform);
             bullets[i].GetComponent<Rigidbody2D>().velocity = dir * throwSpeed;
             _altar.StartCoroutine(ObjectPool.Instance.ReturnObject(bullets[i], 7));
 

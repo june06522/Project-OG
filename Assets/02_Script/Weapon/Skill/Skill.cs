@@ -15,7 +15,7 @@ public class Skill : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇöÀç ¿¬°áµÈ ¿¬°áºÎ °¹¼ö¿¡ µû¸¥ ½ºÅ³ °­È­¸¦ ÁøÇà
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å³ ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     /// <param name="power"></param>
     protected virtual void CurPowerInit(int power)

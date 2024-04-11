@@ -7,14 +7,12 @@ public class AltarPattern : BossPatternBase
 {
     public IEnumerator OmnidirAttack(AltarBoss boss, int bulletCount, float speed, float time, int burstCount)
     {
-        Vector3 originSize = boss.transform.localScale;
-
         SoundManager.Instance.SFXPlay("Fire", boss.fireClip, 1);
-        boss.transform.DOScale(originSize * 1.1f, 0.2f)
+        boss.bigestBody.transform.DORotate(new Vector3(0, 0, 180), 0.5f)
             .SetEase(Ease.OutQuad)
             .OnComplete(() =>
             {
-                boss.transform.DOScale(originSize, 0.2f)
+                boss.bigestBody.transform.DORotate(Vector3.zero, 0.5f)
                 .SetEase(Ease.OutQuad);
             });
 
@@ -43,20 +41,19 @@ public class AltarPattern : BossPatternBase
     public IEnumerator OmniGuidPlayerAttack(AltarBoss boss, int bulletCount, float speed, float time, int burstCount)
     {
         SoundManager.Instance.SFXPlay("Fire", boss.fireClip, 1);
-        Vector3 originSize = boss.transform.localScale;
         GameObject[,] bullets = new GameObject[burstCount, bulletCount];
 
-        boss.transform.DOScale(originSize * 1.1f, 0.2f)
+        boss.bigestBody.transform.DORotate(new Vector3(0, 0, -180), 0.5f)
             .SetEase(Ease.OutQuad)
             .OnComplete(() =>
             {
-                boss.transform.DOScale(originSize, 0.2f)
+                boss.bigestBody.transform.DORotate(Vector3.zero, 0.5f)
                 .SetEase(Ease.OutQuad);
             });
 
         for (int i = 0; i < burstCount; i++)
         {
-            boss.ChangeMaterial(boss.glitchMat);
+            //boss.ChangeMaterial(boss.glitchMat);
 
             for (int j = 0; j < bulletCount; j++)
             {
@@ -72,7 +69,7 @@ public class AltarPattern : BossPatternBase
 
             yield return new WaitForSeconds(time / 2);
 
-            boss.ChangeMaterial(boss.basicMat);
+            //boss.ChangeMaterial(boss.basicMat);
 
             yield return new WaitForSeconds(time / 2);
 
@@ -106,11 +103,11 @@ public class AltarPattern : BossPatternBase
         for (int i = 0; i < burstCount; i++)
         {
             SoundManager.Instance.SFXPlay("Fire", boss.fireClip, 1);
-            boss.transform.DOScale(originSize * 1.1f, 0.2f)
+            boss.smallestBody.transform.DOScale(originSize * 2, 0.2f)
             .SetEase(Ease.OutQuad)
             .OnComplete(() =>
             {
-                boss.transform.DOScale(originSize, 0.2f)
+                boss.smallestBody.transform.DOScale(originSize, 0.2f)
                 .SetEase(Ease.OutQuad);
             });
 
@@ -130,11 +127,14 @@ public class AltarPattern : BossPatternBase
         boss.isAttacking = false;
     }
 
+    private bool rotate = true;
     // 총알을 전 방향으로 난사한다 - 플레이어가 멀어져야 좋은 패턴
     public IEnumerator OmnidirShooting(AltarBoss boss, int bulletCount, float speed, float time, int turnCount)
     {
-        boss.ChangeMaterial(boss.enchantedMat);
+        //boss.ChangeMaterial(boss.enchantedMat);
 
+        rotate = true;
+        StartCoroutine(RotateBigAndSmall(boss, 100));
         for (int i = 0; i < turnCount; i++)
         {
             SoundManager.Instance.SFXPlay("Fire", boss.fireClip, 1);
@@ -152,8 +152,30 @@ public class AltarPattern : BossPatternBase
             yield return new WaitForSeconds(time);
         }
 
-        boss.ChangeMaterial(boss.basicMat);
-        boss.isStop = false;
-        boss.isAttacking = false;
+        rotate = false;
+        //boss.ChangeMaterial(boss.basicMat);
+
+        boss.bigestBody.transform.DORotate(Vector3.zero, 0.5f)
+                .SetEase(Ease.OutQuad)
+                .OnComplete(() =>
+                {
+                    boss.smallestBody.transform.DORotate(Vector3.zero, 0.5f)
+                        .SetEase(Ease.OutQuad)
+                        .OnComplete(() =>
+                        {
+                            boss.isStop = false;
+                            boss.isAttacking = false;
+                        });
+                });
+    }
+
+    private IEnumerator RotateBigAndSmall(AltarBoss boss, float speed)
+    {
+        while(rotate)
+        {
+            boss.bigestBody.transform.Rotate(new Vector3(0, 0, 1) * Time.deltaTime * speed);
+            boss.smallestBody.transform.Rotate(new Vector3(0, 0, -1) * Time.deltaTime * speed);
+            yield return null;
+        }
     }
 }
