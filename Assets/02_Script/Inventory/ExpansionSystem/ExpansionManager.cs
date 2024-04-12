@@ -51,9 +51,6 @@ public class ExpansionManager : MonoBehaviour
             AddSlotcnt(5);
         if (Input.GetKeyUp(KeyCode.X))
             UseSlot(5);
-
-        if (Input.GetKeyUp(KeyCode.C))
-        ShowAddTileBtn();
     }
 
     public void AddSlotcnt(int plusVal = 1)

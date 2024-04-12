@@ -15,7 +15,7 @@ public class InventorySize : MonoBehaviour
     public float ratio;
     [HideInInspector]
     public float positionRatio;
-    
+
     public Transform slotPrt;
 
     private void Awake()
@@ -40,10 +40,7 @@ public class InventorySize : MonoBehaviour
 
     private void SetInvenScale()
     {
-        int x = Mathf.Max(weaponInventory.Width, weaponInventory.Height);
-
-        if (ExpansionManager.Instance.leftCnt > 0)
-            x += 2;
+        int x = GetSize();
 
         if (7 - x < 0)
             rect.localScale = new Vector3(1 + (7 - x) * 0.08f, 1 + (7 - x) * 0.08f, 1);
@@ -63,15 +60,20 @@ public class InventorySize : MonoBehaviour
 
     private void SettingLineRender()
     {
-        if (GameManager.Instance.Inventory.GetInvenSize() > 7)
+        if (GetSize() > 7)
         {
-            connectVisible.mulX = (2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.16f);// * ratio;
-            connectVisible.mulY = (2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.16f);// * ratio;
+            connectVisible.mulX = (2.0f + (7 - GetSize()) * 0.16f);// * ratio;
+            connectVisible.mulY = (2.0f + (7 - GetSize()) * 0.16f);// * ratio;
         }
         else
         {
-            connectVisible.mulX = (2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.25f);// * ratio;
-            connectVisible.mulY = (2.0f + (7 - GameManager.Instance.Inventory.GetInvenSize()) * 0.25f);// * ratio;
+            connectVisible.mulX = (2.0f + (7 - GetSize()) * 0.25f);// * ratio;
+            connectVisible.mulY = (2.0f + (7 - GetSize()) * 0.25f);// * ratio;
         }
+    }
+
+    private int GetSize()
+    {
+        return GameManager.Instance.Inventory.GetInvenSize() + (ExpansionManager.Instance.leftCnt > 0 ? 2 : 0);
     }
 }

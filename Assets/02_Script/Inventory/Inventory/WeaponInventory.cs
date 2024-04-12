@@ -245,6 +245,7 @@ public class WeaponInventory : MonoBehaviour
                 return false;
             }
         }
+        SetWidth(y);
         return true;
     }
 
@@ -257,6 +258,7 @@ public class WeaponInventory : MonoBehaviour
                 return false;
             }
         }
+        SetHeight(x);
         return true;
     }
 
@@ -292,4 +294,34 @@ public class WeaponInventory : MonoBehaviour
     public int AddHeight() => Height++;
 
     public int AddWidth() => Width++;
+
+    private void SetWidth(int val)
+    {
+        val++;
+        foreach (var v in invenslots)
+        {
+            if (v.point.y == val)
+            {
+                InventorySlotCenter.Instance?.ChangeHeight(1);
+                return;
+            }
+        }
+        InventorySlotCenter.Instance?.ChangeHeight(-1);
+
+    }
+
+    private void SetHeight(int val)
+    {
+        val++;
+        foreach (var v in invenslots)
+        {
+            if (v.point.x == val)
+            {
+                InventorySlotCenter.Instance?.ChangeWidth(1);
+                return;
+            }
+        }
+        InventorySlotCenter.Instance?.ChangeWidth(-1);
+
+    }
 }
