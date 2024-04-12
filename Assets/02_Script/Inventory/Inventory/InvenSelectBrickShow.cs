@@ -48,6 +48,7 @@ public class InvenSelectBrickShow : MonoBehaviour
                 Vector2Int p2 = Vector2Int.RoundToInt(tempPos / 100);
                 p2.x -= (int)(v.RectTransform.rect.width / 200);
                 p2.y -= (int)(v.RectTransform.rect.height / 200);
+
                 var point = GameManager.Instance.Inventory.FindInvenPoint(p2);
 
                 if (point == null || !GameManager.Instance.Inventory.CheckFills(v.InvenObject.bricks, point.Value))

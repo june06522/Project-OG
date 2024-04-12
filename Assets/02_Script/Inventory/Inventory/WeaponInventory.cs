@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using static UnityEditor.PlayerSettings;
 
 public class SlotData
 {
@@ -16,7 +17,7 @@ public class SlotData
 
     public Vector2Int point;
     public bool isFilled;
-
+    public bool isOn;
 }
 
 public delegate void SlotAdded(Vector2Int point);
@@ -29,13 +30,16 @@ public class WeaponInventory : MonoBehaviour
     [field: SerializeField] public int Width { get; private set; }
     [field: SerializeField] public int Height { get; private set; }
 
+    [HideInInspector] public int StartWidth;
+    [HideInInspector] public int StartHeight;
+
     public WeaponInventoryViewer viewer { get; private set; }
     private List<SlotData> invenslots = new();
     private List<InventoryObjectData> container = new();
 
     public event SlotAdded OnSlotAddEvent;
     public event CameraSetting camerasetting;
-    public event SlotChanged OnSlotChangeEvent;
+    //public event SlotChanged OnSlotChangeEvent;
 
     [HideInInspector]
     public float tileRength = 1000;
@@ -49,7 +53,8 @@ public class WeaponInventory : MonoBehaviour
 
     private void Start()
     {
-
+        StartWidth = Width;
+        StartHeight = Height;
         for (int x = 0; x < Width; x++)
         {
 
@@ -80,6 +85,7 @@ public class WeaponInventory : MonoBehaviour
         else
             tileRength = 1000;
     }
+
     private void Update()
     {
         CheckTileLen();
@@ -192,10 +198,22 @@ public class WeaponInventory : MonoBehaviour
 
     }
 
+    public bool IsExist(Vector2Int pos)
+    {
+        foreach (var v in invenslots)
+        {
+            if (v.point == pos)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public InventoryObjectData GetObjectData(Vector2Int point, Vector2Int dir, Vector2Int origin)
     {
         var c = container.Find(x => x.inputPoints.Count != 0 ?
-        x.sendPoints.FindIndex(y => y.point + x.originPos == origin + (point + dir) && y.dir == -dir) != -1 : 
+        x.sendPoints.FindIndex(y => y.point + x.originPos == origin + (point + dir) && y.dir == -dir) != -1 :
         x.bricks.FindIndex(y => y.point + x.originPos == origin + (point + dir)) != -1);
         if (c == null) return null;
 
@@ -203,36 +221,75 @@ public class WeaponInventory : MonoBehaviour
 
     }
 
-    public InventoryObjectData GetObjectData2(Vector2Int pos,Vector2Int dir)
+    public InventoryObjectData GetObjectData2(Vector2Int pos, Vector2Int dir)
     {
-        foreach(var item in container)
+        foreach (var item in container)
         {
-            foreach(BrickPoint p in item.bricks)
+            foreach (BrickPoint p in item.bricks)
             {
-                if(p.point + item.originPos == pos)
+                if (p.point + item.originPos == pos)
                 {
                     return item;
                 }
-            }    
+            }
         }
         return null;
     }
 
+    public bool isNewWidth(int y)
+    {
+        foreach (var v in invenslots)
+        {
+            if (v.point.y == y)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public bool isNewHeight(int x)
+    {
+        foreach (var v in invenslots)
+        {
+            if (v.point.x == x)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public Vector2Int? FindInvenPoint(Vector2Int localPoint)
     {
         //
         var c = viewer.slots.Find(x =>
         {
-            return Vector2Int.FloorToInt(Vector2Int.RoundToInt(x.GetComponent<RectTransform>().localPosition) / 100) == Vector2Int.FloorToInt(localPoint);
+            return Vector2Int.RoundToInt(x.GetComponent<RectTransform>().localPosition / 100) == Vector2Int.RoundToInt(localPoint);
 
         });
 
         if (c == null) return null;
 
-        return Vector2Int.FloorToInt(c.invenPoint);
+        return Vector2Int.RoundToInt(c.invenPoint);
 
     }
 
+    public List<SlotData> GetSlot()
+    {
+        return invenslots;
+    }
+
+    public void AddSlotData(Vector2Int point)
+    {
+        invenslots.Add(new SlotData(point));
+    }
+
+    public void ExcuteSlotEvent(Vector2Int pos) => OnSlotAddEvent?.Invoke(pos);
+
     public int GetInvenSize() => Mathf.Max(Width, Height);
+
+    public int AddHeight() => Height++;
+
+    public int AddWidth() => Width++;
 }
