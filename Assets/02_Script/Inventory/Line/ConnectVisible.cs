@@ -46,8 +46,8 @@ public class ConnectVisible : MonoBehaviour
 
     public void SettingOption()
     {
-        canvas.renderMode = RenderMode.ScreenSpaceCamera;
-        canvas.worldCamera = Camera.main;
+        //canvas.renderMode = RenderMode.ScreenSpaceCamera;
+        //canvas.worldCamera = Camera.main;
     }
 
     private void Update()

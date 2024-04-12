@@ -33,6 +33,7 @@ public class InventorySize : MonoBehaviour
 
     private void Update()
     {
+
         SetInvenScale();
         SettingLineRender();
     }
@@ -40,6 +41,9 @@ public class InventorySize : MonoBehaviour
     private void SetInvenScale()
     {
         int x = Mathf.Max(weaponInventory.Width, weaponInventory.Height);
+
+        if (ExpansionManager.Instance.leftCnt > 0)
+            x += 2;
 
         if (7 - x < 0)
             rect.localScale = new Vector3(1 + (7 - x) * 0.08f, 1 + (7 - x) * 0.08f, 1);

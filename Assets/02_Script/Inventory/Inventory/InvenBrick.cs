@@ -105,7 +105,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         Vector2Int p2 = Vector2Int.RoundToInt(tempPos / 100);
         p2.x -= (int)(rectTransform.rect.width / 200);
         p2.y -= (int)(rectTransform.rect.height / 200);
-        Debug.Log(p2.ToString());
+
         var point = inventory.FindInvenPoint(p2);
 
         if (point == null)
@@ -191,7 +191,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             Vector2Int invenPos = new Vector2Int(-1, -1);
             Vector2 pos = rectTransform.position;// * invensize.ratio;
             pos -= new Vector2(x * len / 2, y * len / 2);
-            Vector2 curPos = Camera.main.ScreenToWorldPoint(Input.mousePosition ) ;
+            Vector2 curPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             while (curPos.x > pos.x)
             {
                 pos.x += len;
