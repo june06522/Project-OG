@@ -91,9 +91,9 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         tempPos.x += (rectTransform.rect.width / 100 % 2 == 0) ? 50 : 0;
         tempPos.y += (rectTransform.rect.height / 100 % 2 == 0) ? 50 : 0;
 
-        if (GameManager.Instance.Inventory.Width % 2 == 0)
+        if (GameManager.Instance.Inventory.StartWidth % 2 == 0)
             tempPos.x -= 50;
-        if (GameManager.Instance.Inventory.Height % 2 == 0)
+        if (GameManager.Instance.Inventory.StartHeight % 2 == 0)
             tempPos.y -= 50;
 
         //드래그앤 드랍 여기 건들여야 함
@@ -126,9 +126,9 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
             rectTransform.localPosition += new Vector3((rectTransform.rect.width - 100) / 2, (rectTransform.rect.height - 100) / 2);
 
-            if (GameManager.Instance.Inventory.Width % 2 == 0)
+            if (GameManager.Instance.Inventory.StartWidth % 2 == 0)
                 rectTransform.localPosition += new Vector3(50, 0);
-            if (GameManager.Instance.Inventory.Height % 2 == 0)
+            if (GameManager.Instance.Inventory.StartHeight % 2 == 0)
                 rectTransform.localPosition += new Vector3(0, 50);
 
             Setting();
