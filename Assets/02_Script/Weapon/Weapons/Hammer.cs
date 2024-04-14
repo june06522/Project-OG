@@ -14,8 +14,8 @@ public class Hammer : InvenWeapon
     {
 
         DOTween.Sequence().
-            Append(transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z - 90 * transform.localScale.y), 0.1f).SetEase(Ease.Linear)).
-            Append(transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z), 0.1f).SetEase(Ease.Linear));
+            Append(transform.DOScale(new Vector2(1.2f, 1.2f), 0.2f)).
+            Append(transform.DOScale(Vector2.one, 0.2f));
 
         SoundManager.Instance?.SFXPlay("Hammer", clip);
         StartCoroutine(AttackTween());
@@ -26,10 +26,10 @@ public class Hammer : InvenWeapon
     {
 
         isAttack = true;
-        yield return new WaitForSeconds(0.09f);
-        var obj = Instantiate(effect, transform.position + transform.up * 1.5f * transform.localScale.y, Quaternion.identity);
+        yield return new WaitForSeconds(0.2f);
+        var obj = Instantiate(effect, transform.position, Quaternion.identity);
         obj.Attack(Data.AttackDamage.GetValue());
-        yield return new WaitForSeconds(0.21f);
+        yield return new WaitForSeconds(0.2f);
         isAttack = false;
 
     }
