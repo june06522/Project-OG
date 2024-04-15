@@ -55,11 +55,6 @@ public class SnakeMove : MonoBehaviour
             MoveParts();
         else
             DestroyMove();
-
-        if (Input.GetKeyDown(KeyCode.L))
-            AddBody(Vector3.zero);
-        else if (Input.GetKeyDown(KeyCode.K))
-            DestroyBody();
     }
 
     private void DestroyMove()
@@ -222,12 +217,25 @@ public class SnakeMove : MonoBehaviour
             dir = (_bodyList[0].position - _head.position).normalized;
 
         GameObject backPart = Instantiate(_bodyObject, _bodyRootTrm);
+        BlinkBody(backPart, 0.8f);
+
+        if (_bodyList.Count == 0)
+            backPart.transform.position = _head.position;
+        else
+            backPart.transform.position = _bodyList[_bodyList.Count - 1].position;
+        backPart.transform.position += dir * _bodyMinInterval;
+
+        _bodyList.Add(backPart.transform);
+    }
+
+    public void BlinkBody(GameObject backPart, float second)
+    {
         if (string.IsNullOrEmpty(_bodyObject_SpriteObjectName) == false)
         {
 
             Transform findObject = backPart.transform.Find(_bodyObject_SpriteObjectName);
             SpriteRenderer backPartSprite = findObject?.GetComponent<SpriteRenderer>();
-            
+
             if (backPartSprite != null)
             {
                 Color saveColor = backPartSprite.color;
@@ -238,17 +246,9 @@ public class SnakeMove : MonoBehaviour
                 {
                     backPartSprite.color = saveColor;
                     backPartSprite.material.SetFloat(HASH_BLINK, 0f);
-                }, 0.8f);
+                }, second);
             }
         }
-
-        if (_bodyList.Count == 0)
-            backPart.transform.position = _head.position;
-        else
-            backPart.transform.position = _bodyList[_bodyList.Count - 1].position;
-        backPart.transform.position += dir * _bodyMinInterval;
-
-        _bodyList.Add(backPart.transform);
     }
 
     public void DestroyBody(float destroySpeed = 0f)
