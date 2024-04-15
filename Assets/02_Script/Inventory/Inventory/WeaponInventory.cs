@@ -183,7 +183,7 @@ public class WeaponInventory : MonoBehaviour
         foreach (var slot in invenslots)
         {
 
-            if (slot.isFilled) continue;
+            //if (slot.isFilled) continue;
 
             if (CheckFills(item.bricks, slot.point))
             {
