@@ -14,10 +14,11 @@ using UnityEngine;
 public enum WeaponID
 {
     None,       // 아무것도 아님
-    Pistol,     // 피스톨
-    Katana,     // 카타나
-    Hammer,     // 망치
-    Book,
+    LightSaber,
+    Drone,
+    Speaker,
+    LaserGun,
+    Emp,
 }
 
 // 생성기별 ID

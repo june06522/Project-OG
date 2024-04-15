@@ -1,8 +1,5 @@
-using FSM_System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using DG.Tweening;
+using UnityEngine;
 
 public class PlayerMoveState : PlayerRootState
 {
