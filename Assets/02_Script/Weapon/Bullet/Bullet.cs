@@ -53,9 +53,10 @@ public class Bullet : MonoBehaviour
 
     protected virtual void HitOther()
     {
+        Release();
     }
 
-    protected virtual void OnTriggerEnter2D(Collider2D collision)
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
         if (!isAdd) return;
 
@@ -66,7 +67,6 @@ public class Bullet : MonoBehaviour
             {
 
                 HitOther();
-                Release();
 
                 if(collision.TryGetComponent<IHitAble>(out var hitAble))
                 {

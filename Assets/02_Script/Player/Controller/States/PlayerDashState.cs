@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class PlayerDashState : PlayerRootState
 {
+    ParticleSystem dashParticle;
+
     public PlayerDashState(PlayerController controller) : base(controller)
     {
 
         myColliders = transform.GetComponentsInChildren<Collider2D>();
+        dashParticle = GameObject.Find("FollowEffect").GetComponent<ParticleSystem>();
 
     }
 
@@ -20,9 +23,9 @@ public class PlayerDashState : PlayerRootState
     {
 
         var hitRay = Physics2D.Raycast(transform.position, inputController.LastMoveDir, playerData[PlayerStatsType.DashLenght], playerData.DashObstacleLayer);
-        
 
-        if (hitRay) 
+
+        if (hitRay)
         {
 
             var dashPos = hitRay.point - (inputController.LastMoveDir * 0.6f);
@@ -76,7 +79,7 @@ public class PlayerDashState : PlayerRootState
         dashDir = inputController.LastMoveDir;
         rigid.velocity = inputController.LastMoveDir * playerData[PlayerStatsType.DashSpeed];
 
-        foreach(var col in myColliders)
+        foreach (var col in myColliders)
         {
 
             col.enabled = false;
@@ -85,6 +88,8 @@ public class PlayerDashState : PlayerRootState
 
         eventController.OnDashExecute();
 
+
+        dashParticle.Play();
     }
 
     protected override void UpdateState()
@@ -92,7 +97,7 @@ public class PlayerDashState : PlayerRootState
 
         var dir = (dashEndPos - (Vector2)transform.position).normalized;
 
-        if(dir != dashDir || Vector2.Distance(transform.position, dashEndPos) < 0.1f)
+        if (dir != dashDir || Vector2.Distance(transform.position, dashEndPos) < 0.1f)
         {
 
             rigid.velocity = Vector2.zero;
@@ -122,6 +127,8 @@ public class PlayerDashState : PlayerRootState
 
         isDash = false;
 
+
+        dashParticle.Stop();
 
     }
 

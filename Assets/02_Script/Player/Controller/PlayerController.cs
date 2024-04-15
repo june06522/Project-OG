@@ -17,7 +17,6 @@ public enum EnumPlayerState
 [RequireComponent(typeof(BoxCollider2D))]
 public class PlayerController : FSM_Controller<EnumPlayerState>
 {
-    private Animator _animator;
     private SpriteRenderer _spriteRenderer;
     private GameObject _interactKey;
     private PlayerHP _playerHP;
@@ -33,7 +32,6 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
     public static PlayerInputController InputController => inputController;
     public static PlayerEventController EventController => eventController;
-    public ParticleSystem moveParticle;
 
 
     Rigidbody2D rb2D;
@@ -79,7 +77,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
             .AddTransition<EnumPlayerState>(idleToMove)
             .AddTransition<EnumPlayerState>(goToDash);
 
-        var moveState = new PlayerMoveState(this, visual);
+        var moveState = new PlayerMoveState(this);
         var moveToIdle = new PlayerTransitionByMoveDir(this, EnumPlayerState.Idle, Vector2.zero, TransitionCheckType.Equal);
 
         moveState
@@ -92,7 +90,6 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
         AddState(moveState, EnumPlayerState.Move);
         AddState(dashState, EnumPlayerState.Dash);
 
-        _animator = GetComponent<Animator>();
         _spriteRenderer = visual.GetComponent<SpriteRenderer>();
 
     }
@@ -104,7 +101,6 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
         inputController.Update(rb2D);
 
-        _animator?.SetBool(idleHash, InputController.MoveDir == Vector2.zero);
         if (InputController.LastMoveDir.x != 0)
             _spriteRenderer.flipX = InputController.LastMoveDir.x > 0;
 

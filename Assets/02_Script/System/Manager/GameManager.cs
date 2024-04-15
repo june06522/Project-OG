@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] WeaponController weaponController;
     public WeaponController WeaponController => weaponController;
+
+    public InvenBrickAddType invenAddType;
     #endregion
 
     #region 라이트 관련
@@ -72,6 +74,13 @@ public class GameManager : MonoBehaviour
             inventoryActive = FindObjectOfType<InventoryActive>();
             if (inventoryActive == null)
                 Debug.LogError("inventoryActive is null! You should inventoryActive setActive true");
+        }
+
+        if(invenAddType == null)
+        {
+            invenAddType = FindObjectOfType<InvenBrickAddType>();
+            if(invenAddType == null)
+                Debug.LogError("invenAddType is null! You should add Component InvenBrickAddType in Inven Parent!");
         }
         #endregion
     }

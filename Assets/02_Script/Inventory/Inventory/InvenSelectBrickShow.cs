@@ -14,7 +14,6 @@ public class InvenSelectBrickShow : MonoBehaviour
 
     public void Init()
     {
-        _showUI.transform.parent = transform;
         _rect = _showUI.GetComponent<RectTransform>();
         _invenRaycast = GetComponent<InventoryRaycast>();
         SetDefalut();
@@ -37,9 +36,9 @@ public class InvenSelectBrickShow : MonoBehaviour
                 tempPos.x += (v.RectTransform.rect.width / 100 % 2 == 0) ? 50 : 0;
                 tempPos.y += (v.RectTransform.rect.height / 100 % 2 == 0) ? 50 : 0;
 
-                if (GameManager.Instance.Inventory.Width % 2 == 0)
+                if (GameManager.Instance.Inventory.StartWidth % 2 == 0)
                     tempPos.x -= 50;
-                if (GameManager.Instance.Inventory.Height % 2 == 0)
+                if (GameManager.Instance.Inventory.StartHeight % 2 == 0)
                     tempPos.y -= 50;
 
                 Vector3Int p = Vector3Int.RoundToInt(tempPos / 100);
@@ -49,6 +48,7 @@ public class InvenSelectBrickShow : MonoBehaviour
                 Vector2Int p2 = Vector2Int.RoundToInt(tempPos / 100);
                 p2.x -= (int)(v.RectTransform.rect.width / 200);
                 p2.y -= (int)(v.RectTransform.rect.height / 200);
+
                 var point = GameManager.Instance.Inventory.FindInvenPoint(p2);
 
                 if (point == null || !GameManager.Instance.Inventory.CheckFills(v.InvenObject.bricks, point.Value))
@@ -61,9 +61,9 @@ public class InvenSelectBrickShow : MonoBehaviour
 
                     _rect.localPosition += new Vector3((_rect.rect.width - 100) / 2, (_rect.rect.height - 100) / 2);
 
-                    if (GameManager.Instance.Inventory.Width % 2 == 0)
+                    if (GameManager.Instance.Inventory.StartWidth % 2 == 0)
                         _rect.localPosition += new Vector3(50, 0);
-                    if (GameManager.Instance.Inventory.Height % 2 == 0)
+                    if (GameManager.Instance.Inventory.StartHeight % 2 == 0)
                         _rect.localPosition += new Vector3(0, 50);
 
                 }

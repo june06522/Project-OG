@@ -91,11 +91,10 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         tempPos.x += (rectTransform.rect.width / 100 % 2 == 0) ? 50 : 0;
         tempPos.y += (rectTransform.rect.height / 100 % 2 == 0) ? 50 : 0;
 
-        if (GameManager.Instance.Inventory.Width % 2 == 0)
+        if (GameManager.Instance.Inventory.StartWidth % 2 == 0)
             tempPos.x -= 50;
-        if (GameManager.Instance.Inventory.Height % 2 == 0)
+        if (GameManager.Instance.Inventory.StartHeight % 2 == 0)
             tempPos.y -= 50;
-
 
         //드래그앤 드랍 여기 건들여야 함
         Vector3Int p = Vector3Int.RoundToInt(tempPos / 100);
@@ -106,6 +105,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         Vector2Int p2 = Vector2Int.RoundToInt(tempPos / 100);
         p2.x -= (int)(rectTransform.rect.width / 200);
         p2.y -= (int)(rectTransform.rect.height / 200);
+
         var point = inventory.FindInvenPoint(p2);
 
         if (point == null)
@@ -126,9 +126,9 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
             rectTransform.localPosition += new Vector3((rectTransform.rect.width - 100) / 2, (rectTransform.rect.height - 100) / 2);
 
-            if (GameManager.Instance.Inventory.Width % 2 == 0)
+            if (GameManager.Instance.Inventory.StartWidth % 2 == 0)
                 rectTransform.localPosition += new Vector3(50, 0);
-            if (GameManager.Instance.Inventory.Height % 2 == 0)
+            if (GameManager.Instance.Inventory.StartHeight % 2 == 0)
                 rectTransform.localPosition += new Vector3(0, 50);
 
             Setting();
@@ -191,7 +191,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             Vector2Int invenPos = new Vector2Int(-1, -1);
             Vector2 pos = rectTransform.position;// * invensize.ratio;
             pos -= new Vector2(x * len / 2, y * len / 2);
-            Vector2 curPos = Camera.main.ScreenToWorldPoint(Input.mousePosition ) ;
+            Vector2 curPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             while (curPos.x > pos.x)
             {
                 pos.x += len;

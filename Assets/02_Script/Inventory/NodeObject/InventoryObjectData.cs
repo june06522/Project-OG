@@ -36,6 +36,7 @@ public class InventoryObjectData : ScriptableObject
     public Action<Vector2Int, object> OnSignalSend;
 
     public Vector2Int originPos { get; set; }
+    public Material colorMat;
 
     public void Init(Transform owner)
     {

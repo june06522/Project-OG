@@ -32,7 +32,7 @@ public class ParticleSelfDestroyer : MonoBehaviour
     public void EndOfAnimation()
     {
 
-        Destroy(gameObject);
+        Destroy(gameObject, 0.05f);
 
     }
 
@@ -42,6 +42,6 @@ public class ParticleSelfDestroyer : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, range);
     }
-#endif 
-    
+#endif
+
 }
