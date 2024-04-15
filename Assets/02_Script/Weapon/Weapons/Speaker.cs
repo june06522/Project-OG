@@ -1,20 +1,19 @@
 using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Hammer : InvenWeapon
+public class Speaker : InvenWeapon
 {
 
     [SerializeField] AudioClip clip;
-    [SerializeField] ParticleSelfDestroyer effect;
+    [SerializeField] SpeakerAttack effect;
     private bool isAttack = false;
 
     public override void Attack(Transform target)
     {
 
         DOTween.Sequence().
-            Append(transform.DOScale(new Vector2(1.2f, 1.2f), 0.2f)).
+            Append(transform.DOScale(Vector2.one * 1.3f, 0.2f).SetEase(Ease.InBounce)).
             Append(transform.DOScale(Vector2.one, 0.2f));
 
         SoundManager.Instance?.SFXPlay("Hammer", clip);
@@ -28,7 +27,7 @@ public class Hammer : InvenWeapon
         isAttack = true;
         yield return new WaitForSeconds(0.2f);
         var obj = Instantiate(effect, transform.position, Quaternion.identity);
-        obj.Attack(Data.AttackDamage.GetValue());
+        obj.SetDamage(Data.AttackDamage.GetValue());
         yield return new WaitForSeconds(0.2f);
         isAttack = false;
 
@@ -54,27 +53,27 @@ public class Hammer : InvenWeapon
 
     }
 
-    protected override void RotateWeapon(Transform target)
-    {
+    //protected override void RotateWeapon(Transform target)
+    //{
 
-        if (target == null) return;
-        if (isAttack == true) return;
+    //    if (target == null) return;
+    //    if (isAttack == true) return;
 
-        var dir = target.position - transform.position;
-        dir.Normalize();
-        dir.z = 0;
+    //    var dir = target.position - transform.position;
+    //    dir.Normalize();
+    //    dir.z = 0;
 
-        transform.localScale = dir.x switch
-        {
+    //    transform.localScale = dir.x switch
+    //    {
 
-            var x when x > 0 => new Vector3(1, 1, 1),
-            var x when x < 0 => new Vector3(1, -1, 1),
-            _ => transform.localScale
+    //        var x when x > 0 => new Vector3(1, 1, 1),
+    //        var x when x < 0 => new Vector3(1, -1, 1),
+    //        _ => transform.localScale
 
-        };
+    //    };
 
-        transform.right = dir;
+    //    transform.right = dir;
 
-    }
+    //}
 
 }

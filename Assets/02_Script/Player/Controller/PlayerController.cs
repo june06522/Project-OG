@@ -1,6 +1,4 @@
 using FSM_System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum EnumPlayerState
