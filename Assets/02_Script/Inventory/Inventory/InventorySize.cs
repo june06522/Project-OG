@@ -41,11 +41,20 @@ public class InventorySize : MonoBehaviour
     private void SetInvenScale()
     {
         int x = GetSize();
+        //700 
+        x = Mathf.Min(x, 12);
+        float size = 7 / x;
+
+        //if (7 - x < 0)
+        //    rect.localScale = new Vector3(1 + (7 - x) * 0.08f, 1 + (7 - x) * 0.08f, 1);
+        //else
+        //    rect.localScale = new Vector3(1 + (7 - x) * 0.12f, 1 + (7 - x) * 0.12f, 1);
 
         if (7 - x < 0)
             rect.localScale = new Vector3(1 + (7 - x) * 0.08f, 1 + (7 - x) * 0.08f, 1);
         else
-            rect.localScale = new Vector3(1 + (7 - x) * 0.12f, 1 + (7 - x) * 0.12f, 1);
+            rect.localScale = new Vector3(size, size, 1);
+
 
         //if (pixelSize.assetsPPU == 100)
         //{

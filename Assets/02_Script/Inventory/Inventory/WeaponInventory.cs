@@ -236,7 +236,7 @@ public class WeaponInventory : MonoBehaviour
         return null;
     }
 
-    public bool isNewWidth(int y)
+    public bool IsNewWidth(int y)
     {
         foreach (var v in invenslots)
         {
@@ -249,7 +249,7 @@ public class WeaponInventory : MonoBehaviour
         return true;
     }
 
-    public bool isNewHeight(int x)
+    public bool IsNewHeight(int x)
     {
         foreach (var v in invenslots)
         {
@@ -264,7 +264,9 @@ public class WeaponInventory : MonoBehaviour
 
     public Vector2Int? FindInvenPoint(Vector2Int localPoint)
     {
-        //
+        if(StartWidth % 2 == 0)
+            localPoint += new Vector2Int(1, 0);
+
         var c = viewer.slots.Find(x =>
         {
             return Vector2Int.RoundToInt(x.GetComponent<RectTransform>().localPosition / 100) == Vector2Int.RoundToInt(localPoint);
