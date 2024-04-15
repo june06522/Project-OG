@@ -10,9 +10,9 @@ public class InvenSlotBtn : MonoBehaviour
     public void Add()
     {
         
-        if (GameManager.Instance.Inventory.isNewWidth(pos.y))
+        if (GameManager.Instance.Inventory.IsNewWidth(pos.y))
             GameManager.Instance.Inventory.AddHeight();
-        if (GameManager.Instance.Inventory.isNewHeight(pos.x))
+        if (GameManager.Instance.Inventory.IsNewHeight(pos.x))
             GameManager.Instance.Inventory.AddWidth();
 
         GameManager.Instance.Inventory.ExcuteSlotEvent(pos);

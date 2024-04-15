@@ -236,7 +236,7 @@ public class WeaponInventory : MonoBehaviour
         return null;
     }
 
-    public bool isNewWidth(int y)
+    public bool IsNewWidth(int y)
     {
         foreach (var v in invenslots)
         {
@@ -245,10 +245,11 @@ public class WeaponInventory : MonoBehaviour
                 return false;
             }
         }
+        SetWidth(y);
         return true;
     }
 
-    public bool isNewHeight(int x)
+    public bool IsNewHeight(int x)
     {
         foreach (var v in invenslots)
         {
@@ -257,12 +258,15 @@ public class WeaponInventory : MonoBehaviour
                 return false;
             }
         }
+        SetHeight(x);
         return true;
     }
 
     public Vector2Int? FindInvenPoint(Vector2Int localPoint)
     {
-        //
+        if(StartWidth % 2 == 0)
+            localPoint += new Vector2Int(1, 0);
+
         var c = viewer.slots.Find(x =>
         {
             return Vector2Int.RoundToInt(x.GetComponent<RectTransform>().localPosition / 100) == Vector2Int.RoundToInt(localPoint);
@@ -292,4 +296,34 @@ public class WeaponInventory : MonoBehaviour
     public int AddHeight() => Height++;
 
     public int AddWidth() => Width++;
+
+    private void SetWidth(int val)
+    {
+        val++;
+        foreach (var v in invenslots)
+        {
+            if (v.point.y == val)
+            {
+                InventorySlotCenter.Instance?.ChangeHeight(1);
+                return;
+            }
+        }
+        InventorySlotCenter.Instance?.ChangeHeight(-1);
+
+    }
+
+    private void SetHeight(int val)
+    {
+        val++;
+        foreach (var v in invenslots)
+        {
+            if (v.point.x == val)
+            {
+                InventorySlotCenter.Instance?.ChangeWidth(1);
+                return;
+            }
+        }
+        InventorySlotCenter.Instance?.ChangeWidth(-1);
+
+    }
 }
