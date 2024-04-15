@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -90,7 +91,13 @@ public class InventoryActive : MonoBehaviour
         seq.Append(_invenInfoPanel.transform.DOLocalMoveX(_invenx + moveXVal, time)).SetEase(Ease.OutBack);
         seq.Append(_invenPanel.transform.DOLocalMoveY(_inveny + moveYVal, time)).SetEase(Ease.OutBack);
         seq.Join(_invenInfoPanel.transform.DOLocalMoveY(_inveny + moveYVal, time)).SetEase(Ease.OutBack);
-        seq.AppendCallback(() => { isAnimation = true; });
+        seq.AppendCallback(() => { StartCoroutine(DelayCo()); });
 
+    }
+
+    IEnumerator DelayCo()
+    {
+        yield return new WaitForSeconds(time);
+        isAnimation = true;
     }
 }
