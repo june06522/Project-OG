@@ -53,27 +53,18 @@ public class Speaker : InvenWeapon
 
     }
 
-    //protected override void RotateWeapon(Transform target)
-    //{
+    protected override void RotateWeapon(Transform target)
+    {
 
-    //    if (target == null) return;
-    //    if (isAttack == true) return;
+        if (target == null) return;
+        if (isAttack == true) return;
 
-    //    var dir = target.position - transform.position;
-    //    dir.Normalize();
-    //    dir.z = 0;
+        var dir = target.position - transform.position;
+        dir.Normalize();
+        dir.z = 0;
 
-    //    transform.localScale = dir.x switch
-    //    {
+        transform.right = dir;
 
-    //        var x when x > 0 => new Vector3(1, 1, 1),
-    //        var x when x < 0 => new Vector3(1, -1, 1),
-    //        _ => transform.localScale
-
-    //    };
-
-    //    transform.right = dir;
-
-    //}
+    }
 
 }
