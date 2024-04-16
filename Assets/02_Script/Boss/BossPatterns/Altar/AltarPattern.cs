@@ -5,16 +5,44 @@ using DG.Tweening;
 
 public class AltarPattern : BossPatternBase
 {
-    public IEnumerator OmnidirAttack(AltarBoss boss, int bulletCount, float speed, float time, int burstCount)
+    private IEnumerator OutTriangleAnim(AltarBoss boss, float time, float a)
     {
+        StartCoroutine(boss.Blinking(boss.smallestBody, time, a, 1, Color.white));
+        yield return new WaitForSeconds(time);
+        StartCoroutine(boss.Blinking(boss.mediumSizeBody, time, a, 1, Color.white));
+        yield return new WaitForSeconds(time);
+        StartCoroutine(boss.Blinking(boss.bigestBody, time, a, 1, Color.white));
+    }
+
+    private IEnumerator InTriangleAnim(AltarBoss boss, float time, float a)
+    {
+        StartCoroutine(boss.Blinking(boss.bigestBody, time, a, 1, Color.white));
+        yield return new WaitForSeconds(time);
+        StartCoroutine(boss.Blinking(boss.mediumSizeBody, time, a, 1, Color.white));
+        yield return new WaitForSeconds(time);
+        StartCoroutine(boss.Blinking(boss.smallestBody, time, a, 1, Color.white));
+    }
+
+    public IEnumerator OmnidirAttack(AltarBoss boss, int bulletCount, float speed, float ShotCoolTime, int burstCount)
+    {
+        float animTime = 0.5f;
         SoundManager.Instance.SFXPlay("Fire", boss.fireClip, 1);
-        boss.bigestBody.transform.DORotate(new Vector3(0, 0, 180), 0.5f)
+
+        StartCoroutine(OutTriangleAnim(boss, animTime / 3, 1));
+        boss.bigestBody.transform.DORotate(new Vector3(0, 0, 180), animTime)
             .SetEase(Ease.OutQuad)
             .OnComplete(() =>
             {
-                boss.bigestBody.transform.DORotate(Vector3.zero, 0.5f)
-                .SetEase(Ease.OutQuad);
+                boss.bigestBody.transform.DORotate(Vector3.zero, animTime)
+                .SetEase(Ease.OutQuad)
+                .OnComplete(() =>
+                {
+                    StartCoroutine(boss.Poping(boss.gameObject, animTime, 1.5f));
+                    StartCoroutine(boss.Blinking(boss.gameObject, animTime, 0.5f, 1, Color.white, boss.bigTriangleSprite));
+                });
             });
+
+        yield return new WaitForSeconds(animTime * 2);
 
         for (int i = 0; i < burstCount; i++)
         {
@@ -30,31 +58,38 @@ public class AltarPattern : BossPatternBase
                 rigid.velocity = dir.normalized * speed;
             }
 
-            yield return new WaitForSeconds(time);
+            yield return new WaitForSeconds(ShotCoolTime);
         }
 
-        yield return new WaitForSeconds(time);
+        yield return new WaitForSeconds(ShotCoolTime);
         boss.isAttacking = false;
     }
 
     // 전방향으로 탄막을 날리고 잠시 뒤 탄막들이 플레이어 방향으로 날아간다 - 플레이어가 근접하기 좋은 패턴
     public IEnumerator OmniGuidPlayerAttack(AltarBoss boss, int bulletCount, float speed, float time, int burstCount)
     {
+        float animTime = 0.5f;
         SoundManager.Instance.SFXPlay("Fire", boss.fireClip, 1);
         GameObject[,] bullets = new GameObject[burstCount, bulletCount];
 
-        boss.bigestBody.transform.DORotate(new Vector3(0, 0, -180), 0.5f)
+        StartCoroutine(OutTriangleAnim(boss, animTime / 3, 1));
+        boss.bigestBody.transform.DORotate(new Vector3(0, 0, -180), animTime)
             .SetEase(Ease.OutQuad)
             .OnComplete(() =>
             {
-                boss.bigestBody.transform.DORotate(Vector3.zero, 0.5f)
-                .SetEase(Ease.OutQuad);
+                boss.bigestBody.transform.DORotate(Vector3.zero, animTime)
+                .SetEase(Ease.OutQuad)
+                .OnComplete(() =>
+                {
+                    StartCoroutine(boss.Poping(boss.gameObject, animTime, 1.5f));
+                    StartCoroutine(boss.Blinking(boss.gameObject, animTime, 0.5f, 1, Color.white, boss.bigTriangleSprite));
+                });
             });
+
+        yield return new WaitForSeconds(animTime * 2);
 
         for (int i = 0; i < burstCount; i++)
         {
-            //boss.ChangeMaterial(boss.glitchMat);
-
             for (int j = 0; j < bulletCount; j++)
             {
                 bullets[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
@@ -67,11 +102,7 @@ public class AltarPattern : BossPatternBase
                 rigid.velocity = dir.normalized * speed;
             }
 
-            yield return new WaitForSeconds(time / 2);
-
-            //boss.ChangeMaterial(boss.basicMat);
-
-            yield return new WaitForSeconds(time / 2);
+            yield return new WaitForSeconds(time);
 
             for (int j = 0; j < bulletCount; j++)
             {
@@ -98,18 +129,24 @@ public class AltarPattern : BossPatternBase
     // 플레이어 방향으로 에너지 볼을 던진다 - 플레이어가 근접하기 좋은 패턴
     public IEnumerator ThrowEnergyBall(AltarBoss boss, int burstCount, float speed, float waitTime, float returnTime)
     {
+        float animTime = 0.5f;
         Vector3 originSize = boss.transform.localScale;
 
         for (int i = 0; i < burstCount; i++)
         {
             SoundManager.Instance.SFXPlay("Fire", boss.fireClip, 1);
-            boss.smallestBody.transform.DOScale(originSize * 2, 0.2f)
+
+            StartCoroutine(InTriangleAnim(boss, animTime / 3, 1));
+
+            boss.smallestBody.transform.DOScale(originSize * 2, animTime)
             .SetEase(Ease.OutQuad)
             .OnComplete(() =>
             {
-                boss.smallestBody.transform.DOScale(originSize, 0.2f)
+                boss.smallestBody.transform.DOScale(originSize, animTime)
                 .SetEase(Ease.OutQuad);
             });
+
+            yield return new WaitForSeconds(animTime / 1.5f);
 
             GameObject energyBall = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
             energyBall.GetComponent<BossBullet>().Attack(boss.so.Damage);
@@ -131,13 +168,13 @@ public class AltarPattern : BossPatternBase
     // 총알을 전 방향으로 난사한다 - 플레이어가 멀어져야 좋은 패턴
     public IEnumerator OmnidirShooting(AltarBoss boss, int bulletCount, float speed, float time, int turnCount)
     {
-        //boss.ChangeMaterial(boss.enchantedMat);
-
+        float animTime = 0.5f;
         rotate = true;
         StartCoroutine(RotateBigAndSmall(boss, 100));
         for (int i = 0; i < turnCount; i++)
         {
             SoundManager.Instance.SFXPlay("Fire", boss.fireClip, 1);
+            StartCoroutine(OutTriangleAnim(boss, animTime / 3, 1));
             for (int j = 0; j < bulletCount; j++)
             {
                 GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
@@ -149,11 +186,10 @@ public class AltarPattern : BossPatternBase
                 Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * j / bulletCount + i * 2), Mathf.Sin(Mathf.PI * 2 * j / bulletCount + i * 2));
                 rigid.velocity = dir.normalized * speed;
             }
-            yield return new WaitForSeconds(time);
+            yield return new WaitForSeconds(animTime);
         }
 
         rotate = false;
-        //boss.ChangeMaterial(boss.basicMat);
 
         boss.bigestBody.transform.DORotate(Vector3.zero, 0.5f)
                 .SetEase(Ease.OutQuad)

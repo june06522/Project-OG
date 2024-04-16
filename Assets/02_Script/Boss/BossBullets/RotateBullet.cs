@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AltarBasicBullet : BossBullet
+public class RotateBullet : BossBullet
 {
     private float _deg;
     [SerializeField]

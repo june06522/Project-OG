@@ -5,21 +5,21 @@ using DG.Tweening;
 
 public class AOneBrokenState : BossBaseState
 {
-    private float f_maxMoveDistance;
-    private float f_speed;
+    private float _maxMoveDistance;
+    private float _speed;
     private AltarBoss _altar;
     private AltarPattern _pattern;
     public AOneBrokenState(AltarBoss boss, AltarPattern pattern) : base(boss, pattern)
     {
-        f_maxMoveDistance = 5;
-        f_speed = 2;
+        _maxMoveDistance = 5;
+        _speed = 10;
         _altar = boss;
         _pattern = pattern;
     }
 
     public override void OnBossStateExit()
     {
-
+        _altar.isOneBroken = false;
     }
 
     public override void OnBossStateOn()
@@ -36,7 +36,7 @@ public class AOneBrokenState : BossBaseState
         if(!_altar.isOneBroken)
         {
             _altar.StopCoroutine(RandomPattern(_altar.so.PatternChangeTime));
-            StopThisCoroutine();
+            StopNowCoroutine();
         }
     }
 
@@ -73,21 +73,22 @@ public class AOneBrokenState : BossBaseState
 
     private IEnumerator OneBrokenMove()
     {
+        // 개같이 움직임 해결해줘
         while(_altar.isOneBroken)
         {
             if(!_altar.isStop)
             {
-                if (Vector3.Distance(_altar.transform.localPosition, _altar.originPos) < f_maxMoveDistance)
+                if (Vector3.Distance(_altar.transform.localPosition, _altar.originPos) < _maxMoveDistance)
                 {
                     Vector3 dir = (GameManager.Instance.player.transform.position - _altar.transform.position).normalized;
 
-                    _altar.transform.localPosition = Vector2.MoveTowards(_altar.transform.localPosition, _altar.transform.localPosition + dir * f_maxMoveDistance, Time.deltaTime * f_speed);
+                    _altar.transform.localPosition = Vector2.MoveTowards(_altar.transform.localPosition, _altar.transform.localPosition + dir * _maxMoveDistance, Time.deltaTime * _speed);
                 }
                 else
                 {
                     Vector3 dir = (_altar.originPos - _altar.transform.localPosition).normalized;
 
-                    _altar.transform.localPosition = Vector2.MoveTowards(_altar.transform.localPosition, _altar.transform.localPosition + dir, Time.deltaTime * f_speed);
+                    _altar.transform.localPosition = Vector2.MoveTowards(_altar.transform.localPosition, _altar.transform.localPosition + dir, Time.deltaTime * _speed);
                 }
             }
 

@@ -6,12 +6,19 @@ public class BossMove : MonoBehaviour
 {
     public Boss boss;
 
+    private bool _stop = false;
+
+    public void StopMovement(bool b)
+    {
+        _stop = b;
+    }
+
     public IEnumerator BossMovement(float waitTime, float randX, float randY, float speed, float wallCheckRadius)
     {
         Vector3 targetpatrolPos = transform.localPosition;
         bool wallChecked = false;
 
-        while (!boss.IsDie)
+        while (!boss.IsDie && !_stop)
         {
             if (RayWallCheckForMove(transform.position, wallCheckRadius) && !wallChecked)
             {
@@ -43,6 +50,8 @@ public class BossMove : MonoBehaviour
 
             yield return null;
         }
+
+        _stop = false;
     }
 
     private bool RayWallCheckForMove(Vector3 originPos, float radius)

@@ -5,8 +5,6 @@ using UnityEngine;
 public class ABossDeadState : BossBaseState
 {
     private AltarBoss _altar;
-    private Material _mat;
-    private SpriteRenderer _spriteRenderer;
     private bool _make;
 
     public ABossDeadState(AltarBoss boss, AltarPattern pattern) : base(boss, pattern)
@@ -23,14 +21,13 @@ public class ABossDeadState : BossBaseState
     public override void OnBossStateOn()
     {
         _altar.gameObject.layer = LayerMask.NameToLayer("Default");
-        _spriteRenderer = _altar.bigestBody.GetComponent<SpriteRenderer>();
         _altar.mediumSizeBody.SetActive(false);
         _altar.smallestBody.SetActive(false);
-        _spriteRenderer.sprite = _altar.dyingSprite;
+        _altar.ChangeSprite(_altar.bigestBody, _altar.bigTriangleSprite);
         _altar.StopAllCoroutines();
         _altar.ReturnAll();
         _altar.ChainReturnAll();
-        NowCoroutine(Dying(3, 2, 0.5f));
+        NowCoroutine(Dying(3, 2));
     }
 
     public override void OnBossStateUpdate()
@@ -38,32 +35,14 @@ public class ABossDeadState : BossBaseState
         
     }
 
-    private IEnumerator Dying(float dyingTime, float disappearingTime, float disappearSpeed)
+    private IEnumerator Dying(float dyingTime, float disappearingTime)
     {
-        float curTime = 0;
-        float a = 1;
         SoundManager.Instance.SFXPlay("Dead", _altar.deadClip, 1);
-        //_altar.ChangeMaterial(_altar.dyingMat);
-        _mat = _altar.dyingMat;
         _altar.StartCoroutine(MakeBullets());
-        _mat.SetFloat("_VibrateFade", 1);
         yield return new WaitForSeconds(dyingTime);
         _make = false;
-        GameObject effect = ObjectPool.Instance.GetObject(ObjectPoolType.AltarDeadEffect);
-        effect.transform.position = _altar.transform.position;
-        //_altar.ChangeMaterial(_altar.deadMat);
-        _mat = _spriteRenderer.material;
-        while (curTime < disappearingTime)
-        {
-            curTime += Time.deltaTime;
-            if (a > 0)
-            {
-                _altar.bigestBody.GetComponent<SpriteRenderer>().material.color = new Color(1, 1, 1, a -= Time.deltaTime * disappearSpeed);
-                _mat.SetFloat("_FullDistortionFade", a);
-            }
-            yield return null;
-        }
-        _altar.gameObject.SetActive(false);
+        _altar.StartCoroutine(ActiveFalse(_altar.bigestBody, disappearingTime));
+        _altar.StartCoroutine(ActiveFalse(_altar.gameObject, disappearingTime));
     }
 
     private IEnumerator MakeBullets()

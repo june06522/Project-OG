@@ -4,22 +4,34 @@ using UnityEngine;
 
 public class FullBloomState : BossBaseState
 {
-    public FullBloomState(Boss boss, BossPatternBase pattern) : base(boss, pattern)
+    private FlowerPattern _pattern;
+    private FlowerBoss _flower;
+
+    public FullBloomState(FlowerBoss boss, FlowerPattern pattern) : base(boss, pattern)
     {
+        _flower = boss;
+        _pattern = pattern;
     }
 
     public override void OnBossStateExit()
     {
-        throw new System.NotImplementedException();
+        _flower.SetBasic();
+        _flower.fullBloom = false;
+        _flower.isAttacking = false;
     }
 
     public override void OnBossStateOn()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("FullBloom");
+        _flower.fullBloom = true;
+        NowCoroutine(_pattern.FullBloomPattern(_flower, 2, 100));
     }
 
     public override void OnBossStateUpdate()
     {
-        throw new System.NotImplementedException();
+        if(!_flower.fullBloom)
+        {
+            StopNowCoroutine();
+        }
     }
 }
