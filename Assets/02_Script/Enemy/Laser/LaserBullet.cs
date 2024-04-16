@@ -30,7 +30,7 @@ public class LaserBullet : MonoBehaviour
 
         Sequence seq = DOTween.Sequence();
         seq.Append(laserTween);
-        seq.InsertCallback(0.2f, () => CheckHit(startPos, endPos, damage, player));
+        seq.InsertCallback(0.05f, () => CheckHit(startPos, endPos, damage, player));
         seq.Append(laserwidthTween).AppendCallback(() => lineRenderer.enabled = false);
     }
 
