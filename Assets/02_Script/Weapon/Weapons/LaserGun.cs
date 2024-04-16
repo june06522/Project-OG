@@ -21,27 +21,26 @@ public class LaserGun : InvenWeapon
 
     public override void Attack(Transform target)
     {
-        Debug.Log(1);
-        var obj = Instantiate(gunLine, _shootPos.position, Quaternion.identity);
+        Instantiate(gunLine, Vector3.zero, Quaternion.identity);
 
         gunLine.LineRenderer.positionCount = 2;
-        RaycastHit2D hit = Physics2D.Raycast(_shootPos.transform.position, _shootPos.transform.right, Mathf.Infinity, LayerMask.GetMask("Wall"));
+        Debug.Log(_shootPos.localPosition);
+        RaycastHit2D hit = Physics2D.Raycast(_shootPos.position, _shootPos.right, int.MaxValue, LayerMask.GetMask("Wall"));
 
-        gunLine.LineRenderer.SetPosition(0, _shootPos.transform.position);
-        if (hit.point != null)
+        if (hit.collider != null)
         {
-            gunLine.LineRenderer.SetPosition(1, hit.point);
+            gunLine.SetLine(_shootPos.position, hit.point); 
+            gunLine.LineRenderer.enabled = true;
             gunLine.EdgeCollider.SetPoints(new List<Vector2>
             {
-                _shootPos.transform.position,
+                _shootPos.position,
                 hit.point
             });
+
         }
-        gunLine.LineRenderer.enabled = true;
-        gunLine.LineRenderer.startWidth = 1f;
 
 
-        //DOTween.To(() => gunLine.LineRenderer.startWidth, x => gunLine.LineRenderer.startWidth = x, 0f, 3f)
+        //DOTween.To(() => gunLine.LineRenderer.widthMultiplier , x => gunLine.LineRenderer.widthMultiplier  = x, 0f, 3f)
         //    .OnComplete(() =>
         //    {
         //        gunLine.LineRenderer.positionCount = 0;
