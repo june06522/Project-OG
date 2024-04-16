@@ -2,14 +2,17 @@ using FSM_System;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GlowyStateController : BaseFSM_Controller<ENormalPatrolEnemyState>
 {
     [NonSerialized]
     public Transform attackPoint;
+    
     LaserBullet laserBullet;
-    LaserPointer pointer;
+
+    public LaserPointer[] pointers = new LaserPointer[2];
 
     [SerializeField]
     private AudioClip _lazerClip;
@@ -19,7 +22,7 @@ public class GlowyStateController : BaseFSM_Controller<ENormalPatrolEnemyState>
         base.Awake();
         attackPoint = transform.Find("AttackPoint").GetComponent<Transform>();
         laserBullet = transform.Find("LaserBullet").GetComponent<LaserBullet>();
-        pointer = transform.Find("LaserPointer").GetComponent<LaserPointer>();
+        pointers = transform.Find("LaserPointers").GetComponentsInChildren<LaserPointer>();
     }
 
     protected override void Start()
@@ -49,12 +52,18 @@ public class GlowyStateController : BaseFSM_Controller<ENormalPatrolEnemyState>
         AddState(attackState, ENormalPatrolEnemyState.Attack);
     }
 
-    public void SetLaserPointer(Vector2 endPos)
+    public void SetLaserPointer(Vector2 endPos, int index)
     {
-        pointer.SetPos(attackPoint.position, endPos);
+        pointers[index].SetPos(attackPoint.position, endPos);
     }
 
-    public void SetLaserPointerActive(bool value) => pointer.SetActive(value);
+    public void SetLaserPointerActive(bool value)
+    {
+        for(int i = 0; i < pointers.Length; i++) 
+        {
+            pointers[i].SetActive(value);
+        }
+    }
 
     public void Shoot(Vector2 endPos)
     {

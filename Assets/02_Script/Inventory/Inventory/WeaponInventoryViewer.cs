@@ -14,6 +14,7 @@ public class WeaponInventoryViewer : MonoBehaviour
     [field:SerializeField] public Transform point { get; protected set; }
     [field:SerializeField] public Transform parent { get; protected set; }
 
+    Vector3 thispos = Vector3.zero;
     private WeaponInventory inventory;
 
     public List<InvenSlot> slots { get; set; } = new List<InvenSlot>();
@@ -21,6 +22,7 @@ public class WeaponInventoryViewer : MonoBehaviour
     private void Awake()
     {
         
+        thispos = point.position;
         inventory = GameManager.Instance.Inventory; 
         inventory.OnSlotAddEvent += HandleSlotAdded;
 
@@ -29,7 +31,7 @@ public class WeaponInventoryViewer : MonoBehaviour
     private void HandleSlotAdded(Vector2Int point)
     {
 
-        var pos = (this.point.position + (Vector3)((Vector2)(point * 100))) - (new Vector3(inventory.StartWidth, inventory.StartHeight) * 100 / 2);
+        var pos = (thispos + (Vector3)((Vector2)(point * 100))) - (new Vector3(inventory.StartWidth, inventory.StartHeight) * 100 / 2);
 
         //var pos = (Vector3)(new Vector2(point.x - 51.5f,point.y - 53));
 
@@ -45,7 +47,7 @@ public class WeaponInventoryViewer : MonoBehaviour
 
     public Vector3 GetPosition(Vector2Int point)
     {
-        var pos = (this.point.position + (Vector3)((Vector2)(point * 100))) - (new Vector3(inventory.StartWidth, inventory.StartHeight) * 100 / 2);
+        var pos = (thispos + (Vector3)((Vector2)(point * 100))) - (new Vector3(inventory.StartWidth, inventory.StartHeight) * 100 / 2);
 
         return pos + new Vector3((int)50, (int)50);
     }

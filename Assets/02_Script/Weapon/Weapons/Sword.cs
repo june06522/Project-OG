@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 // �׽�Ʈ��
@@ -11,6 +12,15 @@ public class Sword : InvenWeapon
     Collider2D _col;
     private bool isAttack = false;
 
+    [SerializeField] private float jumpPower = 3f;
+    [SerializeField] private float radius = 2f;
+    [SerializeField] private Ease ease = Ease.Linear;
+
+    [SerializeField] Transform[] wayPointTrms;
+    private Vector3[] wayPoints;
+    
+    Transform wayPointTrmParent;
+
     protected override void Awake()
     {
 
@@ -18,6 +28,15 @@ public class Sword : InvenWeapon
         _spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
         _col = transform.GetComponent<Collider2D>();
         
+        wayPoints = new Vector3[wayPointTrms.Length];
+      
+        for(int i = 0; i < wayPointTrms.Length; i++)
+        {
+            wayPoints.SetValue(wayPointTrms[i].localPosition, i);
+        }
+
+        wayPointTrmParent = transform.Find("Paths");
+
     }
 
     [BindExecuteType(typeof(float))]
@@ -37,17 +56,42 @@ public class Sword : InvenWeapon
 
     }
 
+    private Vector3[] GetWorldWayPoints(Vector3 target)
+    {
+        Vector3[] points = new Vector3[wayPoints.Length];
+        for(int i = 0; i < points.Length; i++)
+        {
+            points[i] = wayPointTrms[i].position + target;// + transform.position;
+        }
+        return points;
+    }
 
     public override void Attack(Transform target)
     {
 
+        Vector3 dir = (target.position - transform.position);
+        float magnitude = dir.magnitude;
+        dir.Normalize();
+
+        Vector3 crossVec = Vector3.Cross(dir, transform.right);
+
+        float dot = Vector2.Dot(crossVec, Vector2.up);
+        int sign = dot > 0 ? -1 : 1;
+        
+        
+        Vector3[] wayPoints = GetWorldWayPoints(dir * (magnitude - 1.5f));
+        if (sign == -1)
+            wayPoints.Reverse();
+
+        transform.position = wayPoints[0];
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, transform.rotation.eulerAngles.z - sign * 60));
 
         DOTween.Sequence().
-            Append(transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z - 60), 0)).
-            Append(transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + 60), 0.1f).SetEase(Ease.Linear)).
-            //Append(transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z - 60), 0.1f).SetEase(Ease.Linear)).
-            Append(transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z), 0.1f).SetEase(Ease.Linear));
 
+            Append(transform.DOPath(wayPoints, 0.25f, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
+            Insert(0f, transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + sign * 90), 0.25f));
+            //Append(transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z), 0.5f).SetEase(Ease.Linear));
+        
 
         StartCoroutine(AttackTween());
 
@@ -60,9 +104,9 @@ public class Sword : InvenWeapon
         _col.enabled = true;
         yield return new WaitForSeconds(0.2f);
         _col.enabled = false;
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(0.2f);
         isAttack = false;
-
+        transform.DOKill();
     }
 
     public override void Run(Transform target)
