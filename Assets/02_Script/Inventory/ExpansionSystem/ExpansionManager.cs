@@ -61,14 +61,14 @@ public class ExpansionManager : MonoBehaviour
     public void AddSlotcnt(int plusVal = 1)
     {
         _leftCnt += plusVal;
-        if(_leftCnt - plusVal <= 0)
+        if (_leftCnt - plusVal <= 0)
             ShowAddTileBtn();
     }
 
     public void UseSlot(int miusVal = 1)
     {
         _leftCnt -= miusVal;
-        if(_leftCnt + miusVal > 0)
+        if (_leftCnt + miusVal > 0)
         {
             ShowAddTileBtn();
             InventorySlotCenter.Instance.SetPos();
@@ -125,11 +125,11 @@ public class ExpansionManager : MonoBehaviour
 
         Dictionary<Vector2Int, bool> dic = new();
 
-        for(int i = 0; i < _createCnt; i++)
+        for (int i = 0; i < _createCnt; i++)
         {
             if (addBlock.Count == 0)
                 return;
-            int idx = Random.Range(0,addBlock.Count);
+            int idx = Random.Range(0, addBlock.Count);
             if (!dic.ContainsKey(addBlock[idx]))
             {
                 dic.Add(addBlock[idx], true);
@@ -145,6 +145,11 @@ public class ExpansionManager : MonoBehaviour
     public bool CanAdd(Vector2Int pos)
     {
         Dictionary<Vector2Int, bool> dic = new Dictionary<Vector2Int, bool>();
+
+        if (GameManager.Instance.Inventory.IsNewWidth(pos.y, false) && GameManager.Instance.Inventory.Height >= 12)
+            return false;
+        if (GameManager.Instance.Inventory.IsNewHeight(pos.x, false) && GameManager.Instance.Inventory.Width >= 12)
+            return false;
 
         foreach (var item in GameManager.Instance.Inventory.GetSlot())
         {
