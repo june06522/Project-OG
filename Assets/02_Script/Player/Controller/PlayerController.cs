@@ -12,7 +12,7 @@ public enum EnumPlayerState
 
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(CircleCollider2D))]
 public class PlayerController : FSM_Controller<EnumPlayerState>
 {
     private SpriteRenderer _spriteRenderer;
