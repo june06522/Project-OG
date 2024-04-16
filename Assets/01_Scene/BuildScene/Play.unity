@@ -12870,6 +12870,10 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1711762472554863436, guid: 85c45c2c16b6a3d4685ef714825e1d47, type: 3}
+      propertyPath: UVModule.sprites.Array.data[0].sprite
+      value: 
+      objectReference: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+    - target: {fileID: 1711762472554863436, guid: 85c45c2c16b6a3d4685ef714825e1d47, type: 3}
       propertyPath: InitialModule.startColor.maxGradient.atime1
       value: 21203
       objectReference: {fileID: 0}
@@ -13014,7 +13018,7 @@ SpriteRenderer:
   m_SortingLayerID: 86297143
   m_SortingLayer: 4
   m_SortingOrder: 3
-  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0, g: 1, b: 0.92368174, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -19403,6 +19407,7 @@ MonoBehaviour:
   tileParent: {fileID: 1385318458}
   plusObj: {fileID: 8952131735635886292, guid: 8953ee564cfb183499c9cb33f8e17b48, type: 3}
   canvas: {fileID: 887356597}
+  _createCnt: 3
 --- !u!114 &1930712624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20868,6 +20873,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22173e9312beb324c8afcfb11174f610, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _useChangeCameraSize: 0
+  _cameraSize: 0
+  _vStageCam: {fileID: 0}
   _monsterSpawnClip: {fileID: 0}
   _useStageLight: 0
   _stageIntensity: 0
