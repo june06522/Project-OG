@@ -7,6 +7,7 @@ public class GlowyAttackState : FSM_State<ENormalPatrolEnemyState>
 {
     bool pointerOn;
     Vector2 endPos;
+    Vector2 beforeEndPos;
 
     new GlowyStateController controller;
 
@@ -27,11 +28,32 @@ public class GlowyAttackState : FSM_State<ENormalPatrolEnemyState>
 
     private IEnumerator Attack()
     {
+        bool attackEnd = false;
+
+        controller.SetLaserPointerActive(true);
+
+        while(attackEnd == false)
+        {
+            
+            yield return null;
+        }
+        bool fakeMotion = UnityEngine.Random.Range(0, 2) == 0;
+
         yield return new WaitForSeconds(0.5f);
+
+        
+        
         pointerOn = false;
         yield return new WaitForSeconds(0.1f);
+        if (fakeMotion)
+        {
+            yield return new WaitForSeconds(0.15f);
+            pointerOn = true;
+            yield return new WaitForSeconds(0.2f);
+        }
         controller.SetLaserPointerActive(false);
         controller.Shoot(endPos);
+
 
         yield return new WaitForSeconds(0.5f);
         controller.EnemyDataSO.SetCoolDown();
@@ -45,20 +67,6 @@ public class GlowyAttackState : FSM_State<ENormalPatrolEnemyState>
 
     protected override void UpdateState()
     {
-        if(pointerOn)
-        {
-            Vector2 dir = controller.Target.position - controller.transform.position;
-            RaycastHit2D hit = Physics2D.Raycast(controller.attackPoint.position, dir.normalized, 50, LayerMask.GetMask("Wall"));
-            if (hit == true)
-            {
-                controller.SetLaserPointer(hit.point);
-                endPos = hit.point;
-            }
-            else
-            {
-                controller.SetLaserPointer(dir.normalized * 50);
-                endPos = dir.normalized * 50;
-            }
-        }
+       
     }
 }
