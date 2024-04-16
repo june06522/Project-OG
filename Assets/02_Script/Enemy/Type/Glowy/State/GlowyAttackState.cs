@@ -19,7 +19,7 @@ public class GlowyAttackState : FSM_State<ENormalPatrolEnemyState>
     protected override void EnterState()
     {
         controller.StopImmediately();
-        
+
         pointerOn = true;
         controller.SetLaserPointerActive(true);
 
@@ -28,29 +28,78 @@ public class GlowyAttackState : FSM_State<ENormalPatrolEnemyState>
 
     private IEnumerator Attack()
     {
-        bool attackEnd = false;
-
-        controller.SetLaserPointerActive(true);
-
-        while(attackEnd == false)
-        {
-            
-            yield return null;
-        }
-        bool fakeMotion = UnityEngine.Random.Range(0, 2) == 0;
-
+        controller.ResetPoints();
+        controller.SetLaserPointerActive(false);
         yield return new WaitForSeconds(0.5f);
 
-        
-        
-        pointerOn = false;
-        yield return new WaitForSeconds(0.1f);
-        if (fakeMotion)
+        bool fakeMotion = UnityEngine.Random.Range(0, 2) == 0;
+
+        float angle = 70;
+        Vector3 dir;// = (controller.Target.position - controller.transform.position).normalized;
+        Vector3 leftdir;// = (Quaternion.Euler(new Vector3(0,0, -angle)) * dir);
+        Vector3 rightdir;// = (Quaternion.Euler(new Vector3(0, 0, angle)) * dir);
+
+        dir = (controller.Target.position - controller.transform.position).normalized;
+        leftdir = (Quaternion.Euler(new Vector3(0, 0, -angle)) * dir);
+        rightdir = (Quaternion.Euler(new Vector3(0, 0, angle)) * dir);
+
+        leftdir.z = 0;
+        rightdir.z = 0f;
+       
+        do
         {
-            yield return new WaitForSeconds(0.15f);
-            pointerOn = true;
-            yield return new WaitForSeconds(0.2f);
+
+            RaycastHit2D lefthit = Physics2D.Raycast(controller.attackPoint.position, leftdir.normalized, 50, LayerMask.GetMask("Wall"));
+            if (lefthit == true)
+            {
+                controller.SetLaserPointer(lefthit.point, 0);
+            }
+            else
+            {
+                controller.SetLaserPointer(leftdir.normalized * 50, 0);
+            }
+
+            RaycastHit2D rightHit = Physics2D.Raycast(controller.attackPoint.position, rightdir.normalized, 50, LayerMask.GetMask("Wall"));
+            if (rightHit == true)
+            {
+                controller.SetLaserPointer(rightHit.point, 1);
+            }
+            else
+            {
+                controller.SetLaserPointer(rightdir.normalized * 50, 1);
+            }
+
+            controller.SetLaserPointerActive(true);
+
+            dir = (controller.Target.position - controller.transform.position).normalized;
+            leftdir = Vector3.Slerp(leftdir, dir, 0.3f);
+            rightdir = Vector3.Slerp(rightdir, dir, 0.3f);
+
+           angle -= Mathf.LerpAngle(angle, 0, 0.3f);
+            yield return new WaitForSeconds(0.05f);
         }
+        while (angle > 0.05f);
+
+        dir = Vector3.Slerp(leftdir, rightdir, 0.5f);
+        RaycastHit2D hit = Physics2D.Raycast(controller.attackPoint.position, dir.normalized, 50, LayerMask.GetMask("Wall"));
+        if (hit == true)
+        {
+            endPos = hit.point;
+        }
+        else
+        {
+            endPos = dir * 50f;
+        }
+
+        pointerOn = false;
+        //yield return new WaitForSeconds(0.1f);
+        //if (fakeMotion)
+        //{
+        //    yield return new WaitForSeconds(0.15f);
+        //    pointerOn = true;
+        //    yield return new WaitForSeconds(0.2f);
+        //}
+
         controller.SetLaserPointerActive(false);
         controller.Shoot(endPos);
 
@@ -67,6 +116,9 @@ public class GlowyAttackState : FSM_State<ENormalPatrolEnemyState>
 
     protected override void UpdateState()
     {
-       
+        if (pointerOn)
+        {
+           
+        }
     }
 }
