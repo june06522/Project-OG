@@ -25,6 +25,9 @@ public enum ESpikeWormState
 public class SW_Pattern : MonoBehaviour
 {
     [SerializeField]
+    private SpikeWorm _boss;
+
+    [SerializeField]
     private GameObject _rootObject;
     [SerializeField]
     private CinemachineVirtualCamera _vStageCam;
@@ -117,6 +120,8 @@ public class SW_Pattern : MonoBehaviour
     {
         _player = GameManager.Instance.player;
         _saveColor = _headSpriteRenderer.color;
+
+        _boss.DieEvt += HandleDie;
     }
 
     private void Update()
