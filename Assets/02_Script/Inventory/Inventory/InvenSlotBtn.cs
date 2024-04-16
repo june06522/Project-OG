@@ -18,6 +18,7 @@ public class InvenSlotBtn : MonoBehaviour
         GameManager.Instance.Inventory.ExcuteSlotEvent(pos);
         GameManager.Instance.Inventory.AddSlot(pos);
         ExpansionManager.Instance.UseSlot();
+        
         Destroy(gameObject);
     }
 

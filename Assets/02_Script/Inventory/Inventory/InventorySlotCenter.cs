@@ -24,6 +24,11 @@ public class InventorySlotCenter : MonoBehaviour
         rect = GetComponent<RectTransform>();
     }
 
+    private void Update()
+    {
+        SetPos();
+    }
+
     public void ChangeWidth(int val)
     {
         width += val;

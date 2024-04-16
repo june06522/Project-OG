@@ -236,7 +236,7 @@ public class WeaponInventory : MonoBehaviour
         return null;
     }
 
-    public bool IsNewWidth(int y)
+    public bool IsNewWidth(int y, bool settingSize = true)
     {
         foreach (var v in invenslots)
         {
@@ -245,11 +245,12 @@ public class WeaponInventory : MonoBehaviour
                 return false;
             }
         }
-        SetWidth(y);
+        if(settingSize)
+            SetWidth(y);
         return true;
     }
 
-    public bool IsNewHeight(int x)
+    public bool IsNewHeight(int x, bool settingSize = true)
     {
         foreach (var v in invenslots)
         {
@@ -258,7 +259,8 @@ public class WeaponInventory : MonoBehaviour
                 return false;
             }
         }
-        SetHeight(x);
+        if(settingSize)
+            SetHeight(x);
         return true;
     }
 

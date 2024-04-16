@@ -1,12 +1,8 @@
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
 
 public class InventorySize : MonoBehaviour
 {
     RectTransform rect;
-    RectTransform inven;
-    PixelPerfectCamera pixelSize;
-    WeaponInventory weaponInventory;
     ConnectVisible connectVisible;
 
     [HideInInspector]
@@ -20,13 +16,6 @@ public class InventorySize : MonoBehaviour
     {
         connectVisible = GetComponent<ConnectVisible>();
         rect = GetComponent<RectTransform>();
-        //pixelSize = FindObjectOfType<PixelPerfectCamera>();
-        inven = transform.parent.parent.parent.GetComponent<RectTransform>();
-    }
-
-    private void Start()
-    {
-        weaponInventory = GameManager.Instance.Inventory;
     }
 
     private void Update()
@@ -38,32 +27,28 @@ public class InventorySize : MonoBehaviour
 
     private void SetInvenScale()
     {
-        int x = GetSize();
-        //700 
-        x = Mathf.Min(x, 12);
-        float size = 7 / x;
+        float x = GetSize();
+        x = Mathf.Min(x, 12) + 2;
 
-        if (7 - x < 0)
-            rect.localScale = new Vector3(1 + (7 - x) * 0.08f, 1 + (7 - x) * 0.08f, 1);
+        float size;
+
+        //9개일때 100 - 200 / 9
+        //8개일때 100 - 100 / 8 -> 87
+        //7개 일때 700 이면 개당 100
+        //6개일때 100 + 100 / 6 -> 1.17f
+        //5개일때 100 + 200 / 5 -> 1.4f
+        
+        if (x == 7)
+            size = 1f;
+        else if (x < 7)
+            size = 1 + ((7 - x) / x);
         else
-            rect.localScale = new Vector3(1 + (7 - x) * 0.12f, 1 + (7 - x) * 0.12f, 1);
-
-        //if (7 - x < 0)
-        //    rect.localScale = new Vector3(size, size, 1);
-        //else
-        //    rect.localScale = new Vector3(size, size, 1);
+            size = 1 - ((x - 7) / x);
 
 
-        //if (pixelSize.assetsPPU == 100)
-        //{
-        //    inven.localScale = new Vector3(1 / 2f, 1 / 2f);
-        //}
-
-        //ratio = 50f / (pixelSize.assetsPPU);
-        //inven.localScale = new Vector3(ratio, ratio);
-
-        //positionRatio = (pixelSize.assetsPPU);
+        rect.localScale = new Vector3(size, size, 1);
     }
+
 
     private void SettingLineRender()
     {
@@ -79,6 +64,6 @@ public class InventorySize : MonoBehaviour
 
     private int GetSize()
     {
-        return GameManager.Instance.Inventory.GetInvenSize() + (ExpansionManager.Instance.leftCnt > 0 ? 2 : 0);
+        return GameManager.Instance.Inventory.GetInvenSize();// + (ExpansionManager.Instance.leftCnt > 0 ? 2 : 0);
     }
 }
