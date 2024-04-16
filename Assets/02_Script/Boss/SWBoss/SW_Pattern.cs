@@ -1,3 +1,4 @@
+using Cinemachine;
 using DG.Tweening;
 using FD.Dev;
 using System;
@@ -16,12 +17,18 @@ public enum ESpikeWormState
     SpikeBullet,
     EnergeCharge,
     TightSnakeBody,
-    BodyBullet
+    BodyBullet,
+    Die
 
 }
 
 public class SW_Pattern : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject _rootObject;
+    [SerializeField]
+    private CinemachineVirtualCamera _vStageCam;
+
     [Header("Boss")]
     private Transform _player;
     [SerializeField]
@@ -281,6 +288,9 @@ public class SW_Pattern : MonoBehaviour
 
             _isOutside = false;
             _snakeMove.DestroyBody();
+
+            _vStageCam.transform.DOShakePosition(0.2f);
+
             SetCoolTime(5f);
         }
 
@@ -324,6 +334,8 @@ public class SW_Pattern : MonoBehaviour
                 Sequence seq = DOTween.Sequence();
                 seq.Append(transform.DOScale(Vector3.one * 1.2f, 0.2f).SetEase(Ease.OutElastic));
                 seq.Append(transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.InBounce));
+
+                _vStageCam.transform.DOShakePosition(0.1f);
 
                 _isShotCross = !_isShotCross;
             }, 1f);
@@ -437,6 +449,17 @@ public class SW_Pattern : MonoBehaviour
         _headSpriteRenderer.material.SetFloat(HASH_BLINK, 0f);
 
 
+    }
+
+    public void HandleDie()
+    {
+        _vStageCam.transform.DOShakePosition(0.8f);
+        SetBossState(ESpikeWormState.Die);
+        FAED.InvokeDelay(() =>
+        {
+            Destroy(_rootObject);
+            _vStageCam.transform.DOShakePosition(0.1f, 5f);
+        }, 1f);
     }
 
     Coroutine coroutine;

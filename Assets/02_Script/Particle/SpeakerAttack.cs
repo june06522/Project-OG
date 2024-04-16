@@ -18,9 +18,16 @@ public class SpeakerAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<IHitAble>(out var h))
+        if (collision.CompareTag("HitAble"))
         {
-            h.Hit(damage);
+            collision.GetComponent<IHitAble>().Hit(damage);
+            Debug.Log(collision.gameObject.name);
         }
+        //Debug.Log(collision.gameObject.name);
+        //if (collision.TryGetComponent<IHitAble>(out var h) && collision.tag != "Player")
+        //{
+        //    h.Hit(damage);
+        //    Debug.Log(collision.gameObject.name);
+        //}
     }
 }
