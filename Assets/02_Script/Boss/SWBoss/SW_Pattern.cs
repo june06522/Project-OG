@@ -94,7 +94,7 @@ public class SW_Pattern : MonoBehaviour
     // move Value
     private Vector3 _movePos = Vector3.zero;
     private Vector3 _dir = Vector3.up;
-    private float _speed = 15.0f;
+    private float _speed = 10.0f;
 
     // state Value
     private float _cool = 0f;
@@ -190,7 +190,7 @@ public class SW_Pattern : MonoBehaviour
             if(Vector3.Distance(_head.position, _movePos) < 0.2f)
             {
                 _angle += 5f * Mathf.Deg2Rad;
-                _movePos = _worldCenterPos.position + new Vector3(Mathf.Cos(_angle), Mathf.Sin(_angle), 0) * (10f + _currentBodyCount * 0.2f);
+                _movePos = _worldCenterPos.position + new Vector3(Mathf.Cos(_angle), Mathf.Sin(_angle), 0) * (10f + _currentBodyCount * 0.1f);
             }
 
             _dir = (_movePos - _head.position).normalized;
@@ -223,7 +223,7 @@ public class SW_Pattern : MonoBehaviour
     }
     private void SnakeMovePattern()
     {
-        _head.localPosition += (_speed + _accel) * _dir * Time.deltaTime;
+        _head.localPosition += (_speed + _accel - 8) * _dir * Time.deltaTime;
         _accel += 1f * Time.deltaTime;
 
         if(_dir == Vector3.up || _dir == Vector3.down)
@@ -295,11 +295,11 @@ public class SW_Pattern : MonoBehaviour
             SetCoolTime(1f);
         }
 
-        if (Vector3.Distance(_head.localPosition, _movePos) < 0.2f)
+        if (Vector3.Distance(_head.position, _movePos) < 0.2f)
         {
             _angle += -75f * Mathf.Deg2Rad;
-            _movePos = _worldCenterPos.localPosition + new Vector3(Mathf.Cos(_angle), Mathf.Sin(_angle), 0) * 5f;
-            _dir = (_movePos - _head.localPosition).normalized;
+            _movePos = _worldCenterPos.position + new Vector3(Mathf.Cos(_angle), Mathf.Sin(_angle), 0) * 5f;
+            _dir = (_movePos - _head.position).normalized;
 
             //Shot Bullet
             (_isShotCross ? _dangerCrossObject : _dangerXCrossObject).SetActive(true);
@@ -332,7 +332,7 @@ public class SW_Pattern : MonoBehaviour
         }
 
         
-        _head.localPosition += _dir * _turnSpeed * Time.deltaTime;
+        _head.position += _dir * _turnSpeed * Time.deltaTime;
     }
     private void TightSnakePattern()
     {
@@ -350,7 +350,7 @@ public class SW_Pattern : MonoBehaviour
             _head.position = pos; 
         }
         // step3
-        else if (Vector3.Distance(_head.position, _worldCenterPos.position) < 120.0f)
+        else if (Vector3.Distance(_head.position, _worldCenterPos.position) < 135.0f)
         {
             _head.position += _dir * _tightSnakeMoveSpeed * Time.deltaTime;
         }
@@ -377,7 +377,7 @@ public class SW_Pattern : MonoBehaviour
                 _currentTime -= _shotDelay;
                 _currentShotCount++;
 
-                int randomIdx = Random.Range(11, 19);
+                int randomIdx = Random.Range(9, 21);
                 GameObject body = _snakeMove.BodyList[randomIdx].gameObject;
 
                 // Danger
@@ -387,9 +387,9 @@ public class SW_Pattern : MonoBehaviour
                 _snakeMove.BlinkBody(body, 0.1f);
 
                 Sequence seq = DOTween.Sequence();
-                seq.Append(body.transform.DOScale(Vector3.one * 2f, 0.1f).SetEase(Ease.OutElastic))
+                seq.Append(body.transform.DOScale(Vector3.one, 0.1f).SetEase(Ease.OutElastic))
                     .Join(danger.transform.DOScaleX(40f, 0.1f).SetEase(Ease.OutCirc))
-                    .Append(body.transform.DOScale(Vector3.one * 1.5f, 0.1f).SetEase(Ease.OutBounce));
+                    .Append(body.transform.DOScale(Vector3.one * 0.8f, 0.1f).SetEase(Ease.OutBounce));
 
 
                 // Shot
@@ -460,23 +460,23 @@ public class SW_Pattern : MonoBehaviour
         switch (state)
         {
             case ESpikeWormState.SnakeMove:
-                _head.localPosition = _underStartPos.localPosition;
+                _head.position = _underStartPos.position;
                 _accel = 0f;
-                _snakeMove.AddBody(Vector3.down, _bodyCount);
+                _snakeMove.AddBody(Vector3.down, _bodyCount - 10);
                 break;
             case ESpikeWormState.SpikeBullet:
                 _currentShotCount = 0;
                 _movePos = _worldCenterPos.position + new Vector3(Mathf.Cos(_angle), Mathf.Sin(_angle), 0) * 5f;
-                _dir = (_movePos - _head.localPosition).normalized;
+                _dir = (_movePos - _head.position).normalized;
                 break;
             case ESpikeWormState.TightSnakeBody:
                 {
                     _angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
-                    _moveAngle = _angle + (360f * Mathf.Deg2Rad);
+                    _moveAngle = _angle + (390f * Mathf.Deg2Rad);
                     Vector3 pos = _worldCenterPos.localPosition + new Vector3(Mathf.Cos(_angle), Mathf.Sin(_angle), 0) * 30;
                     _head.localPosition = pos;
                     _dir = (_worldCenterPos.localPosition - _head.localPosition).normalized;
-                    _snakeMove.AddBody(-_dir, _bodyCount);
+                    _snakeMove.AddBody(-_dir, _bodyCount + 10);
                 }
                 break;
             case ESpikeWormState.EnergeCharge:
@@ -498,7 +498,7 @@ public class SW_Pattern : MonoBehaviour
                 _currentShotCount = 0;
                 _dir = Vector3.up;
                 _head.position = _underStartPos.position;
-                _snakeMove.AddBody(Vector3.down, _bodyCount);
+                _snakeMove.AddBody(Vector3.down, _bodyCount - 20);
                 break;
         }
         this._state = state;

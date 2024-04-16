@@ -47,6 +47,7 @@ public class StageGate : MonoBehaviour, IInteractable
 
             GameManager.Instance.player.position = NextStage.playerSpawnPos;
             NextStage.SetGlobalLight();
+            NextStage.SetCameraSize();
 
         }
         else

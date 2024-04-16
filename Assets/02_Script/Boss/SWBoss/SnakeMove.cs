@@ -8,7 +8,12 @@ using UnityEngine;
 
 public class SnakeMove : MonoBehaviour
 {
-    [Header("Info")]
+    [Header("Setting")]
+    [SerializeField]
+    private Transform _mainHPObjectTransform;
+    private IHitAble _mainHPObject;
+
+    [Header("BodyInfo")]
     [SerializeField]
     private Transform _head;
     [SerializeField]
@@ -46,6 +51,19 @@ public class SnakeMove : MonoBehaviour
     private void Awake()
     {
         _startPos = _head.position;
+
+        if(_mainHPObjectTransform != null)
+        {
+
+            _mainHPObject = _mainHPObjectTransform.GetComponent<IHitAble>();
+
+        }
+
+        if(_mainHPObject != null && _head.TryGetComponent<HPLinkObject>(out HPLinkObject hpLink))
+        {
+            hpLink.Link(_mainHPObject);
+        }
+        
         
     }
 
@@ -202,7 +220,12 @@ public class SnakeMove : MonoBehaviour
                 backPart.transform.position = _head.position;
             else
                 backPart.transform.position = _bodyList[_bodyList.Count - 1].position;
-            backPart.transform.position += dir * _bodyMinInterval;
+            backPart.transform.position += dir * _bodyMaxInterval;
+
+            if (_mainHPObject != null && backPart.TryGetComponent<HPLinkObject>(out HPLinkObject hpLink))
+            {
+                hpLink.Link(_mainHPObject);
+            }
 
             _bodyList.Add(backPart.transform);
         }
@@ -219,11 +242,16 @@ public class SnakeMove : MonoBehaviour
         GameObject backPart = Instantiate(_bodyObject, _bodyRootTrm);
         BlinkBody(backPart, 0.8f);
 
+        if (_mainHPObject != null && backPart.TryGetComponent<HPLinkObject>(out HPLinkObject hpLink))
+        {
+            hpLink.Link(_mainHPObject);
+        }
+
         if (_bodyList.Count == 0)
             backPart.transform.position = _head.position;
         else
             backPart.transform.position = _bodyList[_bodyList.Count - 1].position;
-        backPart.transform.position += dir * _bodyMinInterval;
+        backPart.transform.position += dir * _bodyMaxInterval;
 
         _bodyList.Add(backPart.transform);
     }

@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -55,6 +56,15 @@ public class Stage : MonoBehaviour
     public List<Stage> NextStage { get; private set; } = new List<Stage>();
     public event Action OnStageClearEvent;
     public event Action OnGateEvent;
+
+    [Header("Camera Info")]
+    [SerializeField]
+    private bool _useChangeCameraSize = false;
+    [SerializeField]
+    private float _cameraSize = 0f;
+
+    [SerializeField]
+    private CinemachineVirtualCamera _vStageCam;
 
     [Header("Sound Info")]
     [SerializeField]
@@ -198,6 +208,7 @@ public class Stage : MonoBehaviour
 
         // appear Gate ...it need tween
 
+        DeleteStageCameraSetting();
         GameManager.Instance.InventoryActive.isPlaying = false;
 
         if (_stageType == StageType.BossStage || NextStage.Count == 0)
@@ -270,6 +281,20 @@ public class Stage : MonoBehaviour
             GameManager.Instance.GlobalLight.intensity = 0.9f;
 
         }
+    }
+    public void SetCameraSize()
+    {
+        if(_useChangeCameraSize)
+            Debug.Log("IsNotUpdate");
+        if (_vStageCam != null)
+            _vStageCam.Priority = 20;
+    }
+    private void DeleteStageCameraSetting()
+    {
+        if (_useChangeCameraSize)
+            Debug.Log("IsNotUpdate");
+        if (_vStageCam != null)
+            Destroy(_vStageCam.gameObject);
     }
 
     private void PlayMonsterSpawnSound()
