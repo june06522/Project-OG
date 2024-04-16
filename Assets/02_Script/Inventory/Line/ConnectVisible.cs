@@ -89,22 +89,24 @@ public class ConnectVisible : MonoBehaviour
                     line.positionCount += 1;
 
                     Vector3 pos = generator.transform.position;// / invenSize.positionRatio;
-                    
+
                     pos.z = -4;
                     line.SetPosition(line.positionCount - 1, pos);
 
+                    Vector2Int invenpoint = Vector2Int.RoundToInt(generator.transform.localPosition / 100);
+
                     b = null;
-                    Connect(ref line, generator.InvenObject.originPos + vec.dir + vec.point, vec.dir, pos, dic, maxCnt, ref weaponData, ref b);
-                    AddLineRenderPoint(line, pos);
+                    Connect(ref line, generator.InvenObject.originPos + vec.dir + vec.point, vec.dir, invenpoint, dic, maxCnt, ref weaponData, ref b);
+                    AddLineRenderPoint(line, invenpoint);
                 } while (b != null);
             }
 
         }
     }
 
-    bool Connect(ref LineRenderer line, Vector2 pos, Vector2Int dir, Vector2 originpos, Dictionary<ConnectInfo, bool> isVisited, int cnt, ref Dictionary<Vector2Int, int> weaponData, ref InventoryObjectData findWeapon)
+    bool Connect(ref LineRenderer line, Vector2 pos, Vector2Int dir, Vector2Int originpos, Dictionary<ConnectInfo, bool> isVisited, int cnt, ref Dictionary<Vector2Int, int> weaponData, ref InventoryObjectData findWeapon)
     {
-        Vector2 tempVec = originpos + new Vector2(dir.x * mulX, dir.y * mulY);
+        Vector2Int tempVec = originpos + dir;
         ConnectInfo info = new ConnectInfo(pos);
         #region 스택 오버 플로우 방지 <- 방문한곳 체크
         if (isVisited.ContainsKey(info) && isVisited[info])
@@ -185,7 +187,7 @@ public class ConnectVisible : MonoBehaviour
         return false;
     }
 
-    private bool BrickCircuit(BrickPoint tmpVec, Vector2 tempVec, ref LineRenderer line, InventoryObjectData data, Dictionary<ConnectInfo, bool> isVisited, int cnt, ref Dictionary<Vector2Int, int> weaponData, ref InventoryObjectData findWeapon)
+    private bool BrickCircuit(BrickPoint tmpVec, Vector2Int tempVec, ref LineRenderer line, InventoryObjectData data, Dictionary<ConnectInfo, bool> isVisited, int cnt, ref Dictionary<Vector2Int, int> weaponData, ref InventoryObjectData findWeapon)
     {
         //라인 렌더러에 추가
         AddLineRenderPoint(line, tempVec);
@@ -250,7 +252,7 @@ public class ConnectVisible : MonoBehaviour
                     isVisited[info] = true;
 
 
-                    tempVec += new Vector2(v.x * mulX, v.y * mulY);
+                    tempVec += v;
                     BrickPoint b;
                     b.point = point.point;
                     b.dir = point.dir;
@@ -267,7 +269,7 @@ public class ConnectVisible : MonoBehaviour
                         isConnect = true;
                     }
 
-                    tempVec -= new Vector2(v.x * mulX, v.y * mulY);
+                    tempVec -= v;
                 }
             }
         }
@@ -302,20 +304,19 @@ public class ConnectVisible : MonoBehaviour
         #endregion
     }
 
-    private void AddLineRenderPoint(LineRenderer line, Vector3 pos, int index = -1)
+    private void AddLineRenderPoint(LineRenderer line, Vector2Int pos, int index = -1)
     {
         line.positionCount += 1;
-        pos.x = (int)(pos.x * 100);
-        pos.x /= 100;
 
-        pos.y = (int)(pos.y * 100);
-        pos.y /= 100;
+        Vector2Int? realPos = GameManager.Instance.Inventory.FindInvenPointPos(pos);
+        Vector3 drawPos = new Vector3(realPos.Value.x, realPos.Value.y, -4);
 
-        pos.z = -4;
+
+
         if (index == -1)
-            line.SetPosition(line.positionCount - 1, pos);
+            line.SetPosition(line.positionCount - 1, drawPos);
         else
-            line.SetPosition(index, pos);
+            line.SetPosition(index, drawPos);
     }
 
     private void DeleteLineRenderPoint(LineRenderer line)

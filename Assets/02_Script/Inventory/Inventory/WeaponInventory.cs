@@ -279,6 +279,20 @@ public class WeaponInventory : MonoBehaviour
 
     }
 
+    public Vector2Int? FindInvenPointPos(Vector2Int localPoint)
+    {
+        var c = viewer.slots.Find(x =>
+        {
+            return Vector2Int.RoundToInt(x.GetComponent<RectTransform>().localPosition / 100) == Vector2Int.RoundToInt(localPoint);
+
+        });
+
+        if (c == null) return null;
+        
+        return Vector2Int.RoundToInt(c.GetComponent<Transform>().position);
+
+    }
+
     public List<SlotData> GetSlot()
     {
         return invenslots;
