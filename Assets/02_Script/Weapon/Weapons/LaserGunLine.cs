@@ -23,7 +23,7 @@ public class LaserGunLine : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<IHitAble>(out var h))
+        if (!collision.CompareTag("Player") && collision.TryGetComponent<IHitAble>(out var h))
         {
             h.Hit(damage);
         }
