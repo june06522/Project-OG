@@ -45,6 +45,8 @@ public class SW_Pattern : MonoBehaviour
     private SpriteRenderer _headSpriteRenderer;
     private readonly int HASH_BLINK = Shader.PropertyToID("_StrongTintFade");
 
+    private bool _patternCheckOnce = false; 
+
     [Header("Info")]
     [SerializeField]
     private SnakeMove _snakeMove;
@@ -218,7 +220,13 @@ public class SW_Pattern : MonoBehaviour
         }
         else // OutWorld
         {
-            if(Vector3.Distance(_head.position, _worldCenterPos.position) > 15f)
+            if (_patternCheckOnce == false)
+            {
+                _patternCheckOnce = true;
+                _vStageCam.transform.DOShakePosition(0.2f, 5, 20);
+            }
+
+            if (Vector3.Distance(_head.position, _worldCenterPos.position) > 15f)
             {
                 _moveAngle = _angle + (360f * Mathf.Deg2Rad);
 
@@ -294,7 +302,7 @@ public class SW_Pattern : MonoBehaviour
             _isOutside = false;
             _snakeMove.DestroyBody();
 
-            _vStageCam.transform.DOShakePosition(0.2f);
+            _vStageCam.transform.DOShakePosition(0.3f);
 
             SetCoolTime(5f);
         }
@@ -340,7 +348,7 @@ public class SW_Pattern : MonoBehaviour
                 seq.Append(transform.DOScale(Vector3.one * 1.2f, 0.2f).SetEase(Ease.OutElastic));
                 seq.Append(transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.InBounce));
 
-                _vStageCam.transform.DOShakePosition(0.1f);
+                _vStageCam.transform.DOShakePosition(0.1f, 3);
 
                 _isShotCross = !_isShotCross;
             }, 1f);
@@ -353,6 +361,12 @@ public class SW_Pattern : MonoBehaviour
     }
     private void TightSnakePattern()
     {
+        if (_patternCheckOnce == false)
+        {
+            _patternCheckOnce = true;
+            _vStageCam.transform.DOShakePosition(0.2f, 3, 10);
+        }
+
         // step1
         if (Vector3.Distance(_head.position, _worldCenterPos.position) > 15.0f && _angle < _moveAngle)
         {
@@ -388,6 +402,13 @@ public class SW_Pattern : MonoBehaviour
         }
         else if(_bodyBulletShotCount > _currentShotCount)
         {
+            if(_patternCheckOnce == false)
+            {
+                _patternCheckOnce = true;
+                _vStageCam.transform.DOShakePosition(0.2f, 5, 20);
+            }
+
+
             _currentTime += Time.deltaTime;
             if(_shotDelay <= _currentTime)
             {
@@ -485,6 +506,7 @@ public class SW_Pattern : MonoBehaviour
         if (this._state == ESpikeWormState.Cool)
             return;
 
+        _patternCheckOnce = false;
         switch (state)
         {
             case ESpikeWormState.SnakeMove:
