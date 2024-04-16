@@ -36,7 +36,7 @@ public class InventorySlotCenter : MonoBehaviour
         SetPos();
     }
 
-    private void SetPos()
+    public void SetPos()
     {
         rect.localPosition = new Vector3(width * (50 * rect.localScale.x), height * (50 * rect.localScale.y));
     }

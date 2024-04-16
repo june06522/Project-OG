@@ -69,7 +69,10 @@ public class ExpansionManager : MonoBehaviour
     {
         _leftCnt -= miusVal;
         if(_leftCnt + miusVal > 0)
+        {
             ShowAddTileBtn();
+            InventorySlotCenter.Instance.SetPos();
+        }
     }
 
     public void ShowAddTileBtn()
