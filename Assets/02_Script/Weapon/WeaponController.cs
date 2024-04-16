@@ -88,7 +88,7 @@ public class WeaponController : MonoBehaviour
         {
 
             weaponContainer[i - 1].transform.position
-                = transform.position + (Quaternion.Euler(0, 0, angle * i) * Vector2.right);
+                = transform.position + (Quaternion.Euler(0, 0, angle * i) * Vector2.right * 1.5f);
             weaponContainer[i - 1].OnRePosition();
         }
 
