@@ -22,7 +22,7 @@ public class AltarBoss : Boss
     public Material enchantedMat;
     public Material glitchMat;
 
-    public Sprite dyingSprite;
+    public Sprite bigTriangleSprite;
 
     public bool isTied;
     public bool isOneBroken;
@@ -38,7 +38,7 @@ public class AltarBoss : Boss
 
     private GameObject[] _restraints = new GameObject[2];
 
-    private GameObject[,] _chains = new GameObject[2, 10];
+    private GameObject[,] _chains = new GameObject[2, 5];
 
     private int _restraintIndex = 0;
     private int _restrainCount = 0;
@@ -135,13 +135,13 @@ public class AltarBoss : Boss
             var y = _restraintDistance * Mathf.Sin(rad);
             _restraints[i].transform.position = transform.GetChild(i).position + new Vector3(x, y, 0);
             _restraints[i].transform.rotation = Quaternion.identity;
-            for (int j = 0; j < _chainCount; j++)
+            for (int j = 1; j <= _chainCount; j++)
             {
                 var xx = j * _restraintDistance / _chainCount * Mathf.Cos(rad);
                 var yy = j * _restraintDistance / _chainCount * Mathf.Sin(rad);
-                _chains[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.AltarChain, _restraints[i].transform.GetChild(0).transform);
-                _chains[i, j].transform.position = transform.GetChild(i).position + new Vector3(xx, yy, 0);
-                _chains[i, j].transform.rotation = Quaternion.identity;
+                _chains[i, j - 1] = ObjectPool.Instance.GetObject(ObjectPoolType.AltarChain, _restraints[i].transform.GetChild(0).transform);
+                _chains[i, j - 1].transform.position = transform.GetChild(i).position + new Vector3(xx, yy, 0);
+                _chains[i, j - 1].transform.rotation = Quaternion.identity;
             }
         }
     }

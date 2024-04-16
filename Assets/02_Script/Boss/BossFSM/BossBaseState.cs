@@ -26,10 +26,26 @@ public abstract class BossBaseState
         _boss.StartCoroutine(co);
     }
 
-    public void StopThisCoroutine()
+    public void StopNowCoroutine()
     {
         _boss.isAttacking = false;
         if(co != null)
             _boss.StopCoroutine(co);
+    }
+
+    protected IEnumerator ActiveFalse(GameObject obj, float disappearingTime)
+    {
+        float curTime = 0;
+        float a = 1;
+        while (curTime < disappearingTime)
+        {
+            curTime += Time.deltaTime;
+            if (a > 0)
+            {
+                obj.GetComponent<SpriteRenderer>().material.color = new Color(1, 1, 1, a -= Time.deltaTime * disappearingTime);
+            }
+            yield return null;
+        }
+        obj.SetActive(false);
     }
 }

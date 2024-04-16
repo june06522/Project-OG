@@ -23,5 +23,7 @@ public enum ObjectPoolType
 
     SlateMinimi,
     SlateDeadEffect,
-    SlateBullet
+    SlateBullet,
+
+    ScatterBullet
 }

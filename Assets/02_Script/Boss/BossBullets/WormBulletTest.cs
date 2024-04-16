@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class WormBulletTest : BossBullet
 {
+    private float _deg;
+    [SerializeField]
+    private float _speed;
     [SerializeField]
     private float _angle;
     [SerializeField]
@@ -14,6 +17,20 @@ public class WormBulletTest : BossBullet
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
+    }
+
+    private void Update()
+    {
+        _deg += Time.deltaTime * _speed;
+
+        if (_deg < 360)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, _deg * -1);
+        }
+        else
+        {
+            _deg = 0;
+        }
     }
 
     protected override void OnEnable()
