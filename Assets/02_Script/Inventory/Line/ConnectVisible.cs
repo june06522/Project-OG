@@ -31,7 +31,7 @@ public class ConnectVisible : MonoBehaviour
 
     [HideInInspector] public float mulX = 2.0f;
     [HideInInspector] public float mulY = 2.0f;
-    [HideInInspector] public float width = 0.2f;
+     public float width = 0.2f;
 
     private int maxCnt = 0;
 
@@ -50,7 +50,7 @@ public class ConnectVisible : MonoBehaviour
         //canvas.worldCamera = Camera.main;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         VisibleLine();
     }
@@ -86,14 +86,21 @@ public class ConnectVisible : MonoBehaviour
                     Dictionary<ConnectInfo, bool> dic = new Dictionary<ConnectInfo, bool>();
                     LineRenderer line = CreateLine();
 
-                    line.positionCount += 1;
+                    //line.positionCount += 1;
 
-                    Vector3 pos = generator.transform.position;// / invenSize.positionRatio;
+                    //Vector3 pos = generator.transform.position;// / invenSize.positionRatio;
 
-                    pos.z = -4;
-                    line.SetPosition(line.positionCount - 1, pos);
+                    //pos.z = -4;
+                    //line.SetPosition(line.positionCount - 1, pos);
 
-                    Vector2Int invenpoint = Vector2Int.RoundToInt(generator.transform.localPosition / 100);
+                    Vector3 localPos = generator.RectTransform.localPosition;
+
+                    if (GameManager.Instance.Inventory.StartWidth % 2 == 0)
+                        localPos.x += 50;
+                    if (GameManager.Instance.Inventory.StartHeight % 2 == 0)
+                        localPos.y -= 50;
+                    Vector2Int invenpoint = Vector2Int.RoundToInt(localPos / 100);
+                    AddLineRenderPoint(line, invenpoint);
 
                     b = null;
                     Connect(ref line, generator.InvenObject.originPos + vec.dir + vec.point, vec.dir, invenpoint, dic, maxCnt, ref weaponData, ref b);
@@ -308,7 +315,10 @@ public class ConnectVisible : MonoBehaviour
     {
         line.positionCount += 1;
 
-        Vector2Int? realPos = GameManager.Instance.Inventory.FindInvenPointPos(pos);
+        Vector3? realPos = GameManager.Instance.Inventory.FindInvenPointPos(pos);
+
+        if (realPos == null)
+            return;
         Vector3 drawPos = new Vector3(realPos.Value.x, realPos.Value.y, -4);
 
 
