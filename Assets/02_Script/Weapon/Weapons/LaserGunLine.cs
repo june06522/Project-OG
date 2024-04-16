@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 
 public class LaserGunLine : MonoBehaviour
 {
+    [SerializeField] GameObject _impact;
+
     [SerializeField] LineRenderer _lineRenderer;
     [SerializeField] EdgeCollider2D _edgeCollider;
 
@@ -19,6 +22,8 @@ public class LaserGunLine : MonoBehaviour
         _lineRenderer.SetPosition(1, endPos);
         _lineRenderer.endWidth = 0.5f;
         this.damage = damage;
+
+        Instantiate(_impact, endPos, Quaternion.identity);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -28,5 +33,4 @@ public class LaserGunLine : MonoBehaviour
             h.Hit(damage);
         }
     }
-
 }
