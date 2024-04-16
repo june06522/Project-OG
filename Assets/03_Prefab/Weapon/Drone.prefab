@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4108033509434617942}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: ShootPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4108033509434617937}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.531, y: 0, z: 0}
+  m_LocalPosition: {x: -0.009, y: -0.258, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 4108033509881725649}
   - component: {fileID: 4108033509881725654}
   m_Layer: 0
-  m_Name: Gun
+  m_Name: Drone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,7 +106,7 @@ SpriteRenderer:
   m_SortingLayerID: 86297143
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4ce9ea10ae0c124489627a124ad12a21, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 885134facaac9b64d940b9fb34b29f59, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -129,8 +129,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed24da376617622459f7ecdd29ecafdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1
-  <Data>k__BackingField: {fileID: 11400000, guid: 5233ba636865e67499dde8ad01c29f36, type: 2}
+  id: 2
+  <Data>k__BackingField: {fileID: 11400000, guid: beb4db4299709be478b0deca60cc477a, type: 2}
   explainTxt: "\uADF8\uB0E5 \uD53C\uC2A4\uD1A8\uC774\uB2E4."
+  origin: {x: 0, y: 0, z: 0}
   shootPos: {fileID: 4108033509434617942}
   bullet: {fileID: 8685074117366255195, guid: 863ea10f74060434dad84c5e73e647eb, type: 3}

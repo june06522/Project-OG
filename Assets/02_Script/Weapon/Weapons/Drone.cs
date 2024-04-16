@@ -2,7 +2,7 @@ using DG.Tweening;
 using UnityEngine;
 
 // ����
-public class Pistol : InvenWeapon
+public class Drone : InvenWeapon
 {
 
     [SerializeField] private Transform shootPos;

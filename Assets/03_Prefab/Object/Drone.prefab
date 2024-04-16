@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 5836664701301191159}
   - component: {fileID: 5836664701301191156}
   - component: {fileID: 5836664701301191157}
+  - component: {fileID: 2735266871675464372}
   m_Layer: 17
-  m_Name: Gun
+  m_Name: Drone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 86297143
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4ce9ea10ae0c124489627a124ad12a21, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 885134facaac9b64d940b9fb34b29f59, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -125,7 +126,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.355, y: 1.355}
+    oldSize: {x: 1.195, y: 0.47}
     newSize: {x: 2.71, y: 2.71}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -148,3 +149,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brick: {fileID: -2198685304363558039, guid: f54bbc578054413468a3f11a34c2861c, type: 3}
   one: 1
+--- !u!114 &2735266871675464372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5836664701301191162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2101b6ccf41aefc45be5357fd49ff947, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _orderOffset: -1
