@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class ExpansionManager : MonoBehaviour
     [SerializeField] InvenSlotBtn plusObj;
     [SerializeField] Canvas canvas;
     [SerializeField] int _createCnt = 3;
+    [SerializeField] TextMeshProUGUI leftText;
 
     private int _leftCnt = 0;
     public int leftCnt => _leftCnt;
@@ -63,6 +65,8 @@ public class ExpansionManager : MonoBehaviour
         _leftCnt += plusVal;
         if (_leftCnt - plusVal <= 0)
             ShowAddTileBtn();
+        if (leftText != null)
+            leftText.text = $"추가 갯수: {_leftCnt}";
     }
 
     public void UseSlot(int miusVal = 1)
@@ -73,6 +77,8 @@ public class ExpansionManager : MonoBehaviour
             ShowAddTileBtn();
             InventorySlotCenter.Instance.SetPos();
         }
+        if (leftText != null)
+            leftText.text = $"추가 갯수: {_leftCnt}";
     }
 
     public void ShowAddTileBtn()

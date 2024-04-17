@@ -1,19 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class FlowerPattern : BossPatternBase
 {
-    public IEnumerator FlowerShapeShot(FlowerBoss boss, int dirCount, int bulletCount, int burstCount, float angle, float speed, float time, bool inPattern)
+    public IEnumerator FlowerShapeShot(FlowerBoss boss, int dirCount, int bulletCount, int burstCount, float angle, float speed, float time, bool inPattern, float waitTime)
     {
-        for(int i = 0; i < burstCount; i++)
+        boss.isAttacking = true;
+        GameObject[] objs = { boss.smallestBody, boss.mediumSizeBody, boss.bigestBody };
+        int arrCount = 0;
+
+        for (int i = 0; i < burstCount; i++)
         {
+            boss.StartCoroutine(boss.RotateYObject(objs[arrCount], time / 2, 360));
+            boss.StartCoroutine(boss.Blinking(objs[arrCount], time, 1, 1, Color.white));
+            objs[arrCount].transform.rotation = Quaternion.identity;
+            arrCount++;
+            yield return new WaitForSeconds(time / 2);
             for (int j = 0; j < dirCount; j++)
             {
                 Vector2 standard;
                 if (i % 2 == 0)
                 {
-                    standard = new Vector2(Mathf.Cos(Mathf.PI * 2 * j / dirCount), Mathf.Sin(Mathf.PI * 2 * j / dirCount)).normalized;
+                    standard = new Vector2(-Mathf.Sin(Mathf.PI * 2 * j / dirCount), -Mathf.Cos(Mathf.PI * 2 * j / dirCount)).normalized;
                 }
                 else
                 {
@@ -22,10 +32,15 @@ public class FlowerPattern : BossPatternBase
                 
                 MakeLeafShape(boss, standard, bulletCount, angle, speed);
             }
-
-            yield return new WaitForSeconds(time);
+            if(arrCount == objs.Length)
+            {
+                arrCount = 0;
+            }
+            yield return new WaitForSeconds(time / 2);
         }
-        yield return null;
+
+        yield return new WaitForSeconds(waitTime);
+        boss.isAttacking = false;
     }
 
     private void MakeLeafShape(FlowerBoss boss, Vector2 vec, int bulletCount, float angle, float speed)
@@ -43,6 +58,7 @@ public class FlowerPattern : BossPatternBase
         for(int i = -(bulletCount / 2); i < bc; i++)
         {
             GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
+            bullet.GetComponent<BossBullet>().Attack(boss.so.Damage);
             bullet.transform.position = boss.transform.position;
             bullet.transform.rotation = Quaternion.identity;
 
@@ -50,59 +66,77 @@ public class FlowerPattern : BossPatternBase
             Vector2 dir = Quaternion.Euler(0, 0, i * angle) * vec;
             rigid.velocity = dir.normalized * speed;
         }
-        
     }
 
-    public IEnumerator ScatterShot(FlowerBoss boss, int dirCount, int burstCount, float speed, float angle, float time)
+    public IEnumerator ScatterShot(FlowerBoss boss, int dirCount, float speed, float waitTime)
     {
+        boss.isAttacking = true;
+
+        float animTime = 0.5f;
+
+        boss.bigestBody.transform.DORotate(new Vector3(0, 0, -180), animTime)
+            .SetEase(Ease.InOutSine)
+            .OnComplete(() =>
+            {
+                boss.bigestBody.transform.DORotate(new Vector3(0, 0, 360), animTime)
+                .SetEase(Ease.InOutSine)
+                .OnComplete(() =>
+                {
+                    boss.bigestBody.transform.rotation = Quaternion.identity;
+                });
+            });
+
+        boss.mediumSizeBody.transform.DORotate(new Vector3(0, 0, 180), animTime)
+            .SetEase(Ease.InOutSine)
+            .OnComplete(() =>
+            {
+                boss.mediumSizeBody.transform.DORotate(new Vector3(0, 0, -360), animTime)
+                .SetEase(Ease.InOutSine)
+                .OnComplete(() =>
+                {
+                    boss.mediumSizeBody.transform.rotation = Quaternion.identity;
+                });
+            });
+
+        yield return new WaitForSeconds(animTime / 2);
+
         for (int j = 0; j < dirCount; j++)
         {
-            GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
+            GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.ScatterBullet, boss.bulletCollector.transform);
+            bullet.GetComponent<BossBullet>().Attack(boss.so.Damage);
             bullet.transform.position = transform.position;
             bullet.transform.rotation = Quaternion.identity;
 
             Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
-            Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * j / dirCount), Mathf.Sin(Mathf.PI * 2 * j / dirCount));
+            Vector2 dir = new Vector2(Mathf.Sin(Mathf.PI * 2 * j / dirCount), Mathf.Cos(Mathf.PI * 2 * j / dirCount));
             rigid.velocity = dir.normalized * speed;
-
-            StartCoroutine(Scatter(boss, bullet.transform, speed / 2, dir, burstCount, time, angle));
         }
 
-        yield return null;
+        yield return new WaitForSeconds(waitTime);
+        boss.isAttacking = false;
     }
 
-    private IEnumerator Scatter(FlowerBoss boss, Transform trans, float speed, Vector2 vec, int burstCount,  float time, float angle)
+    public IEnumerator RandomOminidirShot(FlowerBoss boss, int burstCount, int bulletCount, float speed, float time, float waitTime)
     {
-        GameObject[,] bullets = new GameObject[burstCount, 2];
-
-        Rigidbody2D[] rigids = new Rigidbody2D[2];
-
-        yield return new WaitForSeconds(time);
+        boss.isAttacking = true;
+        GameObject[] objs = { boss.smallestBody, boss.mediumSizeBody, boss.bigestBody };
+        int arrCount = 0;
 
         for (int i = 0; i < burstCount; i++)
         {
-            for (int j = 0; j < 2; j++)
-            {
-                bullets[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
-                bullets[i, j].transform.position = trans.position;
-                bullets[i, j].transform.rotation = Quaternion.identity;
-                rigids[j] = bullets[i, j].GetComponent<Rigidbody2D>();
-            }
+            objs[arrCount].transform.DORotate(new Vector3(0, 0, 180), time / 4)
+                .SetEase(Ease.InOutSine)
+                .OnComplete(() =>
+                {
+                    boss.StartCoroutine(boss.Blinking(objs[arrCount], time / 2, 1, 1, Color.white));
+                });
+            
+            yield return new WaitForSeconds(time / 2);
 
-            rigids[0].velocity = Quaternion.Euler(0, 0, angle) * vec.normalized * speed;
-            rigids[1].velocity = Quaternion.Euler(0, 0, -angle) * vec.normalized * speed;
-
-            yield return new WaitForSeconds(time);
-        }
-    }
-
-    public IEnumerator RandomOminidirShot(FlowerBoss boss, int burstCount, int bulletCount, float speed, float time)
-    {
-        for(int i = 0; i < burstCount; i++)
-        {
-            for(int j = 0; j < bulletCount; j++)
+            for (int j = 0; j < bulletCount; j++)
             {
                 GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
+                bullet.GetComponent<BossBullet>().Attack(boss.so.Damage);
                 bullet.transform.position = boss.transform.position;
                 bullet.transform.rotation = Quaternion.identity;
 
@@ -111,19 +145,73 @@ public class FlowerPattern : BossPatternBase
                 rigid.velocity = dir.normalized * speed;
             }
 
-            yield return new WaitForSeconds(time);
+            objs[arrCount].transform.DORotate(new Vector3(0, 0, 0), time / 4)
+                .SetEase(Ease.InOutSine)
+                .OnComplete(() => 
+                {
+                    objs[arrCount].transform.rotation = Quaternion.identity;
+                });
+            
+            arrCount++;
+
+            if (arrCount == objs.Length)
+            {
+                arrCount = 0;
+            }
+
+            yield return new WaitForSeconds(time / 2);
         }
+
+        yield return new WaitForSeconds(waitTime);
+        boss.isAttacking = false;
     }
 
-    public IEnumerator WarmShot(FlowerBoss boss, int dirCount, int bulletCount, float speed, float time)
+    public IEnumerator WarmShot(FlowerBoss boss, int dirCount, int bulletCount, float speed, float time, float waitTime)
     {
-        for(int i = 0; i < dirCount; i++)
+        boss.isAttacking = true;
+
+        float animTime = 0.5f;
+
+        Vector3 bigestOriginSize = boss.bigestBody.transform.localScale;
+        Vector3 mediumSizeOriginSize = boss.mediumSizeBody.transform.localScale;
+        Vector3 smallestOriginSize = boss.smallestBody.transform.localScale;
+
+        boss.bigestBody.transform.DOScale(bigestOriginSize * 1.5f, animTime / 3)
+            .SetEase(Ease.InOutSine)
+            .OnComplete(() =>
+            {
+                boss.mediumSizeBody.transform.DOScale(mediumSizeOriginSize * 1.5f, animTime / 3)
+                .SetEase(Ease.InOutSine)
+                .OnComplete(() =>
+                {
+                    boss.smallestBody.transform.DOScale(smallestOriginSize * 1.5f, animTime / 3)
+                    .SetEase(Ease.InOutSine);
+                });
+            });
+
+        yield return new WaitForSeconds(animTime);
+
+        for (int i = 0; i < dirCount; i++)
         {
             Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / dirCount), Mathf.Sin(Mathf.PI * 2 * i / dirCount));
             StartCoroutine(MakeWarm(boss, dir, bulletCount, speed, time));
         }
 
-        yield return null;
+        boss.bigestBody.transform.DOScale(bigestOriginSize, animTime / 3)
+            .SetEase(Ease.InOutSine)
+            .OnComplete(() =>
+            {
+                boss.mediumSizeBody.transform.DOScale(mediumSizeOriginSize, animTime / 3)
+                .SetEase(Ease.InOutSine)
+                .OnComplete(() =>
+                {
+                    boss.smallestBody.transform.DOScale(smallestOriginSize, animTime / 3)
+                    .SetEase(Ease.InOutSine);
+                });
+            });
+
+        yield return new WaitForSeconds(waitTime);
+        boss.isAttacking = false;
     }
 
     private IEnumerator MakeWarm(FlowerBoss boss, Vector2 dir, int bulletCount, float speed, float time)
@@ -132,17 +220,19 @@ public class FlowerPattern : BossPatternBase
         {
             yield return new WaitForSeconds(time);
             GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType2, boss.bulletCollector.transform);
+            bullet.GetComponent<BossBullet>().Attack(boss.so.Damage);
             bullet.transform.position = boss.transform.position;
             bullet.transform.rotation = Quaternion.identity;
 
             Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
             rigid.velocity = dir.normalized * speed;
-
         }
     }
 
-    public IEnumerator FullBloomPattern(FlowerBoss boss, int laserCount, float time, float turnSpeed, float turnTime)
+    public IEnumerator FullBloomPattern(FlowerBoss boss, int laserCount, float turnSpeed)
     {
+        // 야 이거 애니메이션 해줘
+        boss.isAttacking = true;
         LineRenderer[] lines = new LineRenderer[laserCount];
         GameObject[] lasers = new GameObject[laserCount];
         float curTime = 0;
@@ -150,7 +240,7 @@ public class FlowerPattern : BossPatternBase
         
         for(int i = 0; i < laserCount; i++)
         {
-            lasers[i] = ObjectPool.Instance.GetObject(ObjectPoolType.Laser, boss.FlowerOnlyCollector.transform);
+            lasers[i] = ObjectPool.Instance.GetObject(ObjectPoolType.Laser, boss.flowerOnlyCollector.transform);
             lines[i] = lasers[i].GetComponent<LineRenderer>(); 
         }
 
@@ -164,10 +254,13 @@ public class FlowerPattern : BossPatternBase
 
         yield return new WaitForSeconds(1);
 
-        while(curTime < turnTime)
+        while(!boss.IsDie)
         {
             deg += Time.deltaTime * turnSpeed;
             curTime += Time.deltaTime;
+
+            boss.bigestBody.transform.rotation = Quaternion.Euler(0, 0, deg);
+            boss.mediumSizeBody.transform.rotation = Quaternion.Euler(0, 0, -deg);
 
             if(deg < 360)
             {
@@ -182,11 +275,13 @@ public class FlowerPattern : BossPatternBase
 
                     lines[i].SetPosition(0, RayWallCheck(boss.transform.position, -dir));
                     lines[i].SetPosition(1, RayWallCheck(boss.transform.position, dir));
+                    RayPlayerCheck(boss.transform.position, -dir);
+                    RayPlayerCheck(boss.transform.position, dir);
                 }
             }
             else
             {
-                StartCoroutine(FlowerShapeShot(boss, 6, 3, 2, 10, 5, 1, true));
+                StartCoroutine(FlowerShapeShot(boss, 5, 3, 3, 10, 5, 1, true, 1));
                 deg = 0;
             }
 
@@ -197,7 +292,12 @@ public class FlowerPattern : BossPatternBase
         {
             lines[i].enabled = false;
         }
+        StopAllCoroutines();
 
+        boss.ReturnAll();
+        boss.ReturnFlowerCollector();
+
+        boss.isAttacking = false;
         yield return null;
     }
 }

@@ -15,21 +15,47 @@ public class FloweringState : BossBaseState
 
     public override void OnBossStateExit()
     {
-        
+        _flower.isAttacking = false;
     }
 
     public override void OnBossStateOn()
     {
-        // 나중에 패턴에 옮기셈
-        //NowCoroutine(_pattern.FlowerShapeShot(_flower, 6, 3, 2, 10, 5, 1, false));
-        //NowCoroutine(_pattern.ScatterShot(_flower, 6, 5, 3, 45, 1));
-        //NowCoroutine(_pattern.RandomOminidirShot(_flower, 2, 20, 3, 1));
-        //NowCoroutine(_pattern.WarmShot(_flower, 5, 5, 3, 0.1f));
-        //NowCoroutine(_pattern.FullBloomPattern(_flower, 2, 1, 100, 10));
+        _flower.flowering = true;
+        _flower.StartCoroutine(RandomPattern(_flower.so.PatternChangeTime));
     }
 
     public override void OnBossStateUpdate()
     {
-        
+        if(!_flower.flowering)
+        {
+            _flower.StopCoroutine(RandomPattern(_flower.so.PatternChangeTime));
+            StopNowCoroutine();
+        }
+    }
+
+    private IEnumerator RandomPattern(float waitTime)
+    {
+        while(_flower.flowering)
+        {
+            if(_flower.isAttacking)
+            {
+                yield return null;
+                continue;
+            }
+
+            yield return new WaitForSeconds(waitTime);
+
+            int rand = Random.Range(1, 3);
+
+            switch (rand)
+            {
+                case 1:
+                    NowCoroutine(_pattern.FlowerShapeShot(_flower, 5, 3, 3, 10, 5, 1, false, 2));
+                    break;
+                case 2:
+                    NowCoroutine(_pattern.ScatterShot(_flower, 5, 3, 2));
+                    break;
+            }
+        }
     }
 }

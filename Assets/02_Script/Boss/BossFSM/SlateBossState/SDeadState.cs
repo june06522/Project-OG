@@ -22,7 +22,7 @@ public class SDeadState : BossBaseState
         _slate.StopAllCoroutines();
         _slate.ReturnAll();
         _slate.LaserReturnAll();
-        _slate.StartCoroutine(Dying(2, 0.5f, 3, 0.5f));
+        _slate.StartCoroutine(Dying(2, 3, 0.5f));
     }
 
     public override void OnBossStateUpdate()
@@ -30,11 +30,9 @@ public class SDeadState : BossBaseState
         
     }
 
-    private IEnumerator Dying(float disappearingTime, float disappearSpeed, int explosionCount, float explosionWaitTime)
+    private IEnumerator Dying(float disappearingTime, int explosionCount, float explosionWaitTime)
     {
         SoundManager.Instance.SFXPlay("Dead", _slate.deadClip, 1);
-        float curTime = 0;
-        float a = 1;
         for(int i = 0; i < explosionCount; i++)
         {
             GameObject effect = ObjectPool.Instance.GetObject(ObjectPoolType.SlateDeadEffect);
@@ -42,16 +40,6 @@ public class SDeadState : BossBaseState
 
             yield return new WaitForSeconds(explosionWaitTime);
         }
-        
-        while (curTime < disappearingTime)
-        {
-            curTime += Time.deltaTime;
-            if (a > 0)
-            {
-                _slate.gameObject.GetComponent<SpriteRenderer>().material.color = new Color(1, 1, 1, a -= Time.deltaTime * disappearSpeed);
-            }
-            yield return null;
-        }
-        _slate.gameObject.SetActive(false);
+        _slate.StartCoroutine(ActiveFalse(_slate.gameObject, disappearingTime));
     }
 }

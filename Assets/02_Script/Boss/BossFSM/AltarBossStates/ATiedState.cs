@@ -14,8 +14,7 @@ public class ATiedState : BossBaseState
 
     public override void OnBossStateExit()
     {
-        _altar.isStop = true;
-        _altar.StopAllCoroutines();
+        _altar.bossMove.StopMovement(true);
     }
 
     public override void OnBossStateOn()
@@ -31,7 +30,7 @@ public class ATiedState : BossBaseState
         if(!_altar.isTied)
         {
             _altar.StopCoroutine(RandomPattern(_altar.so.PatternChangeTime));
-            StopThisCoroutine();
+            StopNowCoroutine();
         }
     }
 

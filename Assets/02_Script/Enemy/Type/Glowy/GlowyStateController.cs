@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class GlowyStateController : BaseFSM_Controller<ENormalPatrolEnemyState>
 {
@@ -53,7 +54,7 @@ public class GlowyStateController : BaseFSM_Controller<ENormalPatrolEnemyState>
     }
 
     public void SetLaserPointer(Vector2 endPos, int index)
-    {
+    { 
         pointers[index].SetPos(attackPoint.position, endPos);
     }
 
@@ -62,6 +63,14 @@ public class GlowyStateController : BaseFSM_Controller<ENormalPatrolEnemyState>
         for(int i = 0; i < pointers.Length; i++) 
         {
             pointers[i].SetActive(value);
+        }
+    }
+
+    public void ResetPoints()
+    {
+        for (int i = 0; i < pointers.Length; i++)
+        {
+            pointers[i].ResetPoint();
         }
     }
 

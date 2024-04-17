@@ -20,6 +20,13 @@ public enum BossState
     Dead
 }
 
+public struct Body
+{
+    public Color color;
+    public Vector3 scale;
+    public Quaternion rotation;
+}
+
 public class Boss : MonoBehaviour, IHitAble
 {
     public FeedbackPlayer feedbackPlayer { get; set; }
@@ -47,10 +54,13 @@ public class Boss : MonoBehaviour, IHitAble
 
     protected float _currentHP;
 
+    protected bool _fakeDie;
+
     private bool _isDie;
 
     protected virtual void OnEnable()
     {
+        _fakeDie = false;
         _isDie = false;
         isStop = false;
         isDead = false;
@@ -69,10 +79,19 @@ public class Boss : MonoBehaviour, IHitAble
         bossHPSlider.value = _currentHP / so.MaxHP;
     }
 
+    protected void SetBody(ref Body body, GameObject obj)
+    {
+        body.color = obj.GetComponent<SpriteRenderer>().color;
+        body.scale = obj.transform.localScale;
+        body.rotation = obj.transform.rotation;
+    }
+
     private void DieEvent()
     {
-        Debug.Log("die");
-        _isDie = true;
+        if(!_fakeDie)
+        {
+            _isDie = true;
+        }
         bossHPSlider.value = 0;
     }
 
@@ -97,9 +116,20 @@ public class Boss : MonoBehaviour, IHitAble
         return true;
     }
 
+    protected void MakeDie(bool b)
+    {
+        _isDie = b;
+        bossHPSlider.value = 0;
+    }
+
     public void ChangeMaterial(GameObject obj, Material mat)
     {
         obj.GetComponent<SpriteRenderer>().material = mat;
+    }
+
+    public void ChangeSprite(GameObject obj, Sprite sprite)
+    {
+        obj.GetComponent<SpriteRenderer>().sprite = sprite;
     }
 
     public void StopImmediately(Transform trans)
@@ -128,6 +158,74 @@ public class Boss : MonoBehaviour, IHitAble
         {
             Destroy(bulletCollector.transform.GetChild(0).gameObject);
         }
+    }
+
+    public IEnumerator Blinking(GameObject obj, float blinkingTime, float a, int orderInLayer, Color color, Sprite sprite = null)
+    {
+        SpriteRenderer renderer = obj.GetComponent<SpriteRenderer>();
+        Sprite originSprite = renderer.sprite;
+        Color originColor = renderer.color;
+        int originOrderInLayer = renderer.sortingOrder;
+        float currentTime = 0;
+
+        if(sprite != null)
+        {
+            renderer.sprite = sprite;
+        }
+        renderer.color = color * new Color(1, 1, 1, a);
+        renderer.sortingOrder = orderInLayer;
+
+        while (currentTime < blinkingTime)
+        {
+            currentTime += Time.deltaTime;
+
+            renderer.color -= new Color(0, 0, 0, Time.deltaTime);
+
+            yield return null;
+        }
+
+        renderer.color = originColor;
+        renderer.sortingOrder = originOrderInLayer;
+        if(sprite != null)
+        {
+            renderer.sprite = originSprite;
+        }
+    }
+
+    public IEnumerator Poping(GameObject obj, float popingTime, float multiply)
+    {
+        Vector3 originSize = obj.transform.localScale;
+        float currentTime = 0;
+
+        obj.transform.localScale = originSize * multiply;
+
+        while(currentTime < popingTime)
+        {
+            currentTime += Time.deltaTime;
+
+            obj.transform.localScale -= new Vector3(Time.deltaTime, Time.deltaTime, 0);
+
+            yield return null;
+        }
+
+        obj.transform.localScale = originSize;
+    }
+
+    public IEnumerator RotateYObject(GameObject obj, float rotateTime, float endAngle)
+    {
+        float currentTime = 0;
+        float currentAngle = 0;
+
+        while (currentTime < rotateTime)
+        {
+            currentTime += Time.deltaTime;
+            currentAngle += Time.deltaTime * endAngle;
+
+            obj.transform.rotation = Quaternion.Euler(0, currentAngle, 0);
+            yield return null;
+        }
+        obj.transform.rotation = Quaternion.Euler(0, endAngle, 0);
+        yield return null;
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)

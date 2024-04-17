@@ -36,8 +36,8 @@ public class AFreeState : BossBaseState
     public override void OnBossStateOn()
     {
         _altar.isStop = false;
+        _altar.isBlocked = false;
         _altar.StartCoroutine(Dash(10, 20, 0.5f, 0.5f));
-        _altar.StartCoroutine(_altar.bossMove.BossMovement(_altar.so.StopTime, _altar.so.MoveX, _altar.so.MoveY, _altar.so.Speed, _altar.so.WallCheckRadius));
         //_altar.ChangeMaterial(_altar.basicMat);
     }
 
@@ -100,7 +100,7 @@ public class AFreeState : BossBaseState
                     _altar.StopImmediately(_altar.transform);
                     _altar.isStop = true;
                     _lock = true;
-                    NowCoroutine(_pattern.OmnidirShooting(_altar, 4, 3, 0.2f, 50));
+                    NowCoroutine(_pattern.OmnidirShooting(_altar, 4, 3, 0.2f, 30));
                     break;
             }
         }
@@ -119,12 +119,10 @@ public class AFreeState : BossBaseState
         SoundManager.Instance.SFXPlay("Dash", _altar.dashClip);
         _altar.isDashing = true;
         float curTime = 0;
-
         Vector3 dir = (GameManager.Instance.player.transform.position - _altar.transform.position).normalized;
 
         while (curTime < dashTime && !_altar.isBlocked)
         {
-            
             curTime += Time.deltaTime;
 
             Vector3 target = _altar.transform.position + dir * maxDistance;
@@ -136,6 +134,7 @@ public class AFreeState : BossBaseState
 
         _altar.isDashing = false;
         _altar.StartCoroutine(RotatingBall(3, 100, _altar.transform, 5, 5, 5, 0.5f));
+        _altar.StartCoroutine(_altar.bossMove.BossMovement(_altar.so.StopTime, _altar.so.MoveX, _altar.so.MoveY, _altar.so.Speed, _altar.so.WallCheckRadius));
         _altar.StartCoroutine(RandomPattern(_altar.so.PatternChangeTime));
     }
 

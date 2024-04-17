@@ -21,7 +21,7 @@ public class SFullHPState : BossBaseState
         GameObject effect = ObjectPool.Instance.GetObject(ObjectPoolType.SlateDeadEffect);
         effect.transform.position = _slate.transform.position;
         _slate.ReturnMinimi(g_minimis);
-        StopThisCoroutine();
+        StopNowCoroutine();
         _slate.StopAllCoroutines();
         _slate.isAttacking = false;
         _slate.isStop = true;

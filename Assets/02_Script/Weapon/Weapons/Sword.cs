@@ -12,10 +12,7 @@ public class Sword : InvenWeapon
     Collider2D _col;
     private bool isAttack = false;
 
-    [SerializeField] private float jumpPower = 3f;
-    [SerializeField] private float radius = 2f;
     [SerializeField] private Ease ease = Ease.Linear;
-
     [SerializeField] Transform[] wayPointTrms;
     private Vector3[] wayPoints;
     
@@ -42,6 +39,7 @@ public class Sword : InvenWeapon
     [BindExecuteType(typeof(float))]
     public override void GetSignal([BindParameterType(typeof(float))] object signal)
     {
+        
         var data = (SendData)signal;
 
         if (!sendDataList.ContainsKey(data.GetHashCode()))
@@ -52,7 +50,6 @@ public class Sword : InvenWeapon
         {
             sendDataList[data.GetHashCode()].Power = sendDataList[data.GetHashCode()].Power > data.Power ? sendDataList[data.GetHashCode()].Power : data.Power;
         }
-
 
     }
 
@@ -90,7 +87,7 @@ public class Sword : InvenWeapon
 
             Append(transform.DOPath(wayPoints, 0.25f, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
             Insert(0f, transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + sign * 90), 0.25f));
-            //Append(transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z), 0.5f).SetEase(Ease.Linear));
+
         
 
         StartCoroutine(AttackTween());
