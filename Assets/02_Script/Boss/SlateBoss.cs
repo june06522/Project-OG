@@ -8,10 +8,9 @@ public class SlateBoss : Boss
 
     public GameObject slateOnlyCollector;
     public GameObject minimisPositions;
-
-    public Sprite fullHPSprite;
-    public Sprite halfHPSprite;
-    public Sprite deadSprite;
+    public GameObject bigestBody;
+    public GameObject mediumSizeBody;
+    public GameObject smallestBody;
 
     public AudioClip deadClip;
     public AudioClip laserClip;
@@ -24,6 +23,13 @@ public class SlateBoss : Boss
     public Material hologramMinimiMat;
     public Material bulletMat;
     public Material StopMat;
+
+    [HideInInspector]
+    public Body bigestbody;
+    [HideInInspector]
+    public Body mediumsizebody;
+    [HideInInspector]
+    public Body smallestbody;
 
     public float minimiAwayDistance;
 
@@ -43,9 +49,11 @@ public class SlateBoss : Boss
     {
         base.OnEnable();
 
+        SetBody(ref bigestbody, bigestBody);
+        SetBody(ref mediumsizebody, mediumSizeBody);
+        SetBody(ref smallestbody, smallestBody);
         transform.gameObject.layer = LayerMask.NameToLayer("Boss");
         _pattern = GetComponent<SlatePattern>();
-        transform.GetComponent<SpriteRenderer>().sprite = fullHPSprite;
         fullHP = true;
         halfHP = false;
         _curBossState = BossState.Idle;

@@ -19,6 +19,9 @@ public class SHalfHPState : BossBaseState
     public override void OnBossStateExit()
     {
         _slate.ReturnMinimi(g_minimis);
+        _slate.SetBodyToBasic(_slate.bigestbody, _slate.bigestBody);
+        _slate.SetBodyToBasic(_slate.mediumsizebody, _slate.mediumSizeBody);
+        _slate.SetBodyToBasic(_slate.smallestbody, _slate.smallestBody);
     }
 
     public override void OnBossStateOn()
@@ -27,7 +30,6 @@ public class SHalfHPState : BossBaseState
         g_minimis = new GameObject[_slate.MinimiCount];
         _minimiLaserLineRenderer = new LineRenderer[_slate.MinimiCount];
         _originPos = new Vector3[_slate.MinimiCount];
-        _slate.GetComponent<SpriteRenderer>().sprite = _slate.halfHPSprite;
         CreateMinimi();
         _slate.StartCoroutine(NowMove(0.5f));
         _slate.StartCoroutine(RandomPattern(_slate.so.PatternChangeTime));
