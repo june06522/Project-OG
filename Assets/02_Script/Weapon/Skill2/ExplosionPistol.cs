@@ -9,7 +9,7 @@ public class ExplosionPistol : Skill
     public override void Excute(Transform weaponTrm, Transform target, int power)
     {
 
-        var obj = Instantiate(explosionBlt, transform.position, transform.rotation);
+        var obj = Instantiate(explosionBlt, weaponTrm.position, weaponTrm.rotation);
         obj.SetDamage(power * 10, power);
 
     }

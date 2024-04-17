@@ -11,8 +11,12 @@ public class AnchorSpeakerSkill : Skill
     {
         var obj = Instantiate(speaker, transform.position, Quaternion.identity);
 
-        obj.transform.DOJump(target.transform.position, 5f, 1, Vector2.Distance(transform.position, target.transform.position));
-        
-        obj.StartCoroutine(obj.Attack(3 + power));
+        DOTween.Sequence()
+            .Append(obj.transform.DOJump(target.transform.position, 2f, 1, 0.8f).SetEase(Ease.Linear))
+            .AppendCallback(() =>
+            {
+                obj.StartCoroutine(obj.Attack(3 + power));
+            });
+
     }
 }
