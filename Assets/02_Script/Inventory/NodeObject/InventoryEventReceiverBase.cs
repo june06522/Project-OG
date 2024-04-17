@@ -6,7 +6,7 @@ using UnityEngine;
 
 public delegate void ReceiveEvent(object parm = null);
 
-// ÀÌº¥Æ®°¡ ½ÇÇà µÆÀ»‹š ÀÛµ¿ÇÏ´Â ¾Ö ex) ´ë½¬
+//ì´ë²¤íŠ¸ê°€ ì‹¤í–‰ëì„ë•Œ ì‘ë™í•˜ëŠ” ì–˜ ex)ëŒ€ì‰¬
 public abstract class InventoryEventReceiverBase : InventoryObjectRoot, IDisposable
 {
 
