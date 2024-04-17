@@ -64,6 +64,12 @@ public class BombStateController : BaseFSM_Controller<ENormalEnemyState>
         instShowRangeObj = Instantiate(showRange, transform.position, Quaternion.identity);
     }
 
+    private void OnDestroy()
+    {
+        if (instShowRangeObj != null)
+            Destroy(instShowRangeObj);
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
