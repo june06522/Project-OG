@@ -13,11 +13,20 @@ public class LaserPointer : MonoBehaviour
         lineRenderer.positionCount = 2;
     }
 
+    public void ResetPoint()
+    {
+        lineRenderer.SetPosition(0, Vector3.zero);
+        lineRenderer.SetPosition(1, Vector3.zero);
+    }
     public void SetPos(Vector2 startPos, Vector2 endPos)
     {
         lineRenderer.SetPosition(0, startPos);
         lineRenderer.SetPosition(1, endPos);
     }
 
-    public void SetActive(bool value)=> lineRenderer.enabled = value;
+    public void SetActive(bool value)
+    {
+        if (lineRenderer.enabled != value)
+            lineRenderer.enabled = value;
+    }
 }

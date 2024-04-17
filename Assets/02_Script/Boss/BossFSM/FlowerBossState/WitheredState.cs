@@ -4,22 +4,61 @@ using UnityEngine;
 
 public class WitheredState : BossBaseState
 {
-    public WitheredState(Boss boss, BossPatternBase pattern) : base(boss, pattern)
+    private FlowerPattern _pattern;
+    private FlowerBoss _flower;
+
+    public WitheredState(FlowerBoss boss, FlowerPattern pattern) : base(boss, pattern)
     {
+        _flower = boss;
+        _pattern = pattern;
     }
 
     public override void OnBossStateExit()
     {
-        throw new System.NotImplementedException();
+        _flower.StopAllCoroutines();
+        _flower.SetBasic();
+        _flower.withered = false;
+        _flower.isAttacking = false;
     }
 
     public override void OnBossStateOn()
     {
-        throw new System.NotImplementedException();
+        _flower.withered = true;
+        _flower.StartCoroutine(RandomPattern(_flower.so.PatternChangeTime));
     }
 
     public override void OnBossStateUpdate()
     {
-        throw new System.NotImplementedException();
+        if(!_flower.withered)
+        {
+            _flower.StopCoroutine(RandomPattern(_flower.so.PatternChangeTime));
+            StopNowCoroutine();
+        }
+    }
+
+    private IEnumerator RandomPattern(float waitTime)
+    {
+        while(_flower.withered)
+        {
+            if (_flower.isAttacking)
+            {
+                yield return null;
+                continue;
+            }
+
+            yield return new WaitForSeconds(waitTime);
+
+            int rand = Random.Range(1, 3);
+
+            switch(rand)
+            {
+                case 1:
+                    NowCoroutine(_pattern.RandomOminidirShot(_flower, 3, 20, 3, 1, 2));
+                    break;
+                case 2:
+                    NowCoroutine(_pattern.WarmShot(_flower, 5, 5, 3, 0.35f, 2));
+                    break;
+            }
+        }
     }
 }
