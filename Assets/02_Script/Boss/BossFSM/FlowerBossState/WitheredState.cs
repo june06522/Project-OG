@@ -16,7 +16,9 @@ public class WitheredState : BossBaseState
     public override void OnBossStateExit()
     {
         _flower.StopAllCoroutines();
-        _flower.SetBasic();
+        _flower.SetBodyToBasic(_flower.bigestbody, _flower.bigestBody);
+        _flower.SetBodyToBasic(_flower.mediumsizebody, _flower.mediumSizeBody);
+        _flower.SetBodyToBasic(_flower.smallestbody, _flower.smallestBody);
         _flower.withered = false;
         _flower.isAttacking = false;
     }

@@ -18,11 +18,10 @@ public class SDeadState : BossBaseState
     public override void OnBossStateOn()
     {
         _slate.gameObject.layer = LayerMask.NameToLayer("Default");
-        _slate.GetComponent<SpriteRenderer>().sprite = _slate.deadSprite;
         _slate.StopAllCoroutines();
         _slate.ReturnAll();
         _slate.LaserReturnAll();
-        _slate.StartCoroutine(Dying(2, 3, 0.5f));
+        _slate.StartCoroutine(Dying(2));
     }
 
     public override void OnBossStateUpdate()
@@ -30,16 +29,13 @@ public class SDeadState : BossBaseState
         
     }
 
-    private IEnumerator Dying(float disappearingTime, int explosionCount, float explosionWaitTime)
+    private IEnumerator Dying(float disappearingTime)
     {
+        yield return null;
         SoundManager.Instance.SFXPlay("Dead", _slate.deadClip, 1);
-        for(int i = 0; i < explosionCount; i++)
-        {
-            GameObject effect = ObjectPool.Instance.GetObject(ObjectPoolType.SlateDeadEffect);
-            effect.transform.position = _slate.transform.position;
-
-            yield return new WaitForSeconds(explosionWaitTime);
-        }
         _slate.StartCoroutine(ActiveFalse(_slate.gameObject, disappearingTime));
+        _slate.StartCoroutine(ActiveFalse(_slate.bigestBody, disappearingTime));
+        _slate.StartCoroutine(ActiveFalse(_slate.mediumSizeBody, disappearingTime));
+        _slate.StartCoroutine(ActiveFalse(_slate.smallestBody, disappearingTime));
     }
 }

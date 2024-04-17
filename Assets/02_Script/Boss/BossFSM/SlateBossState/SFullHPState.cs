@@ -23,6 +23,9 @@ public class SFullHPState : BossBaseState
         _slate.ReturnMinimi(g_minimis);
         StopNowCoroutine();
         _slate.StopAllCoroutines();
+        _slate.SetBodyToBasic(_slate.bigestbody, _slate.bigestBody);
+        _slate.SetBodyToBasic(_slate.mediumsizebody, _slate.mediumSizeBody);
+        _slate.SetBodyToBasic(_slate.smallestbody, _slate.smallestBody);
         _slate.isAttacking = false;
         _slate.isStop = true;
         _slate.fullHP = false;
@@ -36,7 +39,7 @@ public class SFullHPState : BossBaseState
         g_minimis = new GameObject[_slate.MinimiCount];
         _minimiLaserLineRenderer = new LineRenderer[_slate.MinimiCount];
         _originPos = new Vector3[_slate.MinimiCount];
-        CreateMinimi();
+        _slate.StartCoroutine(CreateMinimi());
         _slate.StartCoroutine(RandomPattern(_slate.so.PatternChangeTime));
         _slate.StartCoroutine(_slate.bossMove.BossMovement(_slate.so.StopTime, _slate.so.MoveX, _slate.so.MoveY, _slate.so.Speed, _slate.so.WallCheckRadius));
     }
@@ -46,8 +49,9 @@ public class SFullHPState : BossBaseState
         
     }
 
-    private void CreateMinimi()
+    private IEnumerator CreateMinimi()
     {
+        yield return new WaitForSeconds(1);
         for (int i = 0; i < g_minimis.Length; i++)
         {
             g_minimis[i] = ObjectPool.Instance.GetObject(ObjectPoolType.SlateMinimi, _slate.transform);

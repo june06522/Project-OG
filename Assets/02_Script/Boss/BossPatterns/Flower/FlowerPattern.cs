@@ -231,7 +231,6 @@ public class FlowerPattern : BossPatternBase
 
     public IEnumerator FullBloomPattern(FlowerBoss boss, int laserCount, float turnSpeed)
     {
-        // 야 이거 애니메이션 해줘
         boss.isAttacking = true;
         LineRenderer[] lines = new LineRenderer[laserCount];
         GameObject[] lasers = new GameObject[laserCount];

@@ -15,7 +15,9 @@ public class FullBloomState : BossBaseState
 
     public override void OnBossStateExit()
     {
-        _flower.SetBasic();
+        _flower.SetBodyToBasic(_flower.bigestbody, _flower.bigestBody);
+        _flower.SetBodyToBasic(_flower.mediumsizebody, _flower.mediumSizeBody);
+        _flower.SetBodyToBasic(_flower.smallestbody, _flower.smallestBody);
         _flower.fullBloom = false;
         _flower.isAttacking = false;
     }
