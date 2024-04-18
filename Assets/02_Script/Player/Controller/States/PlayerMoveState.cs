@@ -49,6 +49,8 @@ public class PlayerMoveState : PlayerRootState
         }
 
         rigid.velocity = _visual.transform.up * playerData.MoveSpeed;
+        if(rigid.velocity != Vector2.zero)
+            PlayerController.EventController.OnMoveExecute();
     }
 
 

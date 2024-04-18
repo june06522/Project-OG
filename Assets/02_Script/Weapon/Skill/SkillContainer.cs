@@ -40,6 +40,7 @@ public enum TriggerID
     Attack,     // 공격
     Hit,        // 맞음
     Time,       // 시간
+    Move,       // 이동
 }
 
 // Skill 2차원 리스트는 인스펙터에서 안보임 이렇게 해야함
