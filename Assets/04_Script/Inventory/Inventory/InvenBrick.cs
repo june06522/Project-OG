@@ -242,7 +242,6 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public virtual void ShowExplain()
     {
         if (Type == ItemType.Generator)
-            ItemExplain.Instance.HoverGenerator(image.sprite, InvenObject.trigger.ToString()
-                , InvenObject.skills);
+            ItemExplain.Instance.HoverGenerator(image.sprite, /*InvenObject.trigger.ToString()*/"아 수정하기 귀차나ㅡ,ㅡ;;", InvenObject.skills);
     }
 }
