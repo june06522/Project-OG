@@ -1,12 +1,8 @@
 using Cinemachine;
 using DG.Tweening;
 using FD.Dev;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
-using UnityEngine.Playables;
 using Random = UnityEngine.Random;
 
 public enum ESpikeWormState
@@ -537,6 +533,7 @@ public class SW_Pattern : MonoBehaviour
                         Vector3 pos = _worldCenterPos.position + new Vector3(Mathf.Cos(_angle), Mathf.Sin(_angle), 0) * (30+i*5);
 
                         Charge_SWPart spawnChargeObject = Instantiate(_chargeObject, pos, Quaternion.identity);
+                        spawnChargeObject.transform.SetParent(_rootObject.transform);
                         //spawnChargeObject.transform.SetParent(transform);
                         spawnChargeObject.SetPartInfo(_head, _chargeObjectDamage, _chargeObjectSpeed);
                     }

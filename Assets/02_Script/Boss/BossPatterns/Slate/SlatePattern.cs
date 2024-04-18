@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class SlatePattern : BossPatternBase
 {
@@ -12,6 +13,7 @@ public class SlatePattern : BossPatternBase
         boss.isStop = true;
 
         float curTime = 0;
+        float blinkingTime = 0;
         float deg = 90;
         Vector2 dir = Vector2.zero;
 
@@ -77,10 +79,29 @@ public class SlatePattern : BossPatternBase
 
         SoundManager.Instance.SFXPlay("Laser", boss.laserClip, boss.bulletCollector.transform, 0.3f);
 
+        
         while (curTime < fireTime)
         {
             curTime += Time.deltaTime;
             deg += Time.deltaTime * speed;
+            blinkingTime += Time.deltaTime;
+
+            boss.bigestBody.transform.rotation = Quaternion.Euler(0, 0, deg);
+            boss.mediumSizeBody.transform.rotation = Quaternion.Euler(0, 0, -deg);
+            boss.smallestBody.transform.rotation = Quaternion.Euler(0, 0, deg);
+
+            if(blinkingTime >= 0.5f)
+            {
+                boss.StartCoroutine(boss.Blinking(boss.smallestBody, 0.5f, 1, 1, Color.white));
+                boss.StartCoroutine(boss.Poping(boss.smallestBody, 0.5f, 1.2f));
+
+                boss.StartCoroutine(boss.Blinking(boss.mediumSizeBody, 0.4f, 1, 1, Color.white));
+                boss.StartCoroutine(boss.Poping(boss.mediumSizeBody, 0.4f, 1.2f));
+
+                boss.StartCoroutine(boss.Blinking(boss.bigestBody, 0.3f, 1, 1, Color.white));
+                boss.StartCoroutine(boss.Poping(boss.bigestBody, 0.3f, 1.2f));
+                blinkingTime = 0;
+            }
 
             if (deg < 360)
             {
@@ -126,6 +147,10 @@ public class SlatePattern : BossPatternBase
             objs[i].GetComponent<SpriteRenderer>().material = boss.hologramMinimiMat;
         }
 
+        boss.SetBodyToBasic(boss.bigestbody, boss.bigestBody);
+        boss.SetBodyToBasic(boss.mediumsizebody, boss.mediumSizeBody);
+        boss.SetBodyToBasic(boss.smallestbody, boss.smallestBody);
+
         yield return new WaitForSeconds(goBackTime);
 
         for (int i = 0; i < objs.Length; i++)
@@ -167,11 +192,16 @@ public class SlatePattern : BossPatternBase
         if (!breaker)
             yield break;
 
+        int cnt = 0;
+
         for (int i = 0; i < turnCount; i++)
         {
             SoundManager.Instance.SFXPlay("Fire", boss.fireClip);
             for (int j = 0; j < bulletCount; j++)
             {
+                boss.bigestBody.transform.DORotate(new Vector3(0, 0, cnt * 360 / (turnCount + bulletCount)), time);
+                boss.mediumSizeBody.transform.DORotate(new Vector3(0, 0, -cnt * 360 / (turnCount + bulletCount)), time);
+                boss.smallestBody.transform.DORotate(new Vector3(0, 0, cnt * 360 / (turnCount + bulletCount)), time);
                 for (int k = 0; k < objs.Length; k++)
                 {
                     if (k % 2 == 0)
@@ -183,10 +213,14 @@ public class SlatePattern : BossPatternBase
                         TornadoShotBulletsMake(boss, objs[k].transform.position, bulletCount, j, speed, -1);
                     }
                 }
-
+                cnt++;
                 yield return new WaitForSeconds(time);
             }
         }
+
+        boss.bigestBody.transform.rotation = Quaternion.identity;
+        boss.mediumSizeBody.transform.rotation = Quaternion.identity;
+        boss.smallestBody.transform.rotation = Quaternion.identity;
 
         boss.isAttacking = false;
     }
@@ -209,6 +243,9 @@ public class SlatePattern : BossPatternBase
         if (!breaker)
             yield break;
 
+        Vector3 originSize = boss.transform.localScale;
+        float animTime = 0.5f;
+
         boss.isStop = true;
         bool plus = true;
         float r = 1;
@@ -216,6 +253,16 @@ public class SlatePattern : BossPatternBase
         for (int i = 0; i < burstCount; i++)
         {
             SoundManager.Instance.SFXPlay("Fire", boss.fireClip);
+            boss.bigestBody.transform.DOScale(originSize * 1.5f, animTime / 2)
+                .SetEase(Ease.InOutSine)
+                .OnComplete(() =>
+                {
+                    boss.bigestBody.transform.DOScale(originSize, animTime / 2)
+                    .SetEase(Ease.InOutSine);
+                });
+
+            yield return new WaitForSeconds(animTime);
+
             for (int j = 0; j < bulletCount; j++)
             {
                 if (r > 1.1f)
@@ -255,6 +302,13 @@ public class SlatePattern : BossPatternBase
         for (int i = 0; i < burstCount; i++)
         {
             SoundManager.Instance.SFXPlay("Fire", boss.fireClip);
+
+            boss.bigestBody.transform.DORotate(new Vector3(0, 0, 135), time)
+                    .SetEase(Ease.InOutSine);
+            boss.mediumSizeBody.transform.DORotate(new Vector3(0, 0, -135), time)
+                .SetEase(Ease.InOutSine);
+            boss.StartCoroutine(boss.Poping(boss.smallestBody, time * 2, 1.5f));
+
             for (int j = 0; j < bulletCount; j++)
             {
                 for (int k = 0; k < objs.Length; k++)
@@ -274,7 +328,23 @@ public class SlatePattern : BossPatternBase
                 }
             }
 
-            yield return new WaitForSeconds(time);
+            yield return new WaitForSeconds(time / 2);
+
+            boss.bigestBody.transform.DORotate(new Vector3(0, 0, 360), time / 2)
+                    .SetEase(Ease.InOutSine)
+                    .OnComplete(() =>
+                    {
+                        boss.bigestBody.transform.rotation = Quaternion.identity;
+                    });
+            boss.mediumSizeBody.transform.DORotate(new Vector3(0, 0, -360), time / 2)
+                .SetEase(Ease.InOutSine)
+                .OnComplete(() =>
+                {
+                    boss.mediumSizeBody.transform.rotation = Quaternion.identity;
+                });
+
+            yield return new WaitForSeconds(time / 2);
+
 
             int rand = Random.Range(1, 5);
             Vector2 nextDir;
@@ -324,12 +394,18 @@ public class SlatePattern : BossPatternBase
             yield break;
 
         GameObject[,] bullets = new GameObject[burstCount, bulletCount];
+        GameObject[] objs = { boss.bigestBody, boss.mediumSizeBody, boss.smallestBody };
 
+        int objCount = 0;
         int returnCounting = 1;
 
         for (int i = 0; i < burstCount; i++)
         {
             SoundManager.Instance.SFXPlay("Fire", boss.fireClip);
+            Vector3 originSize = objs[objCount].transform.localScale;
+            objs[objCount].transform.DOScale(originSize * 1.5f, time);
+            boss.StartCoroutine(boss.Blinking(objs[objCount], time / 2, 1, 1, Color.white));
+
             for (int j = 0; j < bulletCount; j++)
             {
                 bullets[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
@@ -344,6 +420,8 @@ public class SlatePattern : BossPatternBase
             }
 
             yield return new WaitForSeconds(time);
+
+            objs[objCount].transform.DOScale(originSize, time);
 
             if (i > 0)
                 for (int j = 0; j < bulletCount; j++)
@@ -360,6 +438,8 @@ public class SlatePattern : BossPatternBase
                 Rigidbody2D rigid = bullets[i, j].GetComponent<Rigidbody2D>();
                 rigid.velocity = Vector2.zero;
             }
+
+            objCount++;
         }
 
         yield return new WaitForSeconds(time);

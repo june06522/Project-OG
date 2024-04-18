@@ -26,6 +26,8 @@ public class EMP : InvenWeapon
         Instantiate(empBomb, transform.position, transform.rotation)
             .Throw(targetPos, damage: Data.AttackDamage.GetValue());
 
+        transform.DOScale(transform.localScale * 1.5f, 0.25f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.InOutBounce);
+
         StartCoroutine(WaitAttackEnd());
         
     }

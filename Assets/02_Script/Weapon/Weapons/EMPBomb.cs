@@ -12,11 +12,22 @@ public class EMPBomb : MonoBehaviour
     [SerializeField] ParticleSystem bombEffect;
     float damage;
 
+    Animator animator;
+
+    private readonly int _BombHash = Animator.StringToHash("Bomb");
+
+    private void Awake()
+    {
+        animator = transform.GetChild(0).GetComponent<Animator>();    
+    }
+
     public void Throw(Vector3 targetPos, float damage)
     {
         this.damage = damage;
         transform.DOJump(targetPos, jumpPower, 0, duration)
             .OnComplete(() => Boom(targetPos));
+        //transform.DOScale(transform.localScale * 1.5f, 0.5f).SetLoops(1, LoopType.Yoyo);
+       
     }
 
     private void Boom(Vector3 targetPos)
@@ -24,6 +35,7 @@ public class EMPBomb : MonoBehaviour
         if (bombEffect != null)
             Instantiate(bombEffect, transform);
         EnemyHitCheck(targetPos);
+        animator.SetTrigger(_BombHash);
     }
 
     private void EnemyHitCheck(Vector3 targetPos)

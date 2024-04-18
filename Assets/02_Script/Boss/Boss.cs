@@ -79,6 +79,13 @@ public class Boss : MonoBehaviour, IHitAble
         bossHPSlider.value = _currentHP / so.MaxHP;
     }
 
+    public void SetBodyToBasic(Body body, GameObject obj)
+    {
+        obj.transform.localScale = body.scale;
+        obj.transform.rotation = body.rotation;
+        obj.GetComponent<SpriteRenderer>().color = body.color;
+    }
+
     protected void SetBody(ref Body body, GameObject obj)
     {
         body.color = obj.GetComponent<SpriteRenderer>().color;
@@ -184,6 +191,7 @@ public class Boss : MonoBehaviour, IHitAble
             yield return null;
         }
 
+
         renderer.color = originColor;
         renderer.sortingOrder = originOrderInLayer;
         if(sprite != null)
@@ -203,7 +211,7 @@ public class Boss : MonoBehaviour, IHitAble
         {
             currentTime += Time.deltaTime;
 
-            obj.transform.localScale -= new Vector3(Time.deltaTime, Time.deltaTime, 0);
+            obj.transform.localScale -= new Vector3(Time.deltaTime / multiply, Time.deltaTime / multiply, 0);
 
             yield return null;
         }

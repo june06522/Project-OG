@@ -24,17 +24,20 @@ public class FlowerBoss : Boss
 
     private bool _change = false;
 
-    private Body _bigestBody;
-    private Body _mediumSizeBody;
-    private Body _smallestBody;
+    [HideInInspector]
+    public Body bigestbody;
+    [HideInInspector]
+    public Body mediumsizebody;
+    [HideInInspector]
+    public Body smallestbody;
 
     protected override void OnEnable()
     {
         base.OnEnable();
 
-        SetBody(ref _bigestBody, bigestBody);
-        SetBody(ref _mediumSizeBody, mediumSizeBody);
-        SetBody(ref _smallestBody, smallestBody);
+        SetBody(ref bigestbody, bigestBody);
+        SetBody(ref mediumsizebody, mediumSizeBody);
+        SetBody(ref smallestbody, smallestBody);
 
         _pattern = GetComponent<FlowerPattern>();
         _bossFSM = new BossFSM(new BossIdleState(this, _pattern));
@@ -63,20 +66,7 @@ public class FlowerBoss : Boss
         }
     }
 
-    public void SetBasic()
-    {
-        bigestBody.transform.localScale = _bigestBody.scale;
-        bigestBody.transform.rotation = _bigestBody.rotation;
-        bigestBody.GetComponent<SpriteRenderer>().color = _bigestBody.color;
-
-        mediumSizeBody.transform.localScale = _mediumSizeBody.scale;
-        mediumSizeBody.transform.rotation = _mediumSizeBody.rotation;
-        mediumSizeBody.GetComponent<SpriteRenderer>().color = _mediumSizeBody.color;
-
-        smallestBody.transform.localScale = _smallestBody.scale;
-        smallestBody.transform.rotation = _smallestBody.rotation;
-        smallestBody.GetComponent<SpriteRenderer>().color = _smallestBody.color;
-    }
+    
 
     private IEnumerator FullBloomTimer(float waitTime)
     {
@@ -99,7 +89,9 @@ public class FlowerBoss : Boss
     private IEnumerator NextState(BossState state)
     {
         gameObject.layer = LayerMask.NameToLayer("Default");
-        SetBasic();
+        SetBodyToBasic(bigestbody, bigestBody);
+        SetBodyToBasic(mediumsizebody, mediumSizeBody);
+        SetBodyToBasic(smallestbody, smallestBody);
         ReturnAll();
         flowering = false;
 
