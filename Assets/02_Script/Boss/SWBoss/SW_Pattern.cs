@@ -45,7 +45,17 @@ public class SW_Pattern : MonoBehaviour
     private SpriteRenderer _headSpriteRenderer;
     private readonly int HASH_BLINK = Shader.PropertyToID("_StrongTintFade");
 
-    private bool _patternCheckOnce = false; 
+    private bool _patternCheckOnce = false;
+
+    [Header("Sound")]
+    [SerializeField]
+    private AudioClip _shotBodyBulletClip;
+    [SerializeField]
+    private AudioClip _shakeClip;
+    [SerializeField]
+    private AudioClip _hitClip;
+    [SerializeField]
+    private AudioClip _chargeClip;
 
     [Header("Info")]
     [SerializeField]
@@ -223,6 +233,8 @@ public class SW_Pattern : MonoBehaviour
             if (_patternCheckOnce == false)
             {
                 _patternCheckOnce = true;
+                SoundManager.Instance.SFXPlay("Shake", _shakeClip, 0.7f);
+
                 _vStageCam.transform.DOShakePosition(0.2f, 5, 20);
             }
 
@@ -302,6 +314,9 @@ public class SW_Pattern : MonoBehaviour
             _isOutside = false;
             _snakeMove.DestroyBody();
 
+            SoundManager.Instance.SFXPlay("Shake", _shakeClip, 0.7f);
+            SoundManager.Instance.SFXPlay("Hit", _hitClip, 0.5f);
+
             _vStageCam.transform.DOShakePosition(0.3f);
 
             SetCoolTime(5f);
@@ -348,6 +363,8 @@ public class SW_Pattern : MonoBehaviour
                 seq.Append(transform.DOScale(Vector3.one * 1.2f, 0.2f).SetEase(Ease.OutElastic));
                 seq.Append(transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.InBounce));
 
+                SoundManager.Instance.SFXPlay("Shake", _shakeClip, 0.7f);
+                SoundManager.Instance.SFXPlay("ShotBodyBullet",  _shotBodyBulletClip, 0.5f);
                 _vStageCam.transform.DOShakePosition(0.1f, 3);
 
                 _isShotCross = !_isShotCross;
@@ -363,6 +380,9 @@ public class SW_Pattern : MonoBehaviour
     {
         if (_patternCheckOnce == false)
         {
+            SoundManager.Instance.SFXPlay("Shake", _shakeClip, 0.7f);
+
+
             _patternCheckOnce = true;
             _vStageCam.transform.DOShakePosition(0.2f, 3, 10);
         }
@@ -404,6 +424,9 @@ public class SW_Pattern : MonoBehaviour
         {
             if(_patternCheckOnce == false)
             {
+                SoundManager.Instance.SFXPlay("Shake", _shakeClip, 0.7f);
+
+
                 _patternCheckOnce = true;
                 _vStageCam.transform.DOShakePosition(0.2f, 5, 20);
             }
@@ -433,6 +456,8 @@ public class SW_Pattern : MonoBehaviour
                 // Shot
                 FAED.InvokeDelay(() =>
                 {
+                    SoundManager.Instance.SFXPlay("Shot_BodyBullet", _shotBodyBulletClip, 0.6f);
+
                     Destroy(danger);
                     Instantiate(_spikeBullet, body.transform.position, Quaternion.identity).Shoot(Vector2.left);
                     Instantiate(_spikeBullet, body.transform.position, Quaternion.identity).Shoot(Vector2.right);
@@ -491,6 +516,8 @@ public class SW_Pattern : MonoBehaviour
     Coroutine coroutine;
     public void ChargeCount()
     {
+        SoundManager.Instance.SFXPlay("Charge", _chargeClip, 0.4f);
+
         _snakeMove.AddBody(true);
         _currentBodyCount++;
 
