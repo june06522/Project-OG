@@ -24,13 +24,12 @@ public class LaserBullet : MonoBehaviour
         lineRenderer.enabled = true;
 
         Vector2 curPos = startPos;
-        Tween laserTween = DOTween.To(() => startPos, pos => lineRenderer.SetPosition(1, pos), endPos, 0.3f).SetEase(Ease.InCubic);
+        Tween laserTween = DOTween.To(() => startPos, pos => lineRenderer.SetPosition(1, pos), endPos, 0.05f).SetEase(Ease.InCubic);
         Tween laserwidthTween =
             DOTween.To(() => lineWidth, width => lineRenderer.startWidth = lineRenderer.endWidth = width, 0, 0.3f).SetEase(Ease.OutSine);
 
         Sequence seq = DOTween.Sequence();
-        seq.Append(laserTween);
-        seq.InsertCallback(0.05f, () => CheckHit(startPos, endPos, damage, player));
+        seq.Append(laserTween).AppendCallback(()=> CheckHit(startPos, endPos, damage, player));
         seq.Append(laserwidthTween).AppendCallback(() => lineRenderer.enabled = false);
     }
 

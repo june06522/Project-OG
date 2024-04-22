@@ -100,6 +100,9 @@ public class GlowyAttackState : FSM_State<ENormalPatrolEnemyState>
         //    yield return new WaitForSeconds(0.2f);
         //}
 
+        controller.SetLaserPointer(endPos, 0);
+        controller.SetLaserPointer(endPos, 1);
+        yield return new WaitForSeconds(0.1f);
         controller.SetLaserPointerActive(false);
         controller.Shoot(endPos);
 
