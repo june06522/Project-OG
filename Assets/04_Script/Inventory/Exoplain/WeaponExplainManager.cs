@@ -8,20 +8,20 @@ public class WeaponExplainManager : MonoBehaviour
 
     private void Awake()
     {
-        weaponExplain.Add(GeneratorID.DashAttack,       "");
-        weaponExplain.Add(GeneratorID.DeathRay,         "");
-        weaponExplain.Add(GeneratorID.Electronic,       "");
-        weaponExplain.Add(GeneratorID.ErrorDice,        "");
-        weaponExplain.Add(GeneratorID.Force,            "");
-        weaponExplain.Add(GeneratorID.HeartBeat,        "");
-        weaponExplain.Add(GeneratorID.LaserPointer,     "");
-        weaponExplain.Add(GeneratorID.MagneticField,    "");
-        weaponExplain.Add(GeneratorID.OverLoad,         "");
-        weaponExplain.Add(GeneratorID.Reboot,           "");
-        weaponExplain.Add(GeneratorID.RotateWeapon,     "");
-        weaponExplain.Add(GeneratorID.SequenceAttack,   "");
-        weaponExplain.Add(GeneratorID.SiegeMode,        "");
-        weaponExplain.Add(GeneratorID.Trinity,          "");
-        weaponExplain.Add(GeneratorID.WeaponShot,       "");
+        weaponExplain.Add(GeneratorID.DashAttack,       "대쉬 어택");
+        weaponExplain.Add(GeneratorID.DeathRay,         "대쓰 레이");
+        weaponExplain.Add(GeneratorID.Electronic,       "일렉트로닉");
+        weaponExplain.Add(GeneratorID.ErrorDice,        "에러 다이스");
+        weaponExplain.Add(GeneratorID.Force,            "포스");
+        weaponExplain.Add(GeneratorID.HeartBeat,        "하트비트");
+        weaponExplain.Add(GeneratorID.LaserPointer,     "레이저포인터");
+        weaponExplain.Add(GeneratorID.MagneticField,    "자기장");
+        weaponExplain.Add(GeneratorID.OverLoad,         "과부화");
+        weaponExplain.Add(GeneratorID.Reboot,           "리부트");
+        weaponExplain.Add(GeneratorID.RotateWeapon,     "로테이트 웨폰");
+        weaponExplain.Add(GeneratorID.SequenceAttack,   "시퀀스어택");
+        weaponExplain.Add(GeneratorID.SiegeMode,        "시즈모드");
+        weaponExplain.Add(GeneratorID.Trinity,          "트포");
+        weaponExplain.Add(GeneratorID.WeaponShot,       "무기샷");
     }
 }

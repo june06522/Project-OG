@@ -17,18 +17,18 @@ public class GeneratorExplain : MonoBehaviour
         _skillList = GameObject.Find("GeneratorSkillExplain").GetComponent<TextMeshProUGUI>();
     }
 
-    public void ON(Sprite image, string trigger, string[] skillList)
+    public void ON(Sprite image, string trigger, string skill)
     {
         _iamge.sprite = image;
         _trigger.text = $"트리거: {trigger}";
 
-        if(skillList != null )
+        if(skill != null )
         {
-            _skillList.text = "";
-            for (int i = 1; i <= skillList.Length; i++)
-            {
-                _skillList.text += $"{i}개 - {skillList[i - 1]}\n";
-            }
+            _skillList.text = skill;
+            //for (int i = 1; i <= skillList.Length; i++)
+            //{
+            //    _skillList.text += $"{i}개 - {skillList[i - 1]}\n";
+            //}
         }
     }
 }
