@@ -86,20 +86,20 @@ public class SkillContainer : MonoBehaviour
     {
 
         // prevention Out of index
-        if (weaponList.Count > i && weaponList[i].skillList.Count > j)
+        if (weaponList.Count > j && weaponList[j].skillList.Count > i)
         {
 
             // Checks for existence of a value
-            if (weaponList[i] != null && weaponList[i].skillList[j] != null)
+            if (weaponList[j] != null && weaponList[j].skillList[i] != null)
             {
 
-                return weaponList[i].skillList[j];
+                return weaponList[j].skillList[i];
 
             }
 
         }
 
-        Debug.LogError($"Skill Doesn't exist in SkillList : {i}, {j} ");
+        Debug.LogError($"Skill Doesn't exist in SkillList : {j}, {i} ");
         return null;
 
     }
