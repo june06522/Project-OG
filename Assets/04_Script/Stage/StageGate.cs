@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,8 +10,11 @@ public class StageGate : MonoBehaviour, IInteractable
     public event Action OnMoveEndEvent;
     public Stage NextStage {  get; private set; }
 
-    private bool _interactCheck;
+    private bool _interactCheck = true;
     private StageTransition stageTransition;
+
+    [SerializeField]
+    private Transform _spawnTweeningObject;
 
     private void Awake()
     {
@@ -27,6 +31,20 @@ public class StageGate : MonoBehaviour, IInteractable
     public void SetStage(Stage nextStage)
     {
         NextStage = nextStage;
+        Sequence seq = DOTween.Sequence();
+        transform.localScale = Vector3.zero;
+        seq.Append(transform.DOScale(Vector3.one, 1f).SetEase(Ease.OutBounce));
+        if(_spawnTweeningObject != null)
+        {
+            _spawnTweeningObject.localScale = Vector3.zero;
+            seq.Join(_spawnTweeningObject.DOScale(Vector3.one, 1f).SetEase(Ease.OutBounce));
+        }
+
+        seq.AppendCallback(() =>
+        {
+            _interactCheck = false;
+        });
+
     }
 
     public void OnInteract()

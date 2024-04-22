@@ -69,6 +69,8 @@ public class Stage : MonoBehaviour
     [Header("Sound Info")]
     [SerializeField]
     private AudioClip _monsterSpawnClip;
+    [SerializeField]
+    private AudioClip _stageClearClip;
 
     [Header("Lighting")]
     [SerializeField]
@@ -210,6 +212,7 @@ public class Stage : MonoBehaviour
 
         DeleteStageCameraSetting();
         GameManager.Instance.InventoryActive.isPlaying = false;
+        SoundManager.Instance.SFXPlay("Clear", _stageClearClip, 1f);
 
         if (_stageType == StageType.BossStage || NextStage.Count == 0)
         {
