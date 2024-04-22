@@ -61,7 +61,7 @@ public class ItemExplain : MonoBehaviour
         weaponExplain.ON(image, name, power, explain, skillList);
     }
 
-    public void HoverGenerator(Sprite image, string trigger, string[] skillList)
+    public void HoverGenerator(Sprite image, string trigger, string skillList)
     {
         generatorExplain.gameObject.SetActive(true);
         weaponExplain.gameObject.SetActive(false);

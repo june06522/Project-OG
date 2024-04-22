@@ -136,10 +136,18 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         }
         else
         {
-            Vector2Int prevP = Vector2Int.RoundToInt(prevPos / 100);
-            var prev = inventory.FindInvenPoint(Vector2Int.RoundToInt((prevPos - new Vector3Int
+            Vector3 vPrevPos = prevPos;
+            if (GameManager.Instance.Inventory.StartWidth % 2 == 0)
+                vPrevPos -= new Vector3(50, 0);
+            if (GameManager.Instance.Inventory.StartHeight % 2 == 0)
+                vPrevPos -= new Vector3(0, 50);
+
+
+            var prev = inventory.FindInvenPoint(Vector2Int.RoundToInt((vPrevPos - new Vector3Int
                 ((int)rectTransform.rect.width - 100,
                 ((int)rectTransform.rect.height) - 100) / 2) / 100));
+
+            Debug.Log($"{InvenObject.name} : {prev.Value}");
 
             inventory.AddItem(InvenObject, prev.Value);
             InvenPoint = prev.Value;
@@ -242,7 +250,6 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public virtual void ShowExplain()
     {
         if (Type == ItemType.Generator)
-            ItemExplain.Instance.HoverGenerator(image.sprite, InvenObject.trigger.ToString()
-                , InvenObject.skills);
+            ItemExplain.Instance.HoverGenerator(image.sprite, /*InvenObject.trigger.ToString()*/"아 수정하기 귀차나ㅡ,ㅡ;;", WeaponExplainManager.weaponExplain[InvenObject.generatorID]);
     }
 }
