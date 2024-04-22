@@ -10,7 +10,7 @@ public class ExplosionPistol : Skill
     {
         if (target == null) return;
 
-        var obj = Instantiate(explosionBlt, weaponTrm.position, Quaternion.LookRotation(weaponTrm.right));
+        var obj = Instantiate(explosionBlt, weaponTrm.position, weaponTrm.rotation);
         obj.SetDamage(power * 10, power);
 
     }

@@ -1,0 +1,156 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8713966435135044884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9383c2f9281062e40ab80410fa62372b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 250c09d7-a0fc-48a3-b7a4-f4ebad43f4ce
+  connectedInput: []
+  connectedOutput: []
+  editorPos: {x: -118.03894, y: 117}
+  generatorID: 3
+--- !u!114 &-5359527079972089626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1ab083f488fd224b86791ea45ac16f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 3067479b-e16a-462b-879f-7e75cf5e5083
+  connectedInput: []
+  connectedOutput: []
+  editorPos: {x: -1082, y: 450}
+  generatorID: 1
+--- !u!114 &-4616721483025373814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8a2e67e10b898e449a65cd93a78a877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 08cb9fc3-7b58-480c-9417-9061e148ed6f
+  connectedInput: []
+  connectedOutput: []
+  editorPos: {x: 0, y: 0}
+  generatorID: 0
+  cool: 0
+  reductionVal: 0
+--- !u!114 &-2314010149266243047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8a2e67e10b898e449a65cd93a78a877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 83aca2d7-e7ea-46e3-8a8a-800a533ac124
+  connectedInput: []
+  connectedOutput:
+  - {fileID: 673156935237473557}
+  editorPos: {x: -163, y: 75}
+  generatorID: 3
+  cool: 5
+  reductionVal: 0.5
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9830de08a0b99f4e81ecc6ec92294b0, type: 3}
+  m_Name: CoolTime_Up
+  m_EditorClassIdentifier: 
+  <bricks>k__BackingField:
+  - point: {x: 0, y: 0}
+    dir: []
+  <inputPoints>k__BackingField: []
+  <sendPoints>k__BackingField:
+  - point: {x: 0, y: 0}
+    dir: {x: 0, y: 1}
+  includes:
+  - {fileID: 673156935237473557}
+  - {fileID: -2314010149266243047}
+  trigger: 4
+  skills:
+  - "1\uB2E8\uACC4 Test \uC2A4\uD0AC"
+  - "2\uB2E8\uACC4 Test \uC2A4\uD0AC"
+  - "3\uB2E8\uACC4 Test \uC2A4\uD0AC"
+  - "4\uB2E8\uACC4 Test \uC2A4\uD0AC"
+  - "5\uB2E8\uACC4 Test \uC2A4\uD0AC"
+  - "6\uB2E8\uACC4 Test \uC2A4\uD0AC"
+  colorMat: {fileID: 2100000, guid: 239cd5fe6e08c7f4182d5a330d4b4633, type: 2}
+--- !u!114 &673156935237473557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03e63d2c97db16a458c3a7d2858ed97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: dba6fc491204d5345a47ffd096fce7cd
+  connectedInput:
+  - {fileID: -2314010149266243047}
+  connectedOutput: []
+  editorPos: {x: -2609, y: 915}
+--- !u!114 &1076542449526370482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdc16b5fabe5eed4fa145950fdf41b06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: e4fd9a17-bbdb-4766-886b-ce4d9cd83801
+  connectedInput: []
+  connectedOutput: []
+  editorPos: {x: -300, y: -100}
+--- !u!114 &8736072919707435356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a857becc880aac74faa865fa94201188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: f1f9617a1c6af7e48825b553d1d6bd4d
+  connectedInput: []
+  connectedOutput: []
+  editorPos: {x: -124, y: 56}
+  generatorID: 3

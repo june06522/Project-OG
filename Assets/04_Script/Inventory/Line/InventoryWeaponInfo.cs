@@ -62,7 +62,7 @@ public class InventoryWeaponInfo : MonoBehaviour
         foreach (DictionaryEntry item in end)
         {
             InventoryObjectData obj = (InventoryObjectData)item.Key;
-            list.Add(obj.skills[(int)item.Value]); // 나중에 Min으로 제한두기 생성기 땜에
+            list.Add(WeaponExplainManager.weaponExplain[obj.generatorID]); // 나중에 Min으로 제한두기 생성기 땜에
         }
 
         return list;
@@ -87,7 +87,7 @@ public class InventoryWeaponInfo : MonoBehaviour
 
         if (!canGo)
             return;
-        if (tempData.skills.Length > 0)
+        if (tempData.generatorID != GeneratorID.None)
         {
             foreach (var brick in tempData.sendPoints)
             {
@@ -100,7 +100,7 @@ public class InventoryWeaponInfo : MonoBehaviour
 
             if (isfind)
             {
-                list.Add(tempData.skills[0]);
+                list.Add(WeaponExplainManager.weaponExplain[tempData.generatorID]);
             }
         }
 
@@ -163,7 +163,7 @@ public class InventoryWeaponInfo : MonoBehaviour
             bool isfind = false;
 
             //생성기 찾음
-            if (tempData.skills.Length > 0)
+            if (tempData.generatorID != GeneratorID.None)
             {
                 foreach (var brick in tempData.sendPoints)
                 {

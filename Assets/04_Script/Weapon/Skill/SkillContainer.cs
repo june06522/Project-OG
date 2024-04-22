@@ -25,22 +25,22 @@ public enum WeaponID
 [Serializable]
 public enum GeneratorID
 {
-    None,       // 없음
-    Double,     // 따블
-    Fire,       // 불
-    Water,      // 물
-}
-
-//트리거별 ID
-[Serializable]
-public enum TriggerID
-{
-    None,       // 없음
-    Dash,       // 대쉬
-    Attack,     // 공격
-    Hit,        // 맞음
-    Time,       // 시간
-    Move,       // 이동
+    None,           // 없음
+    DashAttack,     // 대쉬 공격              대쉬
+    DeathRay,       // 광선                  기본 공격
+    Electronic,     // 전기                  대쉬
+    ErrorDice,      // 랜덤 스킬              쿨타임 (10초)
+    Force,          // 범위 및 파워 증가       기본 공격
+    HeartBeat,      // 슬로우                 대쉬
+    LaserPointer,   // 레이저 발사             이동
+    MagneticField,  // 자기장                 기본 공격
+    OverLoad,       // 폭발 공격              대쉬
+    Reboot,         // 잔상 공격              대쉬
+    RotateWeapon,   // 무기 회전              이동
+    SequenceAttack, // 연속 공격              대쉬 or 쿨타임
+    SiegeMode,      // 공속 증가              가만히 있을 시(1초)
+    Trinity,        // 대미지 증가             기본 공격
+    WeaponShot,     // 무기 발사              쿨타임(5초)
 }
 
 // Skill 2차원 리스트는 인스펙터에서 안보임 이렇게 해야함
@@ -86,20 +86,20 @@ public class SkillContainer : MonoBehaviour
     {
 
         // prevention Out of index
-        if (weaponList.Count > i && weaponList[i].skillList.Count > j)
+        if (weaponList.Count > j && weaponList[j].skillList.Count > i)
         {
 
             // Checks for existence of a value
-            if (weaponList[i] != null && weaponList[i].skillList[j] != null)
+            if (weaponList[j] != null && weaponList[j].skillList[i] != null)
             {
 
-                return weaponList[i].skillList[j];
+                return weaponList[j].skillList[i];
 
             }
 
         }
 
-        Debug.LogError($"Skill Doesn't exist in SkillList : {i}, {j} ");
+        Debug.LogError($"Skill Doesn't exist in SkillList : {j}, {i} ");
         return null;
 
     }
