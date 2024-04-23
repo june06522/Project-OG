@@ -7,7 +7,7 @@ public abstract class InvenWeapon : Weapon
     protected Dictionary<int, SendData> sendDataList = new Dictionary<int, SendData>();
     public abstract void GetSignal(object signal);
 
-    protected void LateUpdate()
+    protected void Update()
     {
         foreach (var item in sendDataList)
         {
