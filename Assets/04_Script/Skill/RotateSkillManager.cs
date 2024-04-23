@@ -23,6 +23,7 @@ public class RotateSkillManager : MonoBehaviour
     [SerializeField] float width;
     [SerializeField] float height;
     [SerializeField] float theta;
+    [SerializeField] float radiusIncreaseFlag = 5;
 
     private float curWidth;
     private float curHeight;
@@ -49,9 +50,9 @@ public class RotateSkillManager : MonoBehaviour
                 }
                 else
                 {
-                    RotateStartSetting();
-                    //StopAllCoroutines();
-                    //StartCoroutine(RotateStartSetting());
+                    //RotateStartSetting();
+                    StopAllCoroutines();
+                    StartCoroutine(RotateStartSetting());
                 }
 
                 isRunning = value;
@@ -76,9 +77,9 @@ public class RotateSkillManager : MonoBehaviour
         return null;
     }
 
-    private void RotateStartSetting()
+    private IEnumerator RotateStartSetting()
     {
-        //yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
         Transform playerTrm = GameManager.Instance.player;
 
         // 클론 생성.
@@ -94,11 +95,15 @@ public class RotateSkillManager : MonoBehaviour
 
         // 클론 위치 세팅 & Dissolve 세팅
         int cloneCnt = rotateClones.Count;
+
+        curWidth = width + (cloneCnt/ radiusIncreaseFlag) * 0.5f;
+        curHeight = height + (cloneCnt/ radiusIncreaseFlag) * 0.5f;
+
         for (int i = 0; i < cloneCnt; i++)
         {
             float angle = 360 / cloneCnt * i;
             Debug.Log("Angle : " + angle);
-            Vector2 pos = Eclipse.GetElipsePos(Vector2.zero, angle, width, height, theta);
+            Vector2 pos = Eclipse.GetElipsePos(Vector2.zero, angle, curWidth, curHeight, theta);
 
             rotateClones[i].CurAngle = angle;
             rotateClones[i].transform.localPosition = pos;
