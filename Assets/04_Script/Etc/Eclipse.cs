@@ -19,7 +19,7 @@ public static class Eclipse
         float cx = centerPos.x;
         float cy = centerPos.y;
 
-        float weight = angle;
+        float weight = angle * Mathf.Deg2Rad;
         float x = cx + width * Mathf.Cos(weight);
         float y = cy + height * Mathf.Sin(weight);
 

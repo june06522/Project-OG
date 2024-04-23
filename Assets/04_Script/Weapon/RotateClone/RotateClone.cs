@@ -13,6 +13,7 @@ public class RotateClone : MonoBehaviour
 
     Material material;
     SpriteRenderer spriteRenderer;
+    protected Transform visualTrm;
 
     public float CurAngle { get; set; }
     public bool EndDissolve { get; set; } = false;
@@ -22,7 +23,8 @@ public class RotateClone : MonoBehaviour
     private Tween dissolveTween;
     protected virtual void Awake()
     {
-        spriteRenderer = transform.Find("Visual").GetComponent<SpriteRenderer>();
+        visualTrm = transform.Find("Visual");
+        spriteRenderer = visualTrm.GetComponent<SpriteRenderer>();
         effect = transform.Find("Flash").GetComponent<VisualEffect>();
         material = spriteRenderer.material;
     }
@@ -40,12 +42,14 @@ public class RotateClone : MonoBehaviour
         this.damage = _DataSO.AttackDamage.GetValue();
         material.SetFloat("_FullGlowDissolveFade", 0);
         
-        InvokeRepeating(nameof(Attack), 0f, _DataSO.AttackCoolDown.GetValue());
+        InvokeRepeating(nameof(Attack), 1f, _DataSO.AttackCoolDown.GetValue());
     }
+
+    public void PlayAppearEffect() => effect.Play();
 
     public void Dissolve(float dissolveTime, bool on)
     {
-        effect.Play();
+        //PlayAppearEffect();
         dissolveTween.Kill();
 
         float initValue = on == true ? 0 : 1;
@@ -57,7 +61,7 @@ public class RotateClone : MonoBehaviour
         float curDissolveTime 
             = dissolveTime * Mathf.Lerp(initValue, endValue, Mathf.Abs(initValue - value));
         
-        dissolveTween = DOTween.To(() => value, x => material.SetFloat("_FullGlowDissolveFade", x), endValue, curDissolveTime)
+        dissolveTween = DOTween.To(() => value, x => material.SetFloat("_FullGlowDissolveFade", x), endValue, dissolveTime)
            .OnComplete(() =>
            {
                EndDissolve = true;
@@ -83,8 +87,9 @@ public class RotateClone : MonoBehaviour
         }
         else
         {
-            transform.up = dir;
+            transform.right = dir;
             transform.localPosition = movePos;
+            
         }
     }
 
