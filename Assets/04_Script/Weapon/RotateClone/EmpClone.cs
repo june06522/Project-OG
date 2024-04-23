@@ -8,7 +8,7 @@ public class EmpClone : RotateClone
     [SerializeField] EMPBomb empBomb;
     protected override void Attack()
     {
-        Vector3 targetPos = transform.up * 2f;
+        Vector3 targetPos = transform.position + transform.right * 2f;
         Instantiate(empBomb, transform.position, transform.rotation)
             .Throw(targetPos, damage: _DataSO.AttackDamage.GetValue());
 
