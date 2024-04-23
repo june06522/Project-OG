@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3937593037509806149
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3937593037509806151}
+  - component: {fileID: 3937593037509806148}
+  m_Layer: 0
+  m_Name: RotateSkillManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3937593037509806151
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3937593037509806149}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3937593037509806148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3937593037509806149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 305e5e02a0f0e964bbc6bd997d9e36fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minRotateTime: 5
+  maxRotateTime: 15
+  minRotateSpeed: 100
+  maxRotateSpeed: 100
+  dissolveTime: 0.5
+  width: 3
+  height: 2.5
+  theta: 0
+  radiusIncreaseFlag: 5
+  CloneInfo:
+  - ID: 1
+    Prefab: {fileID: 5703832272855256218, guid: 1d5193435d5ce944fad506ead26eb5b1, type: 3}
+  - ID: 2
+    Prefab: {fileID: 3747810420394697339, guid: 7f5a733f87080774eae91bdf20ae1fcd, type: 3}
+  - ID: 3
+    Prefab: {fileID: 3493190121625543353, guid: 752f85ceb55abdb4caff3f04c59e0d19, type: 3}
+  - ID: 4
+    Prefab: {fileID: 5219865931081822567, guid: 952fa0c0351a86b48b4c704a0a8a2e5d, type: 3}
+  - ID: 5
+    Prefab: {fileID: 3117510128576956867, guid: 37e7fa7b95555bd48b355625f5973b10, type: 3}
+  isRunning: 0

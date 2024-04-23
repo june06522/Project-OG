@@ -12,11 +12,13 @@ public class Sword : InvenWeapon
     Collider2D _col;
     private bool isAttack = false;
 
+    [SerializeField] private float duration = 0.75f;
     [SerializeField] private Ease ease = Ease.Linear;
     [SerializeField] Transform[] wayPointTrms;
     private Vector3[] wayPoints;
     
     Transform wayPointTrmParent;
+    Coroutine attackCor;
 
     protected override void Awake()
     {
@@ -65,6 +67,29 @@ public class Sword : InvenWeapon
 
     public override void Attack(Transform target)
     {
+        if (attackCor != null)
+            StopCoroutine(attackCor);
+        
+        AttackSequence(target);
+
+        attackCor = StartCoroutine(AttackTween(false));
+    }
+
+
+    public void ReinforceAttack(Transform target)
+    {
+        if (attackCor != null)
+            StopCoroutine(attackCor);
+
+        AttackSequence(target);
+
+        attackCor = StartCoroutine(AttackTween(true));
+
+        Debug.Log("Gang");
+    }
+
+    private void AttackSequence(Transform target)
+    {
 
         Vector3 dir = (target.position - transform.position);
         float magnitude = dir.magnitude;
@@ -74,9 +99,9 @@ public class Sword : InvenWeapon
 
         float dot = Vector2.Dot(crossVec, Vector2.up);
         int sign = dot > 0 ? -1 : 1;
-        
-        
-        Vector3[] wayPoints = GetWorldWayPoints(dir * (magnitude - 1.5f));
+
+        //  Vector3[] wayPoints = GetWorldWayPoints(dir.normalized * (magnitude -1.5f));
+        Vector3[] wayPoints = GetWorldWayPoints(dir.normalized);
         if (sign == -1)
             wayPoints.Reverse();
 
@@ -85,25 +110,32 @@ public class Sword : InvenWeapon
 
         DOTween.Sequence().
 
-            Append(transform.DOPath(wayPoints, 0.25f, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
-            Insert(0f, transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + sign * 90), 0.25f));
-
-        
-
-        StartCoroutine(AttackTween());
-
+            Append(transform.DOPath(wayPoints, duration, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
+            Insert(0f, transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + sign * 90), duration).SetEase(ease));
     }
 
-    private IEnumerator AttackTween()
+    private IEnumerator AttackTween(bool refinForce)
     {
 
         isAttack = true;
         _col.enabled = true;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(duration);
         _col.enabled = false;
         yield return new WaitForSeconds(0.2f);
-        isAttack = false;
-        transform.DOKill();
+        //transform.DOKill();
+
+        if(refinForce)
+        {
+            transform.DOScale(Vector3.one, 0.5f)
+                .SetEase(Ease.InOutFlash)
+                .OnComplete(() => isAttack = false);
+            Debug.Log("Gangng");
+        }
+        else
+        {
+            isAttack = false;
+        }
+
     }
 
     public override void Run(Transform target)
