@@ -43,7 +43,7 @@ public class LaserSkillObj : MonoBehaviour
 
             if (hit.collider != null)
             {
-                obj.SetLine(_weaponTrm.position, hit.point, _power, 0.01f * _power);
+                obj.SetLine(_weaponTrm.position, hit.point, _power, 0.01f * _power * _power);
                 obj.LineRenderer.enabled = true;
                 obj.EdgeCollider.SetPoints(new List<Vector2>
             {

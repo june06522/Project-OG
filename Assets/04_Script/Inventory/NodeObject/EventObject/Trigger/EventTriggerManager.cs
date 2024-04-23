@@ -31,6 +31,7 @@ public class EventTriggerManager : MonoBehaviour
     {
         CoolExecute();
         IdleExecute();
+        RunExecute();
     }
 
     public static ulong GetIndex()
