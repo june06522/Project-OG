@@ -9,6 +9,7 @@ public abstract class InvenWeapon : Weapon
 
     protected void LateUpdate()
     {
+        Debug.Log("업데이트 돌고있음");
         foreach (var item in sendDataList)
         {
             SkillContainer.Instance.GetSKill((int)id, (int)item.Value.GeneratorID)?.Excute(transform, target, item.Value.Power);

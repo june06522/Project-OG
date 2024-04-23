@@ -11,9 +11,11 @@ public class TargettingDrone : Skill
     public override void Excute(Transform weaponTrm, Transform target, int power)
     {
 
-        var obj = Instantiate(dronePrefab, target.position + (Vector3)Random.insideUnitCircle * 1.2f, Quaternion.identity);
-        
-        obj.SetLifeTime(power, target);
+        if (target == null) return;
+
+        var obj = Instantiate(dronePrefab, target.position + (Vector3)Random.insideUnitCircle * 3f, Quaternion.identity);
+
+        obj.SetLifeTime(power * 2f, target);
 
     }
 
