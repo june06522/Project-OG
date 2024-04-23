@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class DamageTextFeedback : Feedback
 {
-
-    public DamageTextFeedback(FeedbackPlayer player) : base(player)
-    {
-    }
-
     public override void Play(float damage)
     {
 

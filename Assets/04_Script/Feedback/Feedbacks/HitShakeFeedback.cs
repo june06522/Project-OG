@@ -1,16 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class HitShakeFeedback : Feedback
 {
+    [SerializeField]
+    private List<SpriteRenderer> _sprites;
+
+    [SerializeField]
+    private float _shakeTime = 0.2f;
+
 
     private readonly int HASH_SHAKE = Shader.PropertyToID("_VibrateFade");
     private Coroutine currentCo;
     private bool isShake;
 
-    public HitShakeFeedback(FeedbackPlayer player) : base(player)
+    private List<Color> _defaultColor = new List<Color>();
+
+    private void Start()
     {
+        foreach (var sprite in _sprites)
+        {
+            _defaultColor.Add(sprite.color);
+        }
     }
 
     public override void Play(float damage)
@@ -19,13 +32,13 @@ public class HitShakeFeedback : Feedback
         if (!isShake)
         {
 
-            currentCo = player?.StartCoroutine(BlinkCo());
+            currentCo = StartCoroutine(BlinkCo());
 
         }
         else
         {
-            player?.StopCoroutine(currentCo);
-            currentCo = player?.StartCoroutine(BlinkCo());
+            StopCoroutine(currentCo);
+            currentCo = StartCoroutine(BlinkCo());
 
         }
 
@@ -36,9 +49,21 @@ public class HitShakeFeedback : Feedback
 
         isShake = true;
 
-        spriteRenderer.material.SetFloat(HASH_SHAKE, 1f);
-        yield return new WaitForSeconds(0.05f);
-        spriteRenderer.material.SetFloat(HASH_SHAKE, 0f);
+        foreach(var sprite in _sprites)
+        {
+            sprite.material.SetFloat(HASH_SHAKE, 1f);
+            sprite.color = Color.white;
+        }
+        
+        yield return new WaitForSeconds(_shakeTime);
+
+        for(int i = 0; i < _sprites.Count; ++i)
+        {
+            var sprite = _sprites[i];
+
+            sprite.material.SetFloat(HASH_SHAKE, 0f);
+            sprite.color = _defaultColor[i];
+        }
 
         isShake = false;
 

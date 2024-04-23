@@ -68,6 +68,97 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bd332299282dd5498f9abfe25be18be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1290985232999118975
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5484444208552720339}
+  - component: {fileID: 1741529573003624603}
+  - component: {fileID: 1012220222910674495}
+  - component: {fileID: 7560645192515146841}
+  - component: {fileID: 8306076368060998506}
+  m_Layer: 14
+  m_Name: Feedback
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5484444208552720339
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290985232999118975}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6221319122445699187}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1741529573003624603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290985232999118975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5fe50beff9976e49b5c0574ef0071f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1012220222910674495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290985232999118975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2598d7fc07db37f4aabdda0b1e5c8ad8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprites:
+  - {fileID: 5198929371811361944}
+  - {fileID: 5198929371848020873}
+  _blinkTime: 0.1
+--- !u!114 &7560645192515146841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290985232999118975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 839d078dc3f5d094b8cc3ad22a24b72b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprites:
+  - {fileID: 5198929371811361944}
+  - {fileID: 5198929371848020873}
+  _shakeTime: 0.2
+--- !u!114 &8306076368060998506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290985232999118975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 069d6b3f54d08e14e8c5b4565e29b700, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3191196844543801118
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,7 +325,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 4f74bc514ed25194885df8a60c862353, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -319,7 +410,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 4f74bc514ed25194885df8a60c862353, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -363,8 +454,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5fe50beff9976e49b5c0574ef0071f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableFeedback: 21
-  prefab: {fileID: 2728001201958583583, guid: f856cdcf62a2e60449713591a22ae8be, type: 3}
 --- !u!1 &6221319122445699147
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,6 +489,7 @@ Transform:
   m_Children:
   - {fileID: 5198929370732331051}
   - {fileID: 7712729797331203679}
+  - {fileID: 5484444208552720339}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -422,6 +512,7 @@ MonoBehaviour:
   deacceleration: 100
   currentSpeed: 0
   _hitSound: {fileID: 8300000, guid: 735727e59073dd747808b3adb0c5bb21, type: 3}
+  <feedbackPlayer>k__BackingField: {fileID: 1741529573003624603}
   frozenColor: {r: 0.7584906, g: 0.9797822, b: 1, a: 1}
   IsDebuffing: 0
 --- !u!114 &8566574922441431974
