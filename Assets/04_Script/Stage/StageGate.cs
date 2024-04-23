@@ -13,12 +13,33 @@ public class StageGate : MonoBehaviour, IInteractable
     private bool _interactCheck = true;
     private StageTransition stageTransition;
 
+    private PlayerController _playerController;
+
     [SerializeField]
     private Transform _spawnTweeningObject;
+
+    [SerializeField]
+    private bool _isPlayJumpAnim;
+
 
     private void Awake()
     {
         stageTransition = FindObjectOfType<StageTransition>();
+        _playerController = GameManager.Instance.player.GetComponent<PlayerController>();
+
+        Sequence seq = DOTween.Sequence();
+        transform.localScale = Vector3.zero;
+        seq.Append(transform.DOScale(Vector3.one, 1f).SetEase(Ease.OutBounce));
+        if (_spawnTweeningObject != null)
+        {
+            _spawnTweeningObject.localScale = Vector3.zero;
+            seq.Join(_spawnTweeningObject.DOScale(Vector3.one, 1f).SetEase(Ease.OutBounce));
+        }
+
+        seq.AppendCallback(() =>
+        {
+            _interactCheck = false;
+        });
     }
 
     //test
@@ -31,19 +52,7 @@ public class StageGate : MonoBehaviour, IInteractable
     public void SetStage(Stage nextStage)
     {
         NextStage = nextStage;
-        Sequence seq = DOTween.Sequence();
-        transform.localScale = Vector3.zero;
-        seq.Append(transform.DOScale(Vector3.one, 1f).SetEase(Ease.OutBounce));
-        if(_spawnTweeningObject != null)
-        {
-            _spawnTweeningObject.localScale = Vector3.zero;
-            seq.Join(_spawnTweeningObject.DOScale(Vector3.one, 1f).SetEase(Ease.OutBounce));
-        }
-
-        seq.AppendCallback(() =>
-        {
-            _interactCheck = false;
-        });
+        
 
     }
 
@@ -58,6 +67,20 @@ public class StageGate : MonoBehaviour, IInteractable
 
     IEnumerator GoNextStage()
     {
+        _playerController.ChangeState(EnumPlayerState.Idle);
+
+        if(_isPlayJumpAnim)
+        {
+            Transform playerTrm = GameManager.Instance.player;
+
+            Sequence seq = DOTween.Sequence();
+            seq.Append(playerTrm.DOJump(transform.position, 5f, 1, 1f));
+
+            yield return new WaitForSeconds(0.9f);
+        }
+
+
+
         stageTransition.StartTransition();
         yield return new WaitForSeconds(0.2f);
         if (NextStage != null)
@@ -73,6 +96,7 @@ public class StageGate : MonoBehaviour, IInteractable
         GameManager.Instance.InventoryActive.isPlaying = true;
         OnGateEvent?.Invoke();
         yield return new WaitForSeconds(0.5f);
+        _playerController.ChangeState(EnumPlayerState.Move);
         stageTransition.EndTransition();
         yield return new WaitForSeconds(1f);
 
