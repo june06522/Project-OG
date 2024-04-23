@@ -104,4 +104,9 @@ public class SkillContainer : MonoBehaviour
         return null;
 
     }
+
+    public List<Shell> GetList()
+    {
+        return weaponList;
+    }
 }
