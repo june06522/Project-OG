@@ -45,13 +45,14 @@ public class EventTriggerManager : MonoBehaviour
     public void CoolExecute()
     {
         PlayerController.EventController.OnCoolExecute();
-
     }
 
     public void IdleExecute()
     {
         if (_playerRb.velocity == Vector2.zero)
+        {
             PlayerController.EventController.OnIdleExecute();
+        }
     }
 
     public void BasicAttackExecute()
