@@ -37,8 +37,9 @@ public abstract class Weapon : MonoBehaviour
         {
 
             Data.SetCoolDown();
-            PlayerController.EventController.OnBasicAttackExecute();
-            //여기서 이벤트 컨트롤러 접근해야댐ㅌ
+
+            EventTriggerManager.Instance.BasicAttackExecute();
+
             Attack(target);
 
         }
