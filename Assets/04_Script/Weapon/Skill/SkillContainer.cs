@@ -84,7 +84,6 @@ public class SkillContainer : MonoBehaviour
     /// <returns></returns>
     public Skill GetSKill(int i, int j)
     {
-        Debug.Log(1);
         // prevention Out of index
         if (weaponList.Count > j && weaponList[j].skillList.Count > i)
         {
