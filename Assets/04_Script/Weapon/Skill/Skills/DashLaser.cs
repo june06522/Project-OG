@@ -10,6 +10,7 @@ public class DashLaser : Skill
 
     public override void Excute(Transform weaponTrm, Transform target, int power)
     {
+
         var obj = Instantiate(gunLine, Vector3.zero, Quaternion.identity);
 
         obj.LineRenderer.positionCount = 2;
@@ -18,6 +19,7 @@ public class DashLaser : Skill
 
         if (hit.collider != null)
         {
+
             obj.SetLine(weaponTrm.position, hit.point, power * 10, 0.5f + power * 0.5f);
             obj.LineRenderer.enabled = true;
             obj.EdgeCollider.SetPoints(new List<Vector2>
@@ -34,8 +36,6 @@ public class DashLaser : Skill
             {
                 Destroy(obj, 0.1f);
             });
-
-
 
     }
 
