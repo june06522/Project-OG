@@ -131,6 +131,8 @@ public class Stage : MonoBehaviour
 
     public void StartWave()
     {
+        
+
         if(_stageType == StageType.EventStage)
         {
 

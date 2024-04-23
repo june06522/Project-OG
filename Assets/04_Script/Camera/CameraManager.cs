@@ -11,6 +11,9 @@ public class CameraManager : MonoBehaviour
 
     private CinemachineBasicMultiChannelPerlin perlin;
 
+    [SerializeField]
+    private Camera _minimapCamera;
+
     private void Awake()
     {
         Instance = this;
@@ -27,5 +30,17 @@ public class CameraManager : MonoBehaviour
 
         perlin.m_AmplitudeGain = 0;
         perlin.m_FrequencyGain = 0;
+    }
+
+    public void SetMinimapCameraPostion(Vector3 worldPos)
+    {
+        worldPos.z = -10;
+        if(_minimapCamera != null)
+        {
+
+            Debug.Log("½ÇÇàµÊ");
+            _minimapCamera.transform.position = worldPos;
+
+        }
     }
 }

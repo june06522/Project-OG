@@ -74,9 +74,9 @@ public class StageGate : MonoBehaviour, IInteractable
             Transform playerTrm = GameManager.Instance.player;
 
             Sequence seq = DOTween.Sequence();
-            seq.Append(playerTrm.DOJump(transform.position, 5f, 1, 1f));
+            seq.Append(playerTrm.DOJump(transform.position + Vector3.down, 5f, 1, 1f));
 
-            yield return new WaitForSeconds(0.9f);
+            yield return new WaitForSeconds(0.8f);
         }
 
 
@@ -97,6 +97,7 @@ public class StageGate : MonoBehaviour, IInteractable
         OnGateEvent?.Invoke();
         yield return new WaitForSeconds(0.5f);
         _playerController.ChangeState(EnumPlayerState.Move);
+        CameraManager.Instance.SetMinimapCameraPostion(NextStage.transform.position);
         stageTransition.EndTransition();
         yield return new WaitForSeconds(1f);
 
