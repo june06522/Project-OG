@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class LaserGunLine : MonoBehaviour
@@ -14,6 +15,7 @@ public class LaserGunLine : MonoBehaviour
 
     public void SetLine(Vector2 startPos, Vector2 endPos, float damage, float width = 0.5f)
     {
+
         _lineRenderer.SetPosition(0, startPos);
         _lineRenderer.startWidth = width;
         _lineRenderer.SetPosition(1, endPos);
@@ -23,13 +25,19 @@ public class LaserGunLine : MonoBehaviour
         _edgeCollider.edgeRadius = width * 0.5f;
 
         Instantiate(_impact, endPos, Quaternion.identity);
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+
         if (!collision.CompareTag("Player") && collision.TryGetComponent<IHitAble>(out var h))
         {
+
             h.Hit(damage);
+
         }
+
     }
+
 }
