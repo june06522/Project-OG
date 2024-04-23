@@ -4,16 +4,12 @@ using UnityEngine;
 
 public class HPLinkObject : MonoBehaviour, IHitAble
 {
+    [field:SerializeField]
     public FeedbackPlayer feedbackPlayer { get; set; }
 
     private IHitAble _linkObject;
     [SerializeField]
     private float _damagePer = 0.5f;
-
-    private void Awake()
-    {
-        feedbackPlayer = GetComponent<FeedbackPlayer>();
-    }
 
     public bool Hit(float damage)
     {

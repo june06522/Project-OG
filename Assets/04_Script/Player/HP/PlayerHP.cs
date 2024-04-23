@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerHP : MonoBehaviour, IHitAble
 {
+    [field:SerializeField]
     public FeedbackPlayer feedbackPlayer { get; set; }
 
     // maxHP, currentHP

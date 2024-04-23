@@ -29,6 +29,7 @@ public struct Body
 
 public class Boss : MonoBehaviour, IHitAble
 {
+    [field: SerializeField]
     public FeedbackPlayer feedbackPlayer { get; set; }
 
     public GameObject bulletCollector;
@@ -66,7 +67,6 @@ public class Boss : MonoBehaviour, IHitAble
         isDead = false;
         _currentHP = so.MaxHP;
         DieEvt += DieEvent;
-        feedbackPlayer = GetComponent<FeedbackPlayer>();
     }
 
     protected virtual void OnDisable()
@@ -111,7 +111,7 @@ public class Boss : MonoBehaviour, IHitAble
             return false;
 
         _currentHP -= damage;
-        feedbackPlayer.Play(damage);
+        feedbackPlayer?.Play(damage);
 
         if (_currentHP < 0)
         {

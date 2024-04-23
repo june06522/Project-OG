@@ -1,31 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.U2D.Path;
 using UnityEngine;
 
 public class HitBlinkFeedback : Feedback
 {
+    [SerializeField]
+    private List<SpriteRenderer> _sprites;
+
+    [SerializeField]
+    private float _blinkTime = 0.1f;
+
 
     private readonly int HASH_BLINK = Shader.PropertyToID("_StrongTintFade");
     private Coroutine currentCo;
     private bool isBlink;
-
-    public HitBlinkFeedback(FeedbackPlayer player) : base(player)
-    {
-    }
 
     public override void Play(float damage)
     {
         if (!isBlink)
         {
 
-            currentCo = player?.StartCoroutine(BlinkCo());
+            currentCo = StartCoroutine(BlinkCo());
 
         }
         else
         {
-
-            player?.StopCoroutine(currentCo);
-            currentCo = player?.StartCoroutine(BlinkCo());
+            StopCoroutine(currentCo);
+            currentCo = StartCoroutine(BlinkCo());
 
         }
 
@@ -36,9 +38,18 @@ public class HitBlinkFeedback : Feedback
 
         isBlink = true;
 
-        spriteRenderer.material.SetFloat(HASH_BLINK, 1f);
-        yield return new WaitForSeconds(0.05f);
-        spriteRenderer.material.SetFloat(HASH_BLINK, 0f);
+        foreach (var sprite in _sprites)
+        {
+            sprite.material.SetFloat(HASH_BLINK, 1f);
+        }
+
+        yield return new WaitForSeconds(_blinkTime);
+
+        foreach (var sprite in _sprites)
+        {
+            sprite.material.SetFloat(HASH_BLINK, 0f);
+        }
+
 
         isBlink = false;
 
