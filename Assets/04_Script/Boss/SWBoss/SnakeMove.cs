@@ -240,7 +240,7 @@ public class SnakeMove : MonoBehaviour
             dir = (_bodyList[0].position - _head.position).normalized;
 
         GameObject backPart = Instantiate(_bodyObject, _bodyRootTrm);
-        BlinkBody(backPart, 0.8f);
+        BlinkBody(backPart, 0.4f);
 
         if (_mainHPObject != null && backPart.TryGetComponent<HPLinkObject>(out HPLinkObject hpLink))
         {
@@ -267,12 +267,10 @@ public class SnakeMove : MonoBehaviour
             if (backPartSprite != null)
             {
                 Color saveColor = backPartSprite.color;
-                backPartSprite.color = Color.white;
                 backPartSprite.material.SetFloat(HASH_BLINK, 1f);
 
                 FAED.InvokeDelay(() =>
                 {
-                    backPartSprite.color = saveColor;
                     backPartSprite.material.SetFloat(HASH_BLINK, 0f);
                 }, second);
             }
