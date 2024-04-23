@@ -1,4 +1,5 @@
 using Cinemachine;
+using FD.Dev;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -300,7 +301,14 @@ public class Stage : MonoBehaviour
         if (_useChangeCameraSize)
             Debug.Log("IsNotUpdate");
         if (_vStageCam != null)
-            Destroy(_vStageCam.gameObject);
+        {
+            _vStageCam.Priority = 0;
+            FAED.InvokeDelay(() =>
+            {
+                Destroy(_vStageCam.gameObject);
+            }, 0.1f);
+            
+        }
     }
 
     private void PlayMonsterSpawnSound()

@@ -38,7 +38,6 @@ public class CameraManager : MonoBehaviour
         if(_minimapCamera != null)
         {
 
-            Debug.Log("½ÇÇàµÊ");
             _minimapCamera.transform.position = worldPos;
 
         }
