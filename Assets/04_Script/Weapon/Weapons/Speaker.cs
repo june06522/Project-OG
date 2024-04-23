@@ -36,19 +36,15 @@ public class Speaker : InvenWeapon
     [BindExecuteType(typeof(SendData))]
     public override void GetSignal([BindParameterType(typeof(SendData))] object signal)
     {
-
-        //var data = (SendData)signal;
-        //SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
-
         var data = (SendData)signal;
 
-        if (!sendDataList.ContainsKey(data.GetHashCode()))
+        if (!sendDataList.ContainsKey(data.index))
         {
-            sendDataList.Add(data.GetHashCode(), data);
+            sendDataList.Add(data.index, data);
         }
         else
         {
-            sendDataList[data.GetHashCode()].Power = sendDataList[data.GetHashCode()].Power > data.Power ? sendDataList[data.GetHashCode()].Power : data.Power;
+            sendDataList[data.index].Power = sendDataList[data.index].Power > data.Power ? sendDataList[data.index].Power : data.Power;
         }
 
     }

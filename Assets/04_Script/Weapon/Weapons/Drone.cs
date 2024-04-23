@@ -1,7 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
 
-// ����
 public class Drone : InvenWeapon
 {
 
@@ -23,13 +22,13 @@ public class Drone : InvenWeapon
     {
         var data = (SendData)signal;
 
-        if (!sendDataList.ContainsKey(data.GetHashCode()))
+        if (!sendDataList.ContainsKey(data.index))
         {
-            sendDataList.Add(data.GetHashCode(), data);
+            sendDataList.Add(data.index, data);
         }
         else
         {
-            sendDataList[data.GetHashCode()].Power = sendDataList[data.GetHashCode()].Power > data.Power ? sendDataList[data.GetHashCode()].Power : data.Power;
+            sendDataList[data.index].Power = sendDataList[data.index].Power > data.Power ? sendDataList[data.index].Power : data.Power;
         }
 
     }
@@ -43,7 +42,6 @@ public class Drone : InvenWeapon
         transform.DOShakePosition(0.1f, 0.25f);
 
     }
-
 
     protected override void RotateWeapon(Transform target)
     {

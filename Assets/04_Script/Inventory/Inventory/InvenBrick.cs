@@ -147,8 +147,6 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
                 ((int)rectTransform.rect.width - 100,
                 ((int)rectTransform.rect.height) - 100) / 2) / 100));
 
-            Debug.Log($"{InvenObject.name} : {prev.Value}");
-
             inventory.AddItem(InvenObject, prev.Value);
             InvenPoint = prev.Value;
 

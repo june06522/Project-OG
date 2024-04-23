@@ -84,7 +84,6 @@ public class SkillContainer : MonoBehaviour
     /// <returns></returns>
     public Skill GetSKill(int i, int j)
     {
-
         // prevention Out of index
         if (weaponList.Count > j && weaponList[j].skillList.Count > i)
         {
@@ -100,6 +99,8 @@ public class SkillContainer : MonoBehaviour
         }
 
         Debug.LogError($"Skill Doesn't exist in SkillList : {j}, {i} ");
+
+
         return null;
 
     }

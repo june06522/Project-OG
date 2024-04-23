@@ -11,12 +11,15 @@ public class SendData
         this.generatorID = generatorID;
         this.power = power;
         isVisited = new();
+        index = EventTriggerManager.GetIndex();
     }
 
     private GeneratorID generatorID;
     private int power;
     public Dictionary<Vector2Int, int> isVisited;
     public Hashtable checkVisit = new();
+
+    public ulong index = 0;
    
     public GeneratorID GeneratorID => generatorID;
     public int Power
