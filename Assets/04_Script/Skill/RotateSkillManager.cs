@@ -36,7 +36,7 @@ public class RotateSkillManager : MonoBehaviour
     private bool isRunning = false;
     public bool IsRunning
     {
-        get { return IsRunning; }
+        get { return isRunning; }
         set
         {
             if (value != isRunning)
