@@ -84,8 +84,7 @@ public class PlayerDashState : PlayerRootState
 
         }
 
-        eventController.OnDashExecute();
-
+        EventTriggerManager.Instance.DashExecute();
 
         dashParticle.Play();
     }
