@@ -14,7 +14,8 @@ public class DroneClone : RotateClone
         var blt = Instantiate(bullet, shootPos.position, transform.rotation);
         blt.Shoot(bullet.Data.Damage);
 
-        transform.DOShakePosition(0.1f, 0.25f);
+        visualTrm.DOShakePosition(0.1f, 0.25f)
+            .OnComplete(()=> transform.localPosition = Vector2.zero);
 
     }
 

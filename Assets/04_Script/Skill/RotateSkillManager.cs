@@ -33,7 +33,9 @@ public class RotateSkillManager : MonoBehaviour
     public List<RotateCloneInfo> CloneInfo; // Enum과 ClonePrefab 바인딩 정보 모음.
 
     private bool _endSetting = false;
+    [SerializeField]
     private bool isRunning = false;
+   
     public bool IsRunning
     {
         get { return isRunning; }
@@ -48,6 +50,8 @@ public class RotateSkillManager : MonoBehaviour
                 else
                 {
                     RotateStartSetting();
+                    //StopAllCoroutines();
+                    //StartCoroutine(RotateStartSetting());
                 }
 
                 isRunning = value;
@@ -59,12 +63,13 @@ public class RotateSkillManager : MonoBehaviour
     public void SetCloneInfo(WeaponID id, int count)
     {
         _cloneDictionary[id] = count;
+        Debug.Log($"{id.ToString()}: {count}");
     }
 
     public RotateClone GetClonePrefabInfo(WeaponID id)
     {
         RotateCloneInfo cloneInfo = CloneInfo.Find((clone) => clone.ID == id);
-        if (cloneInfo.Prefab == null)
+        if (cloneInfo.Prefab != null)
         {
             return cloneInfo.Prefab;
         }
@@ -73,6 +78,7 @@ public class RotateSkillManager : MonoBehaviour
 
     private void RotateStartSetting()
     {
+        //yield return new WaitForEndOfFrame();
         Transform playerTrm = GameManager.Instance.player;
 
         // 클론 생성.
@@ -91,12 +97,14 @@ public class RotateSkillManager : MonoBehaviour
         for (int i = 0; i < cloneCnt; i++)
         {
             float angle = 360 / cloneCnt * i;
+            Debug.Log("Angle : " + angle);
+            Vector2 pos = Eclipse.GetElipsePos(Vector2.zero, angle, width, height, theta);
 
-            Vector2 pos = Eclipse.GetElipsePos(Vector2.zero, angle * Mathf.Deg2Rad, width, height, theta);
-
+            rotateClones[i].CurAngle = angle;
             rotateClones[i].transform.localPosition = pos;
             rotateClones[i].transform.up = pos.normalized;
 
+            //rotateClones[i].PlayAppearEffect();
             rotateClones[i].Dissolve(dissolveTime, true);
         }
 
@@ -111,27 +119,71 @@ public class RotateSkillManager : MonoBehaviour
         
         for (int i = 0; i < cloneCnt; i++)
         {
-            rotateClones[i].Dissolve(dissolveTime, false);
+            // rotateClones[i].Dissolve(dissolveTime, false);
+            rotateClones[i].DestroyThis();
         }
-
+        Debug.Log("Clear");
+        //foreach(var info in _cloneDictionary)
+        //{
+        //    _cloneDictionary[info.Key] = 0;
+        //}
+        _cloneDictionary = new();
         rotateClones.Clear();
+    }
+
+    private void SetRunning() => IsRunning = true;
+    private void SetIdle()
+    {
+        Debug.Log(IsRunning);
+        IsRunning = false;
     }
 
     private void Awake()
     {
         rotateClones = new List<RotateClone>();
+        _cloneDictionary = new();
+
+        foreach(var type in Enum.GetValues(typeof(WeaponID)))
+        {
+            _cloneDictionary[(WeaponID)type] = 0;
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (PlayerController.EventController != null)
+        {
+
+            PlayerController.EventController.OnMove += SetRunning;
+            PlayerController.EventController.OnIdle += SetIdle;
+
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (PlayerController.EventController != null)
+        {
+
+            PlayerController.EventController.OnMove -= SetRunning;
+            PlayerController.EventController.OnIdle -= SetIdle;
+
+        }
     }
 
     private void Update()
     {
-        if (IsRunning && _endSetting)
+        curWidth = width;
+        curHeight = height;
+        if (isRunning && _endSetting)
         {
             int cloneCnt = rotateClones.Count;
+            Debug.Log($"ang : " + cloneCnt);
             float addRotateValue = maxRotateSpeed * Time.deltaTime;
             for (int i = 0; i < cloneCnt; i++)
             {
                 RotateClone clone = rotateClones[i];
-                Vector3 pos = Eclipse.GetElipsePos(Vector2.zero, clone.CurAngle * Mathf.Deg2Rad,
+                Vector3 pos = Eclipse.GetElipsePos(Vector2.zero, clone.CurAngle,
                                 curWidth, curHeight, theta);
 
                 clone.CurAngle += addRotateValue;
