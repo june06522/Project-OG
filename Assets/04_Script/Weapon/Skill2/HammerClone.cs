@@ -18,7 +18,7 @@ public class HammerClone : MonoBehaviour
     public bool EndDissolve { get; set; } = false;
 
     Color baseColor = new Color(5.58f, 5.58f, 5.58f, 1);
-    Color baseEdgeColor = new Color(60f, 60f, 60f, 1);
+    Color baseEdgeColor = new Color(60f, 60f,   60f, 1);
 
     Color legendColor = new Color(3.811765f, 2.753964f, 0.2394826f, 1);
     Color legendEdgeColor = new Color(47.93726f, 40.74229f, 2.760784f);

@@ -1,7 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
 
-// ����
 public class Drone : InvenWeapon
 {
 
@@ -43,7 +42,6 @@ public class Drone : InvenWeapon
         transform.DOShakePosition(0.1f, 0.25f);
 
     }
-
 
     protected override void RotateWeapon(Transform target)
     {
