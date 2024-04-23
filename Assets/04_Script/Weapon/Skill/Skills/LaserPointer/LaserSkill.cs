@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class LaserSkill : Skill
 {
-    [SerializeField] LaserGunLine gunLine;
+    [SerializeField] LaserSkillLine gunLine;
     bool isMoving = false;
     Coroutine iCo = null;
-    LaserGunLine obj;
-    LaserGunLine _obj;
+    LaserSkillLine obj;
+    LaserSkillLine _obj;
 
     Transform _weaponTrm, _target;
     int _power;
