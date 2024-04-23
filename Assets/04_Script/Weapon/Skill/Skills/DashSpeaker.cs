@@ -9,7 +9,7 @@ public class DashSpeaker : Skill
     public override void Excute(Transform weaponTrm, Transform target, int power)
     {
 
-        var obj = Instantiate(effect, transform.position, Quaternion.identity);
+        var obj = Instantiate(effect, weaponTrm.position, Quaternion.identity);
         obj.transform.localScale = Vector3.one * 1.5f;
         obj.GetComponent<SpriteRenderer>().color = Color.blue;
         obj.SetDamage(power * 3);

@@ -20,6 +20,8 @@ public class LaserGunLine : MonoBehaviour
         _lineRenderer.endWidth = width;
         this.damage = damage;
 
+        _edgeCollider.edgeRadius = width * 0.5f;
+
         Instantiate(_impact, endPos, Quaternion.identity);
     }
 
