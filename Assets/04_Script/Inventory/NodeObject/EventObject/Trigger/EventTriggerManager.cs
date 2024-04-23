@@ -8,14 +8,14 @@ public class EventTriggerManager : MonoBehaviour
 
     private void Awake()
     {
-        _playerRb = FindObjectOfType<PlayerController>().GetComponent<Rigidbody>();
+        _playerRb = GameObject.Find("Player").GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
         PlayerController.EventController.OnCoolExecute();
 
-        if(_playerRb.velocity == Vector3.zero)
+        if (_playerRb.velocity == Vector3.zero)
             PlayerController.EventController.OnIdleExecute();
 
     }

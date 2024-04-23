@@ -37,6 +37,7 @@ public class Speaker : InvenWeapon
     public override void GetSignal([BindParameterType(typeof(SendData))] object signal)
     {
 
+        Debug.Log(0);
         //var data = (SendData)signal;
         //SkillContainer.Instance.GetSKill((int)id, (int)data.GeneratorID)?.Excute(transform, target, data.Power);
 
