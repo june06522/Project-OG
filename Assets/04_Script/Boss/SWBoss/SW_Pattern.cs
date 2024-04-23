@@ -2,6 +2,7 @@ using Cinemachine;
 using DG.Tweening;
 using FD.Dev;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -65,9 +66,8 @@ public class SW_Pattern : MonoBehaviour
     [SerializeField]
     private GameObject _dangerObject;
 
-    [SerializeField]
-    private int _bodyBulletShotCount = 10;
-    private float _shotDelay = 0.25f;
+    private int _bodyBulletShotCount = 5;
+    private float _shotDelay = 1f;
 
     [Header("SnakeMove Pattern")]
     [SerializeField]
@@ -416,9 +416,9 @@ public class SW_Pattern : MonoBehaviour
         {
             _head.position += _dir * _speed * 2 * Time.deltaTime;
         }
-        else if(_bodyBulletShotCount > _currentShotCount)
+        else if(_bodyBulletShotCount + 1 > _currentShotCount)
         {
-            if(_patternCheckOnce == false)
+            if (_patternCheckOnce == false)
             {
                 SoundManager.Instance.SFXPlay("Shake", _shakeClip, 0.7f);
 
@@ -427,37 +427,66 @@ public class SW_Pattern : MonoBehaviour
                 _vStageCam.transform.DOShakePosition(0.2f, 5, 20);
             }
 
-
             _currentTime += Time.deltaTime;
             if(_shotDelay <= _currentTime)
             {
+                if (_bodyBulletShotCount == _currentShotCount)
+                {
+                    _currentTime -= _shotDelay;
+                    _currentShotCount++;
+                    return;
+                }
+
                 _currentTime -= _shotDelay;
                 _currentShotCount++;
 
-                int randomIdx = Random.Range(9, 21);
-                GameObject body = _snakeMove.BodyList[randomIdx].gameObject;
+                int[] idx = new int[14];
+                List<GameObject> spawnDangerObject = new List<GameObject>();
 
-                // Danger
-                GameObject danger = Instantiate(_dangerObject, body.transform.position, Quaternion.identity);
+                for(int i = 0; i < 14; ++i)
+                {
+                    idx[i] = i + 8;
+                }
 
-                // Anim
-                _snakeMove.BlinkBody(body, 0.1f);
+                for(int i = 0; i < 8+_currentShotCount; ++i)
+                {
+                    int randomIdx = Random.Range(i, 14); // 14
+                    int bodyIdx = idx[randomIdx];
+                    idx[randomIdx] = idx[i];
+                    idx[i] = bodyIdx;
 
-                Sequence seq = DOTween.Sequence();
-                seq.Append(body.transform.DOScale(Vector3.one, 0.1f).SetEase(Ease.OutElastic))
-                    .Join(danger.transform.DOScaleX(40f, 0.1f).SetEase(Ease.OutCirc))
-                    .Append(body.transform.DOScale(Vector3.one * 0.8f, 0.1f).SetEase(Ease.OutBounce));
+                    GameObject body = _snakeMove.BodyList[bodyIdx].gameObject;
 
+                    // Danger
+                    GameObject danger = Instantiate(_dangerObject, body.transform.position, Quaternion.identity);
 
+                    // Anim
+                    _snakeMove.BlinkBody(body, 0.1f);
+
+                    Sequence seq = DOTween.Sequence();
+                    seq.Append(body.transform.DOScale(Vector3.one, 0.1f).SetEase(Ease.OutElastic))
+                        .Join(danger.transform.DOScaleX(40f, 0.1f).SetEase(Ease.OutCirc))
+                        .Append(body.transform.DOScale(Vector3.one * 0.8f, 0.1f).SetEase(Ease.OutBounce));
+
+                    spawnDangerObject.Add(danger);
+
+                }
+                
                 // Shot
                 FAED.InvokeDelay(() =>
                 {
                     SoundManager.Instance.SFXPlay("Shot_BodyBullet", _shotBodyBulletClip, 0.6f);
 
-                    Destroy(danger);
-                    Instantiate(_spikeBullet, body.transform.position, Quaternion.identity).Shoot(Vector2.left);
-                    Instantiate(_spikeBullet, body.transform.position, Quaternion.identity).Shoot(Vector2.right);
-                }, 0.101f);
+                    for (int i = 0; i < 8+_currentShotCount; ++i)
+                    {
+
+                        Destroy(spawnDangerObject[i]);
+                        Instantiate(_spikeBullet, _snakeMove.BodyList[idx[i]].transform.position, Quaternion.identity).Shoot(Vector2.left);
+                        Instantiate(_spikeBullet, _snakeMove.BodyList[idx[i]].transform.position, Quaternion.identity).Shoot(Vector2.right);
+
+                    }
+
+                }, 0.5f);
 
 
 
