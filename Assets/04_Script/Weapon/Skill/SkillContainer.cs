@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 // 생성기가 가지고 있는거
@@ -58,9 +57,6 @@ public class SkillContainer : MonoBehaviour
 
     [SerializeField] List<Shell> weaponList;
 
-
-    public Transform player;
-
     private void Awake()
     {
 
@@ -68,7 +64,7 @@ public class SkillContainer : MonoBehaviour
         {
 
             Debug.LogError("Multiple SkillManager is running");
-            Destroy(this);
+            Destroy(instance);
 
         }
 
@@ -99,7 +95,6 @@ public class SkillContainer : MonoBehaviour
         }
 
         Debug.LogError($"Skill Doesn't exist in SkillList : {j}, {i} ");
-
 
         return null;
 
