@@ -9,7 +9,7 @@ public class DashEventReceiver : InventoryEventReceiverBase
 
     protected override void OnInit()
     {
-
+        Debug.Log("구독");
         if (PlayerController.EventController != null)
         {
 
@@ -38,14 +38,17 @@ public class DashEventReceiver : InventoryEventReceiverBase
 
     public override void Dispose()
     {
-
         if (PlayerController.EventController != null)
         {
-
             PlayerController.EventController.OnDash -= HandleDash;
 
         }
 
     }
 
+    private void OnDestroy()
+    {
+        
+        Debug.Log("구독해제");
+    }
 }
