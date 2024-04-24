@@ -150,4 +150,9 @@ public abstract class InventoryObjectRoot : ScriptableObject
 
     }
 
+    private void OnDestroy()
+    {
+
+        Debug.Log("구독해제3333");
+    }
 }

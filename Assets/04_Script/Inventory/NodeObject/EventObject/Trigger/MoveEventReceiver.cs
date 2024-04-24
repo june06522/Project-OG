@@ -42,8 +42,17 @@ public class MoveEventReceiver : InventoryEventReceiverBase
         {
 
             PlayerController.EventController.OnMove -= HandleMove;
-
         }
 
+    }
+
+    private void OnDestroy()
+    {
+        if (PlayerController.EventController != null)
+        {
+
+            PlayerController.EventController.OnMove -= HandleMove;
+
+        }
     }
 }
