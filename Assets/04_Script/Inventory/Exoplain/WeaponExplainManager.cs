@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WeaponExplainManager : MonoBehaviour
 {
-    public static Dictionary<GeneratorID,string> weaponExplain = new();
+    public static Dictionary<GeneratorID, string> weaponExplain = new();
     public static Dictionary<GeneratorID, TriggerID> triggerExplain = new();
 
     private void Awake()
