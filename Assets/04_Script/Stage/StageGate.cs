@@ -97,7 +97,14 @@ public class StageGate : MonoBehaviour, IInteractable
         OnGateEvent?.Invoke();
         yield return new WaitForSeconds(0.5f);
         _playerController.ChangeState(EnumPlayerState.Move);
-        CameraManager.Instance.SetMinimapCameraPostion(NextStage.transform.position);
+
+        if(NextStage != null)
+        {
+
+            CameraManager.Instance.SetMinimapCameraPostion(NextStage.transform.position);
+
+        }
+
         stageTransition.EndTransition();
         yield return new WaitForSeconds(1f);
 

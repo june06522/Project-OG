@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class InvenWeapon : Weapon
 {
+    [SerializeField] protected AudioClip _attackSoundClip;
+
     protected Dictionary<ulong, SendData> sendDataList = new Dictionary<ulong, SendData>();
     public abstract void GetSignal(object signal);
 

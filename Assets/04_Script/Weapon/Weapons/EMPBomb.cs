@@ -9,6 +9,7 @@ public class EMPBomb : MonoBehaviour
     [SerializeField] private float duration = 0.5f;
     [SerializeField] private float bombRadius = 2f;
     [SerializeField] private LayerMask layerMask;
+    [SerializeField] private AudioClip _bombClip;
     [SerializeField] ParticleSystem bombEffect;
     float damage;
 
@@ -36,7 +37,12 @@ public class EMPBomb : MonoBehaviour
 
     private void Boom(Vector3 targetPos)
     {
+        if (_bombClip != null)
+        {
 
+            SoundManager.Instance.SFXPlay("Bomb", _bombClip, 0.5f);
+
+        }
         if (bombEffect != null)
             Instantiate(bombEffect, transform);
 

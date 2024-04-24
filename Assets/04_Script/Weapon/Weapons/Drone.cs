@@ -39,6 +39,12 @@ public class Drone : InvenWeapon
         var blt = Instantiate(bullet, shootPos.position, transform.rotation);
         blt.Shoot(bullet.Data.Damage);
 
+        if(_attackSoundClip != null)
+        {
+
+            SoundManager.Instance.SFXPlay("AttackSound", _attackSoundClip, 0.5f);
+
+        }
         transform.DOShakePosition(0.1f, 0.25f);
 
     }

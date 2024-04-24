@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class InvenSlotBtn : MonoBehaviour
 {
+    [SerializeField]
+    private AudioClip _clickSound;
+
     [HideInInspector]
     public Vector2Int pos;
 
@@ -18,6 +21,8 @@ public class InvenSlotBtn : MonoBehaviour
         GameManager.Instance.Inventory.ExcuteSlotEvent(pos);
         GameManager.Instance.Inventory.AddSlot(pos);
         ExpansionManager.Instance.UseSlot();
+        if (_clickSound != null)
+            SoundManager.Instance.SFXPlay("Click", _clickSound);
         
         Destroy(gameObject);
     }

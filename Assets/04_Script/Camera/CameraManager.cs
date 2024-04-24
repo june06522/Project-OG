@@ -16,20 +16,35 @@ public class CameraManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+
         cam = GameObject.Find("CM").GetComponent<CinemachineVirtualCamera>();
         perlin = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
 
-    public IEnumerator CameraShake(float shakeIntensity, float shakeTime)
+    public void CameraShake(float shakeIntensity, float shakeTime)
     {
-        perlin.m_AmplitudeGain = shakeIntensity; // 노이즈의 진폭
-        perlin.m_FrequencyGain = shakeIntensity; // 노이즈의 주파수
+        StartCoroutine(CameraShakeCo(shakeIntensity, shakeTime));
+    }
+    public void StopCameraShake()
+    {
+        StopAllCoroutines();
+        perlin.m_AmplitudeGain = 0; // 노이즈의 진폭
+        perlin.m_FrequencyGain = 0; // 노이즈의 주파수
+    }
+
+    private IEnumerator CameraShakeCo(float shakeIntensity, float shakeTime)
+    {
+        perlin.m_AmplitudeGain += shakeIntensity; // 노이즈의 진폭
+        perlin.m_FrequencyGain += shakeIntensity; // 노이즈의 주파수
 
         yield return new WaitForSeconds(shakeTime);
 
-        perlin.m_AmplitudeGain = 0;
-        perlin.m_FrequencyGain = 0;
+        perlin.m_AmplitudeGain = Mathf.Clamp(perlin.m_AmplitudeGain - shakeIntensity, 0, 100);
+        perlin.m_FrequencyGain = Mathf.Clamp(perlin.m_FrequencyGain - shakeIntensity, 0, 100);
     }
 
     public void SetMinimapCameraPostion(Vector3 worldPos)

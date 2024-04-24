@@ -12,6 +12,8 @@ public class Chest : MonoBehaviour, IInteractable
 
     [Header("Info")]
     [SerializeField]
+    private FeedbackPlayer _feedbackPlayer;
+    [SerializeField]
     private AudioClip _openSound;
     [SerializeField]
     private ItemInfoListSO _itemList;
@@ -83,6 +85,7 @@ public class Chest : MonoBehaviour, IInteractable
 
         if (_goldEffect != null)
             PlayOpenEffect(item.Rate);
+        _feedbackPlayer?.Play(0);
 
         SoundManager.Instance.SFXPlay("ChestOpen", _openSound, 1f);
         Money.Instance.EarnGold(Random.Range(_dropMinGold, _dropMaxGold + 1));

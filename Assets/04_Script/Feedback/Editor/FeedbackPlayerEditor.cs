@@ -47,6 +47,8 @@ public class FeedbackPlayerEditor : Editor
             AddFeedbackButton<HitShakeFeedback>("HitShake");
             AddFeedbackButton<DamageTextFeedback>("DamageText");
             AddFeedbackButton<HitStopFeedback>("StopTime");
+            AddFeedbackButton<PlaySoundFeedback>("PlaySound");
+            AddFeedbackButton<CameraShakeFeedback>("CameraShake");
 
         }
 

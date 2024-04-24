@@ -193,7 +193,7 @@ public class AltarBoss : Boss
         {
             if(_restraintIndex < 2)
                 ReturnRestraintAndChains();
-            StartCoroutine(CameraManager.Instance.CameraShake(0, 0));
+            CameraManager.Instance.StopCameraShake();
             isTied = false;
             isOneBroken = false;
             isDead = true;
@@ -262,7 +262,7 @@ public class AltarBoss : Boss
         else
         {
             SoundManager.Instance.SFXPlay("UnChain", unChainClip, 1);
-            StartCoroutine(CameraManager.Instance.CameraShake(5, 1f));
+            CameraManager.Instance.CameraShake(5, 1f);
             StartCoroutine(UnChain(3));
             _currentTime = 0;
         }

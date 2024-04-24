@@ -84,11 +84,16 @@ public class Sword : InvenWeapon
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, transform.rotation.eulerAngles.z - sign * 60));
 
         DOTween.Sequence().
-
             Append(transform.DOPath(wayPoints, 0.25f, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
             Insert(0f, transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + sign * 90), 0.25f));
 
-        
+        if (_attackSoundClip != null)
+        {
+
+            SoundManager.Instance.SFXPlay("AttackSound", _attackSoundClip, 0.5f);
+
+        }
+
 
         StartCoroutine(AttackTween());
 

@@ -23,6 +23,8 @@ public class HealObject : MonoBehaviour, IInteractable
 
     [Header("Object Info")]
     [SerializeField]
+    private FeedbackPlayer _feedbackPlayer;
+    [SerializeField]
     private GameObject _light;
     [SerializeField]
     private TMP_Text _healText;
@@ -53,5 +55,6 @@ public class HealObject : MonoBehaviour, IInteractable
         _spriteRenderer.material = _spriteDefaultMat;
         _collider.enabled = false;
         _light.SetActive(false);
+        _feedbackPlayer?.Play(healHealth);
     }
 }

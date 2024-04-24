@@ -11,12 +11,17 @@ public class Speaker : InvenWeapon
 
     public override void Attack(Transform target)
     {
+        if (_attackSoundClip != null)
+        {
+
+            SoundManager.Instance.SFXPlay("AttackSound", _attackSoundClip, 0.5f);
+
+        }
 
         DOTween.Sequence().
             Append(transform.DOScale(Vector2.one * 1.3f, 0.2f).SetEase(Ease.InBounce)).
             Append(transform.DOScale(Vector2.one, 0.2f));
 
-        SoundManager.Instance?.SFXPlay("Hammer", clip);
         StartCoroutine(AttackTween());
 
     }

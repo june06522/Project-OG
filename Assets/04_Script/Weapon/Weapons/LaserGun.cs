@@ -21,7 +21,12 @@ public class LaserGun : InvenWeapon
 
     public override void Attack(Transform target)
     {
+        if (_attackSoundClip != null)
+        {
 
+            SoundManager.Instance.SFXPlay("AttackSound", _attackSoundClip, 0.5f);
+
+        }
         var obj = Instantiate(gunLine, Vector3.zero, Quaternion.identity);
 
         obj.LineRenderer.positionCount = 2;

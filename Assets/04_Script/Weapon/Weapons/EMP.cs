@@ -23,6 +23,13 @@ public class EMP : InvenWeapon
         isAttack = true;
 
         Vector3 targetPos = target.position;
+        if (_attackSoundClip != null)
+        {
+
+            SoundManager.Instance.SFXPlay("AttackSound", _attackSoundClip, 0.5f);
+
+        }
+
         Instantiate(empBomb, transform.position, transform.rotation)
             .Throw(targetPos, damage: Data.AttackDamage.GetValue());
 

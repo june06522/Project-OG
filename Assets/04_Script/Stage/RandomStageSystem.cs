@@ -93,7 +93,7 @@ public class RandomStageSystem : MonoBehaviour
 
         #region Create Stages
         Stage lastStage = _firstStage = Instantiate(floorInfo.StartStage, _spawnPos, Quaternion.identity);
-        
+        CameraManager.Instance.SetMinimapCameraPostion(_firstStage.transform.position);
 
         for (int i = 0; i < printStageInfo.Count; ++i)
         {
