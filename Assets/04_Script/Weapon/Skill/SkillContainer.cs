@@ -43,6 +43,17 @@ public enum GeneratorID
     WeaponShot,     // 무기 발사              쿨타임(5초)
 }
 
+public enum TriggerID
+{
+    None,           // 없음
+    Dash,           // 대쉬
+    NormalAttack,   // 기본 공격
+    CoolTime,       // 쿨타임
+    Move,           // 이동
+    Idle,           // 가만히
+}
+
+
 // Skill 2차원 리스트는 인스펙터에서 안보임 이렇게 해야함
 [Serializable]
 public class Shell
