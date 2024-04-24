@@ -55,18 +55,19 @@ public class Sword : InvenWeapon
 
     }
 
-    private Vector3[] GetWorldWayPoints(Vector3 target)
+    private Vector3[] GetLocalWayPoints(Vector3 target)
     {
         Vector3[] points = new Vector3[wayPoints.Length];
         for(int i = 0; i < points.Length; i++)
         {
-            points[i] = wayPointTrms[i].position + target;// + transform.position;
+            points[i] = transform.InverseTransformPoint(wayPointTrms[i].position); //+ target;// + transform.position;
         }
         return points;
     }
 
     public override void Attack(Transform target)
     {
+        if (isAttack) return;
         if (attackCor != null)
             StopCoroutine(attackCor);
         
@@ -90,33 +91,43 @@ public class Sword : InvenWeapon
 
     private void AttackSequence(Transform target)
     {
+        Debug.Log($"Target: {target}");
+        Vector3[] wayPoints;
+        int sign;
+        if(target != null)
+        {
+            Vector3 dir = (target.position - transform.position);
+            float magnitude = dir.magnitude;
+            dir.Normalize();
 
-        Vector3 dir = (target.position - transform.position);
-        float magnitude = dir.magnitude;
-        dir.Normalize();
+            Vector3 crossVec = Vector3.Cross(dir, transform.right);
 
-        Vector3 crossVec = Vector3.Cross(dir, transform.right);
+            float dot = Vector2.Dot(crossVec, Vector2.up);
+            sign = dot > 0 ? -1 : 1;
 
-        float dot = Vector2.Dot(crossVec, Vector2.up);
-        int sign = dot > 0 ? -1 : 1;
+            //Vector3[] wayPoints = GetWorldWayPoints(dir.normalized * (magnitude -1.5f));
+            wayPoints = GetLocalWayPoints(dir.normalized);
+            if (sign == -1)
+                wayPoints.Reverse();
+        }else
+        {
+            wayPoints = GetLocalWayPoints(Vector3.zero);
+            sign = 1;
+        }
 
-        //  Vector3[] wayPoints = GetWorldWayPoints(dir.normalized * (magnitude -1.5f));
-        Vector3[] wayPoints = GetWorldWayPoints(dir.normalized);
-        if (sign == -1)
-            wayPoints.Reverse();
-
-        transform.position = wayPoints[0];
+        transform.localPosition = wayPoints[0];
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, transform.rotation.eulerAngles.z - sign * 60));
 
         DOTween.Sequence().
 
-            Append(transform.DOPath(wayPoints, duration, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
-            Insert(0f, transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + sign * 90), duration).SetEase(ease));
+            Append(transform.DOLocalPath(wayPoints, duration, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
+            Insert(0f, transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + sign * 90), duration).SetEase(ease)).SetAutoKill(true);
     }
 
-    private IEnumerator AttackTween(bool refinForce)
+    private IEnumerator AttackTween(bool reinforce)
     {
 
+        Debug.Log($"Reinforce : " + reinforce);
         isAttack = true;
         _col.enabled = true;
         yield return new WaitForSeconds(duration);
@@ -124,10 +135,10 @@ public class Sword : InvenWeapon
         yield return new WaitForSeconds(0.2f);
         //transform.DOKill();
 
-        if(refinForce)
+        if(reinforce)
         {
             transform.DOScale(Vector3.one, 0.5f)
-                .SetEase(Ease.InOutFlash)
+                .SetEase(Ease.InOutSine)
                 .OnComplete(() => isAttack = false);
             Debug.Log("Gangng");
         }
