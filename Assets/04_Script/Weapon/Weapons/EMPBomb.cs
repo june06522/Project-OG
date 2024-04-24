@@ -1,16 +1,17 @@
 using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EMPBomb : MonoBehaviour
 {
+    public List<SpriteRenderer> renderers;
     [SerializeField] private float jumpPower = 3f;
     [SerializeField] private float duration = 0.5f;
     [SerializeField] private float bombRadius = 2f;
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private AudioClip _bombClip;
-    [SerializeField] ParticleSystem bombEffect;
+    [SerializeField] GameObject bombEffect;
+
     float damage;
 
     Animator animator;
@@ -24,18 +25,19 @@ public class EMPBomb : MonoBehaviour
 
     }
 
-    public void Throw(Vector3 targetPos, float damage, float interval = 0f)
+    public void Throw(Vector3 targetPos, float damage, float interval = 0f, float offset = 1f)
     {
 
         this.damage = damage;
+
         transform.DOJump(targetPos, jumpPower, 0, duration)
             .AppendInterval(interval)
-            .OnComplete(() => Boom(targetPos));
+            .OnComplete(() => Boom(targetPos, offset));
         //transform.DOScale(transform.localScale * 1.5f, 0.5f).SetLoops(1, LoopType.Yoyo);
 
     }
 
-    private void Boom(Vector3 targetPos)
+    private void Boom(Vector3 targetPos, float offset)
     {
         if (_bombClip != null)
         {
@@ -43,9 +45,14 @@ public class EMPBomb : MonoBehaviour
             SoundManager.Instance.SFXPlay("Bomb", _bombClip, 0.5f);
 
         }
-        if (bombEffect != null)
-            Instantiate(bombEffect, transform);
 
+        bombRadius *= offset;
+
+        if (bombEffect != null)
+        {
+            var obj = Instantiate(bombEffect, transform.position, Quaternion.identity);
+            obj.transform.localScale *= offset;
+        }
         EnemyHitCheck(targetPos);
         animator.SetTrigger(_BombHash);
 

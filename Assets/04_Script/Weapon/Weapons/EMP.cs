@@ -1,7 +1,5 @@
 using DG.Tweening;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EMP : InvenWeapon
@@ -15,7 +13,7 @@ public class EMP : InvenWeapon
     {
         base.Awake();
         _spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        
+
     }
 
     public override void Attack(Transform target)
@@ -31,12 +29,12 @@ public class EMP : InvenWeapon
         }
 
         Instantiate(empBomb, transform.position, transform.rotation)
-            .Throw(targetPos, damage: Data.AttackDamage.GetValue());
+            .Throw(targetPos, damage: Data.AttackDamage.GetValue(), 0f, transform.localScale.x);
 
         transform.DOScale(transform.localScale * 1.5f, 0.25f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.InOutBounce);
 
         StartCoroutine(WaitAttackEnd());
-        
+
     }
 
     private IEnumerator WaitAttackEnd()

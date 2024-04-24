@@ -5,23 +5,44 @@ using UnityEngine;
 public class WeaponExplainManager : MonoBehaviour
 {
     public static Dictionary<GeneratorID,string> weaponExplain = new();
+    public static Dictionary<GeneratorID, TriggerID> triggerExplain = new();
 
     private void Awake()
     {
-        weaponExplain.Add(GeneratorID.DashAttack,       "대쉬 어택");
-        weaponExplain.Add(GeneratorID.DeathRay,         "대쓰 레이");
-        weaponExplain.Add(GeneratorID.Electronic,       "일렉트로닉");
-        weaponExplain.Add(GeneratorID.ErrorDice,        "에러 다이스");
-        weaponExplain.Add(GeneratorID.Force,            "포스");
-        weaponExplain.Add(GeneratorID.HeartBeat,        "하트비트");
-        weaponExplain.Add(GeneratorID.LaserPointer,     "레이저포인터");
-        weaponExplain.Add(GeneratorID.MagneticField,    "자기장");
-        weaponExplain.Add(GeneratorID.OverLoad,         "과부화");
-        weaponExplain.Add(GeneratorID.Reboot,           "리부트");
-        weaponExplain.Add(GeneratorID.RotateWeapon,     "로테이트 웨폰");
-        weaponExplain.Add(GeneratorID.SequenceAttack,   "시퀀스어택");
-        weaponExplain.Add(GeneratorID.SiegeMode,        "시즈모드");
-        weaponExplain.Add(GeneratorID.Trinity,          "트포");
-        weaponExplain.Add(GeneratorID.WeaponShot,       "무기샷");
+        #region 스킬 설명
+        weaponExplain.Add(GeneratorID.DashAttack,       "대쉬는 훌륭한 공격 수단입니다."); // 대쉬 어택
+        weaponExplain.Add(GeneratorID.DeathRay,         "대쓰 레이"); // 마관광살포
+        weaponExplain.Add(GeneratorID.Electronic,       "일렉트로닉"); // 전기 지짐이
+        weaponExplain.Add(GeneratorID.ErrorDice,        "@#!%&($@1@$q!!"); // 에러다이스
+        weaponExplain.Add(GeneratorID.Force,            "포스"); // 포쓰
+        weaponExplain.Add(GeneratorID.HeartBeat,        "알리스타 쿵쾅 삑사리"); // 하트비트
+        weaponExplain.Add(GeneratorID.LaserPointer,     "히히 발싸"); // 레이저 포인터
+        weaponExplain.Add(GeneratorID.MagneticField,    "배X 그라운드"); //자기장
+        weaponExplain.Add(GeneratorID.OverLoad,         "과부화"); // 과부화
+        weaponExplain.Add(GeneratorID.Reboot,           "리부트"); // 리부트
+        weaponExplain.Add(GeneratorID.RotateWeapon,     "무기를 돌려 공격합니다."); // 로테이트 웨폰
+        weaponExplain.Add(GeneratorID.SequenceAttack,   "시퀀스어택"); // 시퀀스
+        weaponExplain.Add(GeneratorID.SiegeMode,        "이동할 필요가 없다면 이동하지 않아도 된다."); // 시즈모드
+        weaponExplain.Add(GeneratorID.Trinity,          "트포"); //삼위일체
+        weaponExplain.Add(GeneratorID.WeaponShot,       "이 대신 잇몸으로"); // Weapon Shot
+        #endregion
+
+        #region 트리거 설명
+        triggerExplain.Add(GeneratorID.DashAttack,      TriggerID.Dash);
+        triggerExplain.Add(GeneratorID.DeathRay,        TriggerID.NormalAttack);
+        triggerExplain.Add(GeneratorID.ErrorDice,       TriggerID.Dash);
+        triggerExplain.Add(GeneratorID.Electronic,      TriggerID.CoolTime);
+        triggerExplain.Add(GeneratorID.Force,           TriggerID.NormalAttack);
+        triggerExplain.Add(GeneratorID.HeartBeat,       TriggerID.Dash);
+        triggerExplain.Add(GeneratorID.LaserPointer,    TriggerID.Move);
+        triggerExplain.Add(GeneratorID.MagneticField,   TriggerID.NormalAttack);
+        triggerExplain.Add(GeneratorID.OverLoad,        TriggerID.Dash);
+        triggerExplain.Add(GeneratorID.Reboot,          TriggerID.Dash);
+        triggerExplain.Add(GeneratorID.RotateWeapon,    TriggerID.Move);
+        triggerExplain.Add(GeneratorID.SequenceAttack,  TriggerID.Dash); // 얜 미정
+        triggerExplain.Add(GeneratorID.SiegeMode,       TriggerID.Idle);
+        triggerExplain.Add(GeneratorID.Trinity,         TriggerID.NormalAttack);
+        triggerExplain.Add(GeneratorID.WeaponShot,      TriggerID.CoolTime);
+        #endregion
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 // 생성기가 가지고 있는거
@@ -43,6 +42,17 @@ public enum GeneratorID
     WeaponShot,     // 무기 발사              쿨타임(5초)
 }
 
+public enum TriggerID
+{
+    None,           // 없음
+    Dash,           // 대쉬
+    NormalAttack,   // 기본 공격
+    CoolTime,       // 쿨타임
+    Move,           // 이동
+    Idle,           // 가만히
+}
+
+
 // Skill 2차원 리스트는 인스펙터에서 안보임 이렇게 해야함
 [Serializable]
 public class Shell
@@ -58,9 +68,6 @@ public class SkillContainer : MonoBehaviour
 
     [SerializeField] List<Shell> weaponList;
 
-
-    public Transform player;
-
     private void Awake()
     {
 
@@ -68,7 +75,7 @@ public class SkillContainer : MonoBehaviour
         {
 
             Debug.LogError("Multiple SkillManager is running");
-            Destroy(this);
+            Destroy(instance);
 
         }
 
@@ -100,8 +107,12 @@ public class SkillContainer : MonoBehaviour
 
         Debug.LogError($"Skill Doesn't exist in SkillList : {j}, {i} ");
 
-
         return null;
 
+    }
+
+    public List<Shell> GetList()
+    {
+        return weaponList;
     }
 }
