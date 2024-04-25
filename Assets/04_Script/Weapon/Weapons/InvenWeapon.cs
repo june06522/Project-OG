@@ -12,6 +12,8 @@ public abstract class InvenWeapon : Weapon
     {
         foreach (var item in sendDataList)
         {
+            if(target != null)
+            
             SkillContainer.Instance.GetSKill((int)id, (int)item.Value.GeneratorID)?.Excute(transform, target, item.Value.Power);
         }
         sendDataList = new Dictionary<ulong, SendData>();

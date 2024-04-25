@@ -157,7 +157,7 @@ public class Sword : InvenWeapon
         if (collision.TryGetComponent<IHitAble>(out var hitAble))
         {
             //Debug.Log(1);
-            hitAble.Hit(Data.AttackDamage.GetValue());
+            hitAble.Hit(Data.GetDamage());
 
         }
     }

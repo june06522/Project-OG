@@ -5,13 +5,15 @@ using UnityEngine;
 public class SkillEventReceiver : InventoryEventReceiverBase
 {
     public GeneratorID generatorID;
+    public int cnt = 1;
+    private int curskill = 0;
 
     protected override void OnInit()
     {
         if (PlayerController.EventController != null)
         {
 
-            PlayerController.EventController.OnSkill += HandleSkill;
+            PlayerController.EventController.OnSkill += UseSkill;
 
         }
 
@@ -23,6 +25,16 @@ public class SkillEventReceiver : InventoryEventReceiverBase
 
         base.GetSignal(parm);
 
+    }
+
+    private void UseSkill()
+    {
+        curskill++;
+        if (curskill >= cnt)
+        {
+            curskill -= cnt;
+            HandleSkill();
+        }
     }
 
     private void HandleSkill()
@@ -38,7 +50,7 @@ public class SkillEventReceiver : InventoryEventReceiverBase
     {
         if (PlayerController.EventController != null)
         {
-            PlayerController.EventController.OnSkill -= HandleSkill;
+            PlayerController.EventController.OnSkill -= UseSkill;
 
         }
 

@@ -25,7 +25,7 @@ public class SpeakerClone : RotateClone
 
         yield return new WaitForSeconds(0.2f);
         var obj = Instantiate(effect, transform.position, Quaternion.identity);
-        obj.SetDamage(_DataSO.AttackDamage.GetValue());
+        obj.SetDamage(_DataSO.GetDamage());
         yield return new WaitForSeconds(0.2f);
 
     }

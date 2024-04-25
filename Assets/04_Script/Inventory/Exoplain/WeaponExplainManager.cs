@@ -10,6 +10,8 @@ public class WeaponExplainManager : MonoBehaviour
     private void Awake()
     {
         #region 스킬 설명
+        weaponExplain.Add(GeneratorID.None,            "테스트용입니다.");
+
         weaponExplain.Add(GeneratorID.DashAttack,       "대쉬는 훌륭한 공격 수단입니다."); // 대쉬 어택
         weaponExplain.Add(GeneratorID.DeathRay,         "죽음의 광선"); // 마관광살포
         weaponExplain.Add(GeneratorID.Electronic,       "일렉 뚜리뚜리"); // 전기 지짐이
@@ -28,6 +30,8 @@ public class WeaponExplainManager : MonoBehaviour
         #endregion
 
         #region 트리거 설명
+        triggerExplain.Add(GeneratorID.None,      TriggerID.None);
+        
         triggerExplain.Add(GeneratorID.DashAttack,      TriggerID.Dash);
         triggerExplain.Add(GeneratorID.DeathRay,        TriggerID.NormalAttack);
         triggerExplain.Add(GeneratorID.Electronic,      TriggerID.Dash);
