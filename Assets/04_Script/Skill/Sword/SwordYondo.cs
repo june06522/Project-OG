@@ -1,10 +1,7 @@
 using DG.Tweening;
-using FSM_System;
 using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public enum ESwordYondoState
 {
@@ -16,11 +13,6 @@ public enum ESwordYondoState
 
 public class SwordYondo : MonoBehaviour
 {
-
-    [Header("Rotate")]
-    [SerializeField] float minRotateTime = 0.05f;
-    [SerializeField] float maxRotateTime = 0.5f;
-
     [Header("Speed")]
     [SerializeField] float speed = 500f;
 
@@ -32,22 +24,18 @@ public class SwordYondo : MonoBehaviour
     Quaternion startRot;
 
     Action AttackStartAction;
-    AnimationCurve curve;
 
     private LayerMask layerMask;
     private float damage;
     private float radius;
     private float curSpeed;
     ESwordYondoState curState;
-    bool isRotating;
     bool completlyAttach;
     bool attachTrigger;
 
     Rigidbody2D rb;
     private SwordTargetDetector detector;
     private float lerpAngleValue;
-
-    private float isMaxPower ;
 
     private void Awake()
     {
@@ -64,7 +52,6 @@ public class SwordYondo : MonoBehaviour
 
     private void OnEnable()
     {
-        isRotating = false;
         targetTrm = null;
 
         startLocalPos = transform.localPosition;
@@ -223,7 +210,6 @@ public class SwordYondo : MonoBehaviour
         targetTrm = FindClosestEnemy();
         detector.CurTargetTrm = targetTrm;
 
-        isRotating = true;
         completlyAttach = false;
 
         return targetTrm != null;

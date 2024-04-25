@@ -56,8 +56,9 @@ public class ThirdEliteAttackState : FSM_State<ENormalPatrolEnemyState>
             yield return new WaitForSeconds(waitTime);
         }
 
-        yield return new WaitForSeconds(0.5f);
         _controller.EnemyDataSO.SetCoolDown();
         _controller.ChangeState(ENormalPatrolEnemyState.Idle);
+
+        yield return null;
     }
 }

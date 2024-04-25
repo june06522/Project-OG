@@ -149,10 +149,4 @@ public abstract class InventoryObjectRoot : ScriptableObject
         return Instantiate(this);
 
     }
-
-    private void OnDestroy()
-    {
-
-        Debug.Log("구독해제3333");
-    }
 }

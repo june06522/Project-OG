@@ -14,7 +14,6 @@ public enum UIDirection
 public class ConnectorAnimPart : MonoBehaviour
 {
     [SerializeField] UIDirection _direction;
-    Ease ease = Ease.InOutBounce;
 
     Vector3 targetScale;
     Vector3 baseScale;
