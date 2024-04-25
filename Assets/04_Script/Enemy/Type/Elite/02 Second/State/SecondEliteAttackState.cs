@@ -54,23 +54,28 @@ public class SecondEliteAttackState : FSM_State<ENormalPatrolEnemyState>
         Vector3 bulletOriginSize = bullet.transform.localScale;
 
         yield return new WaitForSeconds(waitTime);
-        Transform trans = bullet.transform;
-        UnityEngine.Object.Destroy(bullet);
 
-        for (int i = 0; i < splitBullet; i++)
+        if(bullet != null)
         {
-            bullets[i] = UnityEngine.Object.Instantiate(_controller.bullet);
-            bullets[i].transform.position = trans.position;
-            bullets[i].transform.rotation = Quaternion.identity;
-            bullets[i].transform.localScale = bulletOriginSize / 2;
+            Transform trans = bullet.transform;
+            UnityEngine.Object.Destroy(bullet);
 
-            Rigidbody2D bulletsRigid = bullets[i].GetComponent<Rigidbody2D>();
-            Vector2 temp = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / splitBullet), Mathf.Sin(Mathf.PI * 2 * i / splitBullet));
-            bulletsRigid.velocity = temp.normalized * speed * 2;
+            for (int i = 0; i < splitBullet; i++)
+            {
+                bullets[i] = UnityEngine.Object.Instantiate(_controller.bullet);
+                bullets[i].transform.position = trans.position;
+                bullets[i].transform.rotation = Quaternion.identity;
+                bullets[i].transform.localScale = bulletOriginSize / 2;
+
+                Rigidbody2D bulletsRigid = bullets[i].GetComponent<Rigidbody2D>();
+                Vector2 temp = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / splitBullet), Mathf.Sin(Mathf.PI * 2 * i / splitBullet));
+                bulletsRigid.velocity = temp.normalized * speed * 2;
+            }
         }
 
-        yield return new WaitForSeconds(0.5f);
         _controller.EnemyDataSO.SetCoolDown();
         _controller.ChangeState(ENormalPatrolEnemyState.Idle);
+
+        yield return null;
     }
 }
