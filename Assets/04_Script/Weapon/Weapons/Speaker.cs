@@ -19,7 +19,7 @@ public class Speaker : InvenWeapon
         }
 
         DOTween.Sequence().
-            Append(transform.DOScale(Vector2.one * 1.3f, 0.2f).SetEase(Ease.InBounce)).
+            Append(transform.DOScale(Vector2.one * 1.5f, 0.2f).SetEase(Ease.InBounce)).
             Append(transform.DOScale(Vector2.one, 0.2f));
 
         StartCoroutine(AttackTween());
