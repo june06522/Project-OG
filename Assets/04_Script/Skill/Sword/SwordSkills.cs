@@ -33,8 +33,6 @@ public class SwordSkills : MonoBehaviour
     private float delayTime = 0.5f;
 
     [SerializeField]
-    private float attackRadius = 2f;
-    [SerializeField]
     private float rotateSpeed = 2f;
     [SerializeField]
     private float rotateTime = 1f;
@@ -75,7 +73,6 @@ public class SwordSkills : MonoBehaviour
 
         if (makeDone)
         {
-            float angle = 0;
             for (int i = 0; i < clones.Count; i++)
             {
                 SwordClone clone = clones[i];

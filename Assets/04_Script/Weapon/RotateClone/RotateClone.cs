@@ -7,7 +7,6 @@ using UnityEngine.VFX;
 public class RotateClone : MonoBehaviour
 {
     [SerializeField] protected WeaponDataSO _DataSO;
-    private float rotateSpeed = 20f;
     private float damage = 10f;
     private float dissolveTime;
 

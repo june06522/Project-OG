@@ -61,8 +61,6 @@ public class Stage : MonoBehaviour
     [Header("Camera Info")]
     [SerializeField]
     private bool _useChangeCameraSize = false;
-    [SerializeField]
-    private float _cameraSize = 0f;
 
     [SerializeField]
     private CinemachineVirtualCamera _vStageCam;

@@ -12,9 +12,6 @@ public struct RotateCloneInfo
 
 public class RotateSkillManager : MonoBehaviour
 {
-    [SerializeField] float minRotateTime = 5f;
-    [SerializeField] float maxRotateTime = 15f;
-    [SerializeField] float minRotateSpeed = 100f;
     [SerializeField] float maxRotateSpeed = 1000f;
 
     [SerializeField] float dissolveTime = 0.5f;
