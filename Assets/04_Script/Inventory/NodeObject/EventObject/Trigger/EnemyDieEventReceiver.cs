@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemtDieEventReceiver : InventoryEventReceiverBase
+public class EnemyDieEventReceiver : InventoryEventReceiverBase
 {
     public GeneratorID generatorID;
 
