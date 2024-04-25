@@ -50,6 +50,8 @@ public class FeedbackPlayerEditor : Editor
             AddFeedbackButton<PlaySoundFeedback>("PlaySound");
             AddFeedbackButton<SpawnParticleFeedback>("SpawnParticle");
             AddFeedbackButton<CameraShakeFeedback>("CameraShake");
+            AddFeedbackButton<OverdamageShockwaveFeedback>("OverdamageShockwave");
+            AddFeedbackButton<ChromaticFeedback>("Chromatic");
 
         }
 
@@ -82,6 +84,7 @@ public class FeedbackPlayerEditor : Editor
         if (GUILayout.Button(text, GUILayout.Width(200)))
         {
             _feedbackPlayer.transform.AddComponent<T>();
+            EditorUtility.SetDirty(target);
         }
         EditorGUILayout.EndHorizontal();
     }
