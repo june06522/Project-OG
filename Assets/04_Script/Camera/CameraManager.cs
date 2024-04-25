@@ -9,6 +9,7 @@ public class CameraManager : MonoBehaviour
     public static CameraManager Instance;
 
     private CinemachineVirtualCamera cam;
+    private CinemachineVirtualCamera _defaultCam;
 
     private CinemachineBasicMultiChannelPerlin perlin;
 
@@ -19,8 +20,11 @@ public class CameraManager : MonoBehaviour
     private Shockwave _shockwave;
     [SerializeField]
     private Volume _damageVolume;
+    [SerializeField]
+    private Volume _playerHitDamageVolume;
+
     Coroutine _damageVolumeCoroutine;
-    float _currentVolumeEndValue = 0f;
+    Coroutine _playerDamageVolumeCoroutine;
 
     private void Awake()
     {
@@ -29,8 +33,22 @@ public class CameraManager : MonoBehaviour
         else
             Destroy(gameObject);
 
-        cam = GameObject.Find("CM").GetComponent<CinemachineVirtualCamera>();
+        _defaultCam = cam = GameObject.Find("CM").GetComponent<CinemachineVirtualCamera>();
         perlin = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+    }
+
+    public void SetOtherCam(CinemachineVirtualCamera changeCam)
+    {
+        cam.Priority = 0;
+        changeCam.Priority = 10;
+        cam = changeCam;
+    }
+    public void SetDefaultCam()
+    {
+        cam.Priority = 0;
+        _defaultCam.Priority = 10;
+
+        cam = _defaultCam;
     }
 
     public void Shockwave(Vector2 pos, float strength, float endValue, float time, bool forceShockwave = false)
@@ -55,14 +73,22 @@ public class CameraManager : MonoBehaviour
         {
             StopCoroutine(_damageVolumeCoroutine);
         }
-        _damageVolumeCoroutine = StartCoroutine(DamageVolumeCoroutine(endValue, time));
+        _damageVolumeCoroutine = StartCoroutine(DamageVolumeCoroutine(_damageVolume, endValue, time));
+    }
+    public void PlayerDamageVolume(float endValue, float time)
+    {
+        if (_playerDamageVolumeCoroutine != null)
+        {
+            StopCoroutine(_playerDamageVolumeCoroutine);
+        }
+        _playerDamageVolumeCoroutine = StartCoroutine(DamageVolumeCoroutine(_playerHitDamageVolume, endValue, time));
     }
 
-    private IEnumerator DamageVolumeCoroutine(float endValue, float time)
+    private IEnumerator DamageVolumeCoroutine(Volume volume, float endValue, float time)
     {
-        _damageVolume.weight = endValue;
+        volume.weight = endValue;
         yield return new WaitForSeconds(time);
-        _damageVolume.weight = 0f;
+        volume.weight = 0f;
     }
 
     public void CameraShake(float shakeIntensity, float shakeTime)
