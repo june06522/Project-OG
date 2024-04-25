@@ -30,8 +30,8 @@ public class WeaponExplainManager : MonoBehaviour
         #region 트리거 설명
         triggerExplain.Add(GeneratorID.DashAttack,      TriggerID.Dash);
         triggerExplain.Add(GeneratorID.DeathRay,        TriggerID.NormalAttack);
-        triggerExplain.Add(GeneratorID.ErrorDice,       TriggerID.Dash);
-        triggerExplain.Add(GeneratorID.Electronic,      TriggerID.CoolTime);
+        triggerExplain.Add(GeneratorID.Electronic,      TriggerID.Dash);
+        triggerExplain.Add(GeneratorID.ErrorDice,       TriggerID.CoolTime);
         triggerExplain.Add(GeneratorID.Force,           TriggerID.NormalAttack);
         triggerExplain.Add(GeneratorID.HeartBeat,       TriggerID.Dash);
         triggerExplain.Add(GeneratorID.LaserPointer,    TriggerID.Move);
