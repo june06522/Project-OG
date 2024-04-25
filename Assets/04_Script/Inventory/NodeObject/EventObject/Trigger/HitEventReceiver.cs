@@ -1,9 +1,9 @@
+
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
-using System;
-public class DashEventReceiver : InventoryEventReceiverBase
+
+public class HitEventReceiver : InventoryEventReceiverBase
 {
     public GeneratorID generatorID;
 
@@ -12,7 +12,7 @@ public class DashEventReceiver : InventoryEventReceiverBase
         if (PlayerController.EventController != null)
         {
 
-            PlayerController.EventController.OnDash += HandleDash;
+            PlayerController.EventController.OnHit += HandleHit;
 
         }
 
@@ -26,7 +26,7 @@ public class DashEventReceiver : InventoryEventReceiverBase
 
     }
 
-    private void HandleDash()
+    private void HandleHit()
     {
 
         SendData s = new SendData(generatorID);
@@ -39,7 +39,7 @@ public class DashEventReceiver : InventoryEventReceiverBase
     {
         if (PlayerController.EventController != null)
         {
-            PlayerController.EventController.OnDash -= HandleDash;
+            PlayerController.EventController.OnHit -= HandleHit;
 
         }
 

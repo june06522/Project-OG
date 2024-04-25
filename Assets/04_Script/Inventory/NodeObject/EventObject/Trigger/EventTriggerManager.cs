@@ -70,5 +70,35 @@ public class EventTriggerManager : MonoBehaviour
     {
         PlayerController.EventController.OnDashExecute();
     }
+
+    public void HitExecute()
+    {
+        PlayerController.EventController.OnHitExecute();
+    }
+
+    public void RoomEnterExecute()
+    {
+        PlayerController.EventController.OnRoomEnterExecute();
+    }
+
+    public void StageClearExecute()
+    {
+        PlayerController.EventController.OnStageClearExecute();
+    }
+
+    public void WaveStartExecute()
+    {
+        PlayerController.EventController.OnWaveStartExecute();
+    }
+
+    public void SkillExecute()
+    {
+        PlayerController.EventController.OnSkillxecute();
+    }
+
+    public void EnemyDieExecute()
+    {
+        PlayerController.EventController.OnEnemyDieExecute();
+    }
     #endregion
 }
