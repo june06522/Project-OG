@@ -63,8 +63,9 @@ public class FirstEliteAttackState : FSM_State<ENormalPatrolEnemyState>
             rigid.velocity = temp.normalized * speed;
         }
 
-        yield return new WaitForSeconds(0.5f);
         _controller.EnemyDataSO.SetCoolDown();
         _controller.ChangeState(ENormalPatrolEnemyState.Idle);
+
+        yield return null;
     }
 }
