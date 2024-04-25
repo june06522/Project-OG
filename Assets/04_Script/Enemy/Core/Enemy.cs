@@ -27,6 +27,11 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
     
     [Header("Health")]
     private int curHp;
+    public int CurHP
+    {
+        get => curHp;
+    }
+
     public bool Dead { get; private set; } = false;
     public event Action DeadEvent;
 

@@ -20,7 +20,7 @@ public class RotateBullet : BossBullet
     private void Update()
     {
         _deg += Time.deltaTime * _speed;
-
+        Debug.Log("dd");
         if(_deg < 360)
         {
             transform.rotation = Quaternion.Euler(0, 0, _deg * -1);
