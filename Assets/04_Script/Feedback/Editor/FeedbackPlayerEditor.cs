@@ -48,6 +48,7 @@ public class FeedbackPlayerEditor : Editor
             AddFeedbackButton<DamageTextFeedback>("DamageText");
             AddFeedbackButton<HitStopFeedback>("StopTime");
             AddFeedbackButton<PlaySoundFeedback>("PlaySound");
+            AddFeedbackButton<SpawnParticleFeedback>("SpawnParticle");
             AddFeedbackButton<CameraShakeFeedback>("CameraShake");
 
         }
@@ -67,7 +68,7 @@ public class FeedbackPlayerEditor : Editor
         return value;
     }
 
-    private void AddFeedbackButton<T>(string text) where T : MonoBehaviour
+    private void AddFeedbackButton<T>(string text) where T : Feedback
     {
         if (_feedbackPlayer.transform.GetComponent<T>() != null)
         {
