@@ -253,7 +253,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     public void OnDestroy()
     {
-        Destroy(InvenObject);
-        Debug.Log("트리거 삭제됨");
+        foreach(var v in InvenObject.includes)
+            Destroy(v);
     }
 }

@@ -27,10 +27,8 @@ public abstract class InventoryEventReceiverBase : InventoryObjectRoot, IDisposa
 
     }
 
-    private void OnDestroy()
+    public void OnDestroy()
     {
-
-        Debug.Log("구독해제2222");
+        Dispose();
     }
-
 }
