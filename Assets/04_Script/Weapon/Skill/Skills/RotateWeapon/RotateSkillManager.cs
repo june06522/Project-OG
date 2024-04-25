@@ -132,14 +132,16 @@ public class RotateSkillManager : MonoBehaviour
         //{
         //    _cloneDictionary[info.Key] = 0;
         //}
-        _cloneDictionary = new();
+        _cloneDictionary.Clear();
         rotateClones.Clear();
     }
 
-    private void SetRunning() => IsRunning = true;
+    private void SetRunning()
+    {
+        IsRunning = true;
+    }
     private void SetIdle()
     {
-        Debug.Log(IsRunning);
         IsRunning = false;
     }
 
@@ -154,11 +156,11 @@ public class RotateSkillManager : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    private void Start()
     {
         if (PlayerController.EventController != null)
         {
-
+            Debug.Log("dfsf");
             PlayerController.EventController.OnMove += SetRunning;
             PlayerController.EventController.OnIdle += SetIdle;
 
