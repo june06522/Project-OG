@@ -11,9 +11,6 @@ public class PlayerEventController : IDisposable
     public event Action OnBasicAttack;  // 기본 공격
     public event Action OnCool;         // 쿨타임
     public event Action OnIdle;         // Idle
-
-    //------------------------------------------------
-
     public event Action OnHit;          // 피격
     public event Action OnRoomEnter;    // 방 입장
     public event Action OnStageClear;   // 스테이지 클리어
@@ -28,8 +25,6 @@ public class PlayerEventController : IDisposable
     public void OnBasicAttackExecute()  => OnBasicAttack?.Invoke();
     public void OnCoolExecute()         => OnCool?.Invoke();
     public void OnIdleExecute()         => OnIdle?.Invoke();
-
-    //-------------------------------------------------
     public void OnHitExecute()          => OnHit?.Invoke();
     public void OnRoomEnterExecute()    => OnRoomEnter?.Invoke();
     public void OnStageClearExecute()   => OnStageClear?.Invoke();
