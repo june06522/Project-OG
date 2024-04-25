@@ -32,13 +32,13 @@ public class RotateClone : MonoBehaviour
     {
         transform.localScale = scale;
 
-        this.damage = _DataSO.AttackDamage.GetValue();
+        this.damage = _DataSO.GetDamage();
         material.SetFloat("_FullGlowDissolveFade", 0);
     }
 
     public void Init()
     {
-        this.damage = _DataSO.AttackDamage.GetValue();
+        this.damage = _DataSO.GetDamage();
         material.SetFloat("_FullGlowDissolveFade", 0);
         
         InvokeRepeating(nameof(Attack), 1f, _DataSO.AttackCoolDown.GetValue());

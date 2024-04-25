@@ -12,6 +12,9 @@ public class WeaponDataSO : ScriptableObject
     //[field:SerializeField] public Stats WeaponValue { get; protected set; }
     //[field:SerializeField] public Stats ChangeGauge { get; protected set; }
 
+    public float CoolDown = 0f;
+    public float AddDamege = 0f;
+
     private Weapon owner;
 
     public bool isAttackCoolDown { get; protected set; }
@@ -34,11 +37,16 @@ public class WeaponDataSO : ScriptableObject
     {
 
         isAttackCoolDown = true;
-
-        yield return new WaitForSeconds(AttackCoolDown.GetValue());
+        Debug.Log(CoolDown);
+        Debug.Log(AttackCoolDown.GetValue() / (1f + CoolDown / 100f));
+        yield return new WaitForSeconds(AttackCoolDown.GetValue() /(1f + CoolDown / 100f));
 
         isAttackCoolDown = false;
 
     }
 
+    public float GetDamage()
+    {
+        return AddDamege + AttackDamage.GetValue();
+    }
 }

@@ -32,7 +32,7 @@ public class Speaker : InvenWeapon
         isAttack = true;
         yield return new WaitForSeconds(0.2f);
         var obj = Instantiate(effect, transform.position, Quaternion.identity);
-        obj.SetDamage(Data.AttackDamage.GetValue());
+        obj.SetDamage(Data.GetDamage());
         yield return new WaitForSeconds(0.2f);
         isAttack = false;
 

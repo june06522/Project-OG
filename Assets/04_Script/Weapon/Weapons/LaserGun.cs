@@ -35,7 +35,7 @@ public class LaserGun : InvenWeapon
 
         if (hit.collider != null)
         {
-            obj.SetLine(_shootPos.position, hit.point, Data.AttackDamage.GetValue());
+            obj.SetLine(_shootPos.position, hit.point, Data.GetDamage());
             obj.LineRenderer.enabled = true;
             obj.EdgeCollider.SetPoints(new List<Vector2>
             {
