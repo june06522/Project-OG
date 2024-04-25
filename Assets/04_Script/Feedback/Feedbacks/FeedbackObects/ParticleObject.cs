@@ -7,7 +7,7 @@ public class ParticleObject : MonoBehaviour
 {
     private ParticleSystem _particleSystem;
 
-    void Start()
+    void Awake()
     {
         _particleSystem = GetComponent<ParticleSystem>();
     }
