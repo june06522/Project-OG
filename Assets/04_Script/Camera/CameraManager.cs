@@ -12,6 +12,7 @@ public class CameraManager : MonoBehaviour
     private CinemachineVirtualCamera _defaultCam;
 
     private CinemachineBasicMultiChannelPerlin perlin;
+    private CinemachineBasicMultiChannelPerlin _defaultPerlin;
 
     [SerializeField]
     private Camera _minimapCamera;
@@ -34,7 +35,7 @@ public class CameraManager : MonoBehaviour
             Destroy(gameObject);
 
         _defaultCam = cam = GameObject.Find("CM").GetComponent<CinemachineVirtualCamera>();
-        perlin = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        _defaultPerlin = perlin = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
 
     public void SetOtherCam(CinemachineVirtualCamera changeCam)
@@ -42,6 +43,10 @@ public class CameraManager : MonoBehaviour
         cam.Priority = 0;
         changeCam.Priority = 10;
         cam = changeCam;
+
+        CinemachineBasicMultiChannelPerlin tempPerlin = changeCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        if(tempPerlin != null)
+            perlin = tempPerlin;
     }
     public void SetDefaultCam()
     {
@@ -49,6 +54,7 @@ public class CameraManager : MonoBehaviour
         _defaultCam.Priority = 10;
 
         cam = _defaultCam;
+        perlin = _defaultPerlin;
     }
 
     public void Shockwave(Vector2 pos, float strength, float endValue, float time, bool forceShockwave = false)

@@ -293,7 +293,9 @@ public class Stage : MonoBehaviour
         if(_useChangeCameraSize)
             Debug.Log("IsNotUpdate");
         if (_vStageCam != null)
-            _vStageCam.Priority = 20;
+        {
+            CameraManager.Instance.SetOtherCam(_vStageCam);
+        }
     }
     private void DeleteStageCameraSetting()
     {
@@ -301,12 +303,11 @@ public class Stage : MonoBehaviour
             Debug.Log("IsNotUpdate");
         if (_vStageCam != null)
         {
-            _vStageCam.Priority = 0;
+            CameraManager.Instance.SetDefaultCam();
             FAED.InvokeDelay(() =>
             {
                 Destroy(_vStageCam.gameObject);
             }, 0.1f);
-            
         }
     }
 

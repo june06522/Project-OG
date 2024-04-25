@@ -39,7 +39,7 @@ public class DamageText : MonoBehaviour
 
         seq.Append(transform.DOMoveY(transform.position.y + 0.2f, 0.25f).SetEase(Ease.InOutElastic));
         seq.Join(transform.DOScale(tweenScale + Vector3.one * 0.8f, 0.2f).SetEase(Ease.OutBounce));
-        seq.Append(transform.DOScale(new Vector3(0.6f, 1.75f), 0.1f).SetEase(Ease.InOutBounce));
+        seq.Append(transform.DOScale(tweenScale - new Vector3(1.75f, 0.6f), 0.1f).SetEase(Ease.InOutBounce));
         seq.Append(transform.DOScale(tweenScale, 0.1f).SetEase(Ease.OutBounce));
         seq.InsertCallback(0.2f, () =>
         {
@@ -70,13 +70,13 @@ public class DamageText : MonoBehaviour
         {
             scale = Vector3.one * 1.4f;
         }
-        else if (damage < 1000f)
+        else if (damage < 500f)
         {
             scale = Vector3.one * 2f;
         }
         else
         {
-            scale = Vector3.one * 5f;
+            scale = Vector3.one * 3f;
         }
 
         return scale;
@@ -94,7 +94,7 @@ public class DamageText : MonoBehaviour
         {
             returnColor = _simpleColor;
         }
-        else if(damage < 1000f)
+        else if(damage < 500f)
         {
             returnColor = _powerfulColor;
         }
