@@ -99,6 +99,7 @@ public class SkillContainer : MonoBehaviour
             if (weaponList[j] != null && weaponList[j].skillList[i] != null)
             {
 
+                EventTriggerManager.Instance.SkillExecute();
                 return weaponList[j].skillList[i];
 
             }
