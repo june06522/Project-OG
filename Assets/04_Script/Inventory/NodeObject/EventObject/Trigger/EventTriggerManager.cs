@@ -71,42 +71,33 @@ public class EventTriggerManager : MonoBehaviour
         PlayerController.EventController.OnDashExecute();
     }
 
-    //----------------------------------------------
-
     public void HitExecute()
     {
-        EventTriggerManager.Instance.HitExecute();
         PlayerController.EventController.OnHitExecute();
     }
 
     public void RoomEnterExecute()
     {
-        EventTriggerManager.Instance.RoomEnterExecute();
         PlayerController.EventController.OnRoomEnterExecute();
     }
 
     public void StageClearExecute()
     {
-        EventTriggerManager.Instance.StageClearExecute();
         PlayerController.EventController.OnStageClearExecute();
     }
 
     public void WaveStartExecute()
     {
-        EventTriggerManager.Instance.WaveStartExecute();
         PlayerController.EventController.OnWaveStartExecute();
     }
 
     public void SkillExecute()
     {
-
-        EventTriggerManager.Instance.SkillExecute();
         PlayerController.EventController.OnSkillxecute();
     }
 
     public void EnemyDieExecute()
     {
-        EventTriggerManager.Instance.EnemyDieExecute();
         PlayerController.EventController.OnEnemyDieExecute();
     }
     #endregion

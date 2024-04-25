@@ -108,6 +108,8 @@ public class StageGate : MonoBehaviour, IInteractable
         stageTransition.EndTransition();
         yield return new WaitForSeconds(1f);
 
+        EventTriggerManager.Instance.RoomEnterExecute();
+        
         if (NextStage != null)
         {
             NextStage?.StartWave();
