@@ -18,10 +18,12 @@ public class WeaponDataSO : ScriptableObject
     private Weapon owner;
 
     public bool isAttackCoolDown { get; protected set; }
+    public bool isSkillAttack = false;
 
     public void Init(Weapon owner)
     {
 
+        isSkillAttack = false;
         this.owner = owner;
 
     }
@@ -37,8 +39,6 @@ public class WeaponDataSO : ScriptableObject
     {
 
         isAttackCoolDown = true;
-        Debug.Log(CoolDown);
-        Debug.Log(AttackCoolDown.GetValue() / (1f + CoolDown / 100f));
         yield return new WaitForSeconds(AttackCoolDown.GetValue() /(1f + CoolDown / 100f));
 
         isAttackCoolDown = false;

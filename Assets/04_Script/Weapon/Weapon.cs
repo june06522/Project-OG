@@ -33,10 +33,10 @@ public abstract class Weapon : MonoBehaviour
 
         RotateWeapon(target);
 
-        if (!Data.isAttackCoolDown && target != null)
+        if ((!Data.isAttackCoolDown || Data.isSkillAttack) && target != null)
         {
-
-            Data.SetCoolDown();
+            if(!Data.isAttackCoolDown)
+                Data.SetCoolDown();
 
             EventTriggerManager.Instance.BasicAttackExecute();
 
