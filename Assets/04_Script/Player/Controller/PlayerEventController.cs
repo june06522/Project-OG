@@ -17,6 +17,7 @@ public class PlayerEventController : IDisposable
     public event Action OnWaveStart;    // 웨이브 시작시
     public event Action OnSkill;        // 스킬 발동 시
     public event Action OnEnemyDie;     // 적 처치시
+    public event Action OnAlways;       // 항상
     #endregion
 
     #region 함수 호출
@@ -31,6 +32,7 @@ public class PlayerEventController : IDisposable
     public void OnWaveStartExecute()    => OnWaveStart?.Invoke();
     public void OnSkillxecute()         => OnSkill?.Invoke();
     public void OnEnemyDieExecute()     => OnEnemyDie?.Invoke();
+    public void OnAlwaysExecute()       => OnAlways?.Invoke();
     #endregion
 
     #region 디스포즈
@@ -48,6 +50,7 @@ public class PlayerEventController : IDisposable
         OnWaveStart = null;
         OnSkill = null;
         OnEnemyDie = null;
+        OnAlways = null;
     }
     #endregion
 }
