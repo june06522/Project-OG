@@ -43,7 +43,7 @@ public class WeaponExplainManager : MonoBehaviour
         triggerExplain.Add(GeneratorID.OverLoad,        TriggerID.Dash);
         triggerExplain.Add(GeneratorID.Reboot,          TriggerID.Dash);
         triggerExplain.Add(GeneratorID.RotateWeapon,    TriggerID.Move);
-        triggerExplain.Add(GeneratorID.SequenceAttack,  TriggerID.Dash); // 얜 미정
+        triggerExplain.Add(GeneratorID.SequenceAttack,  TriggerID.CoolTime); // 얜 미정
         triggerExplain.Add(GeneratorID.SiegeMode,       TriggerID.Idle);
         triggerExplain.Add(GeneratorID.Trinity,         TriggerID.NormalAttack);
         triggerExplain.Add(GeneratorID.WeaponShot,      TriggerID.CoolTime);
