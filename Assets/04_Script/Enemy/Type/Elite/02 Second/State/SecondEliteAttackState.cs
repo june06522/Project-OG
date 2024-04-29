@@ -53,6 +53,9 @@ public class SecondEliteAttackState : FSM_State<ENormalPatrolEnemyState>
 
         Vector3 bulletOriginSize = bullet.transform.localScale;
 
+        _controller.EnemyDataSO.SetCoolDown();
+        _controller.ChangeState(ENormalPatrolEnemyState.Idle);
+
         yield return new WaitForSeconds(waitTime);
 
         if(bullet != null)
@@ -72,9 +75,6 @@ public class SecondEliteAttackState : FSM_State<ENormalPatrolEnemyState>
                 bulletsRigid.velocity = temp.normalized * speed * 2;
             }
         }
-
-        _controller.EnemyDataSO.SetCoolDown();
-        _controller.ChangeState(ENormalPatrolEnemyState.Idle);
 
         yield return null;
     }

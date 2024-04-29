@@ -5,6 +5,12 @@ public enum ENormalEnemyState
     Attack
 }
 
+public enum ESixthEliteEnemyState
+{
+    Idle = 0,
+    Attack = 1
+}
+
 public enum ENormalPatrolEnemyState
 {
     Idle = 0,

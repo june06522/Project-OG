@@ -16,17 +16,12 @@ public class AltarBoss : Boss
     public AudioClip dashClip;
     public AudioClip unChainClip;
 
-    public Material basicMat;
-    public Material dyingMat;
-    public Material deadMat;
-    public Material enchantedMat;
-    public Material glitchMat;
-
     public Sprite bigTriangleSprite;
 
     public bool isTied;
     public bool isOneBroken;
     public bool isDashing;
+    public bool isIdleEnded;
 
     public Vector3 originPos;
 
@@ -65,14 +60,13 @@ public class AltarBoss : Boss
         isTied = true;
         isOneBroken = false;
         isDashing = false;
+        isIdleEnded = false;
         originPos = transform.position;
 
         ChainSetting();
 
         _curBossState = BossState.Idle;
-        _bossFSM = new BossFSM(new BossIdleState(this, _pattern));
-
-        ChangeBossState(BossState.Tied);
+        _bossFSM = new BossFSM(new AIdleState(this, _pattern));
 
         StartCoroutine(ShortenChain());
     }
@@ -86,21 +80,29 @@ public class AltarBoss : Boss
     {
         base.Update();
 
-        if(!isDead)
+        if (isIdleEnded)
         {
-            ChangeState();
+            ChangeBossState(BossState.Tied);
         }
 
-        if (!IsDie)
+        if(_curBossState != BossState.Idle)
         {
-            if (_restraintIndex < _restrainCount)
+            if (!isDead)
             {
-                TimeChecker(Time.deltaTime * (_restraintIndex + 1));
+                ChangeState();
             }
 
-            ChainsFollowBoss();
+            if (!IsDie)
+            {
+                if (_restraintIndex < _restrainCount)
+                {
+                    TimeChecker(Time.deltaTime * (_restraintIndex + 1));
+                }
 
-            _bossFSM.UpdateBossState();
+                ChainsFollowBoss();
+
+                _bossFSM.UpdateBossState();
+            }
         }
     }
 
@@ -229,7 +231,8 @@ public class AltarBoss : Boss
         switch (_curBossState)
         {
             case BossState.Idle:
-                _bossFSM.ChangeBossState(new BossIdleState(this, _pattern));
+                Debug.Log(_bossFSM);
+                _bossFSM.ChangeBossState(new AIdleState(this, _pattern));
                 break;
             case BossState.Tied:
                 _bossFSM.ChangeBossState(new ATiedState(this, _pattern));

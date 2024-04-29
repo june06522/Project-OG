@@ -75,7 +75,6 @@ public class ABossDeadState : BossBaseState
         }
         while(_make)
         {
-            // 랜덤 위치 문제?
             float randX = Random.Range(minX, maxX);
             float randY = Random.Range(minY, maxY);
 

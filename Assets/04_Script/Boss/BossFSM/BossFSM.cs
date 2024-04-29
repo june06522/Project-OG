@@ -9,6 +9,7 @@ public class BossFSM
     public BossFSM(BossBaseState initBossState)
     {
         _curBossState = initBossState;
+        Debug.Log(_curBossState);
         ChangeBossState(_curBossState);
     }
 
