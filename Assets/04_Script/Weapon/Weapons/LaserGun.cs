@@ -79,7 +79,11 @@ public class LaserGun : InvenWeapon
     protected override void RotateWeapon(Transform target)
     {
 
-        if (target == null) return;
+        if (target == null)
+        {
+            transform.rotation = Quaternion.identity;
+            return;
+        }
 
         var dir = target.position - transform.position;
         dir.Normalize();
