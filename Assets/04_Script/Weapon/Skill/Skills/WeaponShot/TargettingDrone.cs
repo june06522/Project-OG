@@ -8,7 +8,7 @@ public class TargettingDrone : Skill
     [SerializeField] FollowDrone dronePrefab;
 
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
 
         if (target == null) return;

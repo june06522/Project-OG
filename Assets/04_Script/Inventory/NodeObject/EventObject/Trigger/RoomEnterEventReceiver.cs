@@ -28,7 +28,7 @@ public class RoomEnterEventReceiver : InventoryEventReceiverBase
     private void HandleRoomEnter()
     {
 
-        SendData s = new SendData(generatorID);
+        SendData s = new SendData(generatorID, transform);
 
         GetSignal(s);
 

@@ -4,16 +4,18 @@ using UnityEngine;
 
 public class TrinitySkill : Skill
 {
+    TrinityObject obj;
+
     Dictionary<Weapon, int> damageDic = new();
     bool isOn = false;
     Coroutine co = null;
     float _defaultVal = 40f;
     float _plusVal = 10f;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
         Weapon weapon = weaponTrm.GetComponent<Weapon>();
-        
+
 
         if (damageDic.ContainsKey(weapon))
         {
@@ -53,6 +55,7 @@ public class TrinitySkill : Skill
     private float GetDamage(Weapon weapon,int power)
     {
         float originDamage = weapon.Data.AttackDamage.GetValue();
+        
         return originDamage * ((_defaultVal + _plusVal * power) / 100);
     }
 }

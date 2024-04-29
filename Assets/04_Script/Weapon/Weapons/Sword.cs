@@ -41,7 +41,6 @@ public class Sword : InvenWeapon
     {
         
         var data = (SendData)signal;
-
         if (!sendDataList.ContainsKey(data.index))
         {
             sendDataList.Add(data.index, data);

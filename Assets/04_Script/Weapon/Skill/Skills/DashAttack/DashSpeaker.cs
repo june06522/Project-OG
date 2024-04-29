@@ -6,7 +6,7 @@ public class DashSpeaker : Skill
 {
 
     [SerializeField] SpeakerAttack effect;
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
 
         var obj = Instantiate(effect, weaponTrm.position, Quaternion.identity);

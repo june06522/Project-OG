@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SequenceAttackSkill : Skill
 {
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
         Weapon weapon = weaponTrm.GetComponent<Weapon>();
 

@@ -40,7 +40,7 @@ public class SkillEventReceiver : InventoryEventReceiverBase
     private void HandleSkill()
     {
 
-        SendData s = new SendData(generatorID);
+        SendData s = new SendData(generatorID, transform);
 
         GetSignal(s);
 

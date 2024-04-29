@@ -29,7 +29,7 @@ public class BasicAttackEventReceiver : InventoryEventReceiverBase
     private void HandleBasicAttack()
     {
 
-        SendData s = new SendData(generatorID);
+        SendData s = new SendData(generatorID, transform);
 
         GetSignal(s);
 

@@ -9,7 +9,7 @@ public class SiegeModeSkill : Skill
     Coroutine co = null;
     float coolDownVal = 20f;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
         Weapon weapon = weaponTrm.GetComponent<Weapon>();
 

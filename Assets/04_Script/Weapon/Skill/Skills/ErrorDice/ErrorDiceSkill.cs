@@ -19,7 +19,7 @@ public class ErrorDiceSkill : Skill
         curtime += Time.deltaTime;
     }
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
         Skill s = null;
         int i = 0, j = 0;

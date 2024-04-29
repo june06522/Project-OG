@@ -29,7 +29,7 @@ public class HitEventReceiver : InventoryEventReceiverBase
     private void HandleHit()
     {
 
-        SendData s = new SendData(generatorID);
+        SendData s = new SendData(generatorID,transform);
 
         GetSignal(s);
 

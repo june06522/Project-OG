@@ -28,7 +28,7 @@ public class AlwaysEventReceiver : InventoryEventReceiverBase
     private void HandleDash()
     {
 
-        SendData s = new SendData(generatorID);
+        SendData s = new SendData(generatorID, transform);
 
         GetSignal(s);
 

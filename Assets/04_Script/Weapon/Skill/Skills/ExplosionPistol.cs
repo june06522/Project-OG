@@ -6,7 +6,7 @@ public class ExplosionPistol : Skill
 {
     [SerializeField] private ExplosionBullet explosionBlt;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
         if (target == null) return;
 

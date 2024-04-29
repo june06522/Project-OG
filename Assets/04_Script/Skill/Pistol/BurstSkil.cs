@@ -62,7 +62,7 @@ public class BurstSkil : Skill
             _powerDictionary = new Dictionary<Transform, BurstMember>();
     }
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
         _powerDictionary[weaponTrm] = CurPowerInit(power);
 
