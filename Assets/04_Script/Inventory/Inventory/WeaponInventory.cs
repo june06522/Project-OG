@@ -302,7 +302,7 @@ public class WeaponInventory : MonoBehaviour
         invenslots.Add(new SlotData(point));
     }
 
-    public void ExcuteSlotEvent(Vector2Int pos) => OnSlotAddEvent?.Invoke(pos);
+    //public void ExcuteSlotEvent(Vector2Int pos) => OnSlotAddEvent?.Invoke(pos);
 
     public int GetInvenSize() => Mathf.Max(Width, Height);
 

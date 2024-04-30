@@ -8,8 +8,10 @@ public class InventorySlotCenter : MonoBehaviour
 
     RectTransform rect;
 
-    private int width = 0;
-    private int height = 0;
+    [HideInInspector]
+    public int width = 0;
+    [HideInInspector]
+    public int height = 0;
 
     private void Awake()
     {
