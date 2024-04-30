@@ -126,6 +126,8 @@ public class Stage : MonoBehaviour
     [SerializeField]
     private List<IStageObject> stageObjectList = new List<IStageObject>();
 
+
+    // 장애물 있는 스테이지에 컴포넌트 달아줘야 함. 
     // GridInfo
     private JPSGridInfoFaster m_jpsGridInfoFaster;
     public JPSGridInfoFaster GridInfo => m_jpsGridInfoFaster;
