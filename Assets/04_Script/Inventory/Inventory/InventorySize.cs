@@ -62,7 +62,7 @@ public class InventorySize : MonoBehaviour
         }
     }
 
-    private int GetSize()
+    public int GetSize()
     {
         return GameManager.Instance.Inventory.GetInvenSize();// + (ExpansionManager.Instance.leftCnt > 0 ? 2 : 0);
     }

@@ -15,25 +15,52 @@ public class ShopInventory : MonoBehaviour
 
     private WeaponInventory inventory;
 
-    private void Start()
+    List<InvenSlot> slots = new();
+
+    private void OnEnable()
     {
-        inventory = GameManager.Instance.Inventory;
-        for (int i = 0; i < inventory.Width; i++)
-        {
-            for (int j = 0; j < inventory.Height; j++)
-            {
-                Vector2Int point = new Vector2Int(i, j);
-                var pos = (tile.position + (Vector3)((Vector2)point * 100 * transform.localScale.x)) - (new Vector3(inventory.Width, inventory.Height) * 100 * transform.localScale.x / 2);
-
-                var slot = Instantiate(slotPrefab, Vector2.zero, Quaternion.identity, tile);
-                slot.invenPoint = point;
-                slot.transform.position = pos + new Vector3(50 * transform.localScale.x, 50 * transform.localScale.x);
-            }
-        }
-
+        CreateSlot();
     }
 
     void Update()
+    {
+        CreateImage();
+        SetPos();
+        SetScale();
+        DrawLineRender();
+    }
+
+    private void OnDisable()
+    {
+        DestroySlot();
+    }
+
+    void CreateSlot()
+    {
+        inventory = GameManager.Instance.Inventory;
+
+        foreach (var v in inventory.GetSlot())
+        {
+            Vector2Int point = v.point;
+            var pos = (tile.position + (Vector3)((Vector2)point * 100 * transform.localScale.x)) - (new Vector3(inventory.Width, inventory.Height) * 100 * transform.localScale.x / 2);
+
+            var slot = Instantiate(slotPrefab, Vector2.zero, Quaternion.identity, tile);
+            slot.invenPoint = point;
+            slot.transform.position = pos + new Vector3(50 * transform.localScale.x, 50 * transform.localScale.x);
+            slots.Add(slot);
+        }
+    }
+
+    void DestroySlot()
+    {
+        foreach (var v in slots)
+        {
+            Destroy(v.gameObject);
+        }
+        slots.Clear();
+    }
+
+    void CreateImage()
     {
         for (int i = block.childCount - 1; i >= 0; i--)
         {
@@ -50,5 +77,33 @@ public class ShopInventory : MonoBehaviour
             blockTile.GetComponent<RectTransform>().sizeDelta = v.rect.size;
             blockTile.transform.localPosition = v.transform.localPosition;
         }
+    }
+
+    void SetScale()
+    {
+        float x = GameManager.Instance.Inventory.GetInvenSize();
+        x = Mathf.Min(x, 12) + 2;
+
+        float size;
+
+        if (x == 7)
+            size = 1f;
+        else if (x < 7)
+            size = 1 + ((7 - x) / x);
+        else
+            size = 1 - ((x - 7) / x);
+
+
+        //tile.localScale = new Vector3(size, size, 1);
+    }
+
+    void SetPos()
+    {
+
+    }
+
+    void DrawLineRender()
+    {
+
     }
 }
