@@ -8,7 +8,6 @@ public class AnchorSpeaker : MonoBehaviour
     [SerializeField] SpeakerAttack attack;
 
     [ContextMenu("T")]
-
     public IEnumerator Attack(int cnt)
     {
         YieldInstruction one = new WaitForSeconds(1f);

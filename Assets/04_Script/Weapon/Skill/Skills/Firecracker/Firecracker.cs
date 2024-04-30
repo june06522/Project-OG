@@ -39,8 +39,17 @@ public class Firecracker : Skill
 
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
+
+        StartCoroutine(ExcuteCo(weaponTrm, target, power));
+        
+    }
+
+    IEnumerator ExcuteCo(Transform weaponTrm, Transform target, int power)
+    {
         int num = Random.Range(0, 101);
         Debug.Log($"num:{num}");
+
+        yield return new WaitForSeconds(1f);
 
         if (num < 10) // ¾ÆÀÌÅÛ µå¶ø
         {
@@ -63,16 +72,21 @@ public class Firecracker : Skill
             int healHealth = Random.Range(1, power * 8 + 1);
             _playerHP.RestoreHP(healHealth);
 
-            _notice.color = Color.green;
-            _notice.text = healHealth.ToString();
+            var text = Instantiate(_notice, weaponTrm.position, Quaternion.identity);
+            text.color = Color.green;
+            text.text = healHealth.ToString();
             Sequence seq = DOTween.Sequence();
 
-            _notice.transform.position = weaponTrm.transform.position;
-            Transform healTextTrm = _notice.transform;
-            seq.Append(healTextTrm.DOMoveY(healTextTrm.position.y + 0.2f, 0.25f).SetEase(Ease.InOutElastic));
-            seq.Join(healTextTrm.DOScale(Vector3.one * 1.8f, 0.2f).SetEase(Ease.OutBounce));
-            seq.Append(healTextTrm.DOScale(new Vector3(0.6f, 1.75f), 0.1f).SetEase(Ease.InOutBounce));
-            seq.Append(healTextTrm.DOScale(Vector3.one, 0.1f).SetEase(Ease.OutBounce));
+            text.transform.position = weaponTrm.transform.position;
+            Transform textTrm = text.transform;
+            seq.Append(textTrm.DOMoveY(textTrm.position.y + 0.2f, 0.25f).SetEase(Ease.InOutElastic));
+            seq.Join(textTrm.DOScale(Vector3.one * 1.8f, 0.2f).SetEase(Ease.OutBounce));
+            seq.Append(textTrm.DOScale(new Vector3(0.6f, 1.75f), 0.1f).SetEase(Ease.InOutBounce));
+            seq.Append(textTrm.DOScale(Vector3.one, 0.1f).SetEase(Ease.OutBounce));
+            seq.AppendCallback(() =>
+            {
+                Destroy(text);
+            });
 
         }
         else if (num < 95) // µ·
@@ -82,17 +96,21 @@ public class Firecracker : Skill
             int amount = Random.Range(1, power * 20 + 1);
             Money.Instance.EarnGold(amount);
 
-            _notice.color = Color.yellow;
-            _notice.text = amount.ToString();
+            var text = Instantiate(_notice, weaponTrm.position, Quaternion.identity);
+            text.color = Color.yellow;
+            text.text = amount.ToString();
             Sequence seq = DOTween.Sequence();
 
-            _notice.transform.position = weaponTrm.transform.position;
-            Transform healTextTrm = _notice.transform;
-            seq.Append(healTextTrm.DOMoveY(healTextTrm.position.y + 0.2f, 0.25f).SetEase(Ease.InOutElastic));
-            seq.Join(healTextTrm.DOScale(Vector3.one * 1.8f, 0.2f).SetEase(Ease.OutBounce));
-            seq.Append(healTextTrm.DOScale(new Vector3(0.6f, 1.75f), 0.1f).SetEase(Ease.InOutBounce));
-            seq.Append(healTextTrm.DOScale(Vector3.one, 0.1f).SetEase(Ease.OutBounce));
-            seq.Append(_notice.DOText("", 0f));
+            text.transform.position = weaponTrm.transform.position;
+            Transform textTrm = text.transform;
+            seq.Append(textTrm.DOMoveY(textTrm.position.y + 0.2f, 0.25f).SetEase(Ease.InOutElastic));
+            seq.Join(textTrm.DOScale(Vector3.one * 1.8f, 0.2f).SetEase(Ease.OutBounce));
+            seq.Append(textTrm.DOScale(new Vector3(0.6f, 1.75f), 0.1f).SetEase(Ease.InOutBounce));
+            seq.Append(textTrm.DOScale(Vector3.one, 0.1f).SetEase(Ease.OutBounce));
+            seq.AppendCallback(() =>
+            {
+                Destroy(text);
+            });
 
         }
         else
@@ -101,8 +119,8 @@ public class Firecracker : Skill
             Debug.Log("²Î");
 
         }
-
     }
+
     private ItemInfoSO RandomItem()
     {
         float percent = Random.Range(0f, 100f); // 0 ~ 100
