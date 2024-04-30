@@ -54,6 +54,7 @@ public class InventoryActive : MonoBehaviour
                 (Input.GetKeyDown(KeyCode.Escape) && isOn)) && isAnimation)
             {
                 isAnimation = false;
+                StartCoroutine(ShowLineRender());
                 isOn = !isOn;
                 if (isOn)
                     ShowInven();
@@ -99,5 +100,15 @@ public class InventoryActive : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         isAnimation = true;
+    }
+
+    IEnumerator ShowLineRender()
+    {
+        ConnectVisible cv = FindObjectOfType<ConnectVisible>();
+        while (!isAnimation)
+        {
+            cv.VisibleLine();
+            yield return null;
+        }
     }
 }

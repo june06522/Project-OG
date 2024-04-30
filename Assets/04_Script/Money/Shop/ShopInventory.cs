@@ -8,6 +8,7 @@ public class ShopInventory : MonoBehaviour
 {
     [SerializeField] private Transform tile;
     [SerializeField] private Transform block;
+    [SerializeField] private Transform lineRender;
 
     [Header("Prefab")]
     [SerializeField] private InvenSlot slotPrefab;
@@ -28,7 +29,7 @@ public class ShopInventory : MonoBehaviour
         CreateImage();
         SetScale();
         SetPos();
-        DrawLineRender();
+        //DrawLineRender();
     }
 
     private void OnDisable()
@@ -112,6 +113,21 @@ public class ShopInventory : MonoBehaviour
 
     void DrawLineRender()
     {
+        if(lineRender != null)
+        {
+            for (int i = lineRender.childCount - 1; i >= 0; i--)
+            {
+                Destroy(lineRender.GetChild(i).gameObject);
+            }
 
+            LineRenderer[] obj = GameManager.Instance.Inventory.viewer.parent.parent.GetComponentsInChildren<LineRenderer>();
+
+            foreach (var v in obj)
+            {
+                if (v.positionCount <= 1) continue;
+                LineRenderer line = Instantiate(v,lineRender);
+                line = v;
+            }
+        }
     }
 }
