@@ -51,6 +51,7 @@ public enum TriggerID
     CoolTime,       // 쿨타임
     Move,           // 이동
     Idle,           // 가만히
+    RoomClear,      // 방 클리어
 }
 
 
