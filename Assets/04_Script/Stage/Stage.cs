@@ -1,4 +1,5 @@
 using Cinemachine;
+using DSNavigation;
 using FD.Dev;
 using System;
 using System.Collections;
@@ -124,6 +125,15 @@ public class Stage : MonoBehaviour
     [Header("Object Info")]
     [SerializeField]
     private List<IStageObject> stageObjectList = new List<IStageObject>();
+
+    // GridInfo
+    private JPSGridInfoFaster m_jpsGridInfoFaster;
+    public JPSGridInfoFaster GridInfo => m_jpsGridInfoFaster;
+    
+    private void Awake()
+    {
+        m_jpsGridInfoFaster = GetComponent<JPSGridInfoFaster>();
+    }
 
     public void AddNextStage(Stage stage)
     {

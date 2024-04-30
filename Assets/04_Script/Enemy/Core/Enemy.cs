@@ -1,3 +1,4 @@
+using DSNavigation;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -42,10 +43,16 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
     public Collider2D Collider => collider;
     public Rigidbody2D Rigidbody => rigidbody;
 
+    private SpriteRenderer spriteRender;
+
+    //PathFinding
+    private JPSPathFinderFaster m_jpsPathFinderFaster;
+    public JPSPathFinderFaster GetPathFinder => m_jpsPathFinderFaster;
+
+    //Debuff
     public EDebuffType DebuffType { get; set; }
     public float DebuffCoolTime { get; set; }
 
-    private SpriteRenderer spriteRender;
 
     public Color frozenColor = new Color(0.7584906f, 0.9797822f, 1, 1);
 
@@ -57,6 +64,8 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
         rigidbody = GetComponent<Rigidbody2D>();
 
         spriteRender = _visualTrm.GetComponent<SpriteRenderer>();
+
+        m_jpsPathFinderFaster = GetComponent<JPSPathFinderFaster>();
     }
 
     private void Start()
