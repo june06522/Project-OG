@@ -39,6 +39,7 @@ public class Firecracker : Skill
 
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
+        Debug.Log(1);
         int num = Random.Range(0, 101);
 
         if (num < 10) // 아이템 드랍

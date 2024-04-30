@@ -16,6 +16,7 @@ public class WeaponExplainManager : MonoBehaviour
         weaponExplain.Add(GeneratorID.DeathRay,         "죽음의 광선"); // 마관광살포
         weaponExplain.Add(GeneratorID.Electronic,       "일렉 뚜리뚜리"); // 전기 지짐이
         weaponExplain.Add(GeneratorID.ErrorDice,        "@#!%&($@1@$q!!"); // 에러다이스
+        weaponExplain.Add(GeneratorID.Firecracker,      "축포를 터트린다"); // 축포
         weaponExplain.Add(GeneratorID.Force,            "쾅"); // 포쓰
         weaponExplain.Add(GeneratorID.HeartBeat,        "쿵"); // 하트비트
         weaponExplain.Add(GeneratorID.LaserPointer,     "전방에 레이저를 발사 합니다."); // 레이저 포인터
@@ -30,12 +31,13 @@ public class WeaponExplainManager : MonoBehaviour
         #endregion
 
         #region 트리거 설명
-        triggerExplain.Add(GeneratorID.None,      TriggerID.None);
+        triggerExplain.Add(GeneratorID.None,            TriggerID.None);
         
         triggerExplain.Add(GeneratorID.DashAttack,      TriggerID.Dash);
         triggerExplain.Add(GeneratorID.DeathRay,        TriggerID.NormalAttack);
         triggerExplain.Add(GeneratorID.Electronic,      TriggerID.Dash);
         triggerExplain.Add(GeneratorID.ErrorDice,       TriggerID.CoolTime);
+        triggerExplain.Add(GeneratorID.Firecracker,     TriggerID.RoomClear);
         triggerExplain.Add(GeneratorID.Force,           TriggerID.NormalAttack);
         triggerExplain.Add(GeneratorID.HeartBeat,       TriggerID.Dash);
         triggerExplain.Add(GeneratorID.LaserPointer,    TriggerID.Move);
