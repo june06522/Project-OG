@@ -17,7 +17,8 @@ public class AnchorSpeaker : MonoBehaviour
 
             yield return one;
 
-            Instantiate(attack, transform.position, Quaternion.identity);
+            var obj = Instantiate(attack, transform.position, Quaternion.identity);
+            obj.SetDamage(cnt);
 
         }
 

@@ -55,6 +55,7 @@ public class Drone : InvenWeapon
         if (target == null)
         {
             transform.rotation = Quaternion.identity;
+            _spriteRenderer.flipY = false;
             return;
         }
 

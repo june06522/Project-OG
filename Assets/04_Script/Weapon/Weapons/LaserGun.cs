@@ -82,6 +82,7 @@ public class LaserGun : InvenWeapon
         if (target == null)
         {
             transform.rotation = Quaternion.identity;
+            _spriteRenderer.flipY = false;
             return;
         }
 

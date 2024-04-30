@@ -13,9 +13,9 @@ public class Firecracker : Skill
 
     [Space]
     [SerializeField] private ItemInfoListSO _itemList;
+    [SerializeField] private TMP_Text _notice;
 
     private Dictionary<ItemRate, List<ItemInfoSO>> _rateItems = new Dictionary<ItemRate, List<ItemInfoSO>>();
-    private TMP_Text _notice;
 
     private void OnEnable()
     {
@@ -39,8 +39,8 @@ public class Firecracker : Skill
 
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
-        Debug.Log(1);
         int num = Random.Range(0, 101);
+        Debug.Log($"num:{num}");
 
         if (num < 10) // 아이템 드랍
         {
@@ -63,10 +63,11 @@ public class Firecracker : Skill
             int healHealth = Random.Range(1, power * 8 + 1);
             _playerHP.RestoreHP(healHealth);
 
+            _notice.color = Color.green;
             _notice.text = healHealth.ToString();
             Sequence seq = DOTween.Sequence();
 
-            _notice.transform.position = _playerHP.transform.position;
+            _notice.transform.position = weaponTrm.transform.position;
             Transform healTextTrm = _notice.transform;
             seq.Append(healTextTrm.DOMoveY(healTextTrm.position.y + 0.2f, 0.25f).SetEase(Ease.InOutElastic));
             seq.Join(healTextTrm.DOScale(Vector3.one * 1.8f, 0.2f).SetEase(Ease.OutBounce));
@@ -81,6 +82,7 @@ public class Firecracker : Skill
             int amount = Random.Range(1, power * 20 + 1);
             Money.Instance.EarnGold(amount);
 
+            _notice.color = Color.yellow;
             _notice.text = amount.ToString();
             Sequence seq = DOTween.Sequence();
 
@@ -90,6 +92,7 @@ public class Firecracker : Skill
             seq.Join(healTextTrm.DOScale(Vector3.one * 1.8f, 0.2f).SetEase(Ease.OutBounce));
             seq.Append(healTextTrm.DOScale(new Vector3(0.6f, 1.75f), 0.1f).SetEase(Ease.InOutBounce));
             seq.Append(healTextTrm.DOScale(Vector3.one, 0.1f).SetEase(Ease.OutBounce));
+            seq.Append(_notice.DOText("", 0f));
 
         }
         else
