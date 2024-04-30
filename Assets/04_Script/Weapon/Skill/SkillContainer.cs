@@ -29,6 +29,7 @@ public enum GeneratorID
     DeathRay,       // 광선                  기본 공격
     Electronic,     // 전기                  대쉬
     ErrorDice,      // 랜덤 스킬              쿨타임 (10초)
+    Firecracker,    // 폭죽                   방클
     Force,          // 범위 및 파워 증가       기본 공격
     HeartBeat,      // 슬로우                 대쉬
     LaserPointer,   // 레이저 발사             이동
