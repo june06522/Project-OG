@@ -39,8 +39,9 @@ public enum GeneratorID
     RotateWeapon,   // 무기 회전              이동
     SequenceAttack, // 연속 공격              대쉬 or 쿨타임
     SiegeMode,      // 공속 증가              가만히 있을 시(1초)
-    Trinity,        // 대미지 증가             기본 공격
+    Trinity,        // 대미지 증가            기본 공격
     WeaponShot,     // 무기 발사              쿨타임(5초)
+    Magnetic,       // 자기장                 기본 공격 시
 }
 
 public enum TriggerID
