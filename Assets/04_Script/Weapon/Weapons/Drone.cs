@@ -37,7 +37,7 @@ public class Drone : InvenWeapon
     {
 
         var blt = Instantiate(bullet, shootPos.position, transform.rotation);
-        blt.Shoot(bullet.Data.Damage);
+        blt.Shoot(Data.GetDamage());
 
         if (_attackSoundClip != null)
         {
