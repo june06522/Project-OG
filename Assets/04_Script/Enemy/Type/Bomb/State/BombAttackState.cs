@@ -18,23 +18,23 @@ public class BombAttackState : NormalRootState
     {
         controller.InstantiateRange();
         controller.StopImmediately();
-        float randomTime = 0.5f;
+        float randomTime = 0.8f;
         Attack(randomTime);
     }
 
-    private void Attack(float randomTime)
+    private void Attack(float time)
     {
         DG.Tweening.Sequence seq = DOTween.Sequence();
 
         Tween shakeTween =
-            controller.transform.DOShakeScale(randomTime + 0.1f, strength:0.4f, vibrato:20, randomness: 40, false, ShakeRandomnessMode.Harmonic);
+            controller.transform.DOShakeScale(time + 0.1f, strength:0.4f, vibrato:20, randomness: 40, false, ShakeRandomnessMode.Harmonic);
         Color startColor = Color.white;
         Color endColor = Color.red;
 
         Tween twinkleTween = 
-            DOTween.To(() => startColor, cur => controller.ChangeColor(cur, false), endColor, randomTime / 4).SetLoops(4, LoopType.Yoyo).SetEase(Ease.InOutCirc) ;
+            DOTween.To(() => startColor, cur => controller.ChangeColor(cur, false), endColor, time / 4).SetLoops(4, LoopType.Yoyo).SetEase(Ease.InOutCirc) ;
         Tween bombTween =
-            controller.transform.DOMoveY(transform.position.y + 1f, 0.5f);
+            controller.transform.DOMoveY(transform.position.y + 1f, time);
 
         seq.Append(shakeTween);
         seq.Insert(0, twinkleTween);
