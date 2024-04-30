@@ -19,14 +19,15 @@ public class ShopInventory : MonoBehaviour
 
     private void OnEnable()
     {
+        ReSetScale();
         CreateSlot();
     }
 
     void Update()
     {
         CreateImage();
-        SetPos();
         SetScale();
+        SetPos();
         DrawLineRender();
     }
 
@@ -46,7 +47,7 @@ public class ShopInventory : MonoBehaviour
 
             var slot = Instantiate(slotPrefab, Vector2.zero, Quaternion.identity, tile);
             slot.invenPoint = point;
-            slot.transform.position = pos + new Vector3(50 * transform.localScale.x, 50 * transform.localScale.x);
+            slot.transform.position = pos + new Vector3(50 * transform.localScale.x, 50 * transform.localScale.y);
             slots.Add(slot);
         }
     }
@@ -67,7 +68,7 @@ public class ShopInventory : MonoBehaviour
             Destroy(block.GetChild(i).gameObject);
         }
 
-        RectTransform[] obj = GameManager.Instance.Inventory.viewer.parent.GetComponentsInChildren<RectTransform>();
+        RectTransform[] obj = GameManager.Instance.Inventory.viewer.parent.parent.GetComponentsInChildren<RectTransform>();
 
         foreach (var v in obj)
         {
@@ -82,7 +83,7 @@ public class ShopInventory : MonoBehaviour
     void SetScale()
     {
         float x = GameManager.Instance.Inventory.GetInvenSize();
-        x = Mathf.Min(x, 12) + 2;
+        x = Mathf.Min(x, 12);
 
         float size;
 
@@ -94,12 +95,19 @@ public class ShopInventory : MonoBehaviour
             size = 1 - ((x - 7) / x);
 
 
-        //tile.localScale = new Vector3(size, size, 1);
+        tile.localScale = new Vector3(size, size, 1);
+        block.localScale = new Vector3(size, size, 1);
+    }
+
+    void ReSetScale()
+    {
+        tile.localScale = new Vector3(1, 1, 1);
     }
 
     void SetPos()
     {
-
+        block.localPosition = new Vector3(InventorySlotCenter.Instance.width * (50 * tile.localScale.x), InventorySlotCenter.Instance.height * (50 * tile.localScale.y));
+        tile.localPosition = new Vector3(0, InventorySlotCenter.Instance.height * (100 * tile.localScale.y));
     }
 
     void DrawLineRender()
