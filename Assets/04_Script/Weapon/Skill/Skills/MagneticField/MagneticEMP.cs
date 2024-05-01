@@ -7,8 +7,7 @@ public class MagneticEMP : Skill
     [SerializeField] MagneticObject prefab;
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
-        // 1.3f
-        Debug.Log(2);
+
         StartCoroutine(Generate(target, power));
 
     }
