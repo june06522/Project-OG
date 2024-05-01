@@ -52,6 +52,7 @@ public class FeedbackPlayerEditor : Editor
             AddFeedbackButton<CameraShakeFeedback>("CameraShake");
             AddFeedbackButton<OverdamageShockwaveFeedback>("OverdamageShockwave");
             AddFeedbackButton<ChromaticFeedback>("Chromatic");
+            AddFeedbackButton<SetActiveFeedback>("SetActive");
 
         }
 
