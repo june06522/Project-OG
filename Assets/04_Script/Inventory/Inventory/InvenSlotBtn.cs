@@ -18,7 +18,7 @@ public class InvenSlotBtn : MonoBehaviour
         if (GameManager.Instance.Inventory.IsNewHeight(pos.x))
             GameManager.Instance.Inventory.AddWidth();
 
-        GameManager.Instance.Inventory.ExcuteSlotEvent(pos);
+        //GameManager.Instance.Inventory.ExcuteSlotEvent(pos);
         GameManager.Instance.Inventory.AddSlot(pos);
         ExpansionManager.Instance.UseSlot();
         if (_clickSound != null)

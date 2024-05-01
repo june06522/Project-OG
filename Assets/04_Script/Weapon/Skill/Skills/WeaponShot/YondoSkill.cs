@@ -29,7 +29,7 @@ public class YondoSkill : Skill
         //}
     }
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
         CurPowerInit(power);
         if(Physics2D.OverlapCircle(weaponTrm.parent.position, radius, layerMask))

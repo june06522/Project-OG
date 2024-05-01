@@ -8,7 +8,7 @@ public class DashLaser : Skill
 
     [SerializeField] LaserGunLine gunLine;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
 
         var obj = Instantiate(gunLine, Vector3.zero, Quaternion.identity);

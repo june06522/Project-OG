@@ -8,7 +8,7 @@ public class DashDrone : Skill
 
     [SerializeField] private Bullet bullet;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
 
         var blt = Instantiate(bullet, weaponTrm.position, weaponTrm.rotation);

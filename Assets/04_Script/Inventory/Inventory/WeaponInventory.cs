@@ -19,7 +19,7 @@ public class SlotData
 
 public delegate void SlotAdded(Vector2Int point);
 public delegate void CameraSetting();
-public delegate void SlotChanged(Vector2Int point, bool fill);
+public delegate void AddItem();
 
 public class WeaponInventory : MonoBehaviour
 {
@@ -36,6 +36,7 @@ public class WeaponInventory : MonoBehaviour
 
     public event SlotAdded OnSlotAddEvent;
     public event CameraSetting camerasetting;
+    public event AddItem OnAddItem;
     //public event SlotChanged OnSlotChangeEvent;
 
     [HideInInspector]
@@ -158,6 +159,7 @@ public class WeaponInventory : MonoBehaviour
             item.originPos = origin;
             container.Add(item);
             FillSlots(item.bricks, origin, true);
+            OnAddItem?.Invoke();
             return true;
 
         }
@@ -170,6 +172,7 @@ public class WeaponInventory : MonoBehaviour
     {
 
         container.Remove(item);
+        OnAddItem?.Invoke();
         FillSlots(item.bricks, origin, false);
 
     }
@@ -184,7 +187,7 @@ public class WeaponInventory : MonoBehaviour
 
             if (CheckFills(item.bricks, slot.point))
             {
-
+                OnAddItem?.Invoke();
                 return slot.point;
 
             }
@@ -302,7 +305,7 @@ public class WeaponInventory : MonoBehaviour
         invenslots.Add(new SlotData(point));
     }
 
-    public void ExcuteSlotEvent(Vector2Int pos) => OnSlotAddEvent?.Invoke(pos);
+    //public void ExcuteSlotEvent(Vector2Int pos) => OnSlotAddEvent?.Invoke(pos);
 
     public int GetInvenSize() => Mathf.Max(Width, Height);
 

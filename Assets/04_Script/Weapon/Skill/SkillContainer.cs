@@ -29,6 +29,7 @@ public enum GeneratorID
     DeathRay,       // 광선                  기본 공격
     Electronic,     // 전기                  대쉬
     ErrorDice,      // 랜덤 스킬              쿨타임 (10초)
+    Firecracker,    // 폭죽                   방클
     Force,          // 범위 및 파워 증가       기본 공격
     HeartBeat,      // 슬로우                 대쉬
     LaserPointer,   // 레이저 발사             이동
@@ -38,8 +39,9 @@ public enum GeneratorID
     RotateWeapon,   // 무기 회전              이동
     SequenceAttack, // 연속 공격              대쉬 or 쿨타임
     SiegeMode,      // 공속 증가              가만히 있을 시(1초)
-    Trinity,        // 대미지 증가             기본 공격
+    Trinity,        // 대미지 증가            기본 공격
     WeaponShot,     // 무기 발사              쿨타임(5초)
+    Magnetic,       // 자기장                 기본 공격 시
 }
 
 public enum TriggerID
@@ -50,6 +52,7 @@ public enum TriggerID
     CoolTime,       // 쿨타임
     Move,           // 이동
     Idle,           // 가만히
+    RoomClear,      // 방 클리어
 }
 
 

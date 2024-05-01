@@ -14,7 +14,7 @@ public class RotateSkill : Skill
         rotateManager = FindObjectOfType<RotateSkillManager>();
     }
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
         CurPowerInit(power);
 

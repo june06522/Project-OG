@@ -5,7 +5,7 @@ using UnityEngine;
 public class GuidedEmp : Skill
 {
     [SerializeField] EMPBomb empBomb;
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
 
         Vector3 targetPos = target.position;

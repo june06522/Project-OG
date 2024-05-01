@@ -5,7 +5,7 @@ public class DashEmp : Skill
 
     [SerializeField] EMPBomb empBomb;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
 
         if (target == null) return;

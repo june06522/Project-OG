@@ -40,7 +40,7 @@ public class EnemyDieEventReceiver : InventoryEventReceiverBase
     private void HandleEnemyDie()
     {
 
-        SendData s = new SendData(generatorID);
+        SendData s = new SendData(generatorID, transform);
 
         GetSignal(s);
 

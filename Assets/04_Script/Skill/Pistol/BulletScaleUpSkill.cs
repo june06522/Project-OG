@@ -6,7 +6,7 @@ public class BulletScaleUpSkill : Skill
 {
     [SerializeField] ScaleUpBullet _scaleUpBullet;
     [SerializeField] int power;
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
         //power = this.power;
         CurPowerInit(power);

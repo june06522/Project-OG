@@ -1,52 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SiegeModeSkill : Skill
 {
-    Dictionary<Weapon, int> CoolDownDic = new();
-    bool isOn = false;
-    Coroutine co = null;
-    float coolDownVal = 20f;
+    [SerializeField] SiegeModeObj siegeModeobj;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    Dictionary<Tuple<Transform, SendData>, SiegeModeObj> _coolDownDic = new();
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
         Weapon weapon = weaponTrm.GetComponent<Weapon>();
 
-        if (CoolDownDic.ContainsKey(weapon))
+        var tuple = Tuple.Create(weaponTrm, trigger);
+        if(!_coolDownDic.ContainsKey(tuple))
         {
-            if (power != CoolDownDic[weapon])
-            {
-                weapon.Data.CoolDown -= coolDownVal * CoolDownDic[weapon];
-                CoolDownDic[weapon] = power;
-                weapon.Data.CoolDown += coolDownVal * CoolDownDic[weapon];
-            }
+            _coolDownDic.Add(tuple, Instantiate(siegeModeobj));
         }
-        else
-        {
-            weapon.Data.CoolDown += coolDownVal * power;
-            CoolDownDic.Add(weapon, power);
-        }
-
-        isOn = true;
-        if (co == null)
-            co = StartCoroutine(ISiegeModeOn());
+        _coolDownDic[tuple].Excute(weapon,power);
     }
 
-    IEnumerator ISiegeModeOn()
-    {
-        while (isOn)
-        {
-            isOn = false;
-            yield return null;
-        }
-        co = null;
-        foreach (var v in CoolDownDic)
-        {
-            v.Key.Data.CoolDown -= coolDownVal * v.Value;
-        }
-        CoolDownDic.Clear();
-    }
+    
 
 
 }

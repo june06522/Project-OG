@@ -5,7 +5,7 @@ public class AnchorSpeakerSkill : Skill
 {
     [SerializeField] AnchorSpeaker speaker;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
         var obj = Instantiate(speaker, weaponTrm.position, Quaternion.identity);
         Vector3 point;

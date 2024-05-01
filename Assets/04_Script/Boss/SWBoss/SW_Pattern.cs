@@ -74,10 +74,11 @@ public class SW_Pattern : MonoBehaviour
     private float _detectRadius;
     private float _accel;
 
+    private bool _moveToMovePos = false;
+
     [Header("EnergeCharge Pattern")]
     [SerializeField]
     private Charge_SWPart _chargeObject;
-    [SerializeField]
     private float _chargeObjectSpeed;
     [SerializeField]
     private float _chargeObjectDamage;
@@ -112,7 +113,7 @@ public class SW_Pattern : MonoBehaviour
     // move Value
     private Vector3 _movePos = Vector3.zero;
     private Vector3 _dir = Vector3.up;
-    private float _speed = 10.0f;
+    private float _speed = 18.0f;
 
     // state Value
     private float _cool = 0f;
@@ -129,6 +130,7 @@ public class SW_Pattern : MonoBehaviour
         _player = GameManager.Instance.player;
         _saveColor = _headSpriteRenderer.color;
 
+        _chargeObjectSpeed = _speed + 3f;
         _boss.DieEvt += HandleDie;
     }
 
@@ -251,10 +253,23 @@ public class SW_Pattern : MonoBehaviour
     }
     private void SnakeMovePattern()
     {
-        _head.localPosition += (_speed + _accel - 8) * _dir * Time.deltaTime;
-        _accel += 1f * Time.deltaTime;
+        if(_moveToMovePos == false)
+            _head.localPosition += (_speed + _accel - 8) * _dir * Time.deltaTime;
 
-        if(_dir == Vector3.up || _dir == Vector3.down)
+        _accel += 0.2f * Time.deltaTime;
+
+        if(_moveToMovePos)
+        {
+            Vector3 dir = (_movePos - _head.position).normalized;
+            _head.localPosition += (_speed + _accel - 8) * dir * Time.deltaTime;
+
+            if (Vector2.Distance(_movePos, _head.position) < 0.2f)
+            {
+                _moveToMovePos = false;
+            }
+
+        }
+        else if(_dir == Vector3.up || _dir == Vector3.down)
         {
             // bossY == playerY
             
@@ -263,13 +278,14 @@ public class SW_Pattern : MonoBehaviour
 
                 if (_head.position.x < _player.position.x)
                 {
-
+                    _moveToMovePos = true;
+                    _movePos = _head.position + _dir * 3;
                     _dir = Vector3.right;
-
                 }
                 else
                 {
-
+                    _moveToMovePos = true;
+                    _movePos = _head.position + _dir * 3;
                     _dir = Vector3.left;
 
                 }
@@ -283,17 +299,20 @@ public class SW_Pattern : MonoBehaviour
 
                 if (_head.position.y < _player.position.y)
                 {
-
+                    _moveToMovePos = true;
+                    _movePos = _head.position + _dir * 3;
                     _dir = Vector3.up;
 
                 }
                 else
                 {
-
+                    _moveToMovePos = true;
+                    _movePos = _head.position + _dir * 3;
                     _dir = Vector3.down;
 
                 }
 
+                
             }
 
         }
@@ -414,7 +433,7 @@ public class SW_Pattern : MonoBehaviour
     {
         if(_head.localPosition.y < 30f)
         {
-            _head.position += _dir * _speed * 2 * Time.deltaTime;
+            _head.position += _dir * _speed * 1.5f * Time.deltaTime;
         }
         else if(_bodyBulletShotCount + 1 > _currentShotCount)
         {
@@ -562,6 +581,7 @@ public class SW_Pattern : MonoBehaviour
         switch (state)
         {
             case ESpikeWormState.SnakeMove:
+                _moveToMovePos = false;
                 _head.position = _underStartPos.position;
                 _accel = 0f;
                 _snakeMove.AddBody(Vector3.down, _bodyCount - 10);

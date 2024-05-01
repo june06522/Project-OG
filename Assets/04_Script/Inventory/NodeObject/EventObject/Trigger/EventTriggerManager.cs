@@ -29,6 +29,7 @@ public class EventTriggerManager : MonoBehaviour
 
     private void Update()
     {
+        AlwaysExecute();
         CoolExecute();
         IdleExecute();
         RunExecute();
@@ -100,5 +101,11 @@ public class EventTriggerManager : MonoBehaviour
     {
         PlayerController.EventController.OnEnemyDieExecute();
     }
+
+    public void AlwaysExecute()
+    {
+        PlayerController.EventController.OnAlwaysExecute();
+    }
+
     #endregion
 }

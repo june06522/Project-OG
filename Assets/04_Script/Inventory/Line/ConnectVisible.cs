@@ -43,16 +43,15 @@ public class ConnectVisible : MonoBehaviour
         canvas = GetComponentInParent<Canvas>();
         GameManager.Instance.Inventory.camerasetting += SettingOption;
     }
+    private void Start()
+    {
+        GameManager.Instance.Inventory.OnAddItem += VisibleLine;
+    }
 
     public void SettingOption()
     {
         //canvas.renderMode = RenderMode.ScreenSpaceCamera;
         //canvas.worldCamera = Camera.main;
-    }
-
-    private void LateUpdate()
-    {
-        VisibleLine();
     }
 
     public void VisibleLine()

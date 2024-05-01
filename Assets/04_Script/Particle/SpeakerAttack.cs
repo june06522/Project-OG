@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SpeakerAttack : MonoBehaviour
 {
-    float damage;
+    float damage = 1;
 
     public void SetDamage(float damage)
     {

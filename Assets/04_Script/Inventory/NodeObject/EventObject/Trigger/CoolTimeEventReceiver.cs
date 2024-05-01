@@ -42,7 +42,7 @@ public class CoolTimeEventReceiver : InventoryEventReceiverBase
     private void HandleCool()
     {
 
-        SendData s = new SendData(generatorID);
+        SendData s = new SendData(generatorID, transform);
 
         GetSignal(s);
 

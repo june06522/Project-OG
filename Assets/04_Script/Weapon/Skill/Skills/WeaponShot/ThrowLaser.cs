@@ -6,7 +6,7 @@ public class ThrowLaser : Skill
 {
     [SerializeField] Bullet laserBullet;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
 
         var obj = Instantiate(laserBullet, weaponTrm.position, weaponTrm.rotation);

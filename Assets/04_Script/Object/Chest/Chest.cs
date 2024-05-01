@@ -74,7 +74,7 @@ public class Chest : MonoBehaviour, IInteractable
 
         _spriteRenderer.sprite = _openSprite;
 
-        ItemInfoSO item = RandomItem();
+        ItemInfoSO item = GetRandomItem();
         
         if (item.ItemObject != null) 
         {
@@ -113,7 +113,7 @@ public class Chest : MonoBehaviour, IInteractable
         _goldEffect.Play();
     }
 
-    private ItemInfoSO RandomItem()
+    private ItemInfoSO GetRandomItem()
     {
         float percent = Random.Range(0f, 100f); // 0 ~ 100
         ItemRate rate = ItemRate.NORMAL;
