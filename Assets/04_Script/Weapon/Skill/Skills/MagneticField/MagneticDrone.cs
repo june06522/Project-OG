@@ -7,6 +7,7 @@ public class MagneticDrone : Skill
     [SerializeField] MagneticObject prefab;
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
+        Debug.Log(4);
 
         var obj = Instantiate(prefab, weaponTrm.position, Quaternion.identity);
         obj.transform.localScale = Vector3.one * 0.8f;

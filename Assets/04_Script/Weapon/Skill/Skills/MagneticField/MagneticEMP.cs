@@ -8,6 +8,7 @@ public class MagneticEMP : Skill
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
         // 1.3f
+        Debug.Log(2);
         StartCoroutine(Generate(target, power));
 
     }

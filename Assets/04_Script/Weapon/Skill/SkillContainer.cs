@@ -41,7 +41,6 @@ public enum GeneratorID
     SiegeMode,      // 공속 증가              가만히 있을 시(1초)
     Trinity,        // 대미지 증가            기본 공격
     WeaponShot,     // 무기 발사              쿨타임(5초)
-    Magnetic,       // 자기장                 기본 공격 시
 }
 
 public enum TriggerID
