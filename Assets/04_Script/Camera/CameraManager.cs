@@ -4,10 +4,8 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.Rendering;
 
-public class CameraManager : MonoBehaviour
+public class CameraManager : MonoSingleton<CameraManager>
 {
-    public static CameraManager Instance;
-
     private CinemachineVirtualCamera cam;
     private CinemachineVirtualCamera _defaultCam;
 
@@ -29,11 +27,6 @@ public class CameraManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-
         _defaultCam = cam = GameObject.Find("CM").GetComponent<CinemachineVirtualCamera>();
         _defaultPerlin = perlin = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }

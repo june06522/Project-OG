@@ -1,9 +1,8 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class TilemapManager : MonoBehaviour
+public class TilemapManager : MonoSingleton<TilemapManager>
 {
-    public static TilemapManager Instance;
 
     [SerializeField]
     private Tilemap _mainMap;
@@ -11,14 +10,6 @@ public class TilemapManager : MonoBehaviour
     private Tilemap _wallMap;
     public Tilemap MainMap => _mainMap;
     public Tilemap WallMap => _wallMap;
-
-    private void Awake()
-    {
-        if (Instance != null)
-            Destroy(Instance);
-
-        Instance = this;
-    }
 
     public bool HasWallTile(Vector3Int pos)
     {
