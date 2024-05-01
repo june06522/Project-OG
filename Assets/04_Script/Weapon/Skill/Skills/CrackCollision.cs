@@ -13,11 +13,6 @@ public class CrackCollision : MonoBehaviour
 
     }
 
-    public void SetColor(Color color)
-    {
-
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
 
