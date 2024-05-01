@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoSingleton<GameManager>
 {
-    static public GameManager Instance;
-
     #region 인벤토리 관련
     [SerializeField] InventoryActive inventoryActive;
     public InventoryActive InventoryActive => inventoryActive;
@@ -40,17 +38,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        #region 싱글톤
-        if(Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Debug.LogError($"{transform} : GameManager is multiply running!");
-            Destroy(this);
-        }
-        #endregion
 
         #region 객체 할당
         player = GameObject.Find("Player").GetComponent<Transform>();
