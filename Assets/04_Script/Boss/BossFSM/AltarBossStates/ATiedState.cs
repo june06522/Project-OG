@@ -19,8 +19,11 @@ public class ATiedState : BossBaseState
 
     public override void OnBossStateOn()
     {
+        _altar.gameObject.layer = LayerMask.NameToLayer("Boss");
+
         _altar.isStop = false;
         _altar.isTied = true;
+
         _altar.StartCoroutine(RandomPattern(_altar.so.PatternChangeTime));
         _altar.StartCoroutine(_altar.bossMove.BossMovement(_altar.so.StopTime, 0.5f, 0.5f, _altar.so.Speed, _altar.so.WallCheckRadius));
     }

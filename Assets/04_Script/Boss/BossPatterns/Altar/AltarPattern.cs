@@ -37,8 +37,8 @@ public class AltarPattern : BossPatternBase
                 .SetEase(Ease.OutQuad)
                 .OnComplete(() =>
                 {
-                    StartCoroutine(boss.Poping(boss.gameObject, animTime, 1.5f));
-                    StartCoroutine(boss.Blinking(boss.gameObject, animTime, 0.5f, 1, Color.white, boss.bigTriangleSprite));
+                    StartCoroutine(boss.Poping(boss.bigestBody, animTime, 1.5f));
+                    StartCoroutine(boss.Blinking(boss.gameObject, animTime, 0.5f, 1, Color.white, boss.bigTriangleSprite, true));
                 });
             });
 
@@ -56,6 +56,9 @@ public class AltarPattern : BossPatternBase
                 Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
                 Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * j / bulletCount), Mathf.Sin(Mathf.PI * 2 * j / bulletCount));
                 rigid.velocity = dir.normalized * speed;
+
+               Vector3 rotation = Vector3.forward * 360 * j / bulletCount + Vector3.forward * -90;
+               bullet.transform.Rotate(rotation);
             }
 
             yield return new WaitForSeconds(ShotCoolTime);
@@ -81,8 +84,8 @@ public class AltarPattern : BossPatternBase
                 .SetEase(Ease.OutQuad)
                 .OnComplete(() =>
                 {
-                    StartCoroutine(boss.Poping(boss.gameObject, animTime, 1.5f));
-                    StartCoroutine(boss.Blinking(boss.gameObject, animTime, 0.5f, 1, Color.white, boss.bigTriangleSprite));
+                    StartCoroutine(boss.Poping(boss.bigestBody, animTime, 1.5f));
+                    StartCoroutine(boss.Blinking(boss.gameObject, animTime, 0.5f, 1, Color.white, boss.bigTriangleSprite, true));
                 });
             });
 
@@ -100,6 +103,9 @@ public class AltarPattern : BossPatternBase
                 Rigidbody2D rigid = bullets[i, j].GetComponent<Rigidbody2D>();
                 Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * j / bulletCount), Mathf.Sin(Mathf.PI * 2 * j / bulletCount));
                 rigid.velocity = dir.normalized * speed;
+
+                Vector3 rotation = Vector3.forward * 360 * j / bulletCount + Vector3.forward * -90;
+                bullets[i, j].transform.Rotate(rotation);
             }
 
             yield return new WaitForSeconds(time);
@@ -119,6 +125,9 @@ public class AltarPattern : BossPatternBase
                 Rigidbody2D rigid = bullets[i, j].GetComponent<Rigidbody2D>();
                 Vector2 dir = nextDir - bullets[i, j].transform.position;
                 rigid.velocity = dir.normalized * speed * 2;
+
+                Vector3 rotation = Vector3.forward * 360 * j / bulletCount + Vector3.forward * -90;
+                bullets[i, j].transform.Rotate(rotation);
             }
         }
 
@@ -158,6 +167,9 @@ public class AltarPattern : BossPatternBase
             Vector2 dir = GameManager.Instance.player.transform.position - energyBall.transform.position;
             rigid.velocity = dir.normalized * speed;
 
+            Vector3 rotation = Vector3.forward * 360 + Vector3.forward * -90;
+            energyBall.transform.Rotate(rotation);
+
             yield return new WaitForSeconds(waitTime);
         }
 
@@ -185,6 +197,9 @@ public class AltarPattern : BossPatternBase
                 Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
                 Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * j / bulletCount + i * 2), Mathf.Sin(Mathf.PI * 2 * j / bulletCount + i * 2));
                 rigid.velocity = dir.normalized * speed;
+
+                Vector3 rotation = Vector3.forward * 360 * j / bulletCount + Vector3.forward * -90;
+                bullet.transform.Rotate(rotation);
             }
             yield return new WaitForSeconds(animTime);
         }

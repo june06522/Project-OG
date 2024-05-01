@@ -24,11 +24,15 @@ public class AOneBrokenState : BossBaseState
 
     public override void OnBossStateOn()
     {
+        _altar.SetBodyToBasic(_altar.bigestbody, _altar.bigestBody);
+        _altar.SetBodyToBasic(_altar.mediumSizebody, _altar.mediumSizeBody);
+        _altar.SetBodyToBasic(_altar.smallestbody, _altar.smallestBody);
+
         _altar.isStop = false;
         _altar.isOneBroken = true;
+
         _altar.StartCoroutine(RandomPattern(_altar.so.PatternChangeTime));
         _altar.StartCoroutine(OneBrokenMove());
-        //_altar.ChangeMaterial(_altar.basicMat);
     }
 
     public override void OnBossStateUpdate()

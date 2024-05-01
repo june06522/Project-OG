@@ -3,27 +3,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AltarBoss : Boss
+// inspector에서 보이는 변수들 
+public partial class AltarBoss
 {
     public GameObject altarCollector;
     public GameObject bigestBody;
     public GameObject mediumSizeBody;
     public GameObject smallestBody;
 
+    [field: Header("AudioClip")]
     public AudioClip fireClip;
     public AudioClip deadClip;
     public AudioClip burnClip;
     public AudioClip dashClip;
     public AudioClip unChainClip;
 
+    [field: Header("Sprite")]
     public Sprite bigTriangleSprite;
 
-    public bool isTied;
-    public bool isOneBroken;
-    public bool isDashing;
-    public bool isIdleEnded;
+    [field: Header("AltarOnly")]
+    [SerializeField]
+    private float _restraintDistance;
+    [SerializeField]
+    private float _unChainTime;
 
-    public Vector3 originPos;
+    
+}
+
+public partial class AltarBoss : Boss
+{
+    [HideInInspector] public bool isTied;
+    [HideInInspector] public bool isOneBroken;
+    [HideInInspector] public bool isDashing;
+    [HideInInspector] public bool isIdleEnded;
+
+    [HideInInspector] public Vector3 originPos;
+
+    [HideInInspector] public Body bigestbody;
+    [HideInInspector] public Body mediumSizebody;
+    [HideInInspector] public Body smallestbody;
 
     private BossState _curBossState;
 
@@ -40,27 +58,34 @@ public class AltarBoss : Boss
     private int _chainCount = 0;
     private int _shortenChainIndex = 0;
 
-    [SerializeField]
-    private float _restraintDistance;
-    [SerializeField]
-    private float _unChainTime;
     private float _currentTime = 0;
+
+    private void Awake()
+    {
+        _pattern = GetComponent<AltarPattern>();
+        bossMove = GetComponent<BossMove>();
+        gameObject.layer = LayerMask.NameToLayer("Default");
+
+        SetBody(ref bigestbody, bigestBody);
+        SetBody(ref mediumSizebody, mediumSizeBody);
+        SetBody(ref smallestbody, smallestBody);
+    }
 
     protected override void OnEnable()
     {
         base.OnEnable();
-        _pattern = GetComponent<AltarPattern>();
-        bossMove = GetComponent<BossMove>();
-        gameObject.layer = LayerMask.NameToLayer("Boss");
+
         _currentTime = 0;
         _restraintIndex = 0;
         _restrainCount = _restraints.Length;
         _chainCount = _chains.GetLength(1);
         _shortenChainIndex = 0;
+
         isTied = true;
         isOneBroken = false;
         isDashing = false;
         isIdleEnded = false;
+
         originPos = transform.position;
 
         ChainSetting();
@@ -80,7 +105,7 @@ public class AltarBoss : Boss
     {
         base.Update();
 
-        if (isIdleEnded)
+        if (isIdleEnded && _curBossState == BossState.Idle)
         {
             ChangeBossState(BossState.Tied);
         }
@@ -94,12 +119,12 @@ public class AltarBoss : Boss
 
             if (!IsDie)
             {
+                ChainsFollowBoss();
+
                 if (_restraintIndex < _restrainCount)
                 {
                     TimeChecker(Time.deltaTime * (_restraintIndex + 1));
                 }
-
-                ChainsFollowBoss();
 
                 _bossFSM.UpdateBossState();
             }
@@ -231,7 +256,6 @@ public class AltarBoss : Boss
         switch (_curBossState)
         {
             case BossState.Idle:
-                Debug.Log(_bossFSM);
                 _bossFSM.ChangeBossState(new AIdleState(this, _pattern));
                 break;
             case BossState.Tied:
@@ -294,6 +318,9 @@ public class AltarBoss : Boss
             Rigidbody2D rigid = split.GetComponent<Rigidbody2D>();
             Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / _chainCount), Mathf.Sin(Mathf.PI * 2 * i / _chainCount));
             rigid.velocity = dir.normalized * speed;
+
+            Vector3 rotation = Vector3.forward * 360 * i / _chainCount + Vector3.forward * -90;
+            split.transform.Rotate(rotation);
         }
 
         ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarRestraint, _restraints[_restraintIndex]);

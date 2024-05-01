@@ -20,13 +20,21 @@ public class ABossDeadState : BossBaseState
 
     public override void OnBossStateOn()
     {
+        _altar.SetBodyToBasic(_altar.bigestbody, _altar.bigestBody);
+        _altar.SetBodyToBasic(_altar.mediumSizebody, _altar.mediumSizeBody);
+        _altar.SetBodyToBasic(_altar.smallestbody, _altar.smallestBody);
+
         _altar.gameObject.layer = LayerMask.NameToLayer("Default");
+
         _altar.mediumSizeBody.SetActive(false);
         _altar.smallestBody.SetActive(false);
+
         _altar.ChangeSprite(_altar.bigestBody, _altar.bigTriangleSprite);
+
         _altar.StopAllCoroutines();
         _altar.ReturnAll();
         _altar.ChainReturnAll();
+
         NowCoroutine(Dying(3, 2));
     }
 
