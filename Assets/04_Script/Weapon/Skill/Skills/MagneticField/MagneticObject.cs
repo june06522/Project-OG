@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MagneticObject : MonoBehaviour
@@ -18,9 +19,11 @@ public class MagneticObject : MonoBehaviour
 
     private void Attack()
     {
-        foreach (var hit in enemiesOnTarget)
+        for (int i = enemiesOnTarget.Count - 1; i >= 0; i--)
         {
-            hit.Hit(_damage);
+
+            enemiesOnTarget[i].Hit(_damage);
+
         }
     }
 
@@ -47,5 +50,9 @@ public class MagneticObject : MonoBehaviour
             }
 
         }
+    }
+    private void OnDestroy()
+    {
+        enemiesOnTarget.Clear();
     }
 }
