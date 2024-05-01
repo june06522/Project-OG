@@ -26,10 +26,9 @@ public class ABossDeadState : BossBaseState
 
         _altar.gameObject.layer = LayerMask.NameToLayer("Default");
 
+        _altar.bigestBody.SetActive(false);
         _altar.mediumSizeBody.SetActive(false);
         _altar.smallestBody.SetActive(false);
-
-        _altar.ChangeSprite(_altar.bigestBody, _altar.bigTriangleSprite);
 
         _altar.StopAllCoroutines();
         _altar.ReturnAll();
@@ -108,6 +107,7 @@ public class ABossDeadState : BossBaseState
             yield return null;
         }
 
+        CameraManager.Instance.CameraShake(10, 0.5f);
         for(int i = 0; i < objList.Count; i++)
         {
             Rigidbody2D rigid = objList[i].GetComponent<Rigidbody2D>();

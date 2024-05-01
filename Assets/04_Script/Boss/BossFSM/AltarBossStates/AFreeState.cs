@@ -104,7 +104,7 @@ public class AFreeState : BossBaseState
                     _altar.StopImmediately(_altar.transform);
                     _altar.isStop = true;
                     _lock = true;
-                    NowCoroutine(_pattern.OmnidirShooting(_altar, 4, 3, 0.2f, 30));
+                    NowCoroutine(_pattern.OmnidirShooting(_altar, 3, 5, 0.2f, 30));
                     break;
             }
         }

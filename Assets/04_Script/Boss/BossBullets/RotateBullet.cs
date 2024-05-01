@@ -7,12 +7,6 @@ public class RotateBullet : BossBullet
     private float _deg;
     [SerializeField]
     private float _speed;
-    private Rigidbody2D _rigid;
-
-    private void Awake()
-    {
-        _rigid = GetComponent<Rigidbody2D>();    
-    }
 
     protected override void OnEnable()
     {
@@ -28,6 +22,8 @@ public class RotateBullet : BossBullet
     {
         if(isRotateBullet)
         {
+            _deg += Time.deltaTime * _speed;
+
             if (_deg < 360)
             {
                 transform.rotation = Quaternion.Euler(0, 0, _deg * -1);

@@ -56,10 +56,10 @@ public class ATiedState : BossBaseState
             switch (rand)
             {
                 case 1:
-                    NowCoroutine(_pattern.OmnidirAttack(_altar, 20, 5, 1, 1));
+                    NowCoroutine(_pattern.OmnidirAttack(_altar, 18, 5, 1, 1));
                     break;
                 case 2:
-                    NowCoroutine(_pattern.OmniGuidPlayerAttack(_altar, 20, 5, 1, 1));
+                    NowCoroutine(_pattern.OmniGuidPlayerAttack(_altar, 18, 5, 1, 1));
                     break;
             }
         }

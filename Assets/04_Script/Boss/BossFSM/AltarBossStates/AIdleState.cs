@@ -50,9 +50,9 @@ public class AIdleState : BossBaseState
         yield return new WaitForSeconds(animTime * 4);
 
         _boss.StartCoroutine(_boss.Blinking(_boss.smallestBody, animTime, 1, 0, Color.white));
-        yield return new WaitForSeconds(animTime / 3);
+        yield return new WaitForSeconds(animTime / 2);
         _boss.StartCoroutine(_boss.Blinking(_boss.mediumSizeBody, animTime, 1, 0, Color.white));
-        yield return new WaitForSeconds(animTime / 3);
+        yield return new WaitForSeconds(animTime / 2);
         _boss.StartCoroutine(_boss.Blinking(_boss.bigestBody, animTime, 1, 0, Color.white));
 
         _boss.isIdleEnded = true;

@@ -9,7 +9,7 @@ public class PlayerMoveState : PlayerRootState
 
     public PlayerMoveState(PlayerController controller) : base(controller)
     {
-        moveParticle = GameObject.Find("MoveParticle").GetComponent<ParticleSystem>();
+        moveParticle = GameObject.Find("Player/Visual/MoveParticle").GetComponent<ParticleSystem>();
         _visual = GameObject.Find("Visual");
     }
 

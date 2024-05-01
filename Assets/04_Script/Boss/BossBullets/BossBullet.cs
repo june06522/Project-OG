@@ -8,7 +8,7 @@ public class BossBullet : MonoBehaviour
 
     [SerializeField] protected ParticleSystem particle;
 
-    [SerializeField] protected bool isRotateBullet = false;
+    [SerializeField] protected bool isRotateBullet;
 
     private float f_currentDamage = 0;
 
@@ -36,22 +36,11 @@ public class BossBullet : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        foreach(var tag in data.HitAbleTag)
+        PlayerHP player;
+
+        if (collision.gameObject.TryGetComponent<PlayerHP>(out player))
         {
-            if(collision.CompareTag(tag))
-            {
-                if (collision.TryGetComponent<IHitAble>(out var hitAble))
-                {
-                    hitAble.Hit(f_currentDamage);
-                    if (data.IfHitWillBreak)
-                        ObjectPool.Instance.ReturnObject(gameObject);
-                }
-                else
-                {
-                    if (data.IfHitWillBreak)
-                        ObjectPool.Instance.ReturnObject(gameObject);
-                }
-            }
+            player.Hit(data.Damage);
         }
     }
 
