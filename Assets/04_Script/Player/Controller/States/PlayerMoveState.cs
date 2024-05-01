@@ -10,7 +10,7 @@ public class PlayerMoveState : PlayerRootState
     public PlayerMoveState(PlayerController controller) : base(controller)
     {
         moveParticle = GameObject.Find("MoveParticle").GetComponent<ParticleSystem>();
-        _visual = GameObject.Find("Visual");
+        _visual = GameObject.Find("PlayerVisual");
     }
 
     protected override void EnterState()

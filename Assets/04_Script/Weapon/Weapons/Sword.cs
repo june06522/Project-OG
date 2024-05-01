@@ -15,7 +15,7 @@ public class Sword : InvenWeapon
     [SerializeField] private Ease ease = Ease.Linear;
     [SerializeField] Transform[] wayPointTrms;
     private Vector3[] wayPoints;
-    
+
     Transform wayPointTrmParent;
 
     protected override void Awake()
@@ -24,10 +24,10 @@ public class Sword : InvenWeapon
         base.Awake();
         _spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
         _col = transform.GetComponent<Collider2D>();
-        
+
         wayPoints = new Vector3[wayPointTrms.Length];
-      
-        for(int i = 0; i < wayPointTrms.Length; i++)
+
+        for (int i = 0; i < wayPointTrms.Length; i++)
         {
             wayPoints.SetValue(wayPointTrms[i].localPosition, i);
         }
@@ -39,7 +39,7 @@ public class Sword : InvenWeapon
     [BindExecuteType(typeof(float))]
     public override void GetSignal([BindParameterType(typeof(float))] object signal)
     {
-        
+
         var data = (SendData)signal;
         if (!sendDataList.ContainsKey(data.index))
         {
@@ -55,7 +55,7 @@ public class Sword : InvenWeapon
     private Vector3[] GetWorldWayPoints(Vector3 target)
     {
         Vector3[] points = new Vector3[wayPoints.Length];
-        for(int i = 0; i < points.Length; i++)
+        for (int i = 0; i < points.Length; i++)
         {
             points[i] = wayPointTrms[i].position + target;// + transform.position;
         }
@@ -73,8 +73,8 @@ public class Sword : InvenWeapon
 
         float dot = Vector2.Dot(crossVec, Vector2.up);
         int sign = dot > 0 ? -1 : 1;
-        
-        
+
+
         Vector3[] wayPoints = GetWorldWayPoints(dir * (magnitude - 1.5f));
         if (sign == -1)
             wayPoints.Reverse();
@@ -132,7 +132,7 @@ public class Sword : InvenWeapon
     {
         if (target == null)
         {
-            transform.rotation = Quaternion.identity;
+            transform.rotation = Quaternion.Euler(0f, 0f, 60f);
             return;
         }
         if (isAttack == true) return;
