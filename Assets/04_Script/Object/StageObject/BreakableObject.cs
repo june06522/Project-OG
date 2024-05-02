@@ -7,8 +7,8 @@ public class BreakableObject : MonoBehaviour, IHitAble
     [field: SerializeField]
     public FeedbackPlayer feedbackPlayer { get; set; }
 
-    [SerializeField, Range(0f, 1f)]
-    private float _goldDropPercent = 0f;
+    //[SerializeField, Range(0f, 1f)]
+    //private float _goldDropPercent = 0f;
 
     [SerializeField]
     private float _minDropGold;

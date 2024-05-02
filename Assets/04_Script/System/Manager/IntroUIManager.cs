@@ -45,10 +45,10 @@ public class IntroUIManager : MonoBehaviour
     }
 
     public void BtnSound() => SoundManager.Instance.SFXPlay("Btn", _btnClick, volume);
-
+        
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && Input.GetKey(KeyCode.LeftControl))
+        if (Input.GetKeyDown(KeyCode.Escape) && Input.GetKey(KeyCode.Z))
             SceneManager.LoadScene("UserTest");
     }
 }

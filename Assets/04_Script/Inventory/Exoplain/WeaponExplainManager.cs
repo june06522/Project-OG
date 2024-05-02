@@ -9,6 +9,8 @@ public class WeaponExplainManager : MonoBehaviour
 
     private void Awake()
     {
+        if (weaponExplain.Count > 0)
+            return;
         #region 스킬 설명
         weaponExplain.Add(GeneratorID.None,            "테스트용입니다.");
 
