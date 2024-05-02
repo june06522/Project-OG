@@ -48,7 +48,7 @@ public class IntroUIManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && Input.GetKey(KeyCode.LeftControl))
             SceneManager.LoadScene("UserTest");
     }
 }
