@@ -28,11 +28,13 @@ public class TutorialManager : MonoSingleton<TutorialManager>
         if (_tutorialClear)
             return;
 
+        Debug.Log($"Run Quest {_currentGuide.name}");
         if (_currentGuide.IsQuestComplete())
         {
             _currentGuide.QuestComplete();
+            Debug.Log($"Complete Quest {_currentGuide.name}");
 
-            if(_currentGuideIndex == _guideLine.Count - 1)
+            if (_currentGuideIndex == _guideLine.Count - 1)
             {
                 _tutorialClear = true;
                 return;
