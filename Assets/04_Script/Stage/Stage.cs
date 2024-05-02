@@ -143,7 +143,7 @@ public class Stage : MonoBehaviour
         if(_stageType == StageType.EventStage)
         {
 
-            AppearGate();
+            FAED.InvokeDelay(AppearGate, 1.5f);
             return;
 
         }
