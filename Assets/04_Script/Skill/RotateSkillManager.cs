@@ -99,7 +99,7 @@ public class RotateSkillManager : MonoBehaviour
         for (int i = 0; i < cloneCnt; i++)
         {
             float angle = 360 / cloneCnt * i;
-            Debug.Log("Angle : " + angle);
+            //Debug.Log("Angle : " + angle);
             Vector2 pos = Eclipse.GetElipsePos(Vector2.zero, angle, curWidth, curHeight, theta);
 
             rotateClones[i].CurAngle = angle;
@@ -124,7 +124,7 @@ public class RotateSkillManager : MonoBehaviour
             // rotateClones[i].Dissolve(dissolveTime, false);
             rotateClones[i].DestroyThis();
         }
-        Debug.Log("Clear");
+        //Debug.Log("Clear");
         //foreach(var info in _cloneDictionary)
         //{
         //    _cloneDictionary[info.Key] = 0;
@@ -136,7 +136,7 @@ public class RotateSkillManager : MonoBehaviour
     private void SetRunning() => IsRunning = true;
     private void SetIdle()
     {
-        Debug.Log(IsRunning);
+        //Debug.Log(IsRunning);
         IsRunning = false;
     }
 
@@ -180,7 +180,7 @@ public class RotateSkillManager : MonoBehaviour
         if (isRunning && _endSetting)
         {
             int cloneCnt = rotateClones.Count;
-            Debug.Log($"ang : " + cloneCnt);
+            //Debug.Log($"ang : " + cloneCnt);
             float addRotateValue = maxRotateSpeed * Time.deltaTime;
             for (int i = 0; i < cloneCnt; i++)
             {
