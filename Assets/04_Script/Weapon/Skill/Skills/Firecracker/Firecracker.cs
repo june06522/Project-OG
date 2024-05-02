@@ -47,7 +47,7 @@ public class Firecracker : Skill
     IEnumerator ExcuteCo(Transform weaponTrm, Transform target, int power)
     {
         int num = Random.Range(0, 101);
-        Debug.Log($"num:{num}");
+        //Debug.Log($"num:{num}");
 
         yield return new WaitForSeconds(1f);
 
