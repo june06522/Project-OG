@@ -165,7 +165,7 @@ public class SwordYondo : MonoBehaviour
         if (targetTrm == null || targetTrm.gameObject.activeSelf == false)
         {
             //ChangeState(ESwordYondoState.Attach);
-            if(!SetTarget())
+            if (!SetTarget())
                 Destroy(this.gameObject);
             return;
         }
@@ -263,7 +263,8 @@ public class SwordYondo : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         IHitAble hitAble;
-        if(collision.TryGetComponent<IHitAble>(out hitAble))
+
+        if (!collision.CompareTag("Player") && collision.TryGetComponent<IHitAble>(out hitAble))
         {
 
             SoundManager.Instance.SFXPlay("Yondu", audioClip, 0.2f);
