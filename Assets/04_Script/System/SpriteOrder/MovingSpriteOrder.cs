@@ -9,13 +9,13 @@ public class MovingSpriteOrder : SpriteOrder
     {
         if(_spriteRenderer != null)
         {
-            SpriteOrderManager.Instance.RegisterMovingSprite(this);
+            SpriteOrderManager.Instance?.RegisterMovingSprite(this);
         }
     }
 
     private void OnDestroy()
     {
-        SpriteOrderManager.Instance.DestroyMovingSprite(this);
+        SpriteOrderManager.Instance?.DestroyMovingSprite(this);
     }
 
     public void SetSprite()

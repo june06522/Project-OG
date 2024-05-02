@@ -111,7 +111,7 @@ public class StageGate : MonoBehaviour, IInteractable
 
         yield return new WaitForSeconds(1f);
 
-        EventTriggerManager.Instance.RoomEnterExecute();
+        EventTriggerManager.Instance?.RoomEnterExecute();
         
         if (NextStage != null)
         {

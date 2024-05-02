@@ -198,13 +198,13 @@ public class Stage : MonoBehaviour
             GameManager.Instance.InventoryActive.isPlaying = false;
             if(_stageType == StageType.BossStage)
             {
-                EventTriggerManager.Instance.StageClearExecute();
+                EventTriggerManager.Instance?.StageClearExecute();
                 OnStageClearEvent?.Invoke();
             }    
 
             if(waveCount >= waveList.Count)
             {
-                EventTriggerManager.Instance.StageClearExecute();
+                EventTriggerManager.Instance?.StageClearExecute();
                 AppearGate();
                 AppearChest();
             }
@@ -339,7 +339,7 @@ public class Stage : MonoBehaviour
     {
         isMonsterSpawning = true;
 
-        EventTriggerManager.Instance.WaveStartExecute();
+        EventTriggerManager.Instance?.WaveStartExecute();
 
         WaveInfo waveInfo = waveList[waveCount];
         #region Setting SpawnPos

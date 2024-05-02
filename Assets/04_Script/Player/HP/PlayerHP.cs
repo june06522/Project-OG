@@ -22,7 +22,7 @@ public class PlayerHP : MonoBehaviour, IHitAble
     {
         if (_isDead) return false;
 
-        EventTriggerManager.Instance.HitExecute();
+        EventTriggerManager.Instance?.HitExecute();
         feedbackPlayer?.Play(damage);
         CurrentHP -= (int)damage;
         OnChangeHPEvent?.Invoke(MaxHP, CurrentHP);
