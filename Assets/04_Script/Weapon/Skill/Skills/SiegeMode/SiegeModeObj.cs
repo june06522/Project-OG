@@ -14,8 +14,8 @@ public class SiegeModeObj : MonoBehaviour
         if (power != lastPower)
         {
             weapon.Data.CoolDown -= coolDownVal * lastPower;
-            weapon.Data.CoolDown += coolDownVal * power;
             lastPower = power;
+            weapon.Data.CoolDown += coolDownVal * lastPower;
         }
 
         isOn = true;
@@ -25,13 +25,13 @@ public class SiegeModeObj : MonoBehaviour
 
     IEnumerator ISiegeModeOn(Weapon weapon)
     {
+        weapon.Data.CoolDown += coolDownVal * lastPower;
         while (isOn)
         {
             isOn = false;
             yield return null;
         }
         co = null;
-
         weapon.Data.CoolDown -= coolDownVal * lastPower;
     }
 }
