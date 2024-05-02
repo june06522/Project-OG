@@ -4,49 +4,82 @@ using UnityEngine;
 using System;
 using DG.Tweening;
 
-public class SixthElite : MonoBehaviour, IHitAble
+// inspector에서 보이는 변수들
+public partial class SixthElite
 {
-    [field:SerializeField]
+    [field: Header("Feedback")]
+    [field: SerializeField]
     public FeedbackPlayer feedbackPlayer { get; set; }
 
-    private Action _dieAction;
-
-    private Rigidbody2D _rigid;
-
-    [SerializeField] 
+    [Header("Transform")]
+    [SerializeField]
     private Transform _up;
-    [SerializeField] 
+    [SerializeField]
     private Transform _down;
-    [SerializeField] 
+    [SerializeField]
     private Transform _left;
-    [SerializeField] 
+    [SerializeField]
     private Transform _right;
     [SerializeField]
     private Transform _visual;
 
+    [Header("SO")]
     [SerializeField]
     private SixthEliteDataSO _so;
 
+    [Header("AudioClip")]
     [SerializeField]
     private AudioClip _hitSound;
 
+    [Header("SixthEliteOnly")]
     [SerializeField]
     private float _animationPlayTime;
+
+    [Header("SpriteRenderer")]
+    [SerializeField]
+    private List<SpriteRenderer> _spriteRenderers = new List<SpriteRenderer>();
+}
+
+public partial class SixthElite : MonoBehaviour, IHitAble
+{
+    private Action _dieAction;
+
+    private List<Material> _materials = new List<Material>();
+
+    private Rigidbody2D _rigid;
+
+    private LineRenderer _warningLine;
+
     private float _currentHp;
 
     private bool _isDead;
     private bool _once;
     private bool _y;
 
+    private void Awake()
+    {
+        _rigid = GetComponent<Rigidbody2D>();
+
+        _warningLine = GetComponent<LineRenderer>();
+    }
+
     void Start()
     {
-        _currentHp = _so.MaxHP;
         _dieAction += DieEvt;
+
+        _currentHp = _so.MaxHP;
+
         _isDead = false;
-        _rigid = GetComponent<Rigidbody2D>();
-        _rigid.velocity = (GameManager.Instance.player.position - transform.position).normalized * _so.Speed;
         _once = false;
         _y = false;
+
+        foreach(SpriteRenderer matSprite in _spriteRenderers)
+        {
+            _materials.Add(matSprite.material);
+        }
+
+        _rigid.velocity = (GameManager.Instance.player.position - transform.position).normalized * _so.Speed;
+        StartCoroutine(Charging(1, _rigid.velocity));
     }
 
     public bool Hit(float damage)
@@ -82,6 +115,57 @@ public class SixthElite : MonoBehaviour, IHitAble
         _rigid.velocity = Vector2.zero;
     }
 
+    private IEnumerator Charging(float chargingTime, Vector2 dir)
+    {
+        float currentTime = 0;
+
+        if(WallCheck(dir) != Vector2.zero)
+        {
+            Debug.Log("dd");
+            ShowLine(_warningLine, dir, Color.red, 1);
+        }
+
+        while(currentTime < chargingTime)
+        {
+            currentTime += Time.deltaTime;
+
+            foreach(Material mat in _materials)
+            {
+                mat.SetFloat("_VibrateFade", 1);
+            }
+
+            yield return null;
+        }
+
+        foreach (Material mat in _materials)
+        {
+            mat.SetFloat("_VibrateFade", 0);
+        }
+        _warningLine.enabled = false;
+    }
+
+    private void ShowLine(LineRenderer line, Vector2 dir, Color color,  float scale)
+    {
+        line.enabled = true;
+        line.startWidth = scale;
+        line.startColor = color;
+        line.SetPosition(0, transform.position);
+        line.SetPosition(1, WallCheck(dir));
+        line.endWidth = scale;
+    }
+
+    private Vector2 WallCheck(Vector2 dir)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, Mathf.Infinity, LayerMask.GetMask("Wall"));
+
+        if(hit.point != null)
+        {
+            return hit.point;
+        }
+
+        return Vector2.zero;
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         PlayerHP player;
@@ -98,7 +182,6 @@ public class SixthElite : MonoBehaviour, IHitAble
 
         if(collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
         {
-            Debug.Log("ddd");
             _once = false;
 
             StopImmediately();
@@ -113,7 +196,6 @@ public class SixthElite : MonoBehaviour, IHitAble
 
             if(up.collider != null)
             {
-                Debug.Log("dd");
                 _visual.parent = _up;
                 originSize = _up.localScale;
                 _y = true;
@@ -143,23 +225,27 @@ public class SixthElite : MonoBehaviour, IHitAble
 
             if(!_y)
             {
+                Vector2 dir = (GameManager.Instance.player.position - transform.position).normalized;
+                StartCoroutine(Charging(_animationPlayTime, dir));
+
                 trans.DOScaleX(originSize.x / 2, _animationPlayTime)
                 .SetEase(Ease.InOutSine)
                 .OnComplete(() =>
                 {
                     trans.DOScaleX(originSize.x, Time.deltaTime).SetEase(Ease.InOutSine);
-                    Vector2 dir = (GameManager.Instance.player.position - transform.position).normalized;
                     _rigid.velocity = dir * _so.Speed;
                 });
             }
             else
             {
+                Vector2 dir = (GameManager.Instance.player.position - transform.position).normalized;
+                StartCoroutine(Charging(_animationPlayTime, dir));
+
                 trans.DOScaleY(originSize.y / 2, _animationPlayTime)
                 .SetEase(Ease.InOutSine)
                 .OnComplete(() =>
                 {
                     trans.DOScaleY(originSize.y, Time.deltaTime).SetEase(Ease.InOutSine);
-                    Vector2 dir = (GameManager.Instance.player.position - transform.position).normalized;
                     _rigid.velocity = dir * _so.Speed;
                 });
             }

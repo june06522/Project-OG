@@ -41,6 +41,10 @@ public class BossBullet : MonoBehaviour
         if (collision.gameObject.TryGetComponent<PlayerHP>(out player))
         {
             player.Hit(data.Damage);
+            if(data.IfHitWillBreak)
+            {
+                ObjectPool.Instance.ReturnObject(this.gameObject);
+            }
         }
     }
 
