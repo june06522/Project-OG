@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class Sandbag : MonoBehaviour, IHitAble
 {
-    [field:SerializeField]
+    [field: SerializeField]
     public FeedbackPlayer feedbackPlayer { get; set; }
     public event Action<float> OnHit;
 
     public bool Hit(float damage)
     {
-        OnHit?.Invoke(damage);
         feedbackPlayer.Play(damage + UnityEngine.Random.Range(0.25f, 1.75f));
+        OnHit?.Invoke(damage);
         return true;
     }
 }

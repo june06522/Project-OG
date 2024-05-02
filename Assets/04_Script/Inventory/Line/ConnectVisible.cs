@@ -31,9 +31,11 @@ public class ConnectVisible : MonoBehaviour
 
     [HideInInspector] public float mulX = 2.0f;
     [HideInInspector] public float mulY = 2.0f;
-     public float width = 0.2f;
+    public float width = 0.2f;
 
     private int maxCnt = 0;
+
+    public int ConnectCnt { private set; get; }
 
     private void Awake()
     {
@@ -41,17 +43,10 @@ public class ConnectVisible : MonoBehaviour
         inventoryActive = FindObjectOfType<InventoryActive>();
         inventory = FindObjectOfType<WeaponInventory>();
         canvas = GetComponentInParent<Canvas>();
-        GameManager.Instance.Inventory.camerasetting += SettingOption;
     }
     private void Start()
     {
         GameManager.Instance.Inventory.OnAddItem += VisibleLine;
-    }
-
-    public void SettingOption()
-    {
-        //canvas.renderMode = RenderMode.ScreenSpaceCamera;
-        //canvas.worldCamera = Camera.main;
     }
 
     public void VisibleLine()
@@ -84,13 +79,6 @@ public class ConnectVisible : MonoBehaviour
                 {
                     Dictionary<ConnectInfo, bool> dic = new Dictionary<ConnectInfo, bool>();
                     LineRenderer line = CreateLine();
-
-                    //line.positionCount += 1;
-
-                    //Vector3 pos = generator.transform.position;// / invenSize.positionRatio;
-
-                    //pos.z = -4;
-                    //line.SetPosition(line.positionCount - 1, pos);
 
                     Vector3 localPos = generator.RectTransform.localPosition;
 
@@ -136,6 +124,7 @@ public class ConnectVisible : MonoBehaviour
                 #region 무기 예외처리
                 if (data.sendPoints.Count == 0)
                 {
+                    ConnectCnt = 1;
                     isConnect = true;
                     Dictionary<ConnectInfo, bool> copiedDict = new Dictionary<ConnectInfo, bool>();
                     foreach (var kvp in isVisited)
@@ -179,14 +168,7 @@ public class ConnectVisible : MonoBehaviour
                 if (!isConnect) return false;
                 #endregion
 
-                //isconnect = BrickCircuit(b, tempVec, line, data, isVisited, cnt + 1);
-                //if (isconnect)
-                //{
-                //    AddLineRenderPoint(line, tempVec);
-                //}
-
                 return isconnect;
-                //연결된 블록 순회
             }
         }
 
@@ -212,6 +194,7 @@ public class ConnectVisible : MonoBehaviour
             {
                 if (weaponData[data.originPos] < cnt)
                 {
+                    ConnectCnt = 2;
                     findWeapon = data;
                     weaponData[data.originPos] = cnt;
                     line.positionCount = 0;

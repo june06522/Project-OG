@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class WeaponExplain : MonoBehaviour
 {
-    private Image          _iamge;
+    private Image _image;
     private TextMeshProUGUI _weaponName;
     private TextMeshProUGUI _power;
     private TextMeshProUGUI _explain;
@@ -14,7 +14,7 @@ public class WeaponExplain : MonoBehaviour
 
     private void Awake()
     {
-        _iamge = GameObject.Find("WeaponImage").GetComponent<Image>();
+        _image = GameObject.Find("WeaponImage").GetComponent<Image>();
         _weaponName = GameObject.Find("WeaponName").GetComponent<TextMeshProUGUI>();
         _power = GameObject.Find("WeaponPower").GetComponent<TextMeshProUGUI>();
         _explain = GameObject.Find("WeaponExplain").GetComponent<TextMeshProUGUI>();
@@ -23,15 +23,15 @@ public class WeaponExplain : MonoBehaviour
 
     public void ON(Sprite image, string name, float power, string explain, string[] skillList)
     {
-        _iamge.sprite = image;
+        _image.sprite = image;
         _weaponName.text = $"이름: {name}";
         _power.text = $"공격력: {power}";
         _explain.text = explain;
 
-        if(skillList != null)
+        if (skillList != null)
         {
             _skillList.text = "";
-            for(int i = 0; i < skillList.Length; i++)
+            for (int i = 0; i < skillList.Length; i++)
             {
                 _skillList.text += skillList[i] + '\n';
             }

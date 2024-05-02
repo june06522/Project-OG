@@ -74,4 +74,7 @@ public class ItemExplain : MonoBehaviour
         weaponExplain.gameObject.SetActive(false);
         generatorExplain.gameObject.SetActive(false);
     }
+
+
+    public bool IsOn() => weaponExplain.gameObject.activeSelf;
 }
