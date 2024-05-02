@@ -11,7 +11,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
     int moveIdx;
     bool isArrived;
-    bool isMove;
+    //bool isMove;
 
     bool useNav;
 
@@ -20,7 +20,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     List<Vector3> route;
 
     float beforeTime;
-    float resetTime = 0.5f;
+    //float resetTime = 0.5f;
 
     List<SteeringBehaviour> behaviours;
     Vector2 movementInput;
@@ -34,7 +34,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
         //route = new();
 
         //updateAction = useNav == true ? UseNavChase : NormalChase;
-        isMove = true;
+        //isMove = true;
         firstDiscovered = false;
     }
 

@@ -49,9 +49,7 @@ public class HitBlinkFeedback : Feedback
             sprite.material.SetFloat(HASH_BLINK, 0f);
         }
 
-
         isBlink = false;
-
     }
 
 }

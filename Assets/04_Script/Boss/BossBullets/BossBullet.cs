@@ -6,10 +6,18 @@ public class BossBullet : MonoBehaviour
 {
     [SerializeField] protected BossBulletDataSO data;
 
+    [SerializeField] protected ParticleSystem particle;
+
+    [SerializeField] protected bool isRotateBullet;
+
     private float f_currentDamage = 0;
 
     protected virtual void OnEnable()
     {
+        if(particle != null)
+        {
+            particle.Play();
+        }
         if(data.DestoryTime != 0)
         {
             StartCoroutine(ObjectPool.Instance.ReturnObject(this.gameObject, data.DestoryTime));
@@ -28,21 +36,14 @@ public class BossBullet : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        foreach(var tag in data.HitAbleTag)
+        PlayerHP player;
+
+        if (collision.gameObject.TryGetComponent<PlayerHP>(out player))
         {
-            if(collision.CompareTag(tag))
+            player.Hit(data.Damage);
+            if(data.IfHitWillBreak)
             {
-                if (collision.TryGetComponent<IHitAble>(out var hitAble))
-                {
-                    hitAble.Hit(f_currentDamage);
-                    if (data.IfHitWillBreak)
-                        ObjectPool.Instance.ReturnObject(gameObject);
-                }
-                else
-                {
-                    if (data.IfHitWillBreak)
-                        ObjectPool.Instance.ReturnObject(gameObject);
-                }
+                ObjectPool.Instance.ReturnObject(this.gameObject);
             }
         }
     }

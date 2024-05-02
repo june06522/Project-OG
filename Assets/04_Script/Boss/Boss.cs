@@ -27,26 +27,37 @@ public struct Body
     public Quaternion rotation;
 }
 
-public class Boss : MonoBehaviour, IHitAble
+// inspector에서 보이는 변수들
+public partial class Boss
 {
+    [field: Header("Feedback")]
     [field: SerializeField]
     public FeedbackPlayer feedbackPlayer { get; set; }
 
-    public GameObject bulletCollector;
-
+    [field: Header("Boss Move")]
     public BossMove bossMove;
 
+    [field: Header("SO")]
     public BossDataSO so;
 
+    [field: Header("UI")]
     public Slider bossHPSlider;
+
+    [Header("GameObject")]
+    public GameObject bulletCollector;
+}
+
+public partial class Boss : MonoBehaviour, IHitAble
+{
+    [HideInInspector] public bool isStop;
+    [HideInInspector] public bool isAttacking;
+    [HideInInspector] public bool isDead;
+    [HideInInspector] public bool isBlocked;
+
+    private Color _originColor;
 
     public event Action DieEvt;
     public event Action DeadEndEvt;
-
-    public bool isStop;
-    public bool isAttacking;
-    public bool isDead;
-    public bool isBlocked;
 
     public bool IsDie
     {
@@ -89,6 +100,10 @@ public class Boss : MonoBehaviour, IHitAble
     protected void SetBody(ref Body body, GameObject obj)
     {
         body.color = obj.GetComponent<SpriteRenderer>().color;
+        if(_originColor != body.color)
+        {
+            _originColor = body.color;
+        }
         body.scale = obj.transform.localScale;
         body.rotation = obj.transform.rotation;
     }
@@ -167,11 +182,10 @@ public class Boss : MonoBehaviour, IHitAble
         }
     }
 
-    public IEnumerator Blinking(GameObject obj, float blinkingTime, float a, int orderInLayer, Color color, Sprite sprite = null)
+    public IEnumerator Blinking(GameObject obj, float blinkingTime, float a, int orderInLayer, Color color, Sprite sprite = null, bool willDisappear = false)
     {
         SpriteRenderer renderer = obj.GetComponent<SpriteRenderer>();
         Sprite originSprite = renderer.sprite;
-        Color originColor = renderer.color;
         int originOrderInLayer = renderer.sortingOrder;
         float currentTime = 0;
 
@@ -192,7 +206,11 @@ public class Boss : MonoBehaviour, IHitAble
         }
 
 
-        renderer.color = originColor;
+        renderer.color = _originColor;
+        if(willDisappear)
+        {
+            renderer.color *= new Color(1, 1, 1, 0);
+        }
         renderer.sortingOrder = originOrderInLayer;
         if(sprite != null)
         {

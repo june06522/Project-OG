@@ -35,10 +35,14 @@ public class AFreeState : BossBaseState
 
     public override void OnBossStateOn()
     {
+        _altar.SetBodyToBasic(_altar.bigestbody, _altar.bigestBody);
+        _altar.SetBodyToBasic(_altar.mediumSizebody, _altar.mediumSizeBody);
+        _altar.SetBodyToBasic(_altar.smallestbody, _altar.smallestBody);
+
         _altar.isStop = false;
         _altar.isBlocked = false;
+
         _altar.StartCoroutine(Dash(10, 20, 0.5f, 0.5f));
-        //_altar.ChangeMaterial(_altar.basicMat);
     }
 
     public override void OnBossStateUpdate()
@@ -100,7 +104,7 @@ public class AFreeState : BossBaseState
                     _altar.StopImmediately(_altar.transform);
                     _altar.isStop = true;
                     _lock = true;
-                    NowCoroutine(_pattern.OmnidirShooting(_altar, 4, 3, 0.2f, 30));
+                    NowCoroutine(_pattern.OmnidirShooting(_altar, 3, 5, 0.2f, 30));
                     break;
             }
         }

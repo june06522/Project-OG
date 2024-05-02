@@ -15,7 +15,7 @@ public class ThirdEliteAttackState : FSM_State<ENormalPatrolEnemyState>
 
     protected override void EnterState()
     {
-        StartCoroutine(Skill(10, 0.1f, 5, 60));
+        StartCoroutine(Skill(10, 0.1f, 10, 60));
     }
 
     protected override void ExitState()
@@ -30,11 +30,12 @@ public class ThirdEliteAttackState : FSM_State<ENormalPatrolEnemyState>
 
     private IEnumerator Skill(int bulletCount, float waitTime, float speed, float angle)
     {
-        Vector2 dir = (GameManager.Instance.player.transform.position - _controller.transform.position).normalized;
         Vector3 originSize = _controller.transform.localScale;
 
         for(int i = 0; i < bulletCount; i++)
         {
+            Vector2 dir = (GameManager.Instance.player.transform.position - _controller.transform.position).normalized;
+
             _controller.transform.DOScale(originSize * 1.2f, 0.1f)
                 .SetEase(Ease.InOutSine)
                 .OnComplete(() =>
