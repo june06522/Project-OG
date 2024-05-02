@@ -18,6 +18,6 @@ public class LobbySceneManager : MonoBehaviour
         }
     }
 
-    public void Play() => SceneManager.LoadScene("Play");
-    public void Test() => SceneManager.LoadScene("UserTest");
+    public void Play() => AsyncSceneLoader.LoadScene("Play");
+    public void Test() => AsyncSceneLoader.LoadScene("UserTest");
 }
