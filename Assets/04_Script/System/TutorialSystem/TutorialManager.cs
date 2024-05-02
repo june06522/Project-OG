@@ -44,7 +44,7 @@ public class TutorialManager : MonoSingleton<TutorialManager>
     //Test
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.K))
         {
             _currentGuide.QuestComplete();
             _currentGuide = _guideLine[++_currentGuideIndex];
@@ -68,7 +68,7 @@ public class TutorialManager : MonoSingleton<TutorialManager>
             if (_currentGuideIndex == _guideLine.Count - 1)
             {
                 _tutorialClear = true;
-                SceneManager.LoadScene("Name");
+                AsyncSceneLoader.LoadScene("Play");
                 return;
             }
 
@@ -78,5 +78,5 @@ public class TutorialManager : MonoSingleton<TutorialManager>
 
     }
 
-    
+
 }
