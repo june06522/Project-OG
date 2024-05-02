@@ -8,7 +8,7 @@ public class RandomSpawner : MonoBehaviour, IInteractable
 {
 
     [SerializeField] List<GameObject> weapons = new();
-
+    [SerializeField] Collider2D _collider;
     bool active = true;
 
     public void OnInteract()
@@ -23,6 +23,7 @@ public class RandomSpawner : MonoBehaviour, IInteractable
 
         if (active == false) return;
 
+        _collider.enabled = false;
         active = false;
         var idx = Random.Range(0, weapons.Count - 1);
         var obj = Instantiate(weapons[idx], transform.position, Quaternion.identity);
