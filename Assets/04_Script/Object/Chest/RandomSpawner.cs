@@ -25,7 +25,7 @@ public class RandomSpawner : MonoBehaviour, IInteractable
 
         _collider.enabled = false;
         active = false;
-        var idx = Random.Range(0, weapons.Count - 1);
+        var idx = Random.Range(0, weapons.Count);
         var obj = Instantiate(weapons[idx], transform.position, Quaternion.identity);
         obj.transform.DOJump(transform.position + Vector3.up, 1.5f, 1, 0.7f);
 
