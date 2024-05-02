@@ -33,6 +33,5 @@ public class SiegeModeObj : MonoBehaviour
         }
         co = null;
         weapon.Data.CoolDown -= coolDownVal * lastPower;
-        Debug.Log(weapon.Data.CoolDown);
     }
 }

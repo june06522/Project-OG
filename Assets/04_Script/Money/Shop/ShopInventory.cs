@@ -108,7 +108,7 @@ public class ShopInventory : MonoBehaviour
     void SetPos()
     {
         block.localPosition = new Vector3(InventorySlotCenter.Instance.width * (50 * tile.localScale.x), InventorySlotCenter.Instance.height * (50 * tile.localScale.y));
-        tile.localPosition = new Vector3(0, InventorySlotCenter.Instance.height * (100 * tile.localScale.y));
+        //tile.localPosition = new Vector3(0, InventorySlotCenter.Instance.height * (-100 * tile.localScale.y));
     }
 
     void DrawLineRender()

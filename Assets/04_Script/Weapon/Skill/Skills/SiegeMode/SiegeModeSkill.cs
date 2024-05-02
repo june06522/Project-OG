@@ -1,4 +1,4 @@
-using System;
+    using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,22 +13,24 @@ public class SiegeModeSkill : Skill
     Dictionary<Tuple<Transform, Transform>, SiegeModeObj> _coolDownDic = new();
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
-        if(v != null)
-        {
-            v = Instantiate(effect,GameManager.Instance.player.position,Quaternion.identity);
-        }
+        //if (v == null)
+        //{
+        //    v = Instantiate(effect);
+        //}
+        //if (v != null)
+        //{
+        //    v.transform.position = GameManager.Instance.player.position;
+        //    v.SendEvent("OnPlay");
+        //}
 
         Weapon weapon = weaponTrm.GetComponent<Weapon>();
-
         var tuple = Tuple.Create(weaponTrm, trigger.trigger);
-        if(!_coolDownDic.ContainsKey(tuple))
+        if (!_coolDownDic.ContainsKey(tuple))
         {
             _coolDownDic.Add(tuple, Instantiate(siegeModeobj));
         }
-        _coolDownDic[tuple].Excute(weapon,power);
+        _coolDownDic[tuple].Excute(weapon, power);
+        //v.SendEvent("OnEnd");
     }
-
-    
-
 
 }
