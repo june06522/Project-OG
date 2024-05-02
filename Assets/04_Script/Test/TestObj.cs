@@ -22,6 +22,8 @@ public class TestObj : MonoBehaviour, IInteractable
 
     public event Action<Transform> OnInteractItem;
 
+    bool isTrigger = false;
+
     [SerializeField]
     int index = 0;
 
@@ -44,18 +46,30 @@ public class TestObj : MonoBehaviour, IInteractable
         rb2d.gravityScale = 0.0f;
 
         transform.gameObject.layer = LayerMask.NameToLayer("Interactable");
-        spriteRenderer = items[index].GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = items[index].GetComponent<SpriteRenderer>().sprite;
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.CompareTag("Player"))
+            isTrigger = true;
+    }
+
+    private void Update()
+    {
+        if(isTrigger)
         {
             if (Input.GetKeyDown(KeyCode.LeftArrow))
-                SetIndex(-1);
-            else if(Input.GetKeyDown(KeyCode.RightArrow))
                 SetIndex(1);
+            else if (Input.GetKeyDown(KeyCode.RightArrow))
+                SetIndex(-1);
         }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+            isTrigger = false;
     }
 
     private void SetIndex(int num)
@@ -67,7 +81,7 @@ public class TestObj : MonoBehaviour, IInteractable
         if (index >= items.Length)
             index -= items.Length;
 
-        spriteRenderer = items[index].GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = items[index].GetComponent<SpriteRenderer>().sprite;
     }
 
     public void OnInteract()
