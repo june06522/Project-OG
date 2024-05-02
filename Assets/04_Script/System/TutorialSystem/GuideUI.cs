@@ -3,11 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GuideUI : MonoBehaviour
 {
     [SerializeField]
     private TextMeshProUGUI _guideText;
+    [SerializeField]
+    private List<ContentSizeFitter> _textSizeFitter;
 
     private Sequence _sequence;
 
@@ -24,17 +27,20 @@ public class GuideUI : MonoBehaviour
         if (string.IsNullOrEmpty(text))
             ResetGuideText();
 
+        text = $"{text} ";
+
         if (time == 0)
             _guideText.text = text;
 
         // Tween Guide Text
-        _guideText.text = "";
+        _guideText.text = " ";
 
         if (_sequence != null && _sequence.active)
             _sequence.Kill();
 
         _sequence = DOTween.Sequence();
         _sequence.Append(_guideText.DOText(text, time));
+        
 
     }
 }

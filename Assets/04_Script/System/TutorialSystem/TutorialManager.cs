@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ public class TutorialManager : MonoSingleton<TutorialManager>
 
     [Header("Guide Line")]
     [SerializeField]
+    private Transform _guideRoot;
     private List<GuideQuest> _guideLine;
     private int _currentGuideIndex = 0;
 
@@ -20,11 +22,39 @@ public class TutorialManager : MonoSingleton<TutorialManager>
 
     private void Awake()
     {
+        if (_guideRoot == null)
+        {
+            Debug.LogError("TutorialManager's GuideRoot is null");
+            return;
+        }
+
+        _guideLine = _guideRoot.GetComponentsInChildren<GuideQuest>().ToList<GuideQuest>();
+
+        if (_guideLine.Count <= 0)
+        {
+            Debug.LogError("GuideRoot does not have Quests");
+            return;
+        }
+
         _currentGuide = _guideLine[_currentGuideIndex];
+        _currentGuide?.SetQuestSetting();
+    }
+
+    //Test
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            _currentGuide.QuestComplete();
+            _currentGuide = _guideLine[++_currentGuideIndex];
+            _currentGuide.SetQuestSetting();
+        }
+
     }
 
     private void FixedUpdate()
     {
+
         if (_tutorialClear)
             return;
 

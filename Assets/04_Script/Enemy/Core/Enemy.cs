@@ -34,6 +34,7 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
 
     public bool Dead { get; private set; } = false;
     public event Action DeadEvent;
+    public event Action<float> HitEvent;
 
     [SerializeField]
     private AudioClip _hitSound;
@@ -107,6 +108,7 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
         if (Dead) return false;
 
         SoundManager.Instance.SFXPlay("HitEnemy", _hitSound, 0.55f);
+        HitEvent?.Invoke(damage);
         feedbackPlayer?.Play(damage + UnityEngine.Random.Range(0.25f, 1.75f));
         curHp -= (int)damage;
 

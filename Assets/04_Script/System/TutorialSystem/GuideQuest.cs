@@ -9,7 +9,7 @@ public abstract class GuideQuest : MonoBehaviour
 
     [Header("Guide Text")]
     public string GuideText;
-    public float Time;
+    public float guideTextTime;
 
     private TutorialManager _tutorialManager;
     private GuideUI _tutorialUI;
@@ -24,7 +24,7 @@ public abstract class GuideQuest : MonoBehaviour
 
     public virtual void SetQuestSetting()
     {
-        _tutorialUI.SetGuideText(GuideText, Time);
+        _tutorialUI.SetGuideText(GuideText, guideTextTime);
     }
 
     public abstract bool IsQuestComplete();
