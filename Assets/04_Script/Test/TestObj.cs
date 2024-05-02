@@ -46,7 +46,8 @@ public class TestObj : MonoBehaviour, IInteractable
         rb2d.gravityScale = 0.0f;
 
         transform.gameObject.layer = LayerMask.NameToLayer("Interactable");
-        spriteRenderer.sprite = items[index].GetComponent<SpriteRenderer>().sprite;
+        if(items[index].GetComponent<SpriteRenderer>() != null)
+            spriteRenderer.sprite = items[index].GetComponent<SpriteRenderer>().sprite;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -81,7 +82,8 @@ public class TestObj : MonoBehaviour, IInteractable
         if (index >= items.Length)
             index -= items.Length;
 
-        spriteRenderer.sprite = items[index].GetComponent<SpriteRenderer>().sprite;
+        if(items[index].GetComponent<SpriteRenderer>() != null)
+            spriteRenderer.sprite = items[index].GetComponent<SpriteRenderer>().sprite;
     }
 
     public void OnInteract()
