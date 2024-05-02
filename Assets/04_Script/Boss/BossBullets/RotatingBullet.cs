@@ -5,15 +5,28 @@ using UnityEngine;
 public class RotatingBullet : BossBullet
 {
     private Boss _boss;
+
     private float _deg = 0;
     [SerializeField]
     private float _speed;
 
+    private Vector3 _originSize;
+
+    private void Awake()
+    {
+        _originSize = transform.localScale;
+    }
 
     protected override void OnEnable()
     {
         _boss = GetComponentInParent<Boss>();
     }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+    }
+
     private void Update()
     {
         _deg += Time.deltaTime * _speed;

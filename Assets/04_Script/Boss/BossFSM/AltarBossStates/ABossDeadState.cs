@@ -20,13 +20,20 @@ public class ABossDeadState : BossBaseState
 
     public override void OnBossStateOn()
     {
+        _altar.SetBodyToBasic(_altar.bigestbody, _altar.bigestBody);
+        _altar.SetBodyToBasic(_altar.mediumSizebody, _altar.mediumSizeBody);
+        _altar.SetBodyToBasic(_altar.smallestbody, _altar.smallestBody);
+
         _altar.gameObject.layer = LayerMask.NameToLayer("Default");
+
+        _altar.bigestBody.SetActive(false);
         _altar.mediumSizeBody.SetActive(false);
         _altar.smallestBody.SetActive(false);
-        _altar.ChangeSprite(_altar.bigestBody, _altar.bigTriangleSprite);
+
         _altar.StopAllCoroutines();
         _altar.ReturnAll();
         _altar.ChainReturnAll();
+
         NowCoroutine(Dying(3, 2));
     }
 
@@ -75,7 +82,6 @@ public class ABossDeadState : BossBaseState
         }
         while(_make)
         {
-            // 랜덤 위치 문제?
             float randX = Random.Range(minX, maxX);
             float randY = Random.Range(minY, maxY);
 
@@ -101,6 +107,7 @@ public class ABossDeadState : BossBaseState
             yield return null;
         }
 
+        CameraManager.Instance.CameraShake(10, 0.5f);
         for(int i = 0; i < objList.Count; i++)
         {
             Rigidbody2D rigid = objList[i].GetComponent<Rigidbody2D>();
