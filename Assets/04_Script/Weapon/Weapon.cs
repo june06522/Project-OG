@@ -38,7 +38,7 @@ public abstract class Weapon : MonoBehaviour
             if(!Data.isAttackCoolDown)
                 Data.SetCoolDown();
 
-            EventTriggerManager.Instance.BasicAttackExecute();
+            EventTriggerManager.Instance?.BasicAttackExecute();
 
             Attack(target);
 

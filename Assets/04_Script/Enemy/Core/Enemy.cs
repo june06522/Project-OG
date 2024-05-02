@@ -130,7 +130,7 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
 
     private void DieEvent()
     {
-        EventTriggerManager.Instance.EnemyDieExecute();
+        EventTriggerManager.Instance?.EnemyDieExecute();
         Destroy(gameObject);
     }
 
