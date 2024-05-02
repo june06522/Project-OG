@@ -52,4 +52,6 @@ public class Item : MonoBehaviour, IInteractable
             }
         }
     }
+
+    public InvenBrick GetBrick() => brick;
 }
