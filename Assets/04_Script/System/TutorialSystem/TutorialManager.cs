@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TutorialManager : MonoSingleton<TutorialManager>
 {
@@ -67,6 +68,7 @@ public class TutorialManager : MonoSingleton<TutorialManager>
             if (_currentGuideIndex == _guideLine.Count - 1)
             {
                 _tutorialClear = true;
+                SceneManager.LoadScene("Name");
                 return;
             }
 

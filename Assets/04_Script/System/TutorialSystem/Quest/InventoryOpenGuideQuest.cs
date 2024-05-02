@@ -4,8 +4,17 @@ using UnityEngine;
 
 public class InventoryOpenGuideQuest : GuideQuest
 {
+    private InventoryActive _inventoryActive;
+
+    private void Awake()
+    {
+        _inventoryActive = FindObjectOfType<InventoryActive>();
+    }
+
     public override bool IsQuestComplete()
     {
-        return Input.GetKey(KeyCode.Tab);
+        if (_inventoryActive == null)
+            return true;
+        return _inventoryActive.IsOn;
     }
 }
