@@ -53,9 +53,9 @@ public class EventTriggerManager : MonoBehaviour
         }
     }
 
-    public void BasicAttackExecute()
+    public void BasicAttackExecute(Weapon weapon)
     {
-        PlayerController.EventController.OnBasicAttackExecute();
+        PlayerController.EventController.OnBasicAttackExecute(weapon);
     }
 
     public void RunExecute()
