@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using UnityEngine;
 
@@ -28,6 +29,19 @@ public class PlayerInputController : IDisposable
         CheckDashKey();
         CheckInteractable();
 
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Animation();
+        }
+    }
+
+    // 남준성 인벤토리 열리는 거 이거 쓰면 됌
+    public void Animation()
+    {
+        var obj = GameObject.Find("PlayerVisual");
+        Sequence seq = DOTween.Sequence();
+        seq.Append(obj.transform.DOScale(Vector3.one * 3, 0.5f)).
+            Append(obj.transform.DOScale(Vector3.one, 0.1f));
     }
 
     public void SetInteractUI(GameObject interactUI)
@@ -84,7 +98,7 @@ public class PlayerInputController : IDisposable
         }
 
         // interact
-        if ((KeyManager.Instance == null && Input.GetKeyDown(KeyCode.F)) || 
+        if ((KeyManager.Instance == null && Input.GetKeyDown(KeyCode.F)) ||
             (KeyManager.Instance != null && Input.GetKeyDown(KeyManager.Instance.action)))
         {
             IInteractable interact;
@@ -97,8 +111,8 @@ public class PlayerInputController : IDisposable
 
     private void CheckMovementKeyInput(Rigidbody2D rb2D)
     {
-        float x = 0;// = Input.GetAxisRaw("Horizontal");
-        float y = 0;// = Input.GetAxisRaw("Vertical");
+        float x = 0;
+        float y = 0;
 
         if (!GameManager.Instance.InventoryActive.IsOn && !GameManager.Instance.isShopOpen)
         {
@@ -140,7 +154,7 @@ public class PlayerInputController : IDisposable
 
     private void CheckDashKey()
     {
-        if(KeyManager.Instance == null)
+        if (KeyManager.Instance == null)
             isDashKeyPressed = Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.InventoryActive.IsOn;
         else
             isDashKeyPressed = Input.GetKeyDown(KeyManager.Instance.dash) && !GameManager.Instance.InventoryActive.IsOn;
@@ -153,8 +167,8 @@ public class PlayerInputController : IDisposable
 
             //SoundManager.Instance?.SFXPlay("Dash", clip);
             OnDashKeyPressed?.Invoke();
-            
-            
+
+
 
         }
 

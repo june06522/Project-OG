@@ -58,7 +58,6 @@ public class PlayerMoveState : PlayerRootState
         moveParticle.Stop();
         DOTween.Sequence()
             .Append(_visual.transform.DOScale(new Vector2(1.3f, 0.8f), 0.2f).SetEase(Ease.InOutBack))
-            //.Append(transform.DOScale(Vector3.one * 1.4f, 0.2f).SetEase(Ease.OutBounce))
             .Append(_visual.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBounce));
 
         rigid.velocity = Vector2.zero;
