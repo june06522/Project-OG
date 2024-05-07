@@ -121,7 +121,6 @@ public partial class SixthElite : MonoBehaviour, IHitAble
 
         if(WallCheck(dir) != Vector2.zero)
         {
-            Debug.Log("dd");
             ShowLine(_warningLine, originPos, dir, Color.red, 1);
         }
 
