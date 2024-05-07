@@ -38,10 +38,10 @@ public class ScreenManager : MonoBehaviour
         blit.settings.blitMaterial = tempMat;
     }
 
-    public void SetEffect(float power, float time, Ease ease)
+    public Tween SetEffect(float power, float time, Ease ease)
     {
         float startPower = tempMat.GetFloat("_Power");
-        DOTween.To(() =>
+        return DOTween.To(() =>
             startPower,
             value => tempMat.SetFloat("_Power", value),
             power, time)

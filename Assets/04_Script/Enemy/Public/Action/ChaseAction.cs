@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class ChaseAction<T> : BaseAction<T> where T : Enum
 {
-    bool following;
-
     Transform targetTrm;
     Action updateAction;
 
@@ -16,7 +14,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
     bool useNav;
 
-    Vector3 nextPos;
+    Vector2 nextPos;
     Vector3 currentPos;
     List<Vector3> route;
 
@@ -25,29 +23,17 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
     List<SteeringBehaviour> behaviours;
     Vector2 movementInput;
-
-    private bool firstDiscovered;
     
     public ChaseAction(BaseFSM_Controller<T> controller, List<SteeringBehaviour> behaviours, bool checkCollision) : base(controller)
     {
         this.targetTrm = controller.Target;
         this.behaviours = behaviours;
-        //route = new();
 
-        //updateAction = useNav == true ? UseNavChase : NormalChase;
         isMove = true;
-        firstDiscovered = false;
     }
 
     public override void OnEnter()
     {
-        if (!firstDiscovered)
-        {
-            firstDiscovered = true;
-            DiscoverEvent();
-            //Debug.Log("DisCover");
-        }
-        
         controller.Enemy.enemyAnimController.SetMove(true);
         controller.FixedUpdateAction += OnFixedUpdate;  
     }
@@ -61,6 +47,13 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     public override void OnFixedUpdate()
     {
         Vector2 dir = (targetTrm.position - controller.transform.position);
+
+        if(controller.AIdata.IsDetectObstacle() && 
+           controller.GetNextPath(ref nextPos) == false)
+        {
+            controller.FindPath();
+            controller.GetNextPath(ref nextPos);
+        }
 
         if (dir.magnitude > _data.AttackAbleRange)
         {
@@ -97,20 +90,6 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
         
     }
 
-    private void NormalChase()
-    {
-        Vector2 dir = (targetTrm.position - controller.transform.position);
-        float speed = _data.Speed;
-
-        if (dir.magnitude > _data.AttackAbleRange)
-        {
-            Vector3 position = controller.Enemy.Rigidbody.position 
-                                + (dir.normalized * speed * Time.deltaTime);
-            controller.Enemy.Rigidbody.MovePosition(position);
-        }
-
-        controller.Flip(dir.x < 0);
-    }
 
     #region UseNav
     //public void UseNavChase()
