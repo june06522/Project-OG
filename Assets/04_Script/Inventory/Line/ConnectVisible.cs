@@ -49,6 +49,11 @@ public class ConnectVisible : MonoBehaviour
         GameManager.Instance.Inventory.OnAddItem += VisibleLine;
     }
 
+    private void Update()
+    {
+        Debug.Log(ConnectCnt);
+    }
+
     public void VisibleLine()
     {
         for (int i = lendererList.Count - 1; i >= 0; i--)
@@ -124,7 +129,7 @@ public class ConnectVisible : MonoBehaviour
                 #region 무기 예외처리
                 if (data.sendPoints.Count == 0)
                 {
-                    ConnectCnt = 1;
+                    ConnectCnt = Mathf.Max(1,ConnectCnt);
                     isConnect = true;
                     Dictionary<ConnectInfo, bool> copiedDict = new Dictionary<ConnectInfo, bool>();
                     foreach (var kvp in isVisited)
@@ -194,7 +199,6 @@ public class ConnectVisible : MonoBehaviour
             {
                 if (weaponData[data.originPos] < cnt)
                 {
-                    ConnectCnt = 2;
                     findWeapon = data;
                     weaponData[data.originPos] = cnt;
                     line.positionCount = 0;
@@ -309,6 +313,9 @@ public class ConnectVisible : MonoBehaviour
             line.SetPosition(line.positionCount - 1, drawPos);
         else
             line.SetPosition(index, drawPos);
+
+        if (line.positionCount > 2)
+            ConnectCnt = 2;
     }
 
     private void DeleteLineRenderPoint(LineRenderer line)
