@@ -3,32 +3,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AltarBoss : Boss
+// inspector에서 보이는 변수들 
+public partial class AltarBoss
 {
     public GameObject altarCollector;
     public GameObject bigestBody;
     public GameObject mediumSizeBody;
     public GameObject smallestBody;
 
+    [field: Header("AudioClip")]
     public AudioClip fireClip;
     public AudioClip deadClip;
-    public AudioClip burnClip;
+    public AudioClip rotateClip;
     public AudioClip dashClip;
     public AudioClip unChainClip;
 
-    public Material basicMat;
-    public Material dyingMat;
-    public Material deadMat;
-    public Material enchantedMat;
-    public Material glitchMat;
-
+    [field: Header("Sprite")]
     public Sprite bigTriangleSprite;
 
-    public bool isTied;
-    public bool isOneBroken;
-    public bool isDashing;
+    [field: Header("AltarOnly")]
+    [SerializeField]
+    private float _restraintDistance;
+    [SerializeField]
+    private float _unChainTime;
 
-    public Vector3 originPos;
+    
+}
+
+public partial class AltarBoss : Boss
+{
+    [HideInInspector] public bool isTied;
+    [HideInInspector] public bool isOneBroken;
+    [HideInInspector] public bool isDashing;
+    [HideInInspector] public bool isIdleEnded;
+
+    [HideInInspector] public Vector3 originPos;
 
     private BossState _curBossState;
 
@@ -45,34 +54,38 @@ public class AltarBoss : Boss
     private int _chainCount = 0;
     private int _shortenChainIndex = 0;
 
-    [SerializeField]
-    private float _restraintDistance;
-    [SerializeField]
-    private float _unChainTime;
     private float _currentTime = 0;
+
+    private void Awake()
+    {
+        _pattern = GetComponent<AltarPattern>();
+        bossMove = GetComponent<BossMove>();
+        gameObject.layer = LayerMask.NameToLayer("Default");
+    }
 
     protected override void OnEnable()
     {
         base.OnEnable();
-        _pattern = GetComponent<AltarPattern>();
-        bossMove = GetComponent<BossMove>();
-        gameObject.layer = LayerMask.NameToLayer("Boss");
+
+        bossColor = new Color(1, 0.1960784f, 0.427451f);
+
         _currentTime = 0;
         _restraintIndex = 0;
         _restrainCount = _restraints.Length;
         _chainCount = _chains.GetLength(1);
         _shortenChainIndex = 0;
+
         isTied = true;
         isOneBroken = false;
         isDashing = false;
+        isIdleEnded = false;
+
         originPos = transform.position;
 
         ChainSetting();
 
         _curBossState = BossState.Idle;
-        _bossFSM = new BossFSM(new BossIdleState(this, _pattern));
-
-        ChangeBossState(BossState.Tied);
+        _bossFSM = new BossFSM(new AIdleState(this, _pattern));
 
         StartCoroutine(ShortenChain());
     }
@@ -86,21 +99,29 @@ public class AltarBoss : Boss
     {
         base.Update();
 
-        if(!isDead)
+        if (isIdleEnded && _curBossState == BossState.Idle)
         {
-            ChangeState();
+            ChangeBossState(BossState.Tied);
         }
 
-        if (!IsDie)
+        if(_curBossState != BossState.Idle)
         {
-            if (_restraintIndex < _restrainCount)
+            if (!isDead)
             {
-                TimeChecker(Time.deltaTime * (_restraintIndex + 1));
+                ChangeState();
             }
 
-            ChainsFollowBoss();
+            if (!IsDie)
+            {
+                ChainsFollowBoss();
 
-            _bossFSM.UpdateBossState();
+                if (_restraintIndex < _restrainCount)
+                {
+                    TimeChecker(Time.deltaTime * (_restraintIndex + 1));
+                }
+
+                _bossFSM.UpdateBossState();
+            }
         }
     }
 
@@ -193,7 +214,7 @@ public class AltarBoss : Boss
         {
             if(_restraintIndex < 2)
                 ReturnRestraintAndChains();
-            StartCoroutine(CameraManager.Instance.CameraShake(0, 0));
+            CameraManager.Instance.StopCameraShake();
             isTied = false;
             isOneBroken = false;
             isDead = true;
@@ -229,7 +250,7 @@ public class AltarBoss : Boss
         switch (_curBossState)
         {
             case BossState.Idle:
-                _bossFSM.ChangeBossState(new BossIdleState(this, _pattern));
+                _bossFSM.ChangeBossState(new AIdleState(this, _pattern));
                 break;
             case BossState.Tied:
                 _bossFSM.ChangeBossState(new ATiedState(this, _pattern));
@@ -262,7 +283,7 @@ public class AltarBoss : Boss
         else
         {
             SoundManager.Instance.SFXPlay("UnChain", unChainClip, 1);
-            StartCoroutine(CameraManager.Instance.CameraShake(5, 1f));
+            CameraManager.Instance.CameraShake(5, 1f);
             StartCoroutine(UnChain(3));
             _currentTime = 0;
         }
@@ -291,6 +312,9 @@ public class AltarBoss : Boss
             Rigidbody2D rigid = split.GetComponent<Rigidbody2D>();
             Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / _chainCount), Mathf.Sin(Mathf.PI * 2 * i / _chainCount));
             rigid.velocity = dir.normalized * speed;
+
+            Vector3 rotation = Vector3.forward * 360 * i / _chainCount + Vector3.forward * -90;
+            split.transform.Rotate(rotation);
         }
 
         ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarRestraint, _restraints[_restraintIndex]);

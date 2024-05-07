@@ -20,15 +20,19 @@ public class AOneBrokenState : BossBaseState
     public override void OnBossStateExit()
     {
         _altar.isOneBroken = false;
+
+        _altar.SetBody(_altar.bigestBody, Vector3.one, Vector3.zero, _altar.bossColor, 0.5f);
+        _altar.SetBody(_altar.mediumSizeBody, Vector3.one, Vector3.zero, _altar.bossColor, 0.5f);
+        _altar.SetBody(_altar.smallestBody, Vector3.one, Vector3.zero, _altar.bossColor, 0.5f);
     }
 
     public override void OnBossStateOn()
     {
         _altar.isStop = false;
         _altar.isOneBroken = true;
+
         _altar.StartCoroutine(RandomPattern(_altar.so.PatternChangeTime));
         _altar.StartCoroutine(OneBrokenMove());
-        //_altar.ChangeMaterial(_altar.basicMat);
     }
 
     public override void OnBossStateUpdate()

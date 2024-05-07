@@ -12,9 +12,6 @@ public struct RotateCloneInfo
 
 public class RotateSkillManager : MonoBehaviour
 {
-    [SerializeField] float minRotateTime = 5f;
-    [SerializeField] float maxRotateTime = 15f;
-    [SerializeField] float minRotateSpeed = 100f;
     [SerializeField] float maxRotateSpeed = 1000f;
 
     [SerializeField] float dissolveTime = 0.5f;
@@ -30,8 +27,8 @@ public class RotateSkillManager : MonoBehaviour
 
     private List<RotateClone> rotateClones;
 
-    private Dictionary<WeaponID, int> _cloneDictionary; // ¹«±âº° »ý¼ºÇØ¾ß ÇÒ Å¬·Ð ÀúÀåÇØµÐ Dictionary.
-    public List<RotateCloneInfo> CloneInfo; // Enum°ú ClonePrefab ¹ÙÀÎµù Á¤º¸ ¸ðÀ½.
+    private Dictionary<WeaponID, int> _cloneDictionary; // ï¿½ï¿½ï¿½âº° ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ ï¿½ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ Dictionary.
+    public List<RotateCloneInfo> CloneInfo; // Enumï¿½ï¿½ ClonePrefab ï¿½ï¿½ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 
     private bool _endSetting = false;
     [SerializeField]
@@ -60,7 +57,7 @@ public class RotateSkillManager : MonoBehaviour
         }
     }
 
-    //RotateSkill¿¡¼­ È£Ãâ.
+    //RotateSkillï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½.
     public void SetCloneInfo(WeaponID id, int count)
     {
         _cloneDictionary[id] = count;
@@ -82,7 +79,7 @@ public class RotateSkillManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
         Transform playerTrm = GameManager.Instance.player;
 
-        // Å¬·Ð »ý¼º.
+        // Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
         foreach (var info in  _cloneDictionary) 
         {
             for(int i = 0 ; i < info.Value; ++i)
@@ -93,7 +90,7 @@ public class RotateSkillManager : MonoBehaviour
             }
         }
 
-        // Å¬·Ð À§Ä¡ ¼¼ÆÃ & Dissolve ¼¼ÆÃ
+        // Å¬ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ & Dissolve ï¿½ï¿½ï¿½ï¿½
         int cloneCnt = rotateClones.Count;
 
         curWidth = width + (cloneCnt/ radiusIncreaseFlag) * 0.5f;
@@ -102,7 +99,7 @@ public class RotateSkillManager : MonoBehaviour
         for (int i = 0; i < cloneCnt; i++)
         {
             float angle = 360 / cloneCnt * i;
-            Debug.Log("Angle : " + angle);
+            //Debug.Log("Angle : " + angle);
             Vector2 pos = Eclipse.GetElipsePos(Vector2.zero, angle, curWidth, curHeight, theta);
 
             rotateClones[i].CurAngle = angle;
@@ -127,7 +124,7 @@ public class RotateSkillManager : MonoBehaviour
             // rotateClones[i].Dissolve(dissolveTime, false);
             rotateClones[i].DestroyThis();
         }
-        Debug.Log("Clear");
+        //Debug.Log("Clear");
         //foreach(var info in _cloneDictionary)
         //{
         //    _cloneDictionary[info.Key] = 0;
@@ -142,6 +139,7 @@ public class RotateSkillManager : MonoBehaviour
     }
     private void SetIdle()
     {
+        //Debug.Log(IsRunning);
         IsRunning = false;
     }
 
@@ -185,7 +183,7 @@ public class RotateSkillManager : MonoBehaviour
         if (isRunning && _endSetting)
         {
             int cloneCnt = rotateClones.Count;
-            Debug.Log($"ang : " + cloneCnt);
+            //Debug.Log($"ang : " + cloneCnt);
             float addRotateValue = maxRotateSpeed * Time.deltaTime;
             for (int i = 0; i < cloneCnt; i++)
             {

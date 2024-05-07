@@ -2,44 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlateBoss : Boss
+// inspector에서 보이는 변수들
+public partial class SlateBoss
 {
-    public int MinimiCount { get => _minimiCount; set => _minimiCount = value; }
-
     public GameObject slateOnlyCollector;
     public GameObject minimisPositions;
     public GameObject bigestBody;
     public GameObject mediumSizeBody;
     public GameObject smallestBody;
 
+    [field: Header("AudioClip")]
     public AudioClip deadClip;
     public AudioClip laserClip;
     public AudioClip fireClip;
 
+    [field: Header("Material")]
     public Material basicMat;
     public Material minimiBasicMat;
     public Material warningMat;
     public Material laserMat;
     public Material hologramMinimiMat;
-    public Material bulletMat;
     public Material StopMat;
 
-    [HideInInspector]
-    public Body bigestbody;
-    [HideInInspector]
-    public Body mediumsizebody;
-    [HideInInspector]
-    public Body smallestbody;
+    [Header("LineRenderer")]
+    public LineRenderer line;
 
+    [Header("SlateOnly")]
     public float minimiAwayDistance;
-
-    public bool fullHP;
-    public bool halfHP;
-
-    private SlatePattern _pattern;
-
     [SerializeField]
     private int _minimiCount;
+}
+
+public partial class SlateBoss : Boss
+{
+    public int MinimiCount { get => _minimiCount; set => _minimiCount = value; }
+
+    [HideInInspector] public bool fullHP;
+    [HideInInspector] public bool halfHP;
+
+    private SlatePattern _pattern;
 
     private BossState _curBossState;
 
@@ -49,17 +50,16 @@ public class SlateBoss : Boss
     {
         base.OnEnable();
 
-        SetBody(ref bigestbody, bigestBody);
-        SetBody(ref mediumsizebody, mediumSizeBody);
-        SetBody(ref smallestbody, smallestBody);
+        bossColor = new Color(1, 0.1960784f, 0.427451f);
+
         transform.gameObject.layer = LayerMask.NameToLayer("Boss");
         _pattern = GetComponent<SlatePattern>();
         fullHP = true;
         halfHP = false;
-        _curBossState = BossState.Idle;
-        _bossFSM = new BossFSM(new BossIdleState(this, _pattern));
+        isIdle = true;
 
-        ChangeState();
+        _curBossState = BossState.Idle;
+        _bossFSM = new BossFSM(new SIdleState(this, _pattern));
     }
 
     protected override void OnDisable()
@@ -81,10 +81,8 @@ public class SlateBoss : Boss
 
         if (!isDead)
         {
-            if(!isAttacking)
-            {
-                ChangeState();
-            }
+            ChangeState();
+
             _bossFSM.UpdateBossState();
         }
     }
@@ -94,7 +92,10 @@ public class SlateBoss : Boss
         switch (_curBossState)
         {
             case BossState.Idle:
-                ChangeBossState(BossState.FullHP);
+                if(!isIdle)
+                {
+                    ChangeBossState(BossState.FullHP);
+                }
                 break;
             case BossState.FullHP:
                 if (_currentHP < so.MaxHP / 2)

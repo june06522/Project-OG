@@ -9,7 +9,6 @@ public class DashEventReceiver : InventoryEventReceiverBase
 
     protected override void OnInit()
     {
-
         if (PlayerController.EventController != null)
         {
 
@@ -30,7 +29,7 @@ public class DashEventReceiver : InventoryEventReceiverBase
     private void HandleDash()
     {
 
-        SendData s = new SendData(generatorID);
+        SendData s = new SendData(generatorID, transform);
 
         GetSignal(s);
 
@@ -38,14 +37,11 @@ public class DashEventReceiver : InventoryEventReceiverBase
 
     public override void Dispose()
     {
-
         if (PlayerController.EventController != null)
         {
-
             PlayerController.EventController.OnDash -= HandleDash;
 
         }
 
     }
-
 }

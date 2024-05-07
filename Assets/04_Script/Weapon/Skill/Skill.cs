@@ -7,7 +7,7 @@ using UnityEngine;
 public class Skill : MonoBehaviour
 {
     protected bool isMaxPower;
-    public virtual void Excute(Transform weaponTrm, Transform target, int power)
+    public virtual void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
 
 

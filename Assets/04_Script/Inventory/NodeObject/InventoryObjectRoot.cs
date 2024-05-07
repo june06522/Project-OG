@@ -149,5 +149,4 @@ public abstract class InventoryObjectRoot : ScriptableObject
         return Instantiate(this);
 
     }
-
 }

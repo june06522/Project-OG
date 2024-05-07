@@ -19,8 +19,6 @@ public class InventoryActive : MonoBehaviour
     public Image[] images;
     [HideInInspector]
     public bool canOpen = true;
-    [HideInInspector]
-    public bool isPlaying = false;
 
     bool isOn = false;
 
@@ -70,13 +68,14 @@ public class InventoryActive : MonoBehaviour
 
     private void Update()
     {
-        if (canOpen && !isPlaying)
+        if (canOpen && !GameManager.Instance.isPlay)
         {
             if (((KeyManager.Instance == null && Input.GetKeyDown(KeyCode.Tab)) ||
                 (KeyManager.Instance != null && Input.GetKeyDown(KeyManager.Instance.inven)) || 
                 (Input.GetKeyDown(KeyCode.Escape) && isOn)) && isAnimation)
             {
                 isAnimation = false;
+                StartCoroutine(ShowLineRender());
                 isOn = !isOn;
                 if (isOn)
                     ShowInven();
@@ -136,5 +135,15 @@ public class InventoryActive : MonoBehaviour
         invenRenderer.enabled = false;
         yield return new WaitForSeconds(time);
         isAnimation = true;
+    }
+
+    IEnumerator ShowLineRender()
+    {
+        ConnectVisible cv = FindObjectOfType<ConnectVisible>();
+        while (!isAnimation)
+        {
+            cv.VisibleLine();
+            yield return null;
+        }
     }
 }

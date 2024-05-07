@@ -5,6 +5,29 @@ using DG.Tweening;
 
 public class FlowerPattern : BossPatternBase
 {
+    public IEnumerator FlowerDeadShot(FlowerBoss boss, int dirCount, int bulletCount, int burstCount, float angle, float speed, float time)
+    {
+        for (int i = 0; i < burstCount; i++)
+        {
+            yield return new WaitForSeconds(time / 2);
+            for (int j = 0; j < dirCount; j++)
+            {
+                Vector2 standard;
+                if (i % 2 == 0)
+                {
+                    standard = new Vector2(-Mathf.Sin(Mathf.PI * 2 * j / dirCount), -Mathf.Cos(Mathf.PI * 2 * j / dirCount)).normalized;
+                }
+                else
+                {
+                    standard = new Vector2(Mathf.Sin(Mathf.PI * 2 * j / dirCount), Mathf.Cos(Mathf.PI * 2 * j / dirCount)).normalized;
+                }
+
+                MakeLeafShape(boss, standard, bulletCount, angle, speed);
+            }
+            yield return new WaitForSeconds(time / 2);
+        }
+    }
+
     public IEnumerator FlowerShapeShot(FlowerBoss boss, int dirCount, int bulletCount, int burstCount, float angle, float speed, float time, bool inPattern, float waitTime)
     {
         boss.isAttacking = true;
@@ -18,6 +41,7 @@ public class FlowerPattern : BossPatternBase
             objs[arrCount].transform.rotation = Quaternion.identity;
             arrCount++;
             yield return new WaitForSeconds(time / 2);
+            SoundManager.Instance.SFXPlay("Fire", boss.fireSound);
             for (int j = 0; j < dirCount; j++)
             {
                 Vector2 standard;
@@ -99,7 +123,7 @@ public class FlowerPattern : BossPatternBase
             });
 
         yield return new WaitForSeconds(animTime / 2);
-
+        SoundManager.Instance.SFXPlay("Fire", boss.fireSound);
         for (int j = 0; j < dirCount; j++)
         {
             GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.ScatterBullet, boss.bulletCollector.transform);
@@ -132,7 +156,7 @@ public class FlowerPattern : BossPatternBase
                 });
             
             yield return new WaitForSeconds(time / 2);
-
+            SoundManager.Instance.SFXPlay("Fire", boss.fireSound);
             for (int j = 0; j < bulletCount; j++)
             {
                 GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
@@ -190,7 +214,7 @@ public class FlowerPattern : BossPatternBase
             });
 
         yield return new WaitForSeconds(animTime);
-
+        SoundManager.Instance.SFXPlay("Fire", boss.fireSound);
         for (int i = 0; i < dirCount; i++)
         {
             Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / dirCount), Mathf.Sin(Mathf.PI * 2 * i / dirCount));
@@ -253,7 +277,8 @@ public class FlowerPattern : BossPatternBase
 
         yield return new WaitForSeconds(1);
 
-        while(!boss.IsDie)
+        SoundManager.Instance.SFXPlay("Laser", boss.laserSound);
+        while (!boss.IsDie)
         {
             deg += Time.deltaTime * turnSpeed;
             curTime += Time.deltaTime;
@@ -280,6 +305,7 @@ public class FlowerPattern : BossPatternBase
             }
             else
             {
+                SoundManager.Instance.SFXPlay("Laser", boss.laserSound);
                 StartCoroutine(FlowerShapeShot(boss, 5, 3, 3, 10, 5, 1, true, 1));
                 deg = 0;
             }

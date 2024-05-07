@@ -27,4 +27,8 @@ public abstract class InventoryEventReceiverBase : InventoryObjectRoot, IDisposa
 
     }
 
+    public void OnDestroy()
+    {
+        Dispose();
+    }
 }

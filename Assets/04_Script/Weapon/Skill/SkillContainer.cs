@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 // 생성기가 가지고 있는거
@@ -30,6 +29,7 @@ public enum GeneratorID
     DeathRay,       // 광선                  기본 공격
     Electronic,     // 전기                  대쉬
     ErrorDice,      // 랜덤 스킬              쿨타임 (10초)
+    Firecracker,    // 폭죽                   방클
     Force,          // 범위 및 파워 증가       기본 공격
     HeartBeat,      // 슬로우                 대쉬
     LaserPointer,   // 레이저 발사             이동
@@ -39,9 +39,21 @@ public enum GeneratorID
     RotateWeapon,   // 무기 회전              이동
     SequenceAttack, // 연속 공격              대쉬 or 쿨타임
     SiegeMode,      // 공속 증가              가만히 있을 시(1초)
-    Trinity,        // 대미지 증가             기본 공격
+    Trinity,        // 대미지 증가            기본 공격
     WeaponShot,     // 무기 발사              쿨타임(5초)
 }
+
+public enum TriggerID
+{
+    None,           // 없음
+    Dash,           // 대쉬
+    NormalAttack,   // 기본 공격
+    CoolTime,       // 쿨타임
+    Move,           // 이동
+    Idle,           // 가만히
+    RoomClear,      // 방 클리어
+}
+
 
 // Skill 2차원 리스트는 인스펙터에서 안보임 이렇게 해야함
 [Serializable]
@@ -58,9 +70,6 @@ public class SkillContainer : MonoBehaviour
 
     [SerializeField] List<Shell> weaponList;
 
-
-    public Transform player;
-
     private void Awake()
     {
 
@@ -68,7 +77,7 @@ public class SkillContainer : MonoBehaviour
         {
 
             Debug.LogError("Multiple SkillManager is running");
-            Destroy(this);
+            Destroy(instance);
 
         }
 
@@ -92,6 +101,7 @@ public class SkillContainer : MonoBehaviour
             if (weaponList[j] != null && weaponList[j].skillList[i] != null)
             {
 
+                EventTriggerManager.Instance?.SkillExecute();
                 return weaponList[j].skillList[i];
 
             }
@@ -100,8 +110,12 @@ public class SkillContainer : MonoBehaviour
 
         Debug.LogError($"Skill Doesn't exist in SkillList : {j}, {i} ");
 
-
         return null;
 
+    }
+
+    public List<Shell> GetList()
+    {
+        return weaponList;
     }
 }

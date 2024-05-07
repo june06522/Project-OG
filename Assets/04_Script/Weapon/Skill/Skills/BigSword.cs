@@ -7,7 +7,7 @@ public class BigSword : Skill
     [SerializeField] float damage;
 
     private float curDamage;
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
         CurPowerInit(power);
         SwordSkills obj = Instantiate(prefab, weaponTrm.position, Quaternion.identity);

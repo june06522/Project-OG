@@ -63,7 +63,7 @@ public class WeaponBrick : InvenBrick
         ItemExplain.Instance.HoverWeapon(image.sprite, GetName(), GetDamage(), GetExplain(), GetOnSkillList());
     }
 
-    private float GetDamage() => weaponPrefab.Data.AttackDamage.GetValue();
+    private float GetDamage() => weaponPrefab.Data.GetDamage();
 
     private string GetName() => weaponPrefab.GetName();
 

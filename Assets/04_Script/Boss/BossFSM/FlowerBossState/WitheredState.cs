@@ -16,15 +16,18 @@ public class WitheredState : BossBaseState
     public override void OnBossStateExit()
     {
         _flower.StopAllCoroutines();
-        _flower.SetBodyToBasic(_flower.bigestbody, _flower.bigestBody);
-        _flower.SetBodyToBasic(_flower.mediumsizebody, _flower.mediumSizeBody);
-        _flower.SetBodyToBasic(_flower.smallestbody, _flower.smallestBody);
+
+        _flower.SetBody(_flower.bigestBody, Vector3.one, Vector3.zero, _flower.bossColor, 0.5f);
+        _flower.SetBody(_flower.mediumSizeBody, Vector3.one, Vector3.zero, _flower.bossColor, 0.5f);
+        _flower.SetBody(_flower.smallestBody, Vector3.one, Vector3.zero, _flower.bossColor, 0.5f);
+
         _flower.withered = false;
         _flower.isAttacking = false;
     }
 
     public override void OnBossStateOn()
     {
+        _flower.gameObject.layer = LayerMask.NameToLayer("Boss");
         _flower.withered = true;
         _flower.StartCoroutine(RandomPattern(_flower.so.PatternChangeTime));
     }

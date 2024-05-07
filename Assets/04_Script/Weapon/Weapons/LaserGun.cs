@@ -21,7 +21,12 @@ public class LaserGun : InvenWeapon
 
     public override void Attack(Transform target)
     {
+        if (_attackSoundClip != null)
+        {
 
+            SoundManager.Instance.SFXPlay("AttackSound", _attackSoundClip, 0.5f);
+
+        }
         var obj = Instantiate(gunLine, Vector3.zero, Quaternion.identity);
 
         obj.LineRenderer.positionCount = 2;
@@ -30,7 +35,7 @@ public class LaserGun : InvenWeapon
 
         if (hit.collider != null)
         {
-            obj.SetLine(_shootPos.position, hit.point, Data.AttackDamage.GetValue());
+            obj.SetLine(_shootPos.position, hit.point, Data.GetDamage());
             obj.LineRenderer.enabled = true;
             obj.EdgeCollider.SetPoints(new List<Vector2>
             {
@@ -74,7 +79,12 @@ public class LaserGun : InvenWeapon
     protected override void RotateWeapon(Transform target)
     {
 
-        if (target == null) return;
+        if (target == null)
+        {
+            transform.rotation = Quaternion.identity;
+            _spriteRenderer.flipY = false;
+            return;
+        }
 
         var dir = target.position - transform.position;
         dir.Normalize();

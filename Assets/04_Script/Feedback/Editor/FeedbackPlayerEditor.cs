@@ -47,6 +47,12 @@ public class FeedbackPlayerEditor : Editor
             AddFeedbackButton<HitShakeFeedback>("HitShake");
             AddFeedbackButton<DamageTextFeedback>("DamageText");
             AddFeedbackButton<HitStopFeedback>("StopTime");
+            AddFeedbackButton<PlaySoundFeedback>("PlaySound");
+            AddFeedbackButton<SpawnParticleFeedback>("SpawnParticle");
+            AddFeedbackButton<CameraShakeFeedback>("CameraShake");
+            AddFeedbackButton<OverdamageShockwaveFeedback>("OverdamageShockwave");
+            AddFeedbackButton<ChromaticFeedback>("Chromatic");
+            AddFeedbackButton<SetActiveFeedback>("SetActive");
 
         }
 
@@ -65,7 +71,7 @@ public class FeedbackPlayerEditor : Editor
         return value;
     }
 
-    private void AddFeedbackButton<T>(string text) where T : MonoBehaviour
+    private void AddFeedbackButton<T>(string text) where T : Feedback
     {
         if (_feedbackPlayer.transform.GetComponent<T>() != null)
         {
@@ -79,6 +85,7 @@ public class FeedbackPlayerEditor : Editor
         if (GUILayout.Button(text, GUILayout.Width(200)))
         {
             _feedbackPlayer.transform.AddComponent<T>();
+            EditorUtility.SetDirty(target);
         }
         EditorGUILayout.EndHorizontal();
     }

@@ -11,12 +11,17 @@ public class Speaker : InvenWeapon
 
     public override void Attack(Transform target)
     {
+        if (_attackSoundClip != null)
+        {
+
+            SoundManager.Instance.SFXPlay("AttackSound", _attackSoundClip, 0.5f);
+
+        }
 
         DOTween.Sequence().
-            Append(transform.DOScale(Vector2.one * 1.3f, 0.2f).SetEase(Ease.InBounce)).
+            Append(transform.DOScale(Vector2.one * 1.5f, 0.2f).SetEase(Ease.InBounce)).
             Append(transform.DOScale(Vector2.one, 0.2f));
 
-        SoundManager.Instance?.SFXPlay("Hammer", clip);
         StartCoroutine(AttackTween());
 
     }
@@ -27,7 +32,7 @@ public class Speaker : InvenWeapon
         isAttack = true;
         yield return new WaitForSeconds(0.2f);
         var obj = Instantiate(effect, transform.position, Quaternion.identity);
-        obj.SetDamage(Data.AttackDamage.GetValue());
+        obj.SetDamage(Data.GetDamage());
         yield return new WaitForSeconds(0.2f);
         isAttack = false;
 
@@ -51,8 +56,11 @@ public class Speaker : InvenWeapon
 
     protected override void RotateWeapon(Transform target)
     {
-
-        if (target == null) return;
+        if (target == null)
+        {
+            transform.rotation = Quaternion.identity;
+            return;
+        }
         if (isAttack == true) return;
 
         var dir = target.position - transform.position;

@@ -2,16 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlowerBoss : Boss
+// inspector에서 보이는 변수들
+public partial class FlowerBoss
 {
     public GameObject flowerOnlyCollector;
     public GameObject bigestBody;
     public GameObject mediumSizeBody;
     public GameObject smallestBody;
 
-    public bool flowering;
-    public bool fullBloom;
-    public bool withered;
+    [Header("AudioClip")]
+    public AudioClip fireSound;
+    public AudioClip laserSound;
+
+    [Header("FlowerOnly")]
+    [SerializeField]
+    private float _fullBloomTime;
+}
+
+
+// bigestBody만 히트 후 원래 색깔로 안돌아오는 버그
+public partial class FlowerBoss : Boss
+{
+    [HideInInspector] public bool flowering;
+    [HideInInspector] public bool fullBloom;
+    [HideInInspector] public bool withered;
 
     private BossState _curBossState;
 
@@ -19,28 +33,16 @@ public class FlowerBoss : Boss
 
     private FlowerPattern _pattern;
 
-    [SerializeField]
-    private float _fullBloomTime;
-
     private bool _change = false;
-
-    [HideInInspector]
-    public Body bigestbody;
-    [HideInInspector]
-    public Body mediumsizebody;
-    [HideInInspector]
-    public Body smallestbody;
 
     protected override void OnEnable()
     {
         base.OnEnable();
 
-        SetBody(ref bigestbody, bigestBody);
-        SetBody(ref mediumsizebody, mediumSizeBody);
-        SetBody(ref smallestbody, smallestBody);
+        bossColor = new Color(1, 0.1960784f, 0.427451f);
 
         _pattern = GetComponent<FlowerPattern>();
-        _bossFSM = new BossFSM(new BossIdleState(this, _pattern));
+        _bossFSM = new BossFSM(new FIdleState(this, _pattern));
         StartCoroutine(FullBloomTimer(_fullBloomTime));
     }
 
@@ -66,8 +68,6 @@ public class FlowerBoss : Boss
         }
     }
 
-    
-
     private IEnumerator FullBloomTimer(float waitTime)
     {
         fullBloom = true;
@@ -89,15 +89,12 @@ public class FlowerBoss : Boss
     private IEnumerator NextState(BossState state)
     {
         gameObject.layer = LayerMask.NameToLayer("Default");
-        SetBodyToBasic(bigestbody, bigestBody);
-        SetBodyToBasic(mediumsizebody, mediumSizeBody);
-        SetBodyToBasic(smallestbody, smallestBody);
         ReturnAll();
         flowering = false;
 
         while (_currentHP < so.MaxHP)
         {
-            _currentHP++;
+            _currentHP += so.MaxHP / 50;
             yield return null;
         }
 
@@ -114,7 +111,10 @@ public class FlowerBoss : Boss
         {
             case BossState.Idle:
                 _fakeDie = true;
-                ChangeBossState(BossState.Flowering);
+                if(!isIdle)
+                {
+                    ChangeBossState(BossState.Flowering);
+                }
                 break;
             case BossState.Flowering:
                 if(fullBloom && _currentHP <= 0 && !_change)

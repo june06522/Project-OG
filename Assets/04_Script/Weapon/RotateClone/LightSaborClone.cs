@@ -20,7 +20,7 @@ public class LightSaborClone : RotateClone
             //    }
             //}
 
-            hitAble.Hit(_DataSO.AttackDamage.GetValue());
+            hitAble.Hit(_DataSO.GetDamage());
         }
     }
 }

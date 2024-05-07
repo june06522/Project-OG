@@ -83,6 +83,7 @@ public class StageGate : MonoBehaviour, IInteractable
 
         stageTransition.StartTransition();
         yield return new WaitForSeconds(0.2f);
+        OnGateEvent?.Invoke();
         if (NextStage != null)
         {
 
@@ -93,14 +94,25 @@ public class StageGate : MonoBehaviour, IInteractable
         }
         else
             GameManager.Instance.ResetGlobalLight();
-        GameManager.Instance.InventoryActive.isPlaying = true;
-        OnGateEvent?.Invoke();
+        GameManager.Instance.isPlay = true;
         yield return new WaitForSeconds(0.5f);
         _playerController.ChangeState(EnumPlayerState.Move);
-        CameraManager.Instance.SetMinimapCameraPostion(NextStage.transform.position);
+
+        if(NextStage != null)
+        {
+
+            CameraManager.Instance.SetMinimapCameraPostion(NextStage.transform.position);
+            NextStage.SetStageTitle();
+
+        }
+
         stageTransition.EndTransition();
+        
+
         yield return new WaitForSeconds(1f);
 
+        EventTriggerManager.Instance?.RoomEnterExecute();
+        
         if (NextStage != null)
         {
             NextStage?.StartWave();

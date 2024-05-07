@@ -5,7 +5,6 @@ using UnityEngine;
 public class ContextSolver
 {
     Vector2 resultDirection;
-    private float rayLength = 2;
 
     public Vector2 GetDirectionToMove(List<SteeringBehaviour> behaviours, AIData aiData)
     {

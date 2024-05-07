@@ -25,7 +25,8 @@ public class DataManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = FindObjectOfType<DataManager>();
-            DontDestroyOnLoad(this);
+            if(transform.parent == null)
+                DontDestroyOnLoad(this);
         }
         else
             Destroy(gameObject);

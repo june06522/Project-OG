@@ -4,9 +4,8 @@ using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class ExpansionManager : MonoBehaviour
+public class ExpansionManager : MonoSingleton<ExpansionManager>
 {
-    public static ExpansionManager Instance;
 
     [SerializeField] Transform tileParent;
     [SerializeField] InvenSlotBtn plusObj;
@@ -29,15 +28,6 @@ public class ExpansionManager : MonoBehaviour
 
     private void Awake()
     {
-        #region 싱글톤
-        if (Instance == null)
-            Instance = this;
-        else
-        {
-            Debug.LogError($"{transform} : ExpansionManager is multiply running!");
-            Destroy(gameObject);
-        }
-        #endregion
 
         #region 예외처리
         if (tileParent == null)

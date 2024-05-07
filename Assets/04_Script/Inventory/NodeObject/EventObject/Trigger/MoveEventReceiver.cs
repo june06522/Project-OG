@@ -29,7 +29,7 @@ public class MoveEventReceiver : InventoryEventReceiverBase
     private void HandleMove()
     {
 
-        SendData s = new SendData(generatorID);
+        SendData s = new SendData(generatorID, transform);
 
         GetSignal(s);
 
@@ -42,8 +42,17 @@ public class MoveEventReceiver : InventoryEventReceiverBase
         {
 
             PlayerController.EventController.OnMove -= HandleMove;
-
         }
 
+    }
+
+    private new void OnDestroy()
+    {
+        if (PlayerController.EventController != null)
+        {
+
+            PlayerController.EventController.OnMove -= HandleMove;
+
+        }
     }
 }

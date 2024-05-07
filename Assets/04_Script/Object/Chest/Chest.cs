@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Chest : MonoBehaviour, IInteractable
 {
+    [Header("ItemType")]
+    [SerializeField] private bool _useOnlyOneTypeChest = false;
+    [SerializeField] private ItemType _itemType;
+
     // normal item probabilities are the remaining probabilities other than other item probabilities
     [Header("percent")]
     [SerializeField] private float _rareProbability;     // rare item probability
@@ -11,6 +15,8 @@ public class Chest : MonoBehaviour, IInteractable
     [SerializeField] private float _legendProbability;   // legend item probability
 
     [Header("Info")]
+    [SerializeField]
+    private FeedbackPlayer _feedbackPlayer;
     [SerializeField]
     private AudioClip _openSound;
     [SerializeField]
@@ -55,6 +61,11 @@ public class Chest : MonoBehaviour, IInteractable
 
         foreach (ItemInfoSO item in itemInfoSOs)
         {
+            if(_useOnlyOneTypeChest && item.Brick.Type != _itemType)
+            {
+                continue;
+            }
+
             _rateItems[item.Rate].Add(item);
         }
     }
@@ -70,9 +81,10 @@ public class Chest : MonoBehaviour, IInteractable
         //PlaySceneEffectSound.Instance.PlayChestOpenSound();
         PlaySceneEffectSound.Instance.PlayMoneyDropSound();
 
-        _spriteRenderer.sprite = _openSprite;
+        if(_spriteRenderer != null)
+            _spriteRenderer.sprite = _openSprite;
 
-        ItemInfoSO item = RandomItem();
+        ItemInfoSO item = GetRandomItem();
         
         if (item.ItemObject != null) 
         {
@@ -83,6 +95,7 @@ public class Chest : MonoBehaviour, IInteractable
 
         if (_goldEffect != null)
             PlayOpenEffect(item.Rate);
+        _feedbackPlayer?.Play(0);
 
         SoundManager.Instance.SFXPlay("ChestOpen", _openSound, 1f);
         Money.Instance.EarnGold(Random.Range(_dropMinGold, _dropMaxGold + 1));
@@ -90,27 +103,15 @@ public class Chest : MonoBehaviour, IInteractable
 
     private void PlayOpenEffect(ItemRate rate)
     {
-        _goldEffect.Stop();
+        if (_goldEffect == null)
+            return;
 
-        //var main = _openEffect.main;
-        //main.startColor = Color.white;
-        //switch (rate)
-        //{
-        //    case ItemRate.RARE:
-        //        main.startColor = Color.cyan;
-        //        break;
-        //    case ItemRate.EPIC:
-        //        main.startColor = Color.magenta;
-        //        break;
-        //    case ItemRate.LEGEND:
-        //        main.startColor = Color.yellow;
-        //        break;
-        //}
-
+        if(_goldEffect.isPlaying)
+            _goldEffect.Stop();
         _goldEffect.Play();
     }
 
-    private ItemInfoSO RandomItem()
+    private ItemInfoSO GetRandomItem()
     {
         float percent = Random.Range(0f, 100f); // 0 ~ 100
         ItemRate rate = ItemRate.NORMAL;
@@ -132,6 +133,14 @@ public class Chest : MonoBehaviour, IInteractable
 
             rate = ItemRate.RARE;
 
+        }
+
+        while(_rateItems[rate].Count <= 0)
+        {
+            if (rate == ItemRate.LEGEND)
+                rate = ItemRate.NORMAL;
+            else
+                rate = rate + 1;
         }
 
         ItemInfoSO iteminfo = _rateItems[rate][Random.Range(0, _rateItems[rate].Count)];

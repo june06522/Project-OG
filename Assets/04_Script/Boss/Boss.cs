@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public enum BossState
 {
@@ -20,33 +21,38 @@ public enum BossState
     Dead
 }
 
-public struct Body
+// inspector에서 보이는 변수들
+public partial class Boss
 {
-    public Color color;
-    public Vector3 scale;
-    public Quaternion rotation;
-}
-
-public class Boss : MonoBehaviour, IHitAble
-{
+    [field: Header("Feedback")]
     [field: SerializeField]
     public FeedbackPlayer feedbackPlayer { get; set; }
 
-    public GameObject bulletCollector;
-
+    [field: Header("Boss Move")]
     public BossMove bossMove;
 
+    [field: Header("SO")]
     public BossDataSO so;
 
+    [field: Header("UI")]
     public Slider bossHPSlider;
+
+    [Header("GameObject")]
+    public GameObject bulletCollector;
+}
+
+public partial class Boss : MonoBehaviour, IHitAble
+{
+    [HideInInspector] public bool isIdle;
+    [HideInInspector] public bool isStop;
+    [HideInInspector] public bool isAttacking;
+    [HideInInspector] public bool isDead;
+    [HideInInspector] public bool isBlocked;
+
+    [HideInInspector] public Color bossColor;
 
     public event Action DieEvt;
     public event Action DeadEndEvt;
-
-    public bool isStop;
-    public bool isAttacking;
-    public bool isDead;
-    public bool isBlocked;
 
     public bool IsDie
     {
@@ -79,18 +85,23 @@ public class Boss : MonoBehaviour, IHitAble
         bossHPSlider.value = _currentHP / so.MaxHP;
     }
 
-    public void SetBodyToBasic(Body body, GameObject obj)
+    public void SetBody(GameObject obj, Vector3 scale, Vector3 rotation, Color color, float changeTime)
     {
-        obj.transform.localScale = body.scale;
-        obj.transform.rotation = body.rotation;
-        obj.GetComponent<SpriteRenderer>().color = body.color;
+        SetScale(obj, scale, changeTime);
+        SetRotation(obj, rotation, changeTime);
+        obj.GetComponent<SpriteRenderer>().color = color;
     }
 
-    protected void SetBody(ref Body body, GameObject obj)
+    private void SetScale(GameObject obj, Vector3 scale, float changeTime)
     {
-        body.color = obj.GetComponent<SpriteRenderer>().color;
-        body.scale = obj.transform.localScale;
-        body.rotation = obj.transform.rotation;
+        obj.transform.DOScale(scale, changeTime)
+            .SetEase(Ease.InOutSine);
+    }
+
+    private void SetRotation(GameObject obj, Vector3 rotation, float changeTime)
+    {
+        obj.transform.DORotate(rotation, changeTime)
+            .SetEase(Ease.InOutSine);
     }
 
     private void DieEvent()
@@ -167,11 +178,10 @@ public class Boss : MonoBehaviour, IHitAble
         }
     }
 
-    public IEnumerator Blinking(GameObject obj, float blinkingTime, float a, int orderInLayer, Color color, Sprite sprite = null)
+    public IEnumerator Blinking(GameObject obj, float blinkingTime, float a, int orderInLayer, Color color, Sprite sprite = null, bool willDisappear = false)
     {
         SpriteRenderer renderer = obj.GetComponent<SpriteRenderer>();
         Sprite originSprite = renderer.sprite;
-        Color originColor = renderer.color;
         int originOrderInLayer = renderer.sortingOrder;
         float currentTime = 0;
 
@@ -191,8 +201,11 @@ public class Boss : MonoBehaviour, IHitAble
             yield return null;
         }
 
-
-        renderer.color = originColor;
+        renderer.color = bossColor;
+        if (willDisappear)
+        {
+            renderer.color *= new Color(1, 1, 1, 0);
+        }
         renderer.sortingOrder = originOrderInLayer;
         if(sprite != null)
         {
@@ -209,7 +222,12 @@ public class Boss : MonoBehaviour, IHitAble
 
         while(currentTime < popingTime)
         {
-            currentTime += Time.deltaTime;
+            if (obj.transform.localScale.magnitude < originSize.magnitude)
+            {
+                break;
+            }
+
+            currentTime += Time.deltaTime * multiply;
 
             obj.transform.localScale -= new Vector3(Time.deltaTime / multiply, Time.deltaTime / multiply, 0);
 

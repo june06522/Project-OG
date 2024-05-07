@@ -33,7 +33,9 @@ public class FDeadState : BossBaseState
 
     private IEnumerator Dying(int disappearingTime)
     {
-        yield return null;
+        _flower.StartCoroutine(_pattern.FlowerDeadShot(_flower, 5, 5, 3, 10, 5, 0.5f));
+        yield return new WaitForSeconds(0.5f * 4);
+
         _flower.StartCoroutine(ActiveFalse(_flower.gameObject, disappearingTime));
         _flower.StartCoroutine(ActiveFalse(_flower.bigestBody, disappearingTime));
         _flower.StartCoroutine(ActiveFalse(_flower.mediumSizeBody, disappearingTime));

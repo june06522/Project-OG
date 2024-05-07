@@ -33,12 +33,12 @@ public abstract class Weapon : MonoBehaviour
 
         RotateWeapon(target);
 
-        if (!Data.isAttackCoolDown && target != null)
+        if ((!Data.isAttackCoolDown || Data.isSkillAttack) && target != null)
         {
+            if(!Data.isAttackCoolDown)
+                Data.SetCoolDown();
 
-            Data.SetCoolDown();
-
-            EventTriggerManager.Instance.BasicAttackExecute();
+            EventTriggerManager.Instance?.BasicAttackExecute();
 
             Attack(target);
 
@@ -48,7 +48,11 @@ public abstract class Weapon : MonoBehaviour
 
     protected virtual void RotateWeapon(Transform target)
     {
-        if (target == null) return;
+        if (target == null)
+        {
+            transform.rotation = Quaternion.identity;
+            return;
+        }
 
         var dir = target.position - transform.position;
 

@@ -18,28 +18,34 @@ public class SFullHPState : BossBaseState
 
     public override void OnBossStateExit()
     {
-        GameObject effect = ObjectPool.Instance.GetObject(ObjectPoolType.SlateDeadEffect);
-        effect.transform.position = _slate.transform.position;
         _slate.ReturnMinimi(g_minimis);
         StopNowCoroutine();
         _slate.StopAllCoroutines();
-        _slate.SetBodyToBasic(_slate.bigestbody, _slate.bigestBody);
-        _slate.SetBodyToBasic(_slate.mediumsizebody, _slate.mediumSizeBody);
-        _slate.SetBodyToBasic(_slate.smallestbody, _slate.smallestBody);
+
+        _slate.gameObject.layer = LayerMask.NameToLayer("Default");
+        _slate.SetBody(_slate.bigestBody, Vector3.one, Vector3.zero, _slate.bossColor, 0.5f);
+        _slate.SetBody(_slate.mediumSizeBody, Vector3.one, Vector3.zero, _slate.bossColor, 0.5f);
+        _slate.SetBody(_slate.smallestBody, Vector3.one, Vector3.zero, _slate.bossColor, 0.5f);
+
+        _slate.LaserReturnAll();
+        _slate.ReturnAll();
+
         _slate.isAttacking = false;
         _slate.isStop = true;
         _slate.fullHP = false;
         _slate.halfHP = true;
+
         _slate.MinimiCount = g_minimis.Length + 1;
     }
 
     public override void OnBossStateOn()
     {
+        _slate.gameObject.layer = LayerMask.NameToLayer("Boss");
         _slate.isStop = false;
         g_minimis = new GameObject[_slate.MinimiCount];
         _minimiLaserLineRenderer = new LineRenderer[_slate.MinimiCount];
         _originPos = new Vector3[_slate.MinimiCount];
-        _slate.StartCoroutine(CreateMinimi());
+        CreateMinimi();
         _slate.StartCoroutine(RandomPattern(_slate.so.PatternChangeTime));
         _slate.StartCoroutine(_slate.bossMove.BossMovement(_slate.so.StopTime, _slate.so.MoveX, _slate.so.MoveY, _slate.so.Speed, _slate.so.WallCheckRadius));
     }
@@ -49,9 +55,8 @@ public class SFullHPState : BossBaseState
         
     }
 
-    private IEnumerator CreateMinimi()
+    private void CreateMinimi()
     {
-        yield return new WaitForSeconds(1);
         for (int i = 0; i < g_minimis.Length; i++)
         {
             g_minimis[i] = ObjectPool.Instance.GetObject(ObjectPoolType.SlateMinimi, _slate.transform);
@@ -61,7 +66,6 @@ public class SFullHPState : BossBaseState
             g_minimis[i].transform.rotation = Quaternion.identity;
             _minimiLaserLineRenderer[i] = g_minimis[i].GetComponent<LineRenderer>();
             _minimiLaserLineRenderer[i].material = _slate.laserMat;
-
         }
     }
 

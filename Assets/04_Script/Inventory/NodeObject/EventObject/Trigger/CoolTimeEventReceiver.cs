@@ -27,7 +27,7 @@ public class CoolTimeEventReceiver : InventoryEventReceiverBase
         if(curCool < 0)
         {
             curCool = cool;
-            HandleDash();
+            HandleCool();
         }
     }
 
@@ -39,10 +39,10 @@ public class CoolTimeEventReceiver : InventoryEventReceiverBase
 
     }
 
-    private void HandleDash()
+    private void HandleCool()
     {
 
-        SendData s = new SendData(generatorID);
+        SendData s = new SendData(generatorID, transform);
 
         GetSignal(s);
 

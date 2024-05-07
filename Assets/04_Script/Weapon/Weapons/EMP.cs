@@ -1,7 +1,5 @@
 using DG.Tweening;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EMP : InvenWeapon
@@ -15,7 +13,7 @@ public class EMP : InvenWeapon
     {
         base.Awake();
         _spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        
+
     }
 
     public override void Attack(Transform target)
@@ -23,13 +21,20 @@ public class EMP : InvenWeapon
         isAttack = true;
 
         Vector3 targetPos = target.position;
+        if (_attackSoundClip != null)
+        {
+
+            SoundManager.Instance.SFXPlay("AttackSound", _attackSoundClip, 0.5f);
+
+        }
+
         Instantiate(empBomb, transform.position, transform.rotation)
-            .Throw(targetPos, damage: Data.AttackDamage.GetValue());
+            .Throw(targetPos, damage: Data.GetDamage(), 0f, transform.localScale.x);
 
         transform.DOScale(transform.localScale * 1.5f, 0.25f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.InOutBounce);
 
         StartCoroutine(WaitAttackEnd());
-        
+
     }
 
     private IEnumerator WaitAttackEnd()
@@ -57,7 +62,11 @@ public class EMP : InvenWeapon
 
     protected override void RotateWeapon(Transform target)
     {
-        if (target == null) return;
+        if (target == null)
+        {
+            transform.rotation = Quaternion.identity;
+            return;
+        }
         if (isAttack == true) return;
 
         var dir = target.position - transform.position;

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,7 +18,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     List<Vector3> route;
 
     float beforeTime;
-    float resetTime = 0.5f;
+    //float resetTime = 0.5f;
 
     List<SteeringBehaviour> behaviours;
     Vector2 movementInput;
@@ -28,7 +27,6 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     {
         this.targetTrm = controller.Target;
         this.behaviours = behaviours;
-
         isMove = true;
     }
 

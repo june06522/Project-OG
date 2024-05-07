@@ -12,6 +12,9 @@ public class ChoiceItem : MonoBehaviour
     private ParticleSystem _particleSystem;
 
     [SerializeField]
+    private FeedbackPlayer _feedbackPlayer;
+
+    [SerializeField]
     private List<Transform> _randomItemSpawnPos;
     private List<Item> _spawnItems = new List<Item>();
 
@@ -40,6 +43,8 @@ public class ChoiceItem : MonoBehaviour
 
     private void HandleDeleteItem(Transform itemTrm)
     {
+        _feedbackPlayer?.Play(0);
+
         ParticleSystem spawnParticle = Instantiate(_particleSystem, itemTrm.position, Quaternion.identity);
         spawnParticle.transform.SetParent(transform);
         spawnParticle.Play();

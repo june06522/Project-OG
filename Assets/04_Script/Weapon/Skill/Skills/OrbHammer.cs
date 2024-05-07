@@ -7,7 +7,7 @@ public class OrbHammer : Skill
     [SerializeField] GameObject hammerEffect;
     [SerializeField] AudioClip clip;
 
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
 
         float angle = Mathf.Atan2(weaponTrm.right.y, weaponTrm.right.x) * Mathf.Rad2Deg;

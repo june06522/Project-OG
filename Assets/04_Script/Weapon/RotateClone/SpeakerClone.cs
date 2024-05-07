@@ -6,7 +6,7 @@ using UnityEngine;
 public class SpeakerClone : RotateClone
 {
     [SerializeField] AudioClip clip;
-    [SerializeField] SpeakerAttack effect;
+    [SerializeField] SpeakerAttack _effect;
 
     protected override void Attack()
     {
@@ -24,8 +24,8 @@ public class SpeakerClone : RotateClone
     {
 
         yield return new WaitForSeconds(0.2f);
-        var obj = Instantiate(effect, transform.position, Quaternion.identity);
-        obj.SetDamage(_DataSO.AttackDamage.GetValue());
+        var obj = Instantiate(_effect, transform.position, Quaternion.identity);
+        obj.SetDamage(_DataSO.GetDamage());
         yield return new WaitForSeconds(0.2f);
 
     }

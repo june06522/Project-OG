@@ -16,7 +16,7 @@ public class Sword : InvenWeapon
     [SerializeField] private Ease ease = Ease.Linear;
     [SerializeField] Transform[] wayPointTrms;
     private Vector3[] wayPoints;
-    
+
     Transform wayPointTrmParent;
     Coroutine attackCor;
 
@@ -26,10 +26,10 @@ public class Sword : InvenWeapon
         base.Awake();
         _spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
         _col = transform.GetComponent<Collider2D>();
-        
+
         wayPoints = new Vector3[wayPointTrms.Length];
-      
-        for(int i = 0; i < wayPointTrms.Length; i++)
+
+        for (int i = 0; i < wayPointTrms.Length; i++)
         {
             wayPoints.SetValue(wayPointTrms[i].localPosition, i);
         }
@@ -41,9 +41,8 @@ public class Sword : InvenWeapon
     [BindExecuteType(typeof(float))]
     public override void GetSignal([BindParameterType(typeof(float))] object signal)
     {
-        
-        var data = (SendData)signal;
 
+        var data = (SendData)signal;
         if (!sendDataList.ContainsKey(data.index))
         {
             sendDataList.Add(data.index, data);
@@ -58,7 +57,7 @@ public class Sword : InvenWeapon
     private Vector3[] GetLocalWayPoints(Vector3 target)
     {
         Vector3[] points = new Vector3[wayPoints.Length];
-        for(int i = 0; i < points.Length; i++)
+        for (int i = 0; i < points.Length; i++)
         {
             points[i] = transform.InverseTransformPoint(wayPointTrms[i].position); //+ target;// + transform.position;
         }
@@ -119,9 +118,19 @@ public class Sword : InvenWeapon
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, transform.rotation.eulerAngles.z - sign * 60));
 
         DOTween.Sequence().
+            Append(transform.DOPath(wayPoints, 0.25f, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
+            Insert(0f, transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + sign * 90), 0.25f));
 
-            Append(transform.DOLocalPath(wayPoints, duration, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
-            Insert(0f, transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + sign * 90), duration).SetEase(ease)).SetAutoKill(true);
+        if (_attackSoundClip != null)
+        {
+
+            SoundManager.Instance.SFXPlay("AttackSound", _attackSoundClip, 0.5f);
+
+        }
+
+
+        StartCoroutine(AttackTween(false));
+
     }
 
     private IEnumerator AttackTween(bool reinforce)
@@ -169,8 +178,11 @@ public class Sword : InvenWeapon
 
     protected override void RotateWeapon(Transform target)
     {
-
-        if (target == null) return;
+        if (target == null)
+        {
+            transform.rotation = Quaternion.Euler(0f, 0f, 60f);
+            return;
+        }
         if (isAttack == true) return;
 
         var dir = target.position - transform.position;
@@ -195,7 +207,7 @@ public class Sword : InvenWeapon
         if (collision.TryGetComponent<IHitAble>(out var hitAble))
         {
             //Debug.Log(1);
-            hitAble.Hit(Data.AttackDamage.GetValue());
+            hitAble.Hit(Data.GetDamage());
 
         }
     }

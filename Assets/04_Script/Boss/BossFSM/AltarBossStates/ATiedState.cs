@@ -15,12 +15,19 @@ public class ATiedState : BossBaseState
     public override void OnBossStateExit()
     {
         _altar.bossMove.StopMovement(true);
+
+        _altar.SetBody(_altar.bigestBody, Vector3.one, Vector3.zero, _altar.bossColor, 0.5f);
+        _altar.SetBody(_altar.mediumSizeBody, Vector3.one, Vector3.zero, _altar.bossColor, 0.5f);
+        _altar.SetBody(_altar.smallestBody, Vector3.one, Vector3.zero, _altar.bossColor, 0.5f);
     }
 
     public override void OnBossStateOn()
     {
+        _altar.gameObject.layer = LayerMask.NameToLayer("Boss");
+
         _altar.isStop = false;
         _altar.isTied = true;
+
         _altar.StartCoroutine(RandomPattern(_altar.so.PatternChangeTime));
         _altar.StartCoroutine(_altar.bossMove.BossMovement(_altar.so.StopTime, 0.5f, 0.5f, _altar.so.Speed, _altar.so.WallCheckRadius));
     }
@@ -53,10 +60,10 @@ public class ATiedState : BossBaseState
             switch (rand)
             {
                 case 1:
-                    NowCoroutine(_pattern.OmnidirAttack(_altar, 20, 5, 1, 1));
+                    NowCoroutine(_pattern.OmnidirAttack(_altar, 18, 5, 1, 1));
                     break;
                 case 2:
-                    NowCoroutine(_pattern.OmniGuidPlayerAttack(_altar, 20, 5, 1, 1));
+                    NowCoroutine(_pattern.OmniGuidPlayerAttack(_altar, 18, 5, 1, 1));
                     break;
             }
         }

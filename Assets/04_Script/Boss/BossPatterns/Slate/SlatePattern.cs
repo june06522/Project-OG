@@ -3,8 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
+// 크기 변동의 문제, 시작 애니메이션 추가, 레이저 색 변경
 public class SlatePattern : BossPatternBase
 {
+    public IEnumerator LastLaserAttack(LineRenderer line, Vector3 pos, float speed, float scale)
+    {
+        line.SetPosition(0, pos);
+        line.startWidth = scale;
+        ShowLineRenderer(pos, line, Vector2.right, scale);
+
+        yield return new WaitForSeconds(0.5f);
+
+        float deg = 0;
+        while(deg < 360)
+        {
+            deg += Time.deltaTime * speed;
+
+            var rad = Mathf.Deg2Rad * deg;
+
+            var x = Mathf.Cos(rad);
+            var y = Mathf.Sin(rad);
+
+            Vector2 dir = new Vector2(x, y);
+            line.SetPosition(1, RayWallCheck(pos, dir));
+            RayPlayerCheck(pos, dir);
+
+            yield return null;
+        }
+
+        line.enabled = false;
+    }
+
     public IEnumerator Laser(SlateBoss boss, GameObject[] objs, LineRenderer[] lines, Vector3[] pos, float warningTime, float fireTime, float speed, float goBackTime, float minimiMoveSpeed, bool breaker)
     {
         if (!breaker)
@@ -144,12 +173,11 @@ public class SlatePattern : BossPatternBase
         for (int i = 0; i < objs.Length; i++)
         {
             lines[i].enabled = false;
-            objs[i].GetComponent<SpriteRenderer>().material = boss.hologramMinimiMat;
         }
 
-        boss.SetBodyToBasic(boss.bigestbody, boss.bigestBody);
-        boss.SetBodyToBasic(boss.mediumsizebody, boss.mediumSizeBody);
-        boss.SetBodyToBasic(boss.smallestbody, boss.smallestBody);
+        boss.SetBody(boss.bigestBody, Vector3.one, Vector3.zero, boss.bossColor, 0.5f);
+        boss.SetBody(boss.mediumSizeBody, Vector3.one, Vector3.zero, boss.bossColor, 0.5f);
+        boss.SetBody(boss.smallestBody, Vector3.one, Vector3.zero, boss.bossColor, 0.5f);
 
         yield return new WaitForSeconds(goBackTime);
 
@@ -229,7 +257,6 @@ public class SlatePattern : BossPatternBase
     {
         GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
         bullet.GetComponent<BossBullet>().Attack(boss.so.Damage);
-        bullet.GetComponent<SpriteRenderer>().material = boss.bulletMat;
         bullet.transform.position = pos;
         bullet.transform.rotation = Quaternion.identity;
 
@@ -271,7 +298,6 @@ public class SlatePattern : BossPatternBase
                     plus = true;
                 GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
                 bullet.GetComponent<BossBullet>().Attack(boss.so.Damage);
-                bullet.GetComponent<SpriteRenderer>().material = boss.bulletMat;
                 bullet.transform.position = boss.transform.position;
                 bullet.transform.rotation = Quaternion.identity;
 
@@ -307,7 +333,7 @@ public class SlatePattern : BossPatternBase
                     .SetEase(Ease.InOutSine);
             boss.mediumSizeBody.transform.DORotate(new Vector3(0, 0, -135), time)
                 .SetEase(Ease.InOutSine);
-            boss.StartCoroutine(boss.Poping(boss.smallestBody, time * 2, 1.5f));
+            boss.StartCoroutine(boss.Poping(boss.smallestBody, time / 2, 1.5f));
 
             for (int j = 0; j < bulletCount; j++)
             {
@@ -315,7 +341,6 @@ public class SlatePattern : BossPatternBase
                 {
                     bullets[k, i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.SlateBullet, boss.bulletCollector.transform);
                     bullets[k, i, j].GetComponent<BossBullet>().Attack(boss.so.Damage);
-                    bullets[k, i, j].GetComponent<SpriteRenderer>().material = boss.bulletMat;
                     bullets[k, i, j].transform.position = objs[k].transform.position;
                     bullets[k, i, j].transform.rotation = Quaternion.identity;
 
@@ -410,7 +435,6 @@ public class SlatePattern : BossPatternBase
             {
                 bullets[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
                 bullets[i, j].GetComponent<BossBullet>().Attack(boss.so.Damage);
-                bullets[i, j].GetComponent<SpriteRenderer>().material = boss.bulletMat;
                 bullets[i, j].transform.position = boss.transform.position;
                 bullets[i, j].transform.rotation = Quaternion.identity;
 
@@ -426,7 +450,7 @@ public class SlatePattern : BossPatternBase
             if (i > 0)
                 for (int j = 0; j < bulletCount; j++)
                 {
-                    bullets[i - 1, j].GetComponent<SpriteRenderer>().material = boss.bulletMat;
+                    bullets[i - 1, j].GetComponent<SpriteRenderer>().color = boss.bossColor;
                     Rigidbody2D rigid = bullets[i - 1, j].GetComponent<Rigidbody2D>();
                     Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * j / bulletCount), Mathf.Sin(Mathf.PI * 2 * j / bulletCount));
                     rigid.velocity = dir.normalized * speed;
@@ -434,7 +458,7 @@ public class SlatePattern : BossPatternBase
 
             for (int j = 0; j < bulletCount; j++)
             {
-                bullets[i, j].GetComponent<SpriteRenderer>().material = boss.StopMat;
+                bullets[i, j].GetComponent<SpriteRenderer>().color = Color.white;
                 Rigidbody2D rigid = bullets[i, j].GetComponent<Rigidbody2D>();
                 rigid.velocity = Vector2.zero;
             }
@@ -450,7 +474,7 @@ public class SlatePattern : BossPatternBase
         {
             for (int i = 0; i < bulletCount; i++)
             {
-                bullets[counting, i].GetComponent<SpriteRenderer>().material = boss.StopMat;
+                bullets[counting, i].GetComponent<SpriteRenderer>().color = Color.white;
                 Rigidbody2D rigid = bullets[counting, i].GetComponent<Rigidbody2D>();
                 rigid.velocity = Vector2.zero;
             }
@@ -459,7 +483,7 @@ public class SlatePattern : BossPatternBase
             {
                 for (int i = 0; i < bulletCount; i++)
                 {
-                    bullets[counting - 1, i].GetComponent<SpriteRenderer>().material = boss.bulletMat;
+                    bullets[counting - 1, i].GetComponent<SpriteRenderer>().color = boss.bossColor;
                     Rigidbody2D rigid = bullets[counting - 1, i].GetComponent<Rigidbody2D>();
                     Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / bulletCount), Mathf.Sin(Mathf.PI * 2 * i / bulletCount));
                     rigid.velocity = dir.normalized * speed;
@@ -469,7 +493,7 @@ public class SlatePattern : BossPatternBase
             {
                 for (int i = 0; i < bulletCount; i++)
                 {
-                    bullets[burstCount - 1, i].GetComponent<SpriteRenderer>().material = boss.bulletMat;
+                    bullets[burstCount - 1, i].GetComponent<SpriteRenderer>().color = boss.bossColor;
                     Rigidbody2D rigid = bullets[burstCount - 1, i].GetComponent<Rigidbody2D>();
                     Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / bulletCount), Mathf.Sin(Mathf.PI * 2 * i / bulletCount));
                     rigid.velocity = dir.normalized * speed;
@@ -488,7 +512,7 @@ public class SlatePattern : BossPatternBase
 
         for (int i = 0; i < bulletCount; i++)
         {
-            bullets[burstCount - 1, i].GetComponent<SpriteRenderer>().material = boss.bulletMat;
+            bullets[burstCount - 1, i].GetComponent<SpriteRenderer>().color = boss.bossColor;
             Rigidbody2D rigid = bullets[burstCount - 1, i].GetComponent<Rigidbody2D>();
             Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / bulletCount), Mathf.Sin(Mathf.PI * 2 * i / bulletCount));
             rigid.velocity = dir.normalized * speed;

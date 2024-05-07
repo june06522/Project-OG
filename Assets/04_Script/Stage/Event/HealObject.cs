@@ -23,6 +23,8 @@ public class HealObject : MonoBehaviour, IInteractable
 
     [Header("Object Info")]
     [SerializeField]
+    private FeedbackPlayer _feedbackPlayer;
+    [SerializeField]
     private GameObject _light;
     [SerializeField]
     private TMP_Text _healText;
@@ -49,9 +51,14 @@ public class HealObject : MonoBehaviour, IInteractable
         seq.Append(healTextTrm.DOScale(new Vector3(0.6f, 1.75f), 0.1f).SetEase(Ease.InOutBounce));
         seq.Append(healTextTrm.DOScale(Vector3.one, 0.1f).SetEase(Ease.OutBounce));
 
-
         _spriteRenderer.material = _spriteDefaultMat;
-        _collider.enabled = false;
-        _light.SetActive(false);
+
+        if(_collider != null)
+            _collider.enabled = false;
+
+        if(_light != null)
+            _light.SetActive(false);
+
+        _feedbackPlayer?.Play(healHealth);
     }
 }

@@ -20,12 +20,6 @@ public class RandomStageSystem : MonoBehaviour
     [SerializeField]
     private List<FloorList> _floorStageList = new List<FloorList>();
 
-    [Header("Game Info")]
-    [SerializeField]
-    private TextMeshProUGUI _floorTitle;
-    [SerializeField]
-    private TextMeshProUGUI _floorTipText;
-
     private Stage _firstStage;
     private int _step = 0;
     private int _stageInterval = 80;
@@ -47,32 +41,7 @@ public class RandomStageSystem : MonoBehaviour
 
     private void StartStageEvent(FloorInfoSO floorInfo)
     {
-        if (_floorTitle == null || _floorTipText == null)
-            return;
-
-        // Title
-        _floorTitle.text = floorInfo.FloorName;
-
-        // Tip
-        _floorTipText.text = "";
-        string tipText = floorInfo.FloorTip[Random.Range(0, floorInfo.FloorTip.Count)];
-
-        // Anim
-        _floorTitle.rectTransform.localScale = Vector3.one;
-        _floorTitle.color = new Color(1f, 1f, 1f, 0f);
-        _floorTipText.color = new Color(1f, 1f, 1f, 1f);
-
-        Sequence seq = DOTween.Sequence();
-        seq.AppendInterval(1f);
-        seq.Append(_floorTitle.rectTransform.DOScale(Vector3.one * 1.2f, 0.2f).SetEase(Ease.OutElastic))
-            .Join(_floorTitle.DOFade(1f, 0.15f));
-        seq.AppendInterval(1f);
-        seq.Append(_floorTipText.DOText(tipText, tipText.Length * 0.2f));
-
-        seq.AppendInterval(1f);
-
-        seq.Append(_floorTitle.DOFade(0f, 2f))
-            .Join(_floorTipText.DOFade(0f, 2f));
+        IngameUIManager.Instance.SetStageTitle(floorInfo.FloorName, floorInfo.FloorTip[Random.Range(0, floorInfo.FloorTip.Count)], 0.5f, 0.15f);
             
     }
 
@@ -93,7 +62,7 @@ public class RandomStageSystem : MonoBehaviour
 
         #region Create Stages
         Stage lastStage = _firstStage = Instantiate(floorInfo.StartStage, _spawnPos, Quaternion.identity);
-        
+        CameraManager.Instance.SetMinimapCameraPostion(_firstStage.transform.position);
 
         for (int i = 0; i < printStageInfo.Count; ++i)
         {

@@ -7,6 +7,7 @@ public class RotateBullet : BossBullet
     private float _deg;
     [SerializeField]
     private float _speed;
+
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -19,15 +20,18 @@ public class RotateBullet : BossBullet
 
     private void Update()
     {
-        _deg += Time.deltaTime * _speed;
+        if(isRotateBullet)
+        {
+            _deg += Time.deltaTime * _speed;
 
-        if(_deg < 360)
-        {
-            transform.rotation = Quaternion.Euler(0, 0, _deg * -1);
-        }
-        else
-        {
-            _deg = 0;
+            if (_deg < 360)
+            {
+                transform.rotation = Quaternion.Euler(0, 0, _deg * -1);
+            }
+            else
+            {
+                _deg = 0;
+            }
         }
     }
 

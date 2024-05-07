@@ -31,14 +31,18 @@ public class AFreeState : BossBaseState
     public override void OnBossStateExit()
     {
         _altar.StopCoroutine(RandomPattern(_altar.so.PatternChangeTime));
+
+        _altar.SetBody(_altar.bigestBody, Vector3.one, Vector3.zero, _altar.bossColor, 0.5f);
+        _altar.SetBody(_altar.mediumSizeBody, Vector3.one, Vector3.zero, _altar.bossColor, 0.5f);
+        _altar.SetBody(_altar.smallestBody, Vector3.one, Vector3.zero, _altar.bossColor, 0.5f);
     }
 
     public override void OnBossStateOn()
     {
         _altar.isStop = false;
         _altar.isBlocked = false;
+
         _altar.StartCoroutine(Dash(10, 20, 0.5f, 0.5f));
-        //_altar.ChangeMaterial(_altar.basicMat);
     }
 
     public override void OnBossStateUpdate()
@@ -100,7 +104,7 @@ public class AFreeState : BossBaseState
                     _altar.StopImmediately(_altar.transform);
                     _altar.isStop = true;
                     _lock = true;
-                    NowCoroutine(_pattern.OmnidirShooting(_altar, 4, 3, 0.2f, 30));
+                    NowCoroutine(_pattern.OmnidirShooting(_altar, 3, 5, 0.2f, 30));
                     break;
             }
         }
@@ -151,7 +155,6 @@ public class AFreeState : BossBaseState
             bullets[i].GetComponent<BossBullet>().Attack(_altar.so.Damage);
         }
 
-        SoundManager.Instance.SFXPlay("Burn", _altar.burnClip, _altar.bulletCollector.transform, 1);
         while (curTime < waitTime)
         {
             deg += Time.deltaTime * speed;
@@ -168,7 +171,10 @@ public class AFreeState : BossBaseState
                 }
             }
             else
+            {
+                SoundManager.Instance.SFXPlay("Rotate", _altar.rotateClip, bullets[0].transform, 1);
                 deg = 0;
+            }
 
             yield return new WaitForSeconds(Time.deltaTime);
         }
