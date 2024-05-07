@@ -9,7 +9,7 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
     int moveIdx;
     bool isArrived;
-    //bool isMove;
+    bool isMove;
 
     bool useNav;
 

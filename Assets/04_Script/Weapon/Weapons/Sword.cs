@@ -129,7 +129,7 @@ public class Sword : InvenWeapon
         }
 
 
-        StartCoroutine(AttackTween());
+        StartCoroutine(AttackTween(false));
 
     }
 
