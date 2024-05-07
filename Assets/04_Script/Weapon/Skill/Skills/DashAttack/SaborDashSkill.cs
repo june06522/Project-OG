@@ -11,7 +11,7 @@ public class SaborDashSkill : Skill
     private Vector2 targetScale;
     private Sword sword;
     
-    public override void Excute(Transform weaponTrm, Transform target, int power)
+    public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
         CurPowerInit(power);
         
