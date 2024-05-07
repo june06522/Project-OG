@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class CheckTooltipGuideQuest : GuideQuest
 {
+    ItemExplain weaponExplain;
+
+    private void Start()
+    {
+        weaponExplain = FindObjectOfType<ItemExplain>();
+    }
+
     public override bool IsQuestComplete()
     {
-        return true; // TooltipÀ» ¶ç¿ü´ÂÁö Ã¼Å©
+        return weaponExplain.IsOn();
     }
 }

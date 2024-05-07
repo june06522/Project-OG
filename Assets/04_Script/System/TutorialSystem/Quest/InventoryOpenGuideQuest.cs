@@ -6,8 +6,9 @@ public class InventoryOpenGuideQuest : GuideQuest
 {
     private InventoryActive _inventoryActive;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         _inventoryActive = FindObjectOfType<InventoryActive>();
     }
 
