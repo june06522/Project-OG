@@ -68,7 +68,7 @@ public class Bullet : MonoBehaviour
 
                 HitOther();
 
-                if(collision.TryGetComponent<IHitAble>(out var hitAble))
+                if (collision.TryGetComponent<IHitAble>(out var hitAble))
                 {
 
                     hitAble.Hit(curDamage + Data.Damage);
@@ -84,7 +84,7 @@ public class Bullet : MonoBehaviour
     private IEnumerator ReleaseBulletCo()
     {
 
-        yield return new WaitForSeconds(20f);
+        yield return new WaitForSeconds(8f);
         Release();
 
     }
