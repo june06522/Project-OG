@@ -1,4 +1,5 @@
 using Cinemachine;
+using DSNavigation;
 using FD.Dev;
 using System;
 using System.Collections;
@@ -132,6 +133,17 @@ public class Stage : MonoBehaviour
     [SerializeField]
     private List<IStageObject> stageObjectList = new List<IStageObject>();
 
+
+    // 장애물 있는 스테이지에 컴포넌트 달아줘야 함. 
+    // GridInfo
+    private JPSGridInfoFaster m_jpsGridInfoFaster;
+    public JPSGridInfoFaster GridInfo => m_jpsGridInfoFaster;
+    
+    private void Awake()
+    {
+        m_jpsGridInfoFaster = GetComponent<JPSGridInfoFaster>();
+    }
+
     public void AddNextStage(Stage stage)
     {
         NextStage.Add(stage);
@@ -195,7 +207,7 @@ public class Stage : MonoBehaviour
         monsterCount--;
         if(monsterCount <= 0 && isMonsterSpawning == false)
         {
-            GameManager.Instance.InventoryActive.isPlaying = false;
+            GameManager.Instance.isPlay = false;
             if(_stageType == StageType.BossStage)
             {
                 EventTriggerManager.Instance?.StageClearExecute();
@@ -226,7 +238,7 @@ public class Stage : MonoBehaviour
 
         if (_stageType != StageType.EventStage && _stageType != StageType.Shop)
             DeleteStageCameraSetting();
-        GameManager.Instance.InventoryActive.isPlaying = false;
+        GameManager.Instance.isPlay = false;
         if(_stageClearClip != null)
             SoundManager.Instance.SFXPlay("Clear", _stageClearClip, 1f);
 

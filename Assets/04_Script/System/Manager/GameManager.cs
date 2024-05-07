@@ -32,6 +32,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     #region 상태 관련
     [HideInInspector] public bool isShopOpen = false;
+    [HideInInspector] public bool isPlay = false;
     #endregion
 
     [NonSerialized] public Transform player;

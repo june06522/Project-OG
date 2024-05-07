@@ -1,21 +1,26 @@
 using Astar;
 using DG.Tweening;
+using DSNavigation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
 {
     [field: SerializeField] public EnemyDataSO EnemyDataSO { get; protected set; }
     [SerializeField] public EnemyFindEffect enemyFindEffect;
-    public Navigation Nav;
+    //public Navigation Nav;
     public ContextSolver Solver;
 
     public event Action FixedUpdateAction;
     public Transform Target { get; set; }
     public Enemy Enemy { get; private set; }
     public AIData AIdata { get; private set; }
+
+    private Stage m_ownerStage; 
+    private LinkedList<Vector2> m_fasterPath = new();
 
     protected override void Awake()
     {
@@ -27,7 +32,7 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
     protected virtual void Start()
     {
         EnemyDataSO = Instantiate(EnemyDataSO);
-        Nav = new(Enemy);
+        //Nav = new(Enemy);
         Solver = new();
         //    Target = GameManager.Instance.player;
         Target = GameObject.Find("Player").transform;
@@ -73,6 +78,44 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
     {
         Vector2 spawnPoint = new Vector2(-0.8f, 1.2f);
         Instantiate(enemyFindEffect, transform).transform.localPosition = spawnPoint;
+    }
+
+    public void FindPath()
+    {
+        if (Enemy.GetPathFinder == null)
+            return;
+
+        
+        Vector2 m_start = transform.position;
+        Vector2 m_goal = Target.position;
+
+        m_fasterPath.Clear();
+        {
+            if(m_ownerStage.GridInfo != null)
+            {
+                bool isPathFound = Enemy.GetPathFinder.FindPath
+                    (m_ownerStage.GridInfo,
+                    m_start,
+                    m_goal,
+                    ref m_fasterPath); // ** find path from start to goal **
+            }
+        }
+    }
+
+    public bool GetNextPath(ref Vector2 nextPos)
+    {
+        if (m_fasterPath != null && m_fasterPath.Count > 0)
+        {
+            nextPos = m_fasterPath.First.Value;
+            m_fasterPath.RemoveFirst();
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
     }
 
     //public void PrintRoute(List<Vector3> route)
