@@ -15,7 +15,7 @@ public class AsyncSceneLoader : MonoBehaviour
         StartCoroutine(LoadScene());
     }
 
-    public static void LoadScene(string sceneName)  
+    public static void LoadScene(string sceneName)
     {
         nextScene = sceneName;
         SceneManager.LoadScene("Loading");
@@ -23,7 +23,7 @@ public class AsyncSceneLoader : MonoBehaviour
 
     IEnumerator LoadScene()
     {
-        yield return null;
+        yield return new WaitForSeconds(0.1f);
         AsyncOperation op = SceneManager.LoadSceneAsync(nextScene);
         op.allowSceneActivation = false;
         float timer = 0.0f;
@@ -44,10 +44,11 @@ public class AsyncSceneLoader : MonoBehaviour
                 progressBar.fillAmount = Mathf.Lerp(progressBar.fillAmount, 1f, timer);
                 if (progressBar.fillAmount == 1.0f)
                 {
-                    op.allowSceneActivation = true;
-                    yield break;
+                    break;
                 }
             }
         }
+        yield return new WaitForSeconds(0.1f);
+        op.allowSceneActivation = true;
     }
 }
