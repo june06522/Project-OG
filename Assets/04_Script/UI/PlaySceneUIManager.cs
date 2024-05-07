@@ -47,12 +47,14 @@ public class PlaySceneUIManager : MonoBehaviour
     private void PausePanelOpen()
     {
         PlayEFF();
+        ScreenManager.Instance.SetEffect(1f, 0.5f, DG.Tweening.Ease.InQuart);
         pausePanel.SetActive(true);
     }
 
     public void CloseBtn()
     {
         PlayEFF();
+        ScreenManager.Instance.SetEffect(0, 0.5f, DG.Tweening.Ease.InQuart);
         pausePanel.SetActive(false);
     }
 

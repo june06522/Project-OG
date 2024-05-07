@@ -186,7 +186,8 @@ public class PatrolAction<T> : BaseAction<T> where T : Enum
     }
     private Vector2 FindRandomPoint(Vector2 pos)
     {
-        Vector2 randomPos = controller.Nav.GetRandomPos(pos, patrolRadius);
+        //Vector2 randomPos = controller.Nav.GetRandomPos(pos, patrolRadius);
+        Vector2 randomPos = Vector2.zero;
         SetTarget(randomPos);
         return randomPos;
     }
