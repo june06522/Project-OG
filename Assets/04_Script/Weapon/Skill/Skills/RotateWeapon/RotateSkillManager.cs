@@ -158,7 +158,6 @@ public class RotateSkillManager : MonoBehaviour
     {
         if (PlayerController.EventController != null)
         {
-            Debug.Log("dfsf");
             PlayerController.EventController.OnMove += SetRunning;
             PlayerController.EventController.OnIdle += SetIdle;
 
