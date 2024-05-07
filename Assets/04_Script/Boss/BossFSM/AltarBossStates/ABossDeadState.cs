@@ -20,10 +20,6 @@ public class ABossDeadState : BossBaseState
 
     public override void OnBossStateOn()
     {
-        _altar.SetBodyToBasic(_altar.bigestbody, _altar.bigestBody);
-        _altar.SetBodyToBasic(_altar.mediumSizebody, _altar.mediumSizeBody);
-        _altar.SetBodyToBasic(_altar.smallestbody, _altar.smallestBody);
-
         _altar.gameObject.layer = LayerMask.NameToLayer("Default");
 
         _altar.bigestBody.SetActive(false);

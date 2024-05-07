@@ -26,7 +26,6 @@ public class AltarPattern : BossPatternBase
     public IEnumerator OmnidirAttack(AltarBoss boss, int bulletCount, float speed, float ShotCoolTime, int burstCount)
     {
         float animTime = 0.5f;
-        SoundManager.Instance.SFXPlay("Fire", boss.fireClip, 1);
 
         StartCoroutine(OutTriangleAnim(boss, animTime / 3, 1));
         boss.bigestBody.transform.DORotate(new Vector3(0, 0, 180), animTime)
@@ -46,6 +45,7 @@ public class AltarPattern : BossPatternBase
 
         for (int i = 0; i < burstCount; i++)
         {
+            SoundManager.Instance.SFXPlay("Fire", boss.fireClip, 1);
             for (int j = 0; j < bulletCount; j++)
             {
                 GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
@@ -69,7 +69,6 @@ public class AltarPattern : BossPatternBase
     public IEnumerator OmniGuidPlayerAttack(AltarBoss boss, int bulletCount, float speed, float time, int burstCount)
     {
         float animTime = 0.5f;
-        SoundManager.Instance.SFXPlay("Fire", boss.fireClip, 1);
         GameObject[,] bullets = new GameObject[burstCount, bulletCount];
 
         StartCoroutine(OutTriangleAnim(boss, animTime / 3, 1));
@@ -90,6 +89,7 @@ public class AltarPattern : BossPatternBase
 
         for (int i = 0; i < burstCount; i++)
         {
+            SoundManager.Instance.SFXPlay("Fire", boss.fireClip, 1);
             for (int j = 0; j < bulletCount; j++)
             {
                 bullets[i, j] = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
@@ -134,7 +134,6 @@ public class AltarPattern : BossPatternBase
 
         for (int i = 0; i < burstCount; i++)
         {
-            SoundManager.Instance.SFXPlay("Fire", boss.fireClip, 1);
 
             StartCoroutine(InTriangleAnim(boss, animTime / 3, 1));
 
@@ -147,6 +146,7 @@ public class AltarPattern : BossPatternBase
             });
 
             yield return new WaitForSeconds(animTime / 1.5f);
+            SoundManager.Instance.SFXPlay("Fire", boss.fireClip, 1);
 
             GameObject energyBall = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
             energyBall.GetComponent<BossBullet>().Attack(boss.so.Damage);

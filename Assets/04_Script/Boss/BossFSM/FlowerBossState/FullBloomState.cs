@@ -15,16 +15,17 @@ public class FullBloomState : BossBaseState
 
     public override void OnBossStateExit()
     {
-        _flower.SetBodyToBasic(_flower.bigestbody, _flower.bigestBody);
-        _flower.SetBodyToBasic(_flower.mediumsizebody, _flower.mediumSizeBody);
-        _flower.SetBodyToBasic(_flower.smallestbody, _flower.smallestBody);
         _flower.fullBloom = false;
         _flower.isAttacking = false;
+
+        _flower.SetBody(_flower.bigestBody, Vector3.one, Vector3.zero, _flower.bossColor, 0.5f);
+        _flower.SetBody(_flower.mediumSizeBody, Vector3.one, Vector3.zero, _flower.bossColor, 0.5f);
+        _flower.SetBody(_flower.smallestBody, Vector3.one, Vector3.zero, _flower.bossColor, 0.5f);
     }
 
     public override void OnBossStateOn()
     {
-        Debug.Log("FullBloom");
+        _flower.gameObject.layer = LayerMask.NameToLayer("Boss");
         _flower.fullBloom = true;
         NowCoroutine(_pattern.FullBloomPattern(_flower, 2, 100));
     }

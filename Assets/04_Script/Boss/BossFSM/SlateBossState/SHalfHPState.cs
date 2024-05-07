@@ -19,9 +19,10 @@ public class SHalfHPState : BossBaseState
     public override void OnBossStateExit()
     {
         _slate.ReturnMinimi(g_minimis);
-        _slate.SetBodyToBasic(_slate.bigestbody, _slate.bigestBody);
-        _slate.SetBodyToBasic(_slate.mediumsizebody, _slate.mediumSizeBody);
-        _slate.SetBodyToBasic(_slate.smallestbody, _slate.smallestBody);
+
+        _slate.SetBody(_slate.bigestBody, Vector3.one, Vector3.zero, _slate.bossColor, 0.5f);
+        _slate.SetBody(_slate.mediumSizeBody, Vector3.one, Vector3.zero, _slate.bossColor, 0.5f);
+        _slate.SetBody(_slate.smallestBody, Vector3.one, Vector3.zero, _slate.bossColor, 0.5f);
     }
 
     public override void OnBossStateOn()
@@ -30,15 +31,23 @@ public class SHalfHPState : BossBaseState
         g_minimis = new GameObject[_slate.MinimiCount];
         _minimiLaserLineRenderer = new LineRenderer[_slate.MinimiCount];
         _originPos = new Vector3[_slate.MinimiCount];
-        CreateMinimi();
-        _slate.StartCoroutine(NowMove(0.5f));
-        _slate.StartCoroutine(RandomPattern(_slate.so.PatternChangeTime));
-        _slate.StartCoroutine(_slate.bossMove.BossMovement(_slate.so.StopTime, _slate.so.MoveX, _slate.so.MoveY, _slate.so.Speed, _slate.so.WallCheckRadius));
+        _slate.StartCoroutine(HalfAnimation(1));
     }
 
     public override void OnBossStateUpdate()
     {
 
+    }
+
+    private IEnumerator HalfAnimation(float animTime)
+    {
+        CameraManager.Instance.CameraShake(10, animTime);
+        yield return new WaitForSeconds(animTime);
+
+        CreateMinimi();
+        _slate.StartCoroutine(NowMove(0.5f));
+        _slate.StartCoroutine(RandomPattern(_slate.so.PatternChangeTime));
+        _slate.StartCoroutine(_slate.bossMove.BossMovement(_slate.so.StopTime, _slate.so.MoveX, _slate.so.MoveY, _slate.so.Speed, _slate.so.WallCheckRadius));
     }
 
     private void CreateMinimi()
@@ -54,6 +63,8 @@ public class SHalfHPState : BossBaseState
             _minimiLaserLineRenderer[i].material = _slate.laserMat;
 
         }
+
+        _slate.gameObject.layer = LayerMask.NameToLayer("Boss");
     }
 
     private IEnumerator NowMove(float waitTime)

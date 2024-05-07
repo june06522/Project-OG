@@ -16,10 +16,16 @@ public class FloweringState : BossBaseState
     public override void OnBossStateExit()
     {
         _flower.isAttacking = false;
+
+        _flower.gameObject.layer = LayerMask.NameToLayer("Default");
+        _flower.SetBody(_flower.bigestBody, Vector3.one, Vector3.zero, _flower.bossColor, 0.5f);
+        _flower.SetBody(_flower.mediumSizeBody, Vector3.one, Vector3.zero, _flower.bossColor, 0.5f);
+        _flower.SetBody(_flower.smallestBody, Vector3.one, Vector3.zero, _flower.bossColor, 0.5f);
     }
 
     public override void OnBossStateOn()
     {
+        _flower.gameObject.layer = LayerMask.NameToLayer("Boss");
         _flower.flowering = true;
         _flower.StartCoroutine(RandomPattern(_flower.so.PatternChangeTime));
     }

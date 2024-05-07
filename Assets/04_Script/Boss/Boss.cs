@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public enum BossState
 {
@@ -18,13 +19,6 @@ public enum BossState
     FullBloom,
     Withered,
     Dead
-}
-
-public struct Body
-{
-    public Color color;
-    public Vector3 scale;
-    public Quaternion rotation;
 }
 
 // inspector에서 보이는 변수들
@@ -49,12 +43,13 @@ public partial class Boss
 
 public partial class Boss : MonoBehaviour, IHitAble
 {
+    [HideInInspector] public bool isIdle;
     [HideInInspector] public bool isStop;
     [HideInInspector] public bool isAttacking;
     [HideInInspector] public bool isDead;
     [HideInInspector] public bool isBlocked;
 
-    private Color _originColor;
+    [HideInInspector] public Color bossColor;
 
     public event Action DieEvt;
     public event Action DeadEndEvt;
@@ -90,22 +85,23 @@ public partial class Boss : MonoBehaviour, IHitAble
         bossHPSlider.value = _currentHP / so.MaxHP;
     }
 
-    public void SetBodyToBasic(Body body, GameObject obj)
+    public void SetBody(GameObject obj, Vector3 scale, Vector3 rotation, Color color, float changeTime)
     {
-        obj.transform.localScale = body.scale;
-        obj.transform.rotation = body.rotation;
-        obj.GetComponent<SpriteRenderer>().color = body.color;
+        SetScale(obj, scale, changeTime);
+        SetRotation(obj, rotation, changeTime);
+        obj.GetComponent<SpriteRenderer>().color = color;
     }
 
-    protected void SetBody(ref Body body, GameObject obj)
+    private void SetScale(GameObject obj, Vector3 scale, float changeTime)
     {
-        body.color = obj.GetComponent<SpriteRenderer>().color;
-        if(_originColor != body.color)
-        {
-            _originColor = body.color;
-        }
-        body.scale = obj.transform.localScale;
-        body.rotation = obj.transform.rotation;
+        obj.transform.DOScale(scale, changeTime)
+            .SetEase(Ease.InOutSine);
+    }
+
+    private void SetRotation(GameObject obj, Vector3 rotation, float changeTime)
+    {
+        obj.transform.DORotate(rotation, changeTime)
+            .SetEase(Ease.InOutSine);
     }
 
     private void DieEvent()
@@ -205,9 +201,8 @@ public partial class Boss : MonoBehaviour, IHitAble
             yield return null;
         }
 
-
-        renderer.color = _originColor;
-        if(willDisappear)
+        renderer.color = bossColor;
+        if (willDisappear)
         {
             renderer.color *= new Color(1, 1, 1, 0);
         }
@@ -227,7 +222,12 @@ public partial class Boss : MonoBehaviour, IHitAble
 
         while(currentTime < popingTime)
         {
-            currentTime += Time.deltaTime;
+            if (obj.transform.localScale.magnitude < originSize.magnitude)
+            {
+                break;
+            }
+
+            currentTime += Time.deltaTime * multiply;
 
             obj.transform.localScale -= new Vector3(Time.deltaTime / multiply, Time.deltaTime / multiply, 0);
 

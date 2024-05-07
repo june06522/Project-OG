@@ -14,7 +14,7 @@ public partial class AltarBoss
     [field: Header("AudioClip")]
     public AudioClip fireClip;
     public AudioClip deadClip;
-    public AudioClip burnClip;
+    public AudioClip rotateClip;
     public AudioClip dashClip;
     public AudioClip unChainClip;
 
@@ -39,10 +39,6 @@ public partial class AltarBoss : Boss
 
     [HideInInspector] public Vector3 originPos;
 
-    [HideInInspector] public Body bigestbody;
-    [HideInInspector] public Body mediumSizebody;
-    [HideInInspector] public Body smallestbody;
-
     private BossState _curBossState;
 
     private BossFSM _bossFSM;
@@ -65,15 +61,13 @@ public partial class AltarBoss : Boss
         _pattern = GetComponent<AltarPattern>();
         bossMove = GetComponent<BossMove>();
         gameObject.layer = LayerMask.NameToLayer("Default");
-
-        SetBody(ref bigestbody, bigestBody);
-        SetBody(ref mediumSizebody, mediumSizeBody);
-        SetBody(ref smallestbody, smallestBody);
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
+
+        bossColor = new Color(1, 0.1960784f, 0.427451f);
 
         _currentTime = 0;
         _restraintIndex = 0;
