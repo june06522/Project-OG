@@ -21,9 +21,11 @@ public class ErrorDiceSkill : Skill
 
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
+        if (!GameManager.Instance.isPlay)
+            return;
+
         Skill s = null;
         int i = 0, j = 0;
-
 
         while(s==null)
         {
