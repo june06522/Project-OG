@@ -23,7 +23,7 @@ public class InvenSlotBtn : MonoBehaviour
         ExpansionManager.Instance.UseSlot();
         if (_clickSound != null)
             SoundManager.Instance.SFXPlay("Click", _clickSound);
-        
+        GameManager.Instance.Inventory.SettingLineRender();
         Destroy(gameObject);
     }
 

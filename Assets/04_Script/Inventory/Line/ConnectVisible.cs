@@ -49,11 +49,6 @@ public class ConnectVisible : MonoBehaviour
         GameManager.Instance.Inventory.OnAddItem += VisibleLine;
     }
 
-    private void Update()
-    {
-        Debug.Log(ConnectCnt);
-    }
-
     public void VisibleLine()
     {
         for (int i = lendererList.Count - 1; i >= 0; i--)

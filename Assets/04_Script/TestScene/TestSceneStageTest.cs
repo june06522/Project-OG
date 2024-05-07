@@ -13,6 +13,6 @@ public class TestSceneStageTest : MonoBehaviour
 
     public void PlayStage()
     {
-        Instantiate(stage);
+        Instantiate(stage,transform);
     }
 }

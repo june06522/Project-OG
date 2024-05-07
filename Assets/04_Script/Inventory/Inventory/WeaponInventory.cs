@@ -342,4 +342,6 @@ public class WeaponInventory : MonoBehaviour
         InventorySlotCenter.Instance?.ChangeWidth(-1);
 
     }
+
+    public void SettingLineRender() => OnAddItem?.Invoke();
 }
