@@ -52,8 +52,13 @@ public class HealObject : MonoBehaviour, IInteractable
         seq.Append(healTextTrm.DOScale(Vector3.one, 0.1f).SetEase(Ease.OutBounce));
 
         _spriteRenderer.material = _spriteDefaultMat;
-        _collider.enabled = false;
-        _light.SetActive(false);
+
+        if(_collider != null)
+            _collider.enabled = false;
+
+        if(_light != null)
+            _light.SetActive(false);
+
         _feedbackPlayer?.Play(healHealth);
     }
 }

@@ -20,6 +20,7 @@ public class GoldUI : MonoBehaviour
         _curGoldValue = Money.Instance.Gold;
         _goldValueText.text = _curGoldValue.ToString();
         Money.Instance.GoldChangedEvent += HandleSetGoldUI;
+        HandleSetGoldUI(Money.Instance.Gold);
     }
 
     private void HandleSetGoldUI(int value)
@@ -45,5 +46,6 @@ public class GoldUI : MonoBehaviour
         }
 
         _curGoldValue = _changedGoldValue;
+        _goldValueText.text = _curGoldValue.ToString();
     }
 }

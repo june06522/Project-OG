@@ -19,7 +19,9 @@ public class ExpansionEvent : MonoBehaviour, IInteractable
     {
         if (_isOpen)
             return;
-        _collider.enabled = false;
+
+        if (_collider != null )
+            _collider.enabled = false;
         _isOpen = true;
 
         ExpansionManager.Instance.AddSlotcnt(3);
