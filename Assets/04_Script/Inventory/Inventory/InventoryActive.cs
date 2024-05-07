@@ -9,8 +9,6 @@ public class InventoryActive : MonoBehaviour
     public Image[] images;
     [HideInInspector]
     public bool canOpen = true;
-    [HideInInspector]
-    public bool isPlaying = false;
 
     bool isOn = false;
 
@@ -47,7 +45,7 @@ public class InventoryActive : MonoBehaviour
 
     private void Update()
     {
-        if (canOpen && !isPlaying)
+        if (canOpen && !GameManager.Instance.isPlay)
         {
             if (((KeyManager.Instance == null && Input.GetKeyDown(KeyCode.Tab)) ||
                 (KeyManager.Instance != null && Input.GetKeyDown(KeyManager.Instance.inven)) || 

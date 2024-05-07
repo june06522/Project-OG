@@ -195,7 +195,7 @@ public class Stage : MonoBehaviour
         monsterCount--;
         if(monsterCount <= 0 && isMonsterSpawning == false)
         {
-            GameManager.Instance.InventoryActive.isPlaying = false;
+            GameManager.Instance.isPlay = false;
             if(_stageType == StageType.BossStage)
             {
                 EventTriggerManager.Instance?.StageClearExecute();
@@ -226,7 +226,7 @@ public class Stage : MonoBehaviour
 
         if (_stageType != StageType.EventStage && _stageType != StageType.Shop)
             DeleteStageCameraSetting();
-        GameManager.Instance.InventoryActive.isPlaying = false;
+        GameManager.Instance.isPlay = false;
         if(_stageClearClip != null)
             SoundManager.Instance.SFXPlay("Clear", _stageClearClip, 1f);
 
