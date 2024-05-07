@@ -38,6 +38,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
     protected override void Awake()
     {
+
         rb2D = GetComponent<Rigidbody2D>();
 
         _interactKey = GameManager.Instance.transform.Find("InteractKey")?.gameObject;
@@ -54,15 +55,19 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
         playerData = Instantiate(playerData);
         playerData.SetOwner(this);
+
         if (_playerHP != null)
         {
+
             _playerHP.SetPlayerHP((int)playerData[PlayerStatsType.MaxHP]);
 
         }
         if (_playerEnerge != null)
         {
+
             _playerEnerge.SetPlayerEnerge((int)playerData[PlayerStatsType.MaxEnerge], playerData[PlayerStatsType.RegenEnergePerSec]);
             inputController.SetPlayerEnerge(_playerEnerge);
+
         }
 
 

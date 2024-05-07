@@ -16,6 +16,7 @@ public class Bullet : MonoBehaviour
     {
 
         Data = data.CreateBulletData();
+
     }
 
     public void Shoot(float weaponDamage)
