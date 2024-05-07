@@ -96,16 +96,16 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler
         switch (rate)
         {
             case ItemRate.NORMAL:
-                _itemPrice = Random.Range(2, 15 + 1);
+                _itemPrice = Random.Range(6, 20 + 1);
                 break;
             case ItemRate.RARE:
-                _itemPrice = Random.Range(9, 20 + 1);
+                _itemPrice = Random.Range(11, 40 + 1);
                 break;
             case ItemRate.EPIC:
-                _itemPrice = Random.Range(12, 25 + 1);
+                _itemPrice = Random.Range(24, 70 + 1);
                 break;
             case ItemRate.LEGEND:
-                _itemPrice = Random.Range(22, 30 + 1);
+                _itemPrice = Random.Range(60, 90 + 1);
                 break;
         }
 
