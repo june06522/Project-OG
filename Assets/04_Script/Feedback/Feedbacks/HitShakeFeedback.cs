@@ -16,16 +16,6 @@ public class HitShakeFeedback : Feedback
     private Coroutine currentCo;
     private bool isShake;
 
-    private List<Color> _defaultColor = new List<Color>();
-
-    private void Start()
-    {
-        foreach (var sprite in _sprites)
-        {
-            _defaultColor.Add(sprite.color);
-        }
-    }
-
     public override void Play(float damage)
     {
 
@@ -52,7 +42,6 @@ public class HitShakeFeedback : Feedback
         foreach(var sprite in _sprites)
         {
             sprite.material.SetFloat(HASH_SHAKE, 1f);
-            sprite.color = Color.white;
         }
         
         yield return new WaitForSeconds(_shakeTime);
@@ -62,7 +51,6 @@ public class HitShakeFeedback : Feedback
             var sprite = _sprites[i];
 
             sprite.material.SetFloat(HASH_SHAKE, 0f);
-            sprite.color = _defaultColor[i];
         }
 
         isShake = false;

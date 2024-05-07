@@ -14,7 +14,9 @@ public class AIdleState : BossBaseState
 
     public override void OnBossStateExit()
     {
-        
+        _boss.SetBody(_boss.bigestBody, Vector3.one, Vector3.zero, _boss.bossColor, 0.5f);
+        _boss.SetBody(_boss.mediumSizeBody, Vector3.one, Vector3.zero, _boss.bossColor, 0.5f);
+        _boss.SetBody(_boss.smallestBody, Vector3.one, Vector3.zero, _boss.bossColor, 0.5f);
     }
 
     public override void OnBossStateOn()

@@ -79,7 +79,7 @@ public partial class SixthElite : MonoBehaviour, IHitAble
         }
 
         _rigid.velocity = (GameManager.Instance.player.position - transform.position).normalized * _so.Speed;
-        StartCoroutine(Charging(1, _rigid.velocity));
+        StartCoroutine(Charging(1, transform.position, _rigid.velocity));
     }
 
     public bool Hit(float damage)
@@ -115,14 +115,14 @@ public partial class SixthElite : MonoBehaviour, IHitAble
         _rigid.velocity = Vector2.zero;
     }
 
-    private IEnumerator Charging(float chargingTime, Vector2 dir)
+    private IEnumerator Charging(float chargingTime, Vector2 originPos, Vector2 dir)
     {
         float currentTime = 0;
 
         if(WallCheck(dir) != Vector2.zero)
         {
             Debug.Log("dd");
-            ShowLine(_warningLine, dir, Color.red, 1);
+            ShowLine(_warningLine, originPos, dir, Color.red, 1);
         }
 
         while(currentTime < chargingTime)
@@ -144,14 +144,15 @@ public partial class SixthElite : MonoBehaviour, IHitAble
         _warningLine.enabled = false;
     }
 
-    private void ShowLine(LineRenderer line, Vector2 dir, Color color,  float scale)
+    private void ShowLine(LineRenderer line, Vector2 originPos, Vector2 dir, Color color,  float scale)
     {
         line.enabled = true;
         line.startWidth = scale;
-        line.startColor = color;
-        line.SetPosition(0, transform.position);
+        line.startColor = color * new Color(1, 1, 1, 0.2f);
+        line.SetPosition(0, originPos);
         line.SetPosition(1, WallCheck(dir));
         line.endWidth = scale;
+        line.endColor = color * new Color(1, 1, 1, 0.2f);
     }
 
     private Vector2 WallCheck(Vector2 dir)
@@ -226,7 +227,16 @@ public partial class SixthElite : MonoBehaviour, IHitAble
             if(!_y)
             {
                 Vector2 dir = (GameManager.Instance.player.position - transform.position).normalized;
-                StartCoroutine(Charging(_animationPlayTime, dir));
+                Vector3 correction = Vector2.zero;
+                if(trans == _right)
+                {
+                    correction = Vector2.left * 1f;
+                }
+                else
+                {
+                    correction = Vector2.right * 1f;
+                }
+                StartCoroutine(Charging(_animationPlayTime, _visual.parent.position + correction, dir));
 
                 trans.DOScaleX(originSize.x / 2, _animationPlayTime)
                 .SetEase(Ease.InOutSine)
@@ -239,7 +249,16 @@ public partial class SixthElite : MonoBehaviour, IHitAble
             else
             {
                 Vector2 dir = (GameManager.Instance.player.position - transform.position).normalized;
-                StartCoroutine(Charging(_animationPlayTime, dir));
+                Vector3 correction = Vector2.zero;
+                if (trans == _up)
+                {
+                    correction = Vector2.down * 1f;
+                }
+                else
+                {
+                    correction = Vector2.up * 1f;
+                }
+                StartCoroutine(Charging(_animationPlayTime, _visual.parent.position + correction, dir));
 
                 trans.DOScaleY(originSize.y / 2, _animationPlayTime)
                 .SetEase(Ease.InOutSine)
