@@ -11,7 +11,7 @@ public class SpeakGuide : GuideQuest
     public override void SetQuestSetting()
     {
         base.SetQuestSetting();
-        FAED.InvokeDelay(() => { _isEndSpeak = true; }, guideTextTime + 5f);
+        FAED.InvokeDelay(() => { _isEndSpeak = true; }, guideTextTime + 3f);
     }
 
     public override bool IsQuestComplete()
