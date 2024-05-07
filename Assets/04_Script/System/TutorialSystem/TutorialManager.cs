@@ -53,7 +53,7 @@ public class TutorialManager : MonoSingleton<TutorialManager>
 
     }
 
-    private void FixedUpdate()
+    private void LateUpdate()
     {
 
         if (_tutorialClear)
