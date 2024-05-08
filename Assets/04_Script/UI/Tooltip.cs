@@ -16,10 +16,9 @@ public class Tooltip : MonoBehaviour
     private List<TextDissolve> mainTexts;
     private ImageDissolve image;
 
-    private readonly string shader = "_SourceGlowDissolveFade";
-
-    private readonly float fadeEnd = 3.5f;
-    private readonly float fadeStart = 7.5f;
+    private readonly string shader = "_DirectionalGlowFadeFade";
+    private readonly float fadeEnd = 0;
+    private readonly float fadeStart = 1.5f;
 
     Material mat;
 
@@ -69,7 +68,7 @@ public class Tooltip : MonoBehaviour
     {
         //if (gang) return;
         //gang = true;
-        rectTransform.position = pos;
+        rectTransform.parent.position = pos;
 
         Sequence seq = DOTween.Sequence();
         seq.Append(DOTween.To(() => fadeStart,
@@ -83,15 +82,10 @@ public class Tooltip : MonoBehaviour
             seq.Join(titleTexts[i].Dissolve(true));
         }
 
-        // 0초 트윈 생성
-        ushort empty = 0;
-        Tween t = DOTween.To(() => empty, (e) => empty = 0, 0, 0);
-        seq.Append(t);
-
-        for (int i = 0; i < mainTexts.Count; ++i)
-        {
-            seq.Join(mainTexts[i].Dissolve(true));
-        }
+        //for (int i = 0; i < mainTexts.Count; ++i)
+        //{
+        //    seq.Insert(1f, mainTexts[i].Dissolve(true));
+        //}
 
         //_iamge.sprite = image;
         //_trigger.text = $"트리거: {trigger}";

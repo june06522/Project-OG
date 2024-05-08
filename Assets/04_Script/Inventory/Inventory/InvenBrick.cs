@@ -31,6 +31,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     protected bool isHover;
     public bool IsDrag => isDrag;
 
+    protected RectTransform explainPoint;
     protected RectTransform rectTransform;
     public RectTransform RectTransform => rectTransform;
     protected Image image;
@@ -38,6 +39,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     protected InventorySize invensize;
 
+    Vector3 explainPos = new Vector2(-30.0f, 25f);
 
     protected virtual void Awake()
     {
@@ -45,9 +47,13 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         InvenObject = Instantiate(InvenObject);
         InvenObject.Init(transform);
         inventory = FindObjectOfType<WeaponInventory>();
-        rectTransform = GetComponent<RectTransform>();
         inventoryActive = FindObjectOfType<InventoryActive>();
         invensize = FindObjectOfType<InventorySize>();
+        rectTransform = GetComponent<RectTransform>();
+        if(transform.Find("ExplainPoint"))
+        {
+            explainPoint = transform.Find("ExplainPoint").GetComponent<RectTransform>();
+        }
     }
 
     public virtual void Settings()
@@ -136,7 +142,10 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             if (isHover == false)
             {
                 isHover = true;
-                ShowExplain(rectTransform.position);
+                Vector2 explainPosition = explainPoint == null
+                    ? rectTransform.position + explainPos
+                    : explainPoint.position;
+                ShowExplain(explainPosition);
             }
         }
         else
@@ -223,7 +232,10 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
                 if(isHover == false)
                 {
                     isHover = true;
-                    ShowExplain(rectTransform.position);
+                    Vector2 explainPosition = explainPoint == null
+                    ? rectTransform.position + explainPos
+                    : explainPoint.position;
+                    ShowExplain(explainPosition);
                 }
             }
             else
