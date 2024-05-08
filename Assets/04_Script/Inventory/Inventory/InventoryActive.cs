@@ -105,7 +105,7 @@ public class InventoryActive : MonoBehaviour
         //seq.Join(_invenInfoPanel.transform.DOLocalMoveY(_inveny, time)).SetEase(Ease.OutBounce);
         //seq.Append(_invenInfoPanel.transform.DOLocalMoveX(_infox, time)).SetEase(Ease.OutBounce);
         seq.Append(DOTween.To(()=> initValue, value => mat.SetFloat(invenShader, value), 2f, easingtime)).SetEase(ease);
-        seq.Join(ScreenManager.Instance.SetEffect(0.3f, 0.3f, DG.Tweening.Ease.InQuart));
+        seq.Join(ScreenManager.Instance.SetEffect(0.4f, 0.65f, DG.Tweening.Ease.InQuad));
         seq.Join(_playerUI.transform.DOMoveX(_uix - moveXVal, time));
         seq.AppendCallback(() => { isAnimation = true; });
         

@@ -1,5 +1,7 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,12 +13,14 @@ public class ItemExplain : MonoBehaviour
     [SerializeField] Image panelImage;
     [SerializeField] WeaponExplain weaponExplain;
     [SerializeField] GeneratorExplain generatorExplain;
+    [SerializeField] Tooltip tooltip;
 
     private InventoryActive inventoryActive;
     public bool isDrag = false;
 
     public bool useMove = false;
 
+    Vector2 curInvenPoint;
     private void Awake()
     {
         if (Instance == null)
@@ -29,6 +33,8 @@ public class ItemExplain : MonoBehaviour
 
         inventoryActive = FindObjectOfType<InventoryActive>();
     }
+
+
 
     private void Update()
     {
@@ -53,6 +59,19 @@ public class ItemExplain : MonoBehaviour
         }
     }
 
+
+    public void HoverEvent(Vector2 invenPoint)
+    {
+        if (invenPoint == curInvenPoint) return;
+        if (tooltip.gameObject.activeSelf == false)
+            tooltip.Active(true);
+
+        curInvenPoint = invenPoint;
+        tooltip.On(invenPoint, null, null, null);
+        
+    }
+
+
     public void HoverWeapon(Sprite image, string name, float power, string explain, string[] skillList)
     {
         generatorExplain.gameObject.SetActive(false);
@@ -73,6 +92,7 @@ public class ItemExplain : MonoBehaviour
     {
         weaponExplain.gameObject.SetActive(false);
         generatorExplain.gameObject.SetActive(false);
+        tooltip.Active(false);
     }
 
 
