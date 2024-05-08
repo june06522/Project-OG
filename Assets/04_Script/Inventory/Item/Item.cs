@@ -10,7 +10,10 @@ public class Item : MonoBehaviour, IInteractable
 {
 
     [SerializeField] private InvenBrick brick;
+    public InvenBrick Brick => brick;
     public bool one = true;
+
+    public BrickType brickType;
 
     private WeaponInventory inventory;
     private Transform parent;
