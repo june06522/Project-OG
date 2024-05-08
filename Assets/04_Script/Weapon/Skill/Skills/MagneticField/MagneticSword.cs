@@ -8,7 +8,7 @@ public class MagneticSword : Skill
         if (weaponTrm.GetComponent<Weapon>() != trigger.startWeapon)
             return;
 
-        var obj = Instantiate(prefab, weaponTrm.position, Quaternion.identity);
+        var obj = Instantiate(prefab, target.position, Quaternion.identity);
         obj.SetDamage(power * power);
     }
 
