@@ -68,11 +68,10 @@ public class StageGate : MonoBehaviour, IInteractable
     IEnumerator GoNextStage()
     {
         _playerController.ChangeState(EnumPlayerState.Idle);
-
-        if(_isPlayJumpAnim)
+        Transform playerTrm = GameManager.Instance.player;
+        if (_isPlayJumpAnim)
         {
-            Transform playerTrm = GameManager.Instance.player;
-
+             
             Sequence seq = DOTween.Sequence();
             seq.Append(playerTrm.DOJump(transform.position + Vector3.down, 5f, 1, 1f));
 
@@ -81,7 +80,7 @@ public class StageGate : MonoBehaviour, IInteractable
 
 
 
-        stageTransition.StartTransition();
+        stageTransition.StartTransition(transform.position);
         yield return new WaitForSeconds(0.2f);
         OnGateEvent?.Invoke();
         if (NextStage != null)
@@ -89,12 +88,19 @@ public class StageGate : MonoBehaviour, IInteractable
 
             GameManager.Instance.player.position = NextStage.playerSpawnPos;
             NextStage.SetGlobalLight();
-            NextStage.SetCameraSize();
+            
+            if(NextStage.SetCameraSize() == false)
+                stageTransition.EndTransition(playerTrm.position);
+
+            if (NextStage.ThisStageType == StageType.EnemyStage || NextStage.ThisStageType == StageType.BossStage)
+                GameManager.Instance.isPlay = true;
 
         }
         else
             GameManager.Instance.ResetGlobalLight();
-        GameManager.Instance.isPlay = true;
+        
+        
+
         yield return new WaitForSeconds(0.5f);
         _playerController.ChangeState(EnumPlayerState.Move);
 
@@ -106,7 +112,7 @@ public class StageGate : MonoBehaviour, IInteractable
 
         }
 
-        stageTransition.EndTransition();
+        
         
 
         yield return new WaitForSeconds(1f);

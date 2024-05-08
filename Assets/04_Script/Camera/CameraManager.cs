@@ -6,6 +6,8 @@ using UnityEngine.Rendering;
 
 public class CameraManager : MonoSingleton<CameraManager>
 {
+    private CinemachineBrain _brain;
+
     private CinemachineVirtualCamera cam;
     private CinemachineVirtualCamera _defaultCam;
 
@@ -29,10 +31,21 @@ public class CameraManager : MonoSingleton<CameraManager>
     {
         _defaultCam = cam = GameObject.Find("CM").GetComponent<CinemachineVirtualCamera>();
         _defaultPerlin = perlin = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
+        _brain = Camera.main.transform.GetComponent<CinemachineBrain>();
     }
 
-    public void SetOtherCam(CinemachineVirtualCamera changeCam)
+    public void SetOtherCam(CinemachineVirtualCamera changeCam, bool forceSet = false)
     {
+        if (forceSet)
+        {
+            _brain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Cut;
+        }
+        else
+        {
+            _brain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Linear;
+        }
+
         cam.Priority = 0;
         changeCam.Priority = 10;
         cam = changeCam;

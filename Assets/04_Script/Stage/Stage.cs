@@ -210,12 +210,16 @@ public class Stage : MonoBehaviour
             GameManager.Instance.isPlay = false;
             if(_stageType == StageType.BossStage)
             {
+                ExpansionManager.Instance.AddSlotcnt(5);
+
                 EventTriggerManager.Instance?.StageClearExecute();
                 OnStageClearEvent?.Invoke();
             }    
 
             if(waveCount >= waveList.Count)
             {
+                ExpansionManager.Instance.AddSlotcnt(2);
+
                 EventTriggerManager.Instance?.StageClearExecute();
                 AppearGate();
                 AppearChest();
@@ -318,14 +322,16 @@ public class Stage : MonoBehaviour
 
         }
     }
-    public void SetCameraSize()
+    public bool SetCameraSize()
     {
         if(_useChangeCameraSize)
             Debug.Log("IsNotUpdate");
         if (_vStageCam != null)
         {
-            CameraManager.Instance.SetOtherCam(_vStageCam);
+            CameraManager.Instance.SetOtherCam(_vStageCam, true);
         }
+
+        return (_vStageCam != null);
     }
     private void DeleteStageCameraSetting()
     {

@@ -24,9 +24,9 @@ public class ExpansionEvent : MonoBehaviour, IInteractable
             _collider.enabled = false;
         _isOpen = true;
 
-        ExpansionManager.Instance.AddSlotcnt(3);
+        ExpansionManager.Instance.AddSlotcnt(5);
 
-        _feedbackPlayer?.Play(3);
+        _feedbackPlayer?.Play(5);
         if (_goldEffect != null)
             _goldEffect.Play();
     }
