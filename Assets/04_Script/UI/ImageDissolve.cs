@@ -13,10 +13,10 @@ public class ImageDissolve : MonoBehaviour
     [SerializeField] Ease ease;
     [SerializeField] float duration;
 
-    private readonly string shader = "_DirectionalGlowFadeFade";
+    private readonly string shader = "_SourceGlowDissolveFade";
 
-    float startPos = -1.5f;
-    float endPos = 0f;
+    float startPos = 0f;
+    float endPos = 1f;
 
     private void Awake()
     {

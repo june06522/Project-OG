@@ -19,7 +19,7 @@ public class ExpansionEvent : MonoBehaviour, IInteractable
     {
         if (_isOpen)
             return;
-
+        
         if (_collider != null )
             _collider.enabled = false;
         _isOpen = true;
