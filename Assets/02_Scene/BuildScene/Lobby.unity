@@ -1321,12 +1321,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6205b3c592c3d0b4992d432f672a9b77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryActive: {fileID: 0}
-  inventory: {fileID: 0}
-  weaponController: {fileID: 0}
-  invenAddType: {fileID: 0}
+  inventoryActive: {fileID: 565340795}
+  inventory: {fileID: 1858761893}
+  weaponController: {fileID: 153752826}
+  invenAddType: {fileID: 1172240501}
   _globalLight: {fileID: 0}
   isShopOpen: 0
+  isPlay: 0
 --- !u!1001 &153752825
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1384,6 +1385,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfc0eaab21ff0544d85f5b62ee967771, type: 3}
+--- !u!114 &153752826 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5054021699617846991, guid: cfc0eaab21ff0544d85f5b62ee967771, type: 3}
+  m_PrefabInstance: {fileID: 153752825}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec1076b1e155b840a38d96cb24944e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &190211168
 GameObject:
   m_ObjectHideFlags: 0
@@ -2970,12 +2982,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c28ba79aa150adc4192c050d91d81be4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  power: 5
+  easingtime: 0.5
+  ease: 1
+  animCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   images: []
   canOpen: 1
-  isPlaying: 0
   _playerUI: {fileID: 248530810}
   _invenPanel: {fileID: 1753651509}
   _invenInfoPanel: {fileID: 1797792625}
+  _components: {fileID: 0}
 --- !u!114 &565340796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6431,6 +6452,7 @@ MonoBehaviour:
   panelImage: {fileID: 1797792626}
   weaponExplain: {fileID: 896183902}
   generatorExplain: {fileID: 1219930631}
+  tooltip: {fileID: 0}
   isDrag: 0
   useMove: 0
 --- !u!1 &1298586122
