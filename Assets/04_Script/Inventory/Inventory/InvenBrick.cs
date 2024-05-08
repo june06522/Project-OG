@@ -54,6 +54,8 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         {
             explainPoint = transform.Find("ExplainPoint").GetComponent<RectTransform>();
         }
+
+        isHover = false;
     }
 
     public virtual void Settings()
@@ -119,6 +121,10 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         {
             GameObject obj = Instantiate(origin, GameManager.Instance.player.position, Quaternion.identity);
             Destroy(gameObject);
+
+            Debug.Log("Gang");
+            ItemExplain.Instance.HoverEnd();
+            StartCoroutine("HoverEnd");
             return;
              
         }
@@ -139,14 +145,12 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
                 rectTransform.localPosition += new Vector3(0, 50);
 
             Setting();
-            if (isHover == false)
-            {
-                isHover = true;
-                Vector2 explainPosition = explainPoint == null
-                    ? rectTransform.position + explainPos
-                    : explainPoint.position;
-                ShowExplain(explainPosition);
-            }
+
+            Vector2 explainPosition = explainPoint == null
+                ? rectTransform.position + explainPos
+                : explainPoint.position;
+            ShowExplain(explainPosition);
+    
         }
         else
         {
@@ -194,7 +198,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     {
         StopCoroutine("CheckMouse");
         ItemExplain.Instance.HoverEnd();
-        isHover = false;
+        StartCoroutine("HoverEnd");
     }
 
     IEnumerator CheckMouse()
@@ -229,14 +233,10 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             }
             if (!ItemExplain.Instance.isDrag && isOpen)
             {
-                if(isHover == false)
-                {
-                    isHover = true;
-                    Vector2 explainPosition = explainPoint == null
-                    ? rectTransform.position + explainPos
-                    : explainPoint.position;
-                    ShowExplain(explainPosition);
-                }
+                Vector2 explainPosition = explainPoint == null
+                ? rectTransform.position + explainPos
+                : explainPoint.position;
+                ShowExplain(explainPosition);   
             }
             else
             {
@@ -266,11 +266,21 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         yield return null;
     }
 
+    IEnumerator HoverEnd()
+    {
+        yield return new WaitForEndOfFrame();
+        isHover = false;
+    }
+
+
     public virtual void ShowExplain(Vector2 invenPoint)
     {
+        if (isHover == true) return;
+        isHover = true;
+
         ItemExplain.Instance.HoverEvent(invenPoint);
-        if (Type == ItemType.Generator)
-            ItemExplain.Instance.HoverGenerator(image.sprite, WeaponExplainManager.triggerExplain[InvenObject.generatorID].ToString(), WeaponExplainManager.weaponExplain[InvenObject.generatorID]);
+        //if (Type == ItemType.Generator)
+            //ItemExplain.Instance.HoverGenerator(invenPoint, image.sprite, WeaponExplainManager.triggerExplain[InvenObject.generatorID].ToString(), WeaponExplainManager.weaponExplain[InvenObject.generatorID]);
     }
 
     public void OnDestroy()

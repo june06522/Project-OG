@@ -1,4 +1,5 @@
 using DG.Tweening;
+using FD.Dev;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -46,6 +47,8 @@ public class InventoryActive : MonoBehaviour
     Image invenRenderer;
     Material mat;
 
+    PanelFade fade;
+
     readonly string invenShader = "_SourceGlowDissolveFade";
 
     private void Start()
@@ -61,6 +64,7 @@ public class InventoryActive : MonoBehaviour
 
         _components = _invenPanel.transform.Find("Components").transform;
         invenRenderer = _invenPanel.GetComponent<Image>();
+        fade = transform.Find("FadePanel").GetComponent<PanelFade>();
         mat = invenRenderer.material;
 
         mat.SetFloat(invenShader, 0f);
@@ -95,7 +99,7 @@ public class InventoryActive : MonoBehaviour
     private void ShowInven()
     {
         //DOTween.Kill(seq);
-
+        fade.Fade(true);
         _components.localPosition = new Vector3(0, 0, 0);
         _invenPanel.transform.DOLocalMoveY(_inveny, 0f);
         invenRenderer.enabled = true;
@@ -104,8 +108,8 @@ public class InventoryActive : MonoBehaviour
         //seq.Append(_invenPanel.transform.DOLocalMoveY(_inveny, time)).SetEase(Ease.OutBounce);
         //seq.Join(_invenInfoPanel.transform.DOLocalMoveY(_inveny, time)).SetEase(Ease.OutBounce);
         //seq.Append(_invenInfoPanel.transform.DOLocalMoveX(_infox, time)).SetEase(Ease.OutBounce);
-        seq.Append(DOTween.To(()=> initValue, value => mat.SetFloat(invenShader, value), 2f, easingtime)).SetEase(ease);
-        seq.Join(ScreenManager.Instance.SetEffect(0.4f, 0.65f, DG.Tweening.Ease.InQuad));
+        seq.Append(DOTween.To(()=> initValue, value => mat.SetFloat(invenShader, value), 15f, easingtime)).SetEase(ease);
+        seq.Join(ScreenManager.Instance.SetEffect(0.3f, 0.65f, DG.Tweening.Ease.InQuad));
         seq.Join(_playerUI.transform.DOMoveX(_uix - moveXVal, time));
         seq.AppendCallback(() => { isAnimation = true; });
         
@@ -115,6 +119,8 @@ public class InventoryActive : MonoBehaviour
     private void ShowUI()
     {
         //DOTween.Kill(seq);
+
+        fade.Fade(false);
         _components.localPosition = new Vector3(0, 1000, 0);
         ScreenManager.Instance.SetEffect(0, 0.5f, DG.Tweening.Ease.InQuart);
         float initValue = mat.GetFloat(invenShader);

@@ -60,7 +60,7 @@ public class WeaponBrick : InvenBrick
 
     public override void ShowExplain(Vector2 invenPoint)
     {
-        ItemExplain.Instance.HoverWeapon(image.sprite, GetName(), GetDamage(), GetExplain(), GetOnSkillList());
+        ItemExplain.Instance.HoverWeapon(invenPoint, image.sprite, GetName(), GetDamage(), GetExplain(), GetOnSkillList());
     }
 
     private float GetDamage() => weaponPrefab.Data.GetDamage();
