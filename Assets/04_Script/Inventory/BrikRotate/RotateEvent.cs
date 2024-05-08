@@ -9,7 +9,7 @@ public class RotateEvent : MonoBehaviour
     [SerializeField]
     ParticleSystem _particleSystem;
     [SerializeField]
-    BrickRotateSO[] _brickSO;
+    BrickSOList _brickSO;
 
     private void Awake()
     {
@@ -68,7 +68,7 @@ public class RotateEvent : MonoBehaviour
 
     private Item FindBlock(int dir = 0)
     {
-        foreach (var b in _brickSO)
+        foreach (var b in _brickSO.brickSO)
         {
             if(b.brickType == _curItem.brickType)
             {
