@@ -23,7 +23,7 @@ public class Tooltip : MonoBehaviour
     Material mat;
 
     RectTransform rectTransform;
-
+    Sequence seq;
     private void Start()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -70,7 +70,8 @@ public class Tooltip : MonoBehaviour
         //gang = true;
         rectTransform.parent.position = pos;
 
-        Sequence seq = DOTween.Sequence();
+        seq.Kill();
+        seq = DOTween.Sequence();
         seq.Append(DOTween.To(() => fadeStart,
                   (value) => mat.SetFloat(shader, value), 
                   fadeEnd,
@@ -82,6 +83,7 @@ public class Tooltip : MonoBehaviour
             seq.Join(titleTexts[i].Dissolve(true));
         }
 
+        seq.Restart();
         //for (int i = 0; i < mainTexts.Count; ++i)
         //{
         //    seq.Insert(1f, mainTexts[i].Dissolve(true));

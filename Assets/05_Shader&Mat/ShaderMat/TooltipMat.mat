@@ -10,7 +10,10 @@ Material:
   m_Name: TooltipMat
   m_Shader: {fileID: 4800000, guid: bb134d7d4389e3a45a6c49e898a344a4, type: 3}
   m_ValidKeywords:
+  - _ENABLEALPHATINT_ON
   - _ENABLEDIRECTIONALGLOWFADE_ON
+  - _ENABLEINNEROUTLINE_ON
+  - _ENABLERECOLORRGB_ON
   - _SHADERFADING_NONE
   - _SHADERSPACE_UI_GRAPHIC
   m_InvalidKeywords:
@@ -47,7 +50,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _InnerOutlineTintTexture:
-        m_Texture: {fileID: 2800000, guid: be6c7dc1d21e82a40b4f37e323df4c6c, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0f87311d6f434dd44abe72394d1ec657, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -136,7 +139,7 @@ Material:
     - _AddHueSaturation: 1
     - _AddHueSpeed: 1
     - _AlphaCutoff: 0.5
-    - _AlphaTintFade: 1
+    - _AlphaTintFade: 0.01
     - _AlphaTintMinAlpha: 0.02
     - _BakedMaterial: 0
     - _BlackTintFade: 1
@@ -178,14 +181,14 @@ Material:
     - _DirectionalDistortionRandomDirection: 0.1
     - _DirectionalDistortionRotation: 0
     - _DirectionalDistortionWidth: 0.5
-    - _DirectionalGlowFadeFade: -0.13
+    - _DirectionalGlowFadeFade: 0
     - _DirectionalGlowFadeInvert: 1
     - _DirectionalGlowFadeNoiseFactor: 0.2
     - _DirectionalGlowFadeRotation: 270
     - _DirectionalGlowFadeWidth: 0.05
     - _EnableAddColor: 0
     - _EnableAddHue: 0
-    - _EnableAlphaTint: 0
+    - _EnableAlphaTint: 1
     - _EnableBlackTint: 0
     - _EnableBrightness: 0
     - _EnableBurn: 0
@@ -210,7 +213,7 @@ Material:
     - _EnableHologram: 0
     - _EnableHue: 0
     - _EnableInkSpread: 0
-    - _EnableInnerOutline: 0
+    - _EnableInnerOutline: 1
     - _EnableMetal: 0
     - _EnableNegative: 0
     - _EnableOuterOutline: 0
@@ -219,7 +222,7 @@ Material:
     - _EnablePixelate: 0
     - _EnablePoison: 0
     - _EnableRainbow: 0
-    - _EnableRecolorRGB: 0
+    - _EnableRecolorRGB: 1
     - _EnableRecolorRGBYCP: 0
     - _EnableSaturation: 0
     - _EnableScreenTiling: 0
@@ -291,7 +294,7 @@ Material:
     - _HologramDistortionOffset: 0.5
     - _HologramDistortionScale: 10
     - _HologramDistortionSpeed: 2
-    - _HologramFade: 1
+    - _HologramFade: 0.17
     - _HologramLineFrequency: 500
     - _HologramLineGap: 3
     - _HologramLineSpeed: 0.01
@@ -303,7 +306,7 @@ Material:
     - _InkSpreadNoiseFactor: 0.5
     - _InkSpreadWidth: 0.2
     - _InnerOutlineDistortionToggle: 0
-    - _InnerOutlineFade: 1
+    - _InnerOutlineFade: 0.3
     - _InnerOutlineOutlineOnlyToggle: 0
     - _InnerOutlineTextureToggle: 0
     - _InnerOutlineWidth: 0.02
@@ -346,7 +349,7 @@ Material:
     - _RainbowNoiseFactor: 0.2
     - _RainbowSaturation: 1
     - _RainbowSpeed: 1
-    - _RecolorRGBFade: 1
+    - _RecolorRGBFade: 0.12
     - _RecolorRGBTextureToggle: 0
     - _RecolorRGBYCPFade: 1
     - _RecolorRGBYCPTextureToggle: 0
@@ -420,7 +423,7 @@ Material:
     - _StencilWriteMask: 255
     - _StrongTintContrast: 0
     - _StrongTintContrastToggle: 0
-    - _StrongTintFade: 1
+    - _StrongTintFade: 0
     - _StrongTintMaskToggle: 0
     - _TMPSmoothness: 5
     - _TMPThickness: -0.45
@@ -465,8 +468,8 @@ Material:
     - _WindXPosition: 0
     - _WorldTilingPixelsPerUnit: 100
     m_Colors:
-    - _AddColorColor: {r: 2.996078, g: 0, b: 0, a: 0}
-    - _AlphaTintColor: {r: 95.87451, g: 5.019608, b: 95.87451, a: 0}
+    - _AddColorColor: {r: 0.7490196, g: 0.4862745, b: 0, a: 0}
+    - _AlphaTintColor: {r: 1, g: 1, b: 1, a: 0}
     - _BlackTintColor: {r: 0, g: 0, b: 1, a: 0}
     - _BurnEdgeColor: {r: 11.98431, g: 1.129412, b: 0.1254902, a: 0}
     - _BurnEdgeNoiseScale: {r: 0.3, g: 0.3, b: 0, a: 0}
@@ -491,7 +494,7 @@ Material:
     - _DirectionalDistortionDistortion: {r: 0, g: 0.1, b: 0, a: 0}
     - _DirectionalDistortionDistortionScale: {r: 1, g: 1, b: 0, a: 0}
     - _DirectionalDistortionNoiseScale: {r: 0.4, g: 0.4, b: 0, a: 0}
-    - _DirectionalGlowFadeEdgeColor: {r: 0, g: 9.703579, b: 59.650303, a: 0}
+    - _DirectionalGlowFadeEdgeColor: {r: 0, g: 32.25335, b: 59.65032, a: 0}
     - _DirectionalGlowFadeNoiseScale: {r: 0.3, g: 0.3, b: 0, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EnchantedHighColor: {r: 0, g: 0.7098798, b: 4.237095, a: 0}
@@ -529,7 +532,7 @@ Material:
     - _InkSpreadColor: {r: 8.47419, g: 5.013525, b: 0.08873497, a: 0}
     - _InkSpreadNoiseScale: {r: 0.4, g: 0.4, b: 0, a: 0}
     - _InkSpreadPosition: {r: 0.5, g: -1, b: 0, a: 0}
-    - _InnerOutlineColor: {r: 11.98431, g: 1.254902, b: 1.254902, a: 1}
+    - _InnerOutlineColor: {r: 0, g: 1.3700062, b: 5.283018, a: 1}
     - _InnerOutlineDistortionIntensity: {r: 0.01, g: 0.01, b: 0, a: 0}
     - _InnerOutlineNoiseScale: {r: 4, g: 4, b: 0, a: 0}
     - _InnerOutlineNoiseSpeed: {r: 0, g: 0.1, b: 0, a: 0}
@@ -555,8 +558,8 @@ Material:
     - _PoisonNoiseSpeed: {r: 0, g: -0.2, b: 0, a: 0}
     - _RainbowCenter: {r: 0, g: 0, b: 0, a: 0}
     - _RainbowNoiseScale: {r: 0.2, g: 0.2, b: 0, a: 0}
-    - _RecolorRGBBlueTint: {r: 1, g: 1, b: 1, a: 0.5019608}
-    - _RecolorRGBGreenTint: {r: 1, g: 1, b: 1, a: 0.5019608}
+    - _RecolorRGBBlueTint: {r: 0, g: 0.2509804, b: 15.435294, a: 0.5019608}
+    - _RecolorRGBGreenTint: {r: 0, g: 0.89411765, b: 1.3411765, a: 0.5019608}
     - _RecolorRGBRedTint: {r: 1, g: 1, b: 1, a: 0.5019608}
     - _RecolorRGBYCPBlueTint: {r: 1, g: 1, b: 1, a: 0.5019608}
     - _RecolorRGBYCPCyanTint: {r: 1, g: 1, b: 1, a: 0.5019608}

@@ -72,26 +72,26 @@ public class ItemExplain : MonoBehaviour
     }
 
 
-    public void HoverWeapon(Sprite image, string name, float power, string explain, string[] skillList)
+    public void HoverWeapon(Vector2 invenPoint, Sprite image, string name, float power, string explain, string[] skillList)
     {
-        generatorExplain.gameObject.SetActive(false);
-        weaponExplain.gameObject.SetActive(true);
-
-        weaponExplain.ON(image, name, power, explain, skillList);
+        //generatorExplain.gameObject.SetActive(false);
+        //weaponExplain.gameObject.SetActive(true);
+        tooltip.On(invenPoint, null, null, null);
+        //weaponExplain.ON(image, name, power, explain, skillList);
     }
 
-    public void HoverGenerator(Sprite image, string trigger, string skillList)
+    public void HoverGenerator(Vector2 invenPoint, Sprite image, string trigger, string skillList)
     {
-        generatorExplain.gameObject.SetActive(true);
-        weaponExplain.gameObject.SetActive(false);
-
-        generatorExplain.ON(image, trigger, skillList);
+        //generatorExplain.gameObject.SetActive(true);
+        //weaponExplain.gameObject.SetActive(false);
+        tooltip.On(invenPoint, null, null, null);
+        //generatorExplain.ON(image, trigger, skillList);
     }
 
     public void HoverEnd()
     {
-        weaponExplain.gameObject.SetActive(false);
-        generatorExplain.gameObject.SetActive(false);
+        //weaponExplain.gameObject.SetActive(false);
+        //generatorExplain.gameObject.SetActive(false);
         tooltip.Active(false);
     }
 
