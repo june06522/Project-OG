@@ -27,7 +27,7 @@ public class TextDissolve : MonoBehaviour
     private void Awake()
     {
         m_text = GetComponent<TextMeshProUGUI>();
-        m_text.material = Instantiate(m_text.material);
+        m_text.material = Instantiate(m_text.materialForRendering);
         mat = m_text.materialForRendering;
     }
 
