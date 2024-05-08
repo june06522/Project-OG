@@ -27,9 +27,6 @@ public class AsyncSceneLoader : MonoBehaviour
 
     IEnumerator LoadScene()
     {
-
-        yield return new WaitForSeconds(0.1f);
-
         AsyncOperation op = SceneManager.LoadSceneAsync(nextScene);
         op.allowSceneActivation = false;
         float timer = 0.0f;
@@ -59,6 +56,7 @@ public class AsyncSceneLoader : MonoBehaviour
                 if (progressBar.fillAmount == 1.0f)
                 {
 
+                    op.allowSceneActivation = true;
                     break;
 
                 }
@@ -66,10 +64,6 @@ public class AsyncSceneLoader : MonoBehaviour
             }
 
         }
-
-        yield return new WaitForSeconds(0.1f);
-        op.allowSceneActivation = true;
-
     }
 
 }
