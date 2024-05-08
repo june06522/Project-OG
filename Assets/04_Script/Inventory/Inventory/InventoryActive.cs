@@ -5,6 +5,16 @@ using UnityEngine.UI;
 
 public class InventoryActive : MonoBehaviour
 {
+    [SerializeField]
+    private float power = 5f;
+    [SerializeField]
+    private float easingtime = 0.5f;
+    [SerializeField]
+    Ease ease = Ease.Linear;
+    [SerializeField]
+    AnimationCurve animCurve;
+
+
     [HideInInspector]
     public Image[] images;
     [HideInInspector]
@@ -15,6 +25,8 @@ public class InventoryActive : MonoBehaviour
     [SerializeField] GameObject _playerUI;
     [SerializeField] GameObject _invenPanel;
     [SerializeField] GameObject _invenInfoPanel;
+    [SerializeField] Transform _components;
+
     Sequence seq;
 
     public bool IsOn => isOn;
@@ -31,6 +43,11 @@ public class InventoryActive : MonoBehaviour
 
     private float time = 0.4f;
 
+    Image invenRenderer;
+    Material mat;
+
+    readonly string invenShader = "_SourceGlowDissolveFade";
+
     private void Start()
     {
         _uix = _playerUI.transform.position.x;
@@ -38,9 +55,15 @@ public class InventoryActive : MonoBehaviour
         _inveny = _invenPanel.transform.localPosition.y;
         _infox = _invenInfoPanel.transform.localPosition.x;
 
-        _invenInfoPanel.transform.DOLocalMoveX(_invenx + moveXVal, 0f);
-        _invenPanel.transform.DOLocalMoveY(_inveny + moveYVal, 0f);
-        _invenInfoPanel.transform.DOLocalMoveY(_inveny + moveYVal, 0f);
+        //_invenInfoPanel.transform.DOLocalMoveX(_invenx + moveXVal, 0f);
+        //_invenPanel.transform.DOLocalMoveY(_inveny + moveYVal, 0f);
+        //_invenInfoPanel.transform.DOLocalMoveY(_inveny + moveYVal, 0f);
+
+        _components = _invenPanel.transform.Find("Components").transform;
+        invenRenderer = _invenPanel.GetComponent<Image>();
+        mat = invenRenderer.material;
+
+        mat.SetFloat(invenShader, 0f);
     }
 
     private void Update()
@@ -73,29 +96,43 @@ public class InventoryActive : MonoBehaviour
     {
         //DOTween.Kill(seq);
 
+        _components.localPosition = new Vector3(0, 0, 0);
+        _invenPanel.transform.DOLocalMoveY(_inveny, 0f);
+        invenRenderer.enabled = true;
+        float initValue = mat.GetFloat(invenShader);
         seq = DOTween.Sequence();
-        seq.Append(_invenPanel.transform.DOLocalMoveY(_inveny, time)).SetEase(Ease.OutBounce);
-        seq.Join(_invenInfoPanel.transform.DOLocalMoveY(_inveny, time)).SetEase(Ease.OutBounce);
-        seq.Append(_invenInfoPanel.transform.DOLocalMoveX(_infox, time)).SetEase(Ease.OutBounce);
+        //seq.Append(_invenPanel.transform.DOLocalMoveY(_inveny, time)).SetEase(Ease.OutBounce);
+        //seq.Join(_invenInfoPanel.transform.DOLocalMoveY(_inveny, time)).SetEase(Ease.OutBounce);
+        //seq.Append(_invenInfoPanel.transform.DOLocalMoveX(_infox, time)).SetEase(Ease.OutBounce);
+        seq.Append(DOTween.To(()=> initValue, value => mat.SetFloat(invenShader, value), 2f, easingtime)).SetEase(ease);
+        seq.Join(ScreenManager.Instance.SetEffect(0.4f, 0.65f, DG.Tweening.Ease.InQuad));
         seq.Join(_playerUI.transform.DOMoveX(_uix - moveXVal, time));
         seq.AppendCallback(() => { isAnimation = true; });
+        
+        //ScreenManager.Instance.SetEffect(5, easingtime, ease);
     }
 
     private void ShowUI()
     {
         //DOTween.Kill(seq);
-
+        _components.localPosition = new Vector3(0, 1000, 0);
+        ScreenManager.Instance.SetEffect(0, 0.5f, DG.Tweening.Ease.InQuart);
+        float initValue = mat.GetFloat(invenShader);
         _playerUI.transform.DOMoveX(_uix, time).SetEase(Ease.OutBack);
         seq = DOTween.Sequence();
-        seq.Append(_invenInfoPanel.transform.DOLocalMoveX(_invenx + moveXVal, time)).SetEase(Ease.OutBack);
-        seq.Append(_invenPanel.transform.DOLocalMoveY(_inveny + moveYVal, time)).SetEase(Ease.OutBack);
-        seq.Join(_invenInfoPanel.transform.DOLocalMoveY(_inveny + moveYVal, time)).SetEase(Ease.OutBack);
+        //seq.Append(_invenInfoPanel.transform.DOLocalMoveX(_invenx + moveXVal, time)).SetEase(Ease.OutBack);
+        //seq.Append(_invenPanel.transform.DOLocalMoveY(_inveny + moveYVal, time)).SetEase(Ease.OutBack);
+        //seq.Join(_invenInfoPanel.transform.DOLocalMoveY(_inveny + moveYVal, time)).SetEase(Ease.OutBack);
+        seq.Append(DOTween.To(() => initValue, value => mat.SetFloat(invenShader, value), 0f, easingtime).SetEase(ease));
         seq.AppendCallback(() => { StartCoroutine(DelayCo()); });
-
+            
+        //ScreenManager.Instance.SetEffect(0, 0.5f, ease);
     }
 
     IEnumerator DelayCo()
     {
+        _invenPanel.transform.DOLocalMoveY(_inveny + moveYVal, 0f);
+        invenRenderer.enabled = false;
         yield return new WaitForSeconds(time);
         isAnimation = true;
     }

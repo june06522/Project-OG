@@ -58,7 +58,7 @@ public class WeaponBrick : InvenBrick
 
     }
 
-    public override void ShowExplain()
+    public override void ShowExplain(Vector2 invenPoint)
     {
         ItemExplain.Instance.HoverWeapon(image.sprite, GetName(), GetDamage(), GetExplain(), GetOnSkillList());
     }
