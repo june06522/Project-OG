@@ -7,6 +7,8 @@ public class MagneticEMP : Skill
     [SerializeField] MagneticObject prefab;
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
+        if (weaponTrm.GetComponent<Weapon>() != trigger.startWeapon)
+            return;
 
         StartCoroutine(Generate(target, power));
 
