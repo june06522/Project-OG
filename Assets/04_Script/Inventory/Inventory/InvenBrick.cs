@@ -28,6 +28,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public ItemType Type = ItemType.Weapon;
 
     protected bool isDrag;
+    protected bool isHover;
     public bool IsDrag => isDrag;
 
     protected RectTransform rectTransform;
@@ -132,7 +133,11 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
                 rectTransform.localPosition += new Vector3(0, 50);
 
             Setting();
-            ShowExplain();
+            if (isHover == false)
+            {
+                isHover = true;
+                ShowExplain(rectTransform.position);
+            }
         }
         else
         {
@@ -174,13 +179,13 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public void OnPointerEnter(PointerEventData eventData)
     {
         StartCoroutine("CheckMouse");
-
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         StopCoroutine("CheckMouse");
         ItemExplain.Instance.HoverEnd();
+        isHover = false;
     }
 
     IEnumerator CheckMouse()
@@ -215,7 +220,11 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             }
             if (!ItemExplain.Instance.isDrag && isOpen)
             {
-                ShowExplain();
+                if(isHover == false)
+                {
+                    isHover = true;
+                    ShowExplain(rectTransform.position);
+                }
             }
             else
             {
@@ -245,8 +254,9 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         yield return null;
     }
 
-    public virtual void ShowExplain()
+    public virtual void ShowExplain(Vector2 invenPoint)
     {
+        ItemExplain.Instance.HoverEvent(invenPoint);
         if (Type == ItemType.Generator)
             ItemExplain.Instance.HoverGenerator(image.sprite, WeaponExplainManager.triggerExplain[InvenObject.generatorID].ToString(), WeaponExplainManager.weaponExplain[InvenObject.generatorID]);
     }
