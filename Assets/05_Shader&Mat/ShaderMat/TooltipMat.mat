@@ -10,7 +10,9 @@ Material:
   m_Name: TooltipMat
   m_Shader: {fileID: 4800000, guid: bb134d7d4389e3a45a6c49e898a344a4, type: 3}
   m_ValidKeywords:
+  - _ENABLEADDCOLOR_ON
   - _ENABLEDIRECTIONALGLOWFADE_ON
+  - _ENABLEINNEROUTLINE_ON
   - _SHADERFADING_NONE
   - _SHADERSPACE_UI_GRAPHIC
   m_InvalidKeywords:
@@ -183,7 +185,7 @@ Material:
     - _DirectionalGlowFadeNoiseFactor: 0.1
     - _DirectionalGlowFadeRotation: 270
     - _DirectionalGlowFadeWidth: 0.03
-    - _EnableAddColor: 0
+    - _EnableAddColor: 1
     - _EnableAddHue: 0
     - _EnableAlphaTint: 0
     - _EnableBlackTint: 0
@@ -210,7 +212,7 @@ Material:
     - _EnableHologram: 0
     - _EnableHue: 0
     - _EnableInkSpread: 0
-    - _EnableInnerOutline: 0
+    - _EnableInnerOutline: 1
     - _EnableMetal: 0
     - _EnableNegative: 0
     - _EnableOuterOutline: 0
@@ -465,7 +467,7 @@ Material:
     - _WindXPosition: 0
     - _WorldTilingPixelsPerUnit: 100
     m_Colors:
-    - _AddColorColor: {r: 0.7490196, g: 0.4862745, b: 0, a: 0}
+    - _AddColorColor: {r: 0, g: 0.5882353, b: 0.7490196, a: 0}
     - _AlphaTintColor: {r: 1, g: 1, b: 1, a: 0}
     - _BlackTintColor: {r: 0, g: 0, b: 1, a: 0}
     - _BurnEdgeColor: {r: 11.98431, g: 1.129412, b: 0.1254902, a: 0}
@@ -529,7 +531,7 @@ Material:
     - _InkSpreadColor: {r: 8.47419, g: 5.013525, b: 0.08873497, a: 0}
     - _InkSpreadNoiseScale: {r: 0.4, g: 0.4, b: 0, a: 0}
     - _InkSpreadPosition: {r: 0.5, g: -1, b: 0, a: 0}
-    - _InnerOutlineColor: {r: 0, g: 5.283018, b: 5.283018, a: 1}
+    - _InnerOutlineColor: {r: 0, g: 1.1595955, b: 1.3207545, a: 1}
     - _InnerOutlineDistortionIntensity: {r: 0.01, g: 0.01, b: 0, a: 0}
     - _InnerOutlineNoiseScale: {r: 4, g: 4, b: 0, a: 0}
     - _InnerOutlineNoiseSpeed: {r: 0, g: 0.1, b: 0, a: 0}
