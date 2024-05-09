@@ -8,7 +8,7 @@ public class PanelFade : MonoBehaviour
 {
     Image image;
 
-    float targetAlpha = 0.15f;
+    float targetAlpha = 0.45f;
     private void Awake()
     {
         image = GetComponent<Image>();   
