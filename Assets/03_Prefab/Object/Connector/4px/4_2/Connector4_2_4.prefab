@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 7875682921897073602}
   - component: {fileID: 7875682921897073601}
   - component: {fileID: 7875682921897073600}
+  - component: {fileID: 8506776254960201935}
   m_Layer: 17
-  m_Name: Connector5_1_1
+  m_Name: Connector4_2_4
   m_TagString: Brick
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7875682921278912687}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.51, y: 0.01, z: -0.015409201}
+  m_LocalPosition: {x: 5.51, y: 0.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -76,12 +77,12 @@ SpriteRenderer:
   m_SortingLayerID: 86297143
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 65ae8d5d18e6d474493de4db9b3ac3e8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b8c6583e922315d43805ef32646bfa91, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 7.5, y: 7.5}
+  m_Size: {x: 7.5, y: 5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -125,14 +126,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.75, y: 3.75}
-    newSize: {x: 7.5, y: 7.5}
+    oldSize: {x: 2.5, y: 3.75}
+    newSize: {x: 7.5, y: 5}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3, y: 3}
+  m_Size: {x: 3, y: 2}
   m_EdgeRadius: 0
 --- !u!114 &7875682921897073600
 MonoBehaviour:
@@ -146,6 +147,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd34b163d938d794c8443f97a164a26d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brick: {fileID: 4283228968543105357, guid: 69d63b1b71682fd47bbc793cf0a64790, type: 3}
+  brick: {fileID: 4283228968543105357, guid: 4b832328badc6d748a5cf9d697c00dc0, type: 3}
   one: 1
-  brickType: 12
+  brickType: 9
+--- !u!114 &8506776254960201935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7875682921278912687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2101b6ccf41aefc45be5357fd49ff947, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _orderOffset: -1
