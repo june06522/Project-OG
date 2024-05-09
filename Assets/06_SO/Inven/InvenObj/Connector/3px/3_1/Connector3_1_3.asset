@@ -33,30 +33,32 @@ MonoBehaviour:
   <bricks>k__BackingField:
   - point: {x: 0, y: 0}
     dir:
-    - {x: 0, y: 1}
-    - {x: 0, y: -1}
-  - point: {x: 0, y: 1}
-    dir:
-    - {x: 1, y: 0}
-    - {x: 0, y: -1}
-  - point: {x: 1, y: 1}
-    dir:
     - {x: 1, y: 0}
     - {x: -1, y: 0}
+  - point: {x: 1, y: 0}
+    dir:
+    - {x: -1, y: 0}
+    - {x: 0, y: 1}
+  - point: {x: 1, y: 1}
+    dir:
+    - {x: 0, y: 1}
+    - {x: 0, y: -1}
   <inputPoints>k__BackingField:
   - point: {x: 0, y: 0}
-    dir: {x: 0, y: 1}
+    dir: {x: 1, y: 0}
   - point: {x: 1, y: 1}
-    dir: {x: -1, y: 0}
+    dir: {x: 0, y: -1}
   <sendPoints>k__BackingField:
   - point: {x: 0, y: 0}
-    dir: {x: 0, y: -1}
+    dir: {x: -1, y: 0}
   - point: {x: 1, y: 1}
-    dir: {x: 1, y: 0}
+    dir: {x: 0, y: 1}
   includes:
   - {fileID: -9200671205789383270}
   - {fileID: 3521686311245487743}
   - {fileID: 8363739996122354861}
+  generatorID: 0
+  colorMat: {fileID: 0}
 --- !u!114 &3521686311245487743
 MonoBehaviour:
   m_ObjectHideFlags: 0
