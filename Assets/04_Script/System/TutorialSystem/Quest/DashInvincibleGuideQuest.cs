@@ -22,7 +22,9 @@ public class DashInvincibleGuideQuest : GuideQuest
         _player = GameManager.Instance.player;
 
         if(startPos != null)
+        {
             _player.position = startPos.position;
+        }
 
         foreach(GameObject obj in questObject)
         {

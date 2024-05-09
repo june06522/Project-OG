@@ -97,6 +97,7 @@ public class InventoryActive : MonoBehaviour
 
     private void ShowInven()
     {
+        isOn = true;
         //DOTween.Kill(seq);
         fade.Fade(true);
         _components.localPosition = new Vector3(0, 0, 0);
@@ -115,9 +116,10 @@ public class InventoryActive : MonoBehaviour
         //ScreenManager.Instance.SetEffect(5, easingtime, ease);
     }
 
-    private void ShowUI()
+    public void ShowUI()
     {
         //DOTween.Kill(seq);
+        isOn = false;
 
         fade.Fade(false);
         _components.localPosition = new Vector3(0, 1000, 0);

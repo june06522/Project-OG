@@ -11,8 +11,9 @@ public class Sandbag : MonoBehaviour, IHitAble
 
     public bool Hit(float damage)
     {
-        feedbackPlayer.Play(damage + UnityEngine.Random.Range(0.25f, 1.75f));
         OnHit?.Invoke(damage);
+        if(gameObject.activeInHierarchy)
+            feedbackPlayer.Play(damage + UnityEngine.Random.Range(0.25f, 1.75f));
         return true;
     }
 }
