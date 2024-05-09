@@ -39,7 +39,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     protected InventorySize invensize;
 
-    Vector3 explainPos = new Vector2(-30.0f, 25f);
+    Vector2 explainPos = new Vector2(-30.0f, 25f);
 
     protected virtual void Awake()
     {
@@ -147,9 +147,9 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             Setting();
 
             Vector2 explainPosition = explainPoint == null
-                ? rectTransform.position + explainPos
+                ? (Vector2)(rectTransform.position) + explainPos
                 : explainPoint.position;
-            ShowExplain(explainPosition);
+                ShowExplain(explainPosition);
     
         }
         else
@@ -234,7 +234,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             if (!ItemExplain.Instance.isDrag && isOpen)
             {
                 Vector2 explainPosition = explainPoint == null
-                ? rectTransform.position + explainPos
+                ? (Vector2)(rectTransform.position) + explainPos
                 : explainPoint.position;
                 ShowExplain(explainPosition);   
             }

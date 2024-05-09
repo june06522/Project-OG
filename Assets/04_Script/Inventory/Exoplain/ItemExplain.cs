@@ -76,7 +76,13 @@ public class ItemExplain : MonoBehaviour
     {
         //generatorExplain.gameObject.SetActive(false);
         //weaponExplain.gameObject.SetActive(true);
+        if (invenPoint == curInvenPoint) return;
+        if (tooltip.gameObject.activeSelf == false)
+            tooltip.Active(true);
+
+        curInvenPoint = invenPoint;
         tooltip.On(invenPoint, null, null, null);
+
         //weaponExplain.ON(image, name, power, explain, skillList);
     }
 
@@ -84,7 +90,14 @@ public class ItemExplain : MonoBehaviour
     {
         //generatorExplain.gameObject.SetActive(true);
         //weaponExplain.gameObject.SetActive(false);
+
+        if (invenPoint == curInvenPoint) return;
+        if (tooltip.gameObject.activeSelf == false)
+            tooltip.Active(true);
+
+        curInvenPoint = invenPoint;
         tooltip.On(invenPoint, null, null, null);
+
         //generatorExplain.ON(image, trigger, skillList);
     }
 
