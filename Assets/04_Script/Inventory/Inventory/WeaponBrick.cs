@@ -60,6 +60,9 @@ public class WeaponBrick : InvenBrick
 
     public override void ShowExplain(Vector2 invenPoint)
     {
+        if (isHover == true) return;
+        isHover = true;
+
         ItemExplain.Instance.HoverWeapon(invenPoint, image.sprite, GetName(), GetDamage(), GetExplain(), GetOnSkillList());
     }
 
