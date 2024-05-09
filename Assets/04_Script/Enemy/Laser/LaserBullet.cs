@@ -57,7 +57,6 @@ public class LaserBullet : MonoBehaviour
                 if (hit.collider.TryGetComponent<IHitAble>(out hitAble))
                 {
                     hitAble.Hit(damage);
-                    Debug.Log("Hit");
                 }
             }
         }

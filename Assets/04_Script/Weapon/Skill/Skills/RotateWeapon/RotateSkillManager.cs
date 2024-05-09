@@ -61,7 +61,6 @@ public class RotateSkillManager : MonoBehaviour
     public void SetCloneInfo(WeaponID id, int count)
     {
         _cloneDictionary[id] = count;
-        Debug.Log($"{id.ToString()}: {count}");
     }
 
     public RotateClone GetClonePrefabInfo(WeaponID id)
