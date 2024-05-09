@@ -11,11 +11,10 @@ public class SiegeModeObj : MonoBehaviour
 
     public void Excute(Weapon weapon, int power)
     {
-        if (power != lastPower)
+        if (power != lastPower && co != null)
         {
             weapon.Data.CoolDown -= coolDownVal * lastPower;
             lastPower = power;
-            if(co != null)
                 weapon.Data.CoolDown += coolDownVal * lastPower;
         }
 
@@ -34,5 +33,6 @@ public class SiegeModeObj : MonoBehaviour
         }
         co = null;
         weapon.Data.CoolDown -= coolDownVal * lastPower;
+
     }
 }
