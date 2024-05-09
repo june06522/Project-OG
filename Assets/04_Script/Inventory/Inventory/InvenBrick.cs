@@ -120,11 +120,10 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         if (point == null)
         {
             GameObject obj = Instantiate(origin, GameManager.Instance.player.position, Quaternion.identity);
-            Destroy(gameObject);
 
-            Debug.Log("Gang");
+            isHover = true;
             ItemExplain.Instance.HoverEnd();
-            StartCoroutine("HoverEnd");
+            Destroy(gameObject);
             return;
              
         }
