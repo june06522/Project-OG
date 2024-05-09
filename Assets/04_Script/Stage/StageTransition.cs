@@ -1,3 +1,4 @@
+using FD.Dev;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,48 +8,29 @@ public class StageTransition : MonoBehaviour
 {
     [SerializeField]
     private AudioClip _stageTransitionClip;
+    [SerializeField]
+    private CircleTransition _circleTransition;
 
-    Animator _stageAnimator;
-    Image _transitionImage;
-
-    private int _startHash = Animator.StringToHash("Start");
-    private int _endHash = Animator.StringToHash("End");
-    private int _valueHash = Animator.StringToHash("Value");
-
-    private void Awake()
+    public void StartTransition(float time)
     {
-        _stageAnimator = GetComponent<Animator>();
-        _transitionImage = GetComponent<Image>();
-    }
 
-    public void StartTransition()
-    {
-        RandomTransitionValue();
 
         if(_stageTransitionClip != null)
             SoundManager.Instance.SFXPlay("Transition", _stageTransitionClip, 1f);
 
-        //_stageAnimator.ResetTrigger(_startHash);
-        _transitionImage.color = Color.white;
-        _stageAnimator.SetTrigger(_startHash);
+        _circleTransition.SetOnOff(true);
+        _circleTransition.PlayCircleSizeChange(Vector3.one * 2800, Vector3.zero, time, true);
     }
 
-    public void EndTransition()
+    public void EndTransition(float time)
     {
-        RandomTransitionValue();
-
-        //_stageAnimator.ResetTrigger(_endHash);
-        _stageAnimator.SetTrigger(_endHash);
+        
+        _circleTransition.PlayCircleSizeChange(Vector3.zero, Vector3.one * 2800, time);
+        FAED.InvokeDelay(() =>
+        {
+            _circleTransition.SetOnOff(false);
+        }, time + 0.01f);
 
     }
 
-    public void EndTransitionEvent()
-    {
-        _transitionImage.color = Color.clear;
-    }
-
-    private void RandomTransitionValue()
-    {
-        _stageAnimator.SetInteger(_valueHash, Random.Range(0, 3));
-    }
 }

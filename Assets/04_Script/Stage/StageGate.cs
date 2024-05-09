@@ -80,40 +80,35 @@ public class StageGate : MonoBehaviour, IInteractable
 
 
 
-        stageTransition.StartTransition(transform.position);
-        yield return new WaitForSeconds(0.2f);
+        stageTransition.StartTransition(1f);
+        yield return new WaitForSeconds(2f);
         OnGateEvent?.Invoke();
         if (NextStage != null)
         {
 
             GameManager.Instance.player.position = NextStage.playerSpawnPos;
             NextStage.SetGlobalLight();
-            
-            if(NextStage.SetCameraSize() == false)
-                stageTransition.EndTransition(playerTrm.position);
-
-            if (NextStage.ThisStageType == StageType.EnemyStage || NextStage.ThisStageType == StageType.BossStage)
-                GameManager.Instance.isPlay = true;
+            NextStage.SetCameraSize();
 
         }
         else
             GameManager.Instance.ResetGlobalLight();
-        
-        
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
+        stageTransition.EndTransition(1f);
+        yield return new WaitForSeconds(0.2f);
         _playerController.ChangeState(EnumPlayerState.Move);
 
         if(NextStage != null)
         {
 
+            if (NextStage.ThisStageType == StageType.EnemyStage || NextStage.ThisStageType == StageType.BossStage)
+                GameManager.Instance.isPlay = true;
+
             CameraManager.Instance.SetMinimapCameraPostion(NextStage.transform.position);
             NextStage.SetStageTitle();
 
         }
-
-        
-        
 
         yield return new WaitForSeconds(1f);
 
