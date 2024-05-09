@@ -5,10 +5,7 @@ using UnityEngine.UI;
 
 public class CircleTransition : MonoBehaviour
 {
-    [SerializeField]
-    private Vector3 _resolution;
-    [SerializeField, Range(0, 2400)]
-    private float _circleSize;
+    private Vector3 _resolution = new Vector3(1920, 1080);
 
     private Image _image;
     private Transform _player;
@@ -20,27 +17,11 @@ public class CircleTransition : MonoBehaviour
 
     private Coroutine _coroutine;
 
-    private void Awake()
+    private void Start()
     {
         _player = GameManager.Instance.player;
         _image = GetComponent<Image>(); 
         _circleMat = _image.material;
-    }
-
-    private void OnValidate()
-    {
-        _player = GameObject.Find("Player").GetComponent<Transform>();
-        _circleMat = GetComponent<Image>().material;
-
-        if (_player == null || _circleMat == null)
-            return;
-
-
-        Vector3 pos = Camera.main.WorldToScreenPoint(_player.position) - (_resolution * 0.5f);
-        _circleMat.SetVector(circlePosVecName, pos);
-
-        _circleMat.SetVector(circleSizeVecName, Vector2.one * _circleSize);
-        _circleMat.SetVector(resolutionVecName, _resolution);
     }
 
     public void PlayCircleSizeChange(Vector3 startSize, Vector3 endSize, float time, bool lastTween = false)
