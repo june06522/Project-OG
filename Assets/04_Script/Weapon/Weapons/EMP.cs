@@ -11,6 +11,7 @@ public class EMP : InvenWeapon
 
     protected override void Awake()
     {
+
         base.Awake();
         _spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
 
@@ -18,6 +19,7 @@ public class EMP : InvenWeapon
 
     public override void Attack(Transform target)
     {
+        transform.DOKill();
         isAttack = true;
 
         Vector3 targetPos = target.position;
