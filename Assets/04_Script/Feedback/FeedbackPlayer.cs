@@ -21,6 +21,9 @@ public class FeedbackPlayer : MonoBehaviour
     {
         foreach (Feedback feedback in _feedbackList)
         {
+            if (gameObject.activeInHierarchy == false)
+                return;
+
             feedback.Play(damage);
         }
     }

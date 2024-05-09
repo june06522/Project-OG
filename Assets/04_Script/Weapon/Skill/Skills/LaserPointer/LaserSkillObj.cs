@@ -17,6 +17,8 @@ public class LaserSkillObj : MonoBehaviour
 
     public void Execute(Transform weaponTrm, Transform target, int power)
     {
+        if (target == null)
+            return;
         _weaponTrm = weaponTrm;
         _target = target;
         _power = power;
