@@ -79,7 +79,7 @@ public class StageGate : MonoBehaviour, IInteractable
         }
 
 
-
+        
         stageTransition.StartTransition(1f);
         yield return new WaitForSeconds(2f);
         OnGateEvent?.Invoke();
