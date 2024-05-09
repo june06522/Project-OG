@@ -1,3 +1,4 @@
+using FD.Dev;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ public class AutoCombatGuideQuest : GuideQuest
     public override void SetQuestSetting()
     {
         base.SetQuestSetting();
-        GameManager.Instance.player.position = playerStartPos.position;
+
         sandbag.gameObject.SetActive(true);
         sandbag.OnHit += HandleHit;
     }
