@@ -278,9 +278,9 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         if (isHover == true) return;
         isHover = true;
 
-        ItemExplain.Instance.HoverEvent(invenPoint);
-        //if (Type == ItemType.Generator)
-            //ItemExplain.Instance.HoverGenerator(invenPoint, image.sprite, WeaponExplainManager.triggerExplain[InvenObject.generatorID].ToString(), WeaponExplainManager.weaponExplain[InvenObject.generatorID]);
+        //ItemExplain.Instance.HoverEvent(invenPoint);
+        if (Type == ItemType.Generator)
+            ItemExplain.Instance.HoverGenerator(invenPoint, image.sprite, WeaponExplainManager.triggerExplain[InvenObject.generatorID].ToString(), WeaponExplainManager.weaponExplain[InvenObject.generatorID]);
     }
 
     public void OnDestroy()
