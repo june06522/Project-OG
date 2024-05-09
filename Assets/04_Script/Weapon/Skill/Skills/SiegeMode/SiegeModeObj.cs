@@ -26,6 +26,7 @@ public class SiegeModeObj : MonoBehaviour
     IEnumerator ISiegeModeOn(Weapon weapon)
     {
         weapon.Data.CoolDown += coolDownVal * lastPower;
+        Debug.Log(weapon.Data.CoolDown);
         while (isOn)
         {
             isOn = false;
