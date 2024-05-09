@@ -1,15 +1,10 @@
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ItemExplain : MonoBehaviour
 {
     public static ItemExplain Instance;
-
+        
     [SerializeField] Image panelImage;
     [SerializeField] WeaponExplain weaponExplain;
     [SerializeField] GeneratorExplain generatorExplain;
