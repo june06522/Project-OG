@@ -15,7 +15,8 @@ public class SiegeModeObj : MonoBehaviour
         {
             weapon.Data.CoolDown -= coolDownVal * lastPower;
             lastPower = power;
-            weapon.Data.CoolDown += coolDownVal * lastPower;
+            if(co != null)
+                weapon.Data.CoolDown += coolDownVal * lastPower;
         }
 
         isOn = true;
