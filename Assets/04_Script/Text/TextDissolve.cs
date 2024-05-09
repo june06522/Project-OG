@@ -15,6 +15,9 @@ public enum TextType
 public class TextDissolve : MonoBehaviour
 {
     TextMeshProUGUI m_text;
+    [SerializeField]
+    Material textMat;
+
     Material mat;
 
     [SerializeField] TextType m_type;
@@ -27,7 +30,7 @@ public class TextDissolve : MonoBehaviour
     private void Awake()
     {
         m_text = GetComponent<TextMeshProUGUI>();
-        m_text.material = Instantiate(m_text.materialForRendering);
+        m_text.material = Instantiate(m_text.material);
         mat = m_text.materialForRendering;
     }
 

@@ -23,7 +23,7 @@ public class Tooltip : MonoBehaviour
 
     RectTransform rectTransform;
     Sequence seq;
-    private void Start()
+    private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
 
@@ -33,7 +33,7 @@ public class Tooltip : MonoBehaviour
         mat.SetFloat(shader, fadeStart); 
         
 
-        image = transform.Find("DissolveImage").GetComponent<ImageDissolve>();
+        image = transform.Find("Image").GetComponent<ImageDissolve>();
         TextDissolve[] texts = GetComponentsInChildren<TextDissolve>();
         
         titleTexts = (from text in texts
@@ -43,18 +43,15 @@ public class Tooltip : MonoBehaviour
         mainTexts = (from text in texts
                       where text.Type == TextType.MAIN
                       select text).ToList();
-
-        Init();
     }
 
-    public void Active(bool value)
+    private void Start()
     {
-        this.gameObject.SetActive(value);
-
         Init();
     }
 
-    private void Init()
+
+    public void Init()
     {
         mat.SetFloat(shader, fadeStart);
         titleTexts.ForEach((text) => text.Init());
@@ -62,11 +59,8 @@ public class Tooltip : MonoBehaviour
         image.Init();
     }
 
-    private bool gang = false;
-    public void On(Vector2 pos, Sprite _image, string trigger, string skill)
+    public void On(Vector2 pos)
     {
-        //if (gang) return;
-        //gang = true;
         rectTransform.parent.position = pos;
 
         seq.Kill();
@@ -86,18 +80,6 @@ public class Tooltip : MonoBehaviour
         //for (int i = 0; i < mainTexts.Count; ++i)
         //{
         //    seq.Insert(1f, mainTexts[i].Dissolve(true));
-        //}
-
-        //_iamge.sprite = image;
-        //_trigger.text = $"트리거: {trigger}";
-
-        //if (skill != null)
-        //{
-        //    _skillList.text = skill;
-        //    //for (int i = 1; i <= skillList.Length; i++)
-        //    //{
-        //    //    _skillList.text += $"{i}개 - {skillList[i - 1]}\n";
-        //    //}
         //}
     }
 }
