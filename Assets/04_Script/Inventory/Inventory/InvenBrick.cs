@@ -28,8 +28,10 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public ItemType Type = ItemType.Weapon;
 
     protected bool isDrag;
+    protected bool isHover;
     public bool IsDrag => isDrag;
 
+    protected RectTransform explainPoint;
     protected RectTransform rectTransform;
     public RectTransform RectTransform => rectTransform;
     protected Image image;
@@ -37,6 +39,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     protected InventorySize invensize;
 
+    Vector2 explainPos = new Vector2(-30.0f, 25f);
 
     protected virtual void Awake()
     {
@@ -44,9 +47,15 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         InvenObject = Instantiate(InvenObject);
         InvenObject.Init(transform);
         inventory = FindObjectOfType<WeaponInventory>();
-        rectTransform = GetComponent<RectTransform>();
         inventoryActive = FindObjectOfType<InventoryActive>();
         invensize = FindObjectOfType<InventorySize>();
+        rectTransform = GetComponent<RectTransform>();
+        if(transform.Find("ExplainPoint"))
+        {
+            explainPoint = transform.Find("ExplainPoint").GetComponent<RectTransform>();
+        }
+
+        isHover = false;
     }
 
     public virtual void Settings()
@@ -111,6 +120,9 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         if (point == null)
         {
             GameObject obj = Instantiate(origin, GameManager.Instance.player.position, Quaternion.identity);
+
+            isHover = true;
+            ItemExplain.Instance.HoverEnd();
             Destroy(gameObject);
             return;
              
@@ -132,7 +144,12 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
                 rectTransform.localPosition += new Vector3(0, 50);
 
             Setting();
-            ShowExplain();
+
+            Vector2 explainPosition = explainPoint == null
+                ? (Vector2)(rectTransform.position) + explainPos
+                : explainPoint.position;
+                ShowExplain(explainPosition);
+    
         }
         else
         {
@@ -174,13 +191,13 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public void OnPointerEnter(PointerEventData eventData)
     {
         StartCoroutine("CheckMouse");
-
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         StopCoroutine("CheckMouse");
         ItemExplain.Instance.HoverEnd();
+        StartCoroutine("HoverEnd");
     }
 
     IEnumerator CheckMouse()
@@ -215,7 +232,10 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             }
             if (!ItemExplain.Instance.isDrag && isOpen)
             {
-                ShowExplain();
+                Vector2 explainPosition = explainPoint == null
+                ? (Vector2)(rectTransform.position) + explainPos
+                : explainPoint.position;
+                ShowExplain(explainPosition);   
             }
             else
             {
@@ -245,10 +265,21 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         yield return null;
     }
 
-    public virtual void ShowExplain()
+    IEnumerator HoverEnd()
     {
-        if (Type == ItemType.Generator)
-            ItemExplain.Instance.HoverGenerator(image.sprite, WeaponExplainManager.triggerExplain[InvenObject.generatorID].ToString(), WeaponExplainManager.weaponExplain[InvenObject.generatorID]);
+        yield return new WaitForEndOfFrame();
+        isHover = false;
+    }
+
+
+    public virtual void ShowExplain(Vector2 invenPoint)
+    {
+        if (isHover == true) return;
+        isHover = true;
+
+        ItemExplain.Instance.HoverEvent(invenPoint);
+        //if (Type == ItemType.Generator)
+            //ItemExplain.Instance.HoverGenerator(invenPoint, image.sprite, WeaponExplainManager.triggerExplain[InvenObject.generatorID].ToString(), WeaponExplainManager.weaponExplain[InvenObject.generatorID]);
     }
 
     public void OnDestroy()

@@ -1,5 +1,7 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,12 +13,14 @@ public class ItemExplain : MonoBehaviour
     [SerializeField] Image panelImage;
     [SerializeField] WeaponExplain weaponExplain;
     [SerializeField] GeneratorExplain generatorExplain;
+    [SerializeField] Tooltip tooltip;
 
     private InventoryActive inventoryActive;
     public bool isDrag = false;
 
     public bool useMove = false;
 
+    Vector2 curInvenPoint;
     private void Awake()
     {
         if (Instance == null)
@@ -29,6 +33,8 @@ public class ItemExplain : MonoBehaviour
 
         inventoryActive = FindObjectOfType<InventoryActive>();
     }
+
+
 
     private void Update()
     {
@@ -53,26 +59,53 @@ public class ItemExplain : MonoBehaviour
         }
     }
 
-    public void HoverWeapon(Sprite image, string name, float power, string explain, string[] skillList)
-    {
-        generatorExplain.gameObject.SetActive(false);
-        weaponExplain.gameObject.SetActive(true);
 
-        weaponExplain.ON(image, name, power, explain, skillList);
+    public void HoverEvent(Vector2 invenPoint)
+    {
+        if (invenPoint == curInvenPoint) return;
+        if (tooltip.gameObject.activeSelf == false)
+            tooltip.Active(true);
+
+        curInvenPoint = invenPoint;
+        tooltip.On(invenPoint, null, null, null);
+        
     }
 
-    public void HoverGenerator(Sprite image, string trigger, string skillList)
-    {
-        generatorExplain.gameObject.SetActive(true);
-        weaponExplain.gameObject.SetActive(false);
 
-        generatorExplain.ON(image, trigger, skillList);
+    public void HoverWeapon(Vector2 invenPoint, Sprite image, string name, float power, string explain, string[] skillList)
+    {
+        //generatorExplain.gameObject.SetActive(false);
+        //weaponExplain.gameObject.SetActive(true);
+        if (invenPoint == curInvenPoint) return;
+        if (tooltip.gameObject.activeSelf == false)
+            tooltip.Active(true);
+
+        curInvenPoint = invenPoint;
+        tooltip.On(invenPoint, null, null, null);
+
+        //weaponExplain.ON(image, name, power, explain, skillList);
+    }
+
+    public void HoverGenerator(Vector2 invenPoint, Sprite image, string trigger, string skillList)
+    {
+        //generatorExplain.gameObject.SetActive(true);
+        //weaponExplain.gameObject.SetActive(false);
+
+        if (invenPoint == curInvenPoint) return;
+        if (tooltip.gameObject.activeSelf == false)
+            tooltip.Active(true);
+
+        curInvenPoint = invenPoint;
+        tooltip.On(invenPoint, null, null, null);
+
+        //generatorExplain.ON(image, trigger, skillList);
     }
 
     public void HoverEnd()
     {
-        weaponExplain.gameObject.SetActive(false);
-        generatorExplain.gameObject.SetActive(false);
+        //weaponExplain.gameObject.SetActive(false);
+        //generatorExplain.gameObject.SetActive(false);
+        tooltip.Active(false);
     }
 
 
