@@ -23,7 +23,7 @@ public class ScreenManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = FindObjectOfType<ScreenManager>();
-            DontDestroyOnLoad(this);
+            //DontDestroyOnLoad(this);
         }
         else
             Destroy(gameObject);
