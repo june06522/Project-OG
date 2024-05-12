@@ -39,7 +39,7 @@ public abstract class InventoryObjectRoot : ScriptableObject
 
     public void Connect(InventoryObjectRoot obj, ConnectType type)
     {
-
+        Debug.Log("제가 범인입니다");
         if(type == ConnectType.Input)
         {
 
@@ -87,7 +87,7 @@ public abstract class InventoryObjectRoot : ScriptableObject
         {
 
             item.Disconnect(this, ConnectType.Output);
-
+            
         }
 
         foreach (var item in connectedOutput)
