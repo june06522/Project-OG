@@ -6,7 +6,8 @@ public class SiegeModeObj : MonoBehaviour
 {
     bool isOn = false;
     Coroutine co = null;
-    float coolDownVal = 20f;
+    float coolDownVal = 15f;
+    float multiVal = 10f;
     int lastPower = 0;
 
     public void Excute(Weapon weapon, int power)

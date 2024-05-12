@@ -29,7 +29,7 @@ public class PlusOneConverter : InventoryConverterBase
             }
 
             tempdata.Power++;
-
+            Debug.Log("내가 범인이다");
             tempdata.checkVisit.Add(item.Data.originPos, 1);
             tempdata.isVisited[item.Data.originPos] = tempdata.Power;
             item.DoGetSignal(tempdata);
