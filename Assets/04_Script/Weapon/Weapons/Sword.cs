@@ -106,6 +106,7 @@ public class Sword : InvenWeapon
 
             //Vector3[] wayPoints = GetWorldWayPoints(dir.normalized * (magnitude -1.5f));
             wayPoints = GetLocalWayPoints(dir.normalized);
+            wayPoints.Append(transform.localPosition);
             if (sign == -1)
                 wayPoints.Reverse();
         }else
