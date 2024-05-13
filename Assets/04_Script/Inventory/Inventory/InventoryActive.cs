@@ -22,7 +22,7 @@ public class InventoryActive : MonoBehaviour
 
     bool isOn = false;
 
-    [SerializeField] GameObject _playerUI;
+    //[SerializeField] GameObject _playerUI;
     [SerializeField] GameObject _invenPanel;
     [SerializeField] GameObject _invenInfoPanel;
     [SerializeField] Transform _components;
@@ -52,7 +52,7 @@ public class InventoryActive : MonoBehaviour
 
     private void Start()
     {
-        _uix = _playerUI.transform.position.x;
+        //_uix = _playerUI.transform.position.x;
         _invenx = _invenPanel.transform.localPosition.x;
         _inveny = _invenPanel.transform.localPosition.y;
         _infox = _invenInfoPanel.transform.localPosition.x;
@@ -110,7 +110,7 @@ public class InventoryActive : MonoBehaviour
         //seq.Append(_invenInfoPanel.transform.DOLocalMoveX(_infox, time)).SetEase(Ease.OutBounce);
         seq.Append(DOTween.To(()=> initValue, value => mat.SetFloat(invenShader, value), 15f, easingtime)).SetEase(ease);
         seq.Join(ScreenManager.Instance.SetEffect(0.3f, 0.65f, DG.Tweening.Ease.InQuad));
-        seq.Join(_playerUI.transform.DOMoveX(_uix - moveXVal, time));
+        //seq.Join(_playerUI.transform.DOMoveX(_uix - moveXVal, time));
         seq.AppendCallback(() => { isAnimation = true; });
         
         //ScreenManager.Instance.SetEffect(5, easingtime, ease);
@@ -125,7 +125,7 @@ public class InventoryActive : MonoBehaviour
         _components.localPosition = new Vector3(0, 1000, 0);
         ScreenManager.Instance.SetEffect(0, 0.5f, DG.Tweening.Ease.InQuart);
         float initValue = mat.GetFloat(invenShader);
-        _playerUI.transform.DOMoveX(_uix, time).SetEase(Ease.OutBack);
+        //_playerUI.transform.DOMoveX(_uix, time).SetEase(Ease.OutBack);
         seq = DOTween.Sequence();
         //seq.Append(_invenInfoPanel.transform.DOLocalMoveX(_invenx + moveXVal, time)).SetEase(Ease.OutBack);
         //seq.Append(_invenPanel.transform.DOLocalMoveY(_inveny + moveYVal, time)).SetEase(Ease.OutBack);

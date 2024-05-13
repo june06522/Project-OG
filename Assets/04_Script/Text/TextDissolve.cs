@@ -15,9 +15,6 @@ public enum TextType
 public class TextDissolve : MonoBehaviour
 {
     TextMeshProUGUI m_text;
-    [SerializeField]
-    Material textMat;
-
     Material mat;
 
     [SerializeField] TextType m_type;
