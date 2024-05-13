@@ -59,7 +59,7 @@ public class Sword : InvenWeapon
         Vector3[] points = new Vector3[wayPoints.Length];
         for (int i = 0; i < points.Length; i++)
         {
-            points[i] = target + transform.InverseTransformPoint(wayPointTrms[i].position); //+ target;// + transform.position;
+            points[i] = Quaternion.Euler(transform.eulerAngles) * wayPointTrms[i].localPosition; //+ target;// + transform.position;
         }
         return points;
     }
@@ -114,12 +114,13 @@ public class Sword : InvenWeapon
             sign = 1;
         }
 
-        transform.localPosition = wayPoints[0];
+        //transform.localPosition = wayPoints[0];
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, transform.rotation.eulerAngles.z - sign * 60));
 
+        float duration = this.duration / 2;
         DOTween.Sequence().
-            Append(transform.DOPath(wayPoints, duration, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
-            Insert(0f, transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + sign * 90), duration));
+            Append(transform.DOLocalPath(wayPoints, duration, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
+            Insert(0f, transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + sign * 120), duration + 0.1f).SetEase(ease));
 
         if (_attackSoundClip != null)
         {
@@ -141,6 +142,7 @@ public class Sword : InvenWeapon
         _col.enabled = true;
         yield return new WaitForSeconds(duration);
         _col.enabled = false;
+        //_col.transform.localPosition = origin;
         yield return new WaitForSeconds(0.2f);
         //transform.DOKill();
 
@@ -160,12 +162,25 @@ public class Sword : InvenWeapon
 
     public override void Run(Transform target)
     {
-        base.Run(target);
+        this.target = target;
+
+        RotateWeapon(target);
+
+        if ((!Data.isAttackCoolDown || Data.isSkillAttack) && target != null)
+        {
+            if (!Data.isAttackCoolDown)
+                Data.SetCoolDown();
+
+            EventTriggerManager.Instance?.BasicAttackExecute(this);
+
+            Attack(target);
+
+        }
 
         if (!isAttack)
         {
 
-            _col.transform.localPosition = origin;
+            //_col.transform.localPosition = origin;
 
         }
 
