@@ -8,19 +8,21 @@ public class MagneticEMP : Skill
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
         if (weaponTrm.GetComponent<Weapon>() != trigger.startWeapon)
+        {
             return;
+        }
 
-        StartCoroutine(Generate(target, power));
+        StartCoroutine(Generate(target, power, weaponTrm.GetComponent<Weapon>()));
 
     }
 
-    private IEnumerator Generate(Transform target, int power)
+    private IEnumerator Generate(Transform target, int power, Weapon weapon)
     {
 
         yield return new WaitForSeconds(0.5f);
 
         var obj = Instantiate(prefab, target.position, Quaternion.identity);
-        obj.SetDamage((power + 1) * 10);
+        obj.SetDamage(power * weapon.Data.GetDamage() / 10);
 
     }
 

@@ -13,7 +13,7 @@ public class MagneticDrone : Skill
         var obj = Instantiate(prefab, weaponTrm.position, Quaternion.identity);
         obj.transform.localScale = Vector3.one * 0.8f;
         obj.transform.SetParent(weaponTrm, true);
-        obj.SetDamage(power * 4);
+        obj.SetDamage(power * weaponTrm.GetComponent<Weapon>().Data.GetDamage() / 10);
 
     }
 
