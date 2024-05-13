@@ -51,8 +51,9 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
         {
             controller.FindPath();
             controller.GetNextPath(ref nextPos);
-        }
 
+            Debug.Log(nextPos);
+        }
         if (dir.magnitude > _data.AttackAbleRange)
         {
             if(controller.Enemy.enemyAnimController.IsMove == false)
