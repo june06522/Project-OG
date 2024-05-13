@@ -13,6 +13,11 @@ public class InventorySlotCenter : MonoBehaviour
     [HideInInspector]
     public int height = 0;
 
+    [HideInInspector]
+    public int minuswidth = 0;
+    [HideInInspector]
+    public int minusheight = 0;
+
     private void Awake()
     {
         if(Instance == null)
@@ -33,12 +38,14 @@ public class InventorySlotCenter : MonoBehaviour
 
     public void ChangeWidth(int val)
     {
+        minuswidth += (val > 0) ? val : 0;
         width += val;
         SetPos();
     }
 
     public void ChangeHeight(int val)
     {
+        minusheight += (val > 0) ? val : 0;
         height += val;
         SetPos();
     }

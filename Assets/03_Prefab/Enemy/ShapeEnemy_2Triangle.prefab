@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1944151050896453345}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: LaserPointers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 3168560435909413188}
   - component: {fileID: 814301245025049237}
   - component: {fileID: 1009574451655646485}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: ShapeEnemy_2Triangle
   m_TagString: HitAble
   m_Icon: {fileID: 0}
@@ -181,7 +181,7 @@ GameObject:
   - component: {fileID: 439619632645327634}
   - component: {fileID: 8548035946310926029}
   - component: {fileID: 6092130853823430912}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -301,7 +301,7 @@ GameObject:
   m_Component:
   - component: {fileID: 911366774962963193}
   - component: {fileID: 911366774962963142}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Triangle_MidEmpty1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -386,7 +386,7 @@ GameObject:
   - component: {fileID: 911366775033697898}
   - component: {fileID: 911366775033697899}
   - component: {fileID: 4008791851679570892}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Eye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -482,7 +482,7 @@ GameObject:
   m_Component:
   - component: {fileID: 911366775129634920}
   - component: {fileID: 911366775129634921}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Triangle_MidEmpty2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -565,7 +565,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 911366775719791586}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: 2TriangleEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -679,7 +679,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3100868264825967832}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: AttackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -716,7 +716,7 @@ GameObject:
   - component: {fileID: 9161792446298179834}
   - component: {fileID: 8523728206327549119}
   - component: {fileID: 8109625133579815972}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Feedback
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -821,8 +821,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b8c23d8711efd149b9824440dd9a127, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  endValue: 0.5
   time: 0.1
+  isPlayer: 0
 --- !u!1 &5552379292721887799
 GameObject:
   m_ObjectHideFlags: 0
@@ -834,7 +834,7 @@ GameObject:
   - component: {fileID: 5552379292721887797}
   - component: {fileID: 5552379292721887796}
   - component: {fileID: 5552379292721887794}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: LaserPointer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -978,7 +978,7 @@ GameObject:
   - component: {fileID: 5552379293996088951}
   - component: {fileID: 5552379293996088950}
   - component: {fileID: 5552379293996088948}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: LaserBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1131,7 +1131,7 @@ GameObject:
   - component: {fileID: 4896474395553102917}
   - component: {fileID: 5490652077650825835}
   - component: {fileID: 910125385457266994}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: LaserPointer2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1271,9 +1271,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 814301245025049232}
     m_Modifications:
+    - target: {fileID: 1483481847284270958, guid: 6df9c765a561e924db5d072aacca6165, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 4186881487374793503, guid: 6df9c765a561e924db5d072aacca6165, type: 3}
       propertyPath: m_Name
       value: EnemyMinimapIcon
+      objectReference: {fileID: 0}
+    - target: {fileID: 4186881487374793503, guid: 6df9c765a561e924db5d072aacca6165, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 7197673637942693744, guid: 6df9c765a561e924db5d072aacca6165, type: 3}
       propertyPath: m_RootOrder
