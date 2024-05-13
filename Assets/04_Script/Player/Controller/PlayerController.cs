@@ -31,7 +31,6 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
     public static PlayerInputController InputController => inputController;
     public static PlayerEventController EventController => eventController;
 
-
     Rigidbody2D rb2D;
 
     private readonly int idleHash = Animator.StringToHash("IsIdle");

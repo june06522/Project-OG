@@ -47,7 +47,7 @@ public class Chest : MonoBehaviour, IInteractable
             Debug.LogError("ItemSOList is null");
             return;
         }
-
+        
         SetRateItems(_itemList.ItemInfoList.ToArray());
     }
 
