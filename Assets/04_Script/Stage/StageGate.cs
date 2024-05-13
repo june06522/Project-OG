@@ -21,11 +21,14 @@ public class StageGate : MonoBehaviour, IInteractable
     [SerializeField]
     private bool _isPlayJumpAnim;
 
+    private InventoryActive invenactive;
+
 
     private void Awake()
     {
         stageTransition = FindObjectOfType<StageTransition>();
         _playerController = GameManager.Instance.player.GetComponent<PlayerController>();
+        invenactive = FindObjectOfType<InventoryActive>();
 
         Sequence seq = DOTween.Sequence();
         transform.localScale = Vector3.zero;
@@ -67,6 +70,8 @@ public class StageGate : MonoBehaviour, IInteractable
 
     IEnumerator GoNextStage()
     {
+
+        invenactive.canOpen = false;
         _playerController.ChangeState(EnumPlayerState.Idle);
         Transform playerTrm = GameManager.Instance.player;
         if (_isPlayJumpAnim)
@@ -121,5 +126,7 @@ public class StageGate : MonoBehaviour, IInteractable
         }
 
         OnMoveEndEvent?.Invoke();
+        GameManager.Instance.Inventory.SettingLineRender();
+        invenactive.canOpen = true;
     }
 }
