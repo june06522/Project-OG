@@ -123,9 +123,9 @@ public class Sword : InvenWeapon
 
         float duration = this.duration - 0.2f;
         DOTween.Sequence().
-            Append(transform.DORotate(new Vector3(0, 0, endAngle), duration + 0.2f).SetEase(ease)).
-            Insert(0.1f, transform.DOLocalPath(wayPoints, duration, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease));
-
+            Append(transform.DOLocalPath(wayPoints, duration, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
+            Insert(0.05f, transform.DORotate(new Vector3(0, 0, endAngle), duration + 0.05f).SetEase(ease));
+      
         if (_attackSoundClip != null)
         {
 
