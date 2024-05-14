@@ -53,7 +53,7 @@ public class Tooltip : MonoBehaviour
 
     public void Init()
     {
-        mat.SetFloat(shader, fadeStart);
+        mat.SetFloat(shader, fadeStart);    
         titleTexts.ForEach((text) => text.Init());
         mainTexts.ForEach((text) => text.Init());
         image.Init();
@@ -62,6 +62,8 @@ public class Tooltip : MonoBehaviour
     public void On(Vector2 pos)
     {
         rectTransform.parent.position = pos;
+
+        Init();
 
         seq.Kill();
         seq = DOTween.Sequence();
@@ -76,10 +78,12 @@ public class Tooltip : MonoBehaviour
             seq.Join(titleTexts[i].Dissolve(true));
         }
 
+        seq.Append(null);
+        for (int i = 0; i < mainTexts.Count; ++i)
+        {
+            seq.Join(mainTexts[i].Dissolve(true));
+        }
+        
         seq.Restart();
-        //for (int i = 0; i < mainTexts.Count; ++i)
-        //{
-        //    seq.Insert(1f, mainTexts[i].Dissolve(true));
-        //}
     }
 }

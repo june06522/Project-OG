@@ -9,17 +9,20 @@ public class EMP : InvenWeapon
 
     [SerializeField] EMPBomb empBomb;
 
+    Vector3 localScale;
     protected override void Awake()
     {
 
         base.Awake();
         _spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
-
+        localScale = transform.localScale;
     }
 
     public override void Attack(Transform target)
     {
         transform.DOKill();
+        transform.localScale = localScale;
+
         isAttack = true;
 
         Vector3 targetPos = target.position;

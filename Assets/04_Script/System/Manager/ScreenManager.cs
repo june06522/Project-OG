@@ -28,22 +28,27 @@ public class ScreenManager : MonoBehaviour
         else
             Destroy(gameObject);
 
-        tempMat = Instantiate(inventoryScreenMat);
+        //tempMat = Instantiate(inventoryScreenMat);
 
-        ScriptableRendererFeature renderFeature;
-        renderFeature = URPRendererUtility.GetScriptableRendererData()[0]
-            .rendererFeatures.Find((feature) => String.Equals(feature.name, scifiBlit));
+    //    ScriptableRendererFeature renderFeature;
+    //    renderFeature = URPRendererUtility.GetScriptableRendererData()[0]
+    //        .rendererFeatures.Find((feature) => String.Equals(feature.name, scifiBlit));
 
-        Cyan.Blit blit = renderFeature as Cyan.Blit;
-        blit.settings.blitMaterial = tempMat;
+    //    Cyan.Blit blit = renderFeature as Cyan.Blit;
+    //    blit.settings.blitMaterial = tempMat;
+    }
+
+    private void OnEnable()
+    {
+        SetEffect(0, 0, Ease.Linear);
     }
 
     public Tween SetEffect(float power, float time, Ease ease)
     {
-        float startPower = tempMat.GetFloat("_Power");
+        float startPower = inventoryScreenMat.GetFloat("_Power");
         return DOTween.To(() =>
             startPower,
-            value => tempMat.SetFloat("_Power", value),
+            value => inventoryScreenMat.SetFloat("_Power", value),
             power, time)
             .SetEase(ease);
     }
