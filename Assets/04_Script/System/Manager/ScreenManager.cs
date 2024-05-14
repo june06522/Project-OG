@@ -28,7 +28,7 @@ public class ScreenManager : MonoBehaviour
         else
             Destroy(gameObject);
 
-        tempMat = Instantiate(inventoryScreenMat);
+        //tempMat = Instantiate(inventoryScreenMat);
 
     //    ScriptableRendererFeature renderFeature;
     //    renderFeature = URPRendererUtility.GetScriptableRendererData()[0]
@@ -45,10 +45,10 @@ public class ScreenManager : MonoBehaviour
 
     public Tween SetEffect(float power, float time, Ease ease)
     {
-        float startPower = tempMat.GetFloat("_Power");
+        float startPower = inventoryScreenMat.GetFloat("_Power");
         return DOTween.To(() =>
             startPower,
-            value => tempMat.SetFloat("_Power", value),
+            value => inventoryScreenMat.SetFloat("_Power", value),
             power, time)
             .SetEase(ease);
     }
