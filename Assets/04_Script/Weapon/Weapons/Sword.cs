@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 // �׽�Ʈ��
 // ���߿� �����ѹ��� Ÿ�� 1ȸ�� ���ľ���
@@ -88,12 +89,13 @@ public class Sword : InvenWeapon
         Debug.Log("Gang");
     }
 
+    int sign = 1;
     private void AttackSequence(Transform target)
     {
         Debug.Log($"Target: {target}");
         Vector3[] wayPoints;
-        int sign;
-        if(target != null)
+        //sign = -sign;
+        if (target != null)
         {
             Vector3 dir = (target.position - transform.position);
             float magnitude = dir.magnitude;
@@ -102,10 +104,10 @@ public class Sword : InvenWeapon
             Vector3 crossVec = Vector3.Cross(dir, transform.right);
 
             float dot = Vector2.Dot(crossVec, Vector2.up);
-            sign = dot > 0 ? -1 : 1;
-
+            //sign = dot > 0 ? -1 : 1;
             //Vector3[] wayPoints = GetWorldWayPoints(dir.normalized * (magnitude -1.5f));
             wayPoints = GetLocalWayPoints(dir.normalized);
+            wayPoints.Append(transform.localPosition);
             if (sign == -1)
                 wayPoints.Reverse();
         }else
@@ -115,13 +117,15 @@ public class Sword : InvenWeapon
         }
 
         //transform.localPosition = wayPoints[0];
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, transform.rotation.eulerAngles.z - sign * 60));
+        float startAngle = transform.rotation.eulerAngles.z - sign * 60;
+        float endAngle = startAngle + sign * 120;
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, startAngle));
 
-        float duration = this.duration / 2;
+        float duration = this.duration - 0.2f;
         DOTween.Sequence().
             Append(transform.DOLocalPath(wayPoints, duration, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
-            Insert(0f, transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + sign * 120), duration + 0.1f).SetEase(ease));
-
+            Insert(0.05f, transform.DORotate(new Vector3(0, 0, endAngle), duration + 0.05f).SetEase(ease));
+      
         if (_attackSoundClip != null)
         {
 
