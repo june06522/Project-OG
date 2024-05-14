@@ -30,12 +30,17 @@ public class ScreenManager : MonoBehaviour
 
         tempMat = Instantiate(inventoryScreenMat);
 
-        ScriptableRendererFeature renderFeature;
-        renderFeature = URPRendererUtility.GetScriptableRendererData()[0]
-            .rendererFeatures.Find((feature) => String.Equals(feature.name, scifiBlit));
+    //    ScriptableRendererFeature renderFeature;
+    //    renderFeature = URPRendererUtility.GetScriptableRendererData()[0]
+    //        .rendererFeatures.Find((feature) => String.Equals(feature.name, scifiBlit));
 
-        Cyan.Blit blit = renderFeature as Cyan.Blit;
-        blit.settings.blitMaterial = tempMat;
+    //    Cyan.Blit blit = renderFeature as Cyan.Blit;
+    //    blit.settings.blitMaterial = tempMat;
+    }
+
+    private void OnEnable()
+    {
+        SetEffect(0, 0, Ease.Linear);
     }
 
     public Tween SetEffect(float power, float time, Ease ease)
