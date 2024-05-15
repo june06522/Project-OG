@@ -29,21 +29,28 @@ public class PlayerEnergeBar : MonoBehaviour
     {
         
         ui.transform.position = Camera.main.WorldToScreenPoint(player.position);
-        image.fillAmount = Mathf.Lerp(targetAmount, image.fillAmount, 0.5f);
+        image.fillAmount = Mathf.Lerp(targetAmount, image.fillAmount, 0.6f);
 
     }
 
     private void HandleUpdateEnergeUI(int maxEnerge, int currentEnerge)
     {
+
         targetAmount = (float)currentEnerge / (float)maxEnerge;
+
         if (image.fillAmount < 0.2f)
         {
+
             image.color = disableColor;
+
         }
         else
         {
+
             image.color = ableColor;
+
         }
+
     }
 
 }
