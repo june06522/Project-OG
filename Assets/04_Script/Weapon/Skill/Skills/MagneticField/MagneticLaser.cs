@@ -16,7 +16,7 @@ public class MagneticLaser : Skill
         {
 
             var obj = Instantiate(prefab, hit.point, Quaternion.identity);
-            obj.SetDamage(power * power);
+            obj.SetDamage(power * weaponTrm.GetComponent<Weapon>().Data.GetDamage() / 10);
 
         }
     }

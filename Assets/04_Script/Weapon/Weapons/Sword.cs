@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 // �׽�Ʈ��
 // ���߿� �����ѹ��� Ÿ�� 1ȸ�� ���ľ���
@@ -59,7 +60,7 @@ public class Sword : InvenWeapon
         Vector3[] points = new Vector3[wayPoints.Length];
         for (int i = 0; i < points.Length; i++)
         {
-            points[i] = target + transform.InverseTransformPoint(wayPointTrms[i].position); //+ target;// + transform.position;
+            points[i] = Quaternion.Euler(transform.eulerAngles) * wayPointTrms[i].localPosition; //+ target;// + transform.position;
         }
         return points;
     }
@@ -88,12 +89,13 @@ public class Sword : InvenWeapon
         Debug.Log("Gang");
     }
 
+    int sign = 1;
     private void AttackSequence(Transform target)
     {
         Debug.Log($"Target: {target}");
         Vector3[] wayPoints;
-        int sign;
-        if(target != null)
+        //sign = -sign;
+        if (target != null)
         {
             Vector3 dir = (target.position - transform.position);
             float magnitude = dir.magnitude;
@@ -102,10 +104,10 @@ public class Sword : InvenWeapon
             Vector3 crossVec = Vector3.Cross(dir, transform.right);
 
             float dot = Vector2.Dot(crossVec, Vector2.up);
-            sign = dot > 0 ? -1 : 1;
-
+            //sign = dot > 0 ? -1 : 1;
             //Vector3[] wayPoints = GetWorldWayPoints(dir.normalized * (magnitude -1.5f));
             wayPoints = GetLocalWayPoints(dir.normalized);
+            wayPoints.Append(transform.localPosition);
             if (sign == -1)
                 wayPoints.Reverse();
         }else
@@ -114,13 +116,16 @@ public class Sword : InvenWeapon
             sign = 1;
         }
 
-        transform.localPosition = wayPoints[0];
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, transform.rotation.eulerAngles.z - sign * 60));
+        //transform.localPosition = wayPoints[0];
+        float startAngle = transform.rotation.eulerAngles.z - sign * 60;
+        float endAngle = startAngle + sign * 120;
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, startAngle));
 
+        float duration = this.duration - 0.2f;
         DOTween.Sequence().
-            Append(transform.DOPath(wayPoints, duration, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
-            Insert(0f, transform.DORotate(new Vector3(0, 0, transform.rotation.eulerAngles.z + sign * 90), duration));
-
+            Append(transform.DOLocalPath(wayPoints, duration, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
+            Insert(0.05f, transform.DORotate(new Vector3(0, 0, endAngle), duration + 0.05f).SetEase(ease));
+      
         if (_attackSoundClip != null)
         {
 
@@ -141,6 +146,7 @@ public class Sword : InvenWeapon
         _col.enabled = true;
         yield return new WaitForSeconds(duration);
         _col.enabled = false;
+        //_col.transform.localPosition = origin;
         yield return new WaitForSeconds(0.2f);
         //transform.DOKill();
 
@@ -160,12 +166,25 @@ public class Sword : InvenWeapon
 
     public override void Run(Transform target)
     {
-        base.Run(target);
+        this.target = target;
+
+        RotateWeapon(target);
+
+        if ((!Data.isAttackCoolDown || Data.isSkillAttack) && target != null)
+        {
+            if (!Data.isAttackCoolDown)
+                Data.SetCoolDown();
+
+            EventTriggerManager.Instance?.BasicAttackExecute(this);
+
+            Attack(target);
+
+        }
 
         if (!isAttack)
         {
 
-            _col.transform.localPosition = origin;
+            //_col.transform.localPosition = origin;
 
         }
 

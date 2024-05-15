@@ -18,7 +18,7 @@ public class PlusOneConverter : InventoryConverterBase
             if (sendData.checkVisit.ContainsKey(item.Data.originPos))
                 continue;
 
-            SendData tempdata = new(sendData.GeneratorID, transform, sendData.Power);
+            SendData tempdata = new(sendData.GeneratorID, transform, sendData.Power,sendData.startWeapon);
 
 
             tempdata.checkVisit = new();

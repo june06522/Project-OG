@@ -9,7 +9,7 @@ public class MagneticSword : Skill
             return;
 
         var obj = Instantiate(prefab, target.position, Quaternion.identity);
-        obj.SetDamage(power * power);
+        obj.SetDamage(power * weaponTrm.GetComponent<Weapon>().Data.GetDamage() / 10);
     }
 
 }

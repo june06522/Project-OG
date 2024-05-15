@@ -10,7 +10,7 @@ public class MagneticSpeaker : Skill
 
         var obj = Instantiate(prefab, weaponTrm.position, Quaternion.identity);
         obj.transform.localScale = Vector3.one + Vector3.one * (0.5f * power);
-        obj.SetDamage(power * 2);
+        obj.SetDamage(power * weaponTrm.GetComponent<Weapon>().Data.GetDamage() / 10);
 
     }
 

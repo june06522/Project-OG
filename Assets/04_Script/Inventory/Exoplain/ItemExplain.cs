@@ -29,7 +29,11 @@ public class ItemExplain : MonoBehaviour
         inventoryActive = FindObjectOfType<InventoryActive>();
     }
 
-
+    private void Start()
+    {
+        weaponExplain.gameObject.SetActive( false );
+        generatorExplain.gameObject.SetActive( false ); 
+    }
 
     private void Update()
     {
