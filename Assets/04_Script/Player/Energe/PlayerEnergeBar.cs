@@ -8,11 +8,14 @@ public class PlayerEnergeBar : MonoBehaviour
     Transform player;
     PlayerEnerge _playerEnerge;
 
+
     [SerializeField] RectTransform ui;
     [SerializeField] Image image;
 
     [SerializeField] Color ableColor;
     [SerializeField] Color disableColor;
+
+    float targetAmount;
 
     private void Start()
     {
@@ -24,12 +27,15 @@ public class PlayerEnergeBar : MonoBehaviour
 
     private void Update()
     {
+        
         ui.transform.position = Camera.main.WorldToScreenPoint(player.position);
+        image.fillAmount = Mathf.Lerp(targetAmount, image.fillAmount, 0.5f);
+
     }
 
     private void HandleUpdateEnergeUI(int maxEnerge, int currentEnerge)
     {
-        image.fillAmount = (float)currentEnerge / (float)maxEnerge;
+        targetAmount = (float)currentEnerge / (float)maxEnerge;
         if (image.fillAmount < 0.2f)
         {
             image.color = disableColor;
