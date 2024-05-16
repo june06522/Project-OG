@@ -9,10 +9,13 @@ public class AOneBrokenState : BossBaseState
     private float _speed;
     private AltarBoss _altar;
     private AltarPattern _pattern;
+
+    private IEnumerator RandomPatternCo;
+    private IEnumerator patternCo;
     public AOneBrokenState(AltarBoss boss, AltarPattern pattern) : base(boss, pattern)
     {
-        _maxMoveDistance = 5;
-        _speed = 10;
+        _maxMoveDistance = 10;
+        _speed = 3;
         _altar = boss;
         _pattern = pattern;
     }
@@ -20,6 +23,7 @@ public class AOneBrokenState : BossBaseState
     public override void OnBossStateExit()
     {
         _altar.isOneBroken = false;
+        _altar.isAttacking = false;
 
         _altar.SetBody(_altar.bigestBody, Vector3.one, Vector3.zero, _altar.bossColor, 0.5f);
         _altar.SetBody(_altar.mediumSizeBody, Vector3.one, Vector3.zero, _altar.bossColor, 0.5f);
@@ -31,16 +35,18 @@ public class AOneBrokenState : BossBaseState
         _altar.isStop = false;
         _altar.isOneBroken = true;
 
-        _altar.StartCoroutine(RandomPattern(_altar.so.PatternChangeTime));
+        RandomPatternCo = RandomPattern(_altar.so.PatternChangeTime / 2);
+        _altar.StartCoroutine(RandomPatternCo);
         _altar.StartCoroutine(OneBrokenMove());
     }
 
     public override void OnBossStateUpdate()
     {
-        if(!_altar.isOneBroken)
+        if(!_altar.isOneBroken || _altar.isUnChained)
         {
-            _altar.StopCoroutine(RandomPattern(_altar.so.PatternChangeTime));
-            StopNowCoroutine();
+            _altar.StopCoroutine(RandomPatternCo);
+            _altar.StopCoroutine(patternCo);
+            _altar.isAttacking = false;
         }
     }
 
@@ -56,28 +62,15 @@ public class AOneBrokenState : BossBaseState
 
             yield return new WaitForSeconds(waitTime);
 
-            int rand = Random.Range(1, 4);
-
             _altar.isAttacking = true;
 
-            switch (rand)
-            {
-                case 1:
-                    NowCoroutine(_pattern.OmnidirAttack(_altar, 20, 5, 1, 1));
-                    break;
-                case 2:
-                    NowCoroutine(_pattern.OmniGuidPlayerAttack(_altar, 20, 5, 1, 1));
-                    break;
-                case 3:
-                    NowCoroutine(_pattern.ThrowEnergyBall(_altar, 3, 10, 1, 2));
-                    break;
-            }
+            patternCo = _pattern.OmniGuidPlayerAttack(_altar, 20, 5, 2, 2);
+            NowCoroutine(patternCo);
         }
     }
 
     private IEnumerator OneBrokenMove()
     {
-        // 개같이 움직임 해결해줘
         while(_altar.isOneBroken)
         {
             if(!_altar.isStop)

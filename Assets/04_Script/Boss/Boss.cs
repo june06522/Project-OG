@@ -8,6 +8,7 @@ using DG.Tweening;
 public enum BossState
 {
     Idle,
+
     Tied,
     OneBroken,
     Free,
@@ -18,6 +19,9 @@ public enum BossState
     Flowering,
     FullBloom,
     Withered,
+
+    Alive,
+
     Dead
 }
 
@@ -85,11 +89,16 @@ public partial class Boss : MonoBehaviour, IHitAble
         bossHPSlider.value = _currentHP / so.MaxHP;
     }
 
-    public void SetBody(GameObject obj, Vector3 scale, Vector3 rotation, Color color, float changeTime)
+    public void SetBody(GameObject obj, Vector3 scale, Vector3 rotation, Color color, float changeTime, bool chageColor = true)
     {
         SetScale(obj, scale, changeTime);
         SetRotation(obj, rotation, changeTime);
-        obj.GetComponent<SpriteRenderer>().color = color;
+
+        if(chageColor)
+        {
+            obj.GetComponent<SpriteRenderer>().color = color;
+        }
+        
     }
 
     private void SetScale(GameObject obj, Vector3 scale, float changeTime)
@@ -178,6 +187,16 @@ public partial class Boss : MonoBehaviour, IHitAble
         }
     }
 
+    public IEnumerator RepeatBlinking(int count, GameObject obj, float blinkingTime, float a, int orderInLayer, Color color, Sprite sprite = null, bool willDisappear = false)
+    {
+        for(int i = 0; i < count; i++)
+        {
+            StartCoroutine(Blinking(obj, blinkingTime, a, orderInLayer, color, sprite, willDisappear));
+
+            yield return new WaitForSeconds(blinkingTime * 1.2f);
+        }
+    }
+    
     public IEnumerator Blinking(GameObject obj, float blinkingTime, float a, int orderInLayer, Color color, Sprite sprite = null, bool willDisappear = false)
     {
         SpriteRenderer renderer = obj.GetComponent<SpriteRenderer>();
