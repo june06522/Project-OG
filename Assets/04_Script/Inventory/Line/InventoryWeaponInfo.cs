@@ -63,7 +63,7 @@ public class InventoryWeaponInfo : MonoBehaviour
         foreach (DictionaryEntry item in end)
         {
             InventoryObjectData obj = (InventoryObjectData)item.Key;
-            list.Add(Tuple.Create(WeaponExplainManager.weaponExplain[obj.generatorID],(int)item.Value + 1)); // 나중에 Min으로 제한두기 생성기 땜에
+            list.Add(Tuple.Create(obj.generatorID.ToString(),(int)item.Value + 1)); 
         }
 
         return list;
@@ -101,7 +101,7 @@ public class InventoryWeaponInfo : MonoBehaviour
 
             if (isfind)
             {
-                list.Add(Tuple.Create(WeaponExplainManager.weaponExplain[tempData.generatorID], 1));
+                list.Add(Tuple.Create(tempData.generatorID.ToString(), 1));
             }
         }
 
