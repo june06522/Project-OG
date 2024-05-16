@@ -70,29 +70,26 @@ public class Sword : InvenWeapon
         if (isAttack) return;
         if (attackCor != null)
             StopCoroutine(attackCor);
-        
-        AttackSequence(target);
 
-        attackCor = StartCoroutine(AttackTween(false));
+        attackCor = StartCoroutine(AttackTween(false, target));
     }
 
 
-    public void ReinforceAttack(Transform target)
+    public void ReinforceAttack(Transform target, Vector2 targetScale)
     {
         if (attackCor != null)
             StopCoroutine(attackCor);
 
-        AttackSequence(target);
+        transform
+           .DOScale(targetScale, duration)
+           .SetEase(ease);
 
-        attackCor = StartCoroutine(AttackTween(true));
-
-        Debug.Log("Gang");
+        attackCor = StartCoroutine(AttackTween(true, target));
     }
 
     int sign = 1;
     private void AttackSequence(Transform target)
     {
-        Debug.Log($"Target: {target}");
         Vector3[] wayPoints;
         //sign = -sign;
         if (target != null)
@@ -134,34 +131,37 @@ public class Sword : InvenWeapon
         }
 
 
-        StartCoroutine(AttackTween(false));
+        //StartCoroutine(AttackTween(false));
 
     }
 
-    private IEnumerator AttackTween(bool reinforce)
+    private IEnumerator AttackTween(bool reinforce, Transform target = null)
     {
 
         Debug.Log($"Reinforce : " + reinforce);
         isAttack = true;
         _col.enabled = true;
-        yield return new WaitForSeconds(duration);
-        _col.enabled = false;
-        //_col.transform.localPosition = origin;
-        yield return new WaitForSeconds(0.2f);
+        
+      
         //transform.DOKill();
 
         if(reinforce)
         {
-            transform.DOScale(Vector3.one, 0.5f)
-                .SetEase(Ease.InOutSine)
-                .OnComplete(() => isAttack = false);
-            Debug.Log("Gangng");
+            AttackSequence(target);
+            yield return new WaitForSeconds(duration);
+            transform.DOScale(Vector3.one, 0.35f)
+                .SetEase(Ease.InOutSine);
         }
         else
         {
-            isAttack = false;
+            AttackSequence(target);
+            yield return new WaitForSeconds(duration);
         }
 
+        _col.enabled = false;
+        //_col.transform.localPosition = origin;
+        yield return new WaitForSeconds(0.2f);
+        isAttack = false;
     }
 
     public override void Run(Transform target)
@@ -184,7 +184,7 @@ public class Sword : InvenWeapon
         if (!isAttack)
         {
 
-            //_col.transform.localPosition = origin;
+            _col.transform.localPosition = origin;
 
         }
 

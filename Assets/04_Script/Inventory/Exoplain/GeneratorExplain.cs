@@ -15,11 +15,11 @@ public class GeneratorExplain : MonoBehaviour
 
     private void Awake()
     {
-        _iamge = GameObject.Find("Image").GetComponent<Image>();
-        _trigger = GameObject.Find("Trigger").GetComponent<TextMeshProUGUI>();
-        _skillExplain = GameObject.Find("Explain").GetComponent<TextMeshProUGUI>();
-        _evaluation = GameObject.Find("Evaluation").GetComponent<TextMeshProUGUI>();
-        _name = GameObject.Find("Name").GetComponent<TextMeshProUGUI>();
+        _iamge = transform.Find("Image").GetComponent<Image>();
+        _trigger = transform.Find("Trigger").GetComponent<TextMeshProUGUI>();
+        _skillExplain = transform.Find("Explain").GetComponent<TextMeshProUGUI>();
+        _evaluation = transform.Find("Evaluation").GetComponent<TextMeshProUGUI>();
+        _name = transform.Find("Name").GetComponent<TextMeshProUGUI>();
         _toolTip = GetComponent<Tooltip>();
     }
 

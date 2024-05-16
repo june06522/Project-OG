@@ -18,13 +18,8 @@ public class SaborDashSkill : Skill
         if(sword == null)
             sword = weaponTrm.GetComponent<Sword>();
         
-        sword.transform.DOKill();
-        sword.transform
-            .DOScale(targetScale, duration)
-            .SetEase(ease);
-
         Debug.Log("ReinForce");
-        sword.ReinforceAttack(target);
+        sword.ReinforceAttack(target, targetScale);
     }
 
     public override void Power1()
