@@ -33,7 +33,7 @@ public class SpeakGuide : BaseTextGuideQuest
     private bool InputNextKey()
     {
 
-        _isEndSpeak = _isEndSpeak || Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0);
+        _isEndSpeak = _isEndSpeak || Input.GetKeyDown(KeyCode.Return);
 
         return _isEndSpeak;
     }
