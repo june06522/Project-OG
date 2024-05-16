@@ -26,8 +26,8 @@ public class PlayerHP : MonoBehaviour, IHitAble
         EventTriggerManager.Instance?.HitExecute();
         feedbackPlayer?.Play(damage);
         CurrentHP -= (int)damage;
-        OnChangeHPEvent?.Invoke(MaxHP, CurrentHP);
         HitEvent?.Invoke((int)damage);
+        OnChangeHPEvent?.Invoke(MaxHP, CurrentHP);
 
         if (CurrentHP <= 0)
         {
