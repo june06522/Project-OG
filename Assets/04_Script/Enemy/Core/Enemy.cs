@@ -88,7 +88,7 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
         if(movementInput != Vector2.zero)
             enemyAnimController.Flip(oldMovementInput);
 
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.T) && Input.GetKey(KeyCode.LeftControl))
             Die(); //test
     }
 

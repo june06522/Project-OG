@@ -45,7 +45,7 @@ public class InventorySize : MonoBehaviour
         else
             size = 1 - ((x - 7) / x);
 
-        size *= 1.2f;
+        size *= 1.1f;
 
 
         rect.localScale = new Vector3(size, size, 1);

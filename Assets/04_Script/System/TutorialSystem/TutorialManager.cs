@@ -41,17 +41,17 @@ public class TutorialManager : MonoSingleton<TutorialManager>
         _currentGuide?.SetQuestSetting();
     }
 
-    //Test
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            _currentGuide.QuestComplete();
-            _currentGuide = _guideLine[++_currentGuideIndex];
-            _currentGuide.SetQuestSetting();
-        }
+    ////Test
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.K))
+    //    {
+    //        _currentGuide.QuestComplete();
+    //        _currentGuide = _guideLine[++_currentGuideIndex];
+    //        _currentGuide.SetQuestSetting();
+    //    }
 
-    }
+    //}
 
     private void LateUpdate()
     {
