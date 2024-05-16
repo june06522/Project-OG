@@ -52,7 +52,8 @@ public class WeaponExplain : MonoBehaviour
             _skillList.text = "";
             for (int i = 0; i < skillList.Length; i++)
             {
-                _skillList.text += $"{skillList[i].Item1} {skillList[i].Item2}레벨 \n";
+                if (i != 0 && i % 2 == 0) _skillList.text += "\n";
+                _skillList.text += $"{skillList[i].Item1} {skillList[i].Item2}레벨\t";
             }
         }
 

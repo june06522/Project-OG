@@ -92,10 +92,10 @@ public class Tooltip : MonoBehaviour
             seq.Join(titleTexts[i].Dissolve(true));
         }
 
-        seq.Append(null);
+        float time = seq.Duration();
         for (int i = 0; i < mainTexts.Count; ++i)
         {
-            seq.Join(mainTexts[i].Dissolve(true));
+            seq.Insert(time - 0.1f, mainTexts[i].Dissolve(true));
         }
         
         seq.Restart();
