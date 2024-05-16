@@ -6,8 +6,16 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+[Serializable]
+struct RateColor
+{
+    public ItemRate Rate;
+    public Color color;
+}
+
 public class Tooltip : MonoBehaviour
 {
+    [SerializeField] List<RateColor> colorList;
     [SerializeField] float duration;
     [SerializeField] Ease ease;
 
@@ -19,6 +27,7 @@ public class Tooltip : MonoBehaviour
     private readonly float fadeEnd = 0;
     private readonly float fadeStart = 1.5f;
 
+    public ItemRate CurrentItemRate { get; set; }
     Material mat;
 
     RectTransform rectTransform;
@@ -56,7 +65,12 @@ public class Tooltip : MonoBehaviour
         mat.SetFloat(shader, fadeStart);    
         titleTexts.ForEach((text) => text.Init());
         mainTexts.ForEach((text) => text.Init());
-        image.Init();
+        image.Init(GetColor(CurrentItemRate));
+    }
+
+    private Color GetColor(ItemRate currentItemRate)
+    {
+        return colorList.Find((item) => item.Rate == currentItemRate).color;
     }
 
     public void On(Vector2 pos)
