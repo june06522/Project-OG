@@ -21,8 +21,8 @@ public class ErrorDiceSkill : Skill
 
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
-        if (!GameManager.Instance.isPlay)
-            return;
+        //if (!GameManager.Instance.isPlay)
+        //    return;
 
         Skill s = null;
         int i = 0, j = 0;
@@ -38,7 +38,7 @@ public class ErrorDiceSkill : Skill
                 s = weaponList[i].skillList[j];
         }
 
-
+        Debug.Log("스킬실행");
         if (WeaponExplainManager.triggerExplain[(GeneratorID)i] == TriggerID.Idle ||
         WeaponExplainManager.triggerExplain[(GeneratorID)i] == TriggerID.Move)
             StartCoroutine(Co(s, weaponTrm, target, power));

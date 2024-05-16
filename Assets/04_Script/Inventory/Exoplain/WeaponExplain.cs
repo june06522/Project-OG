@@ -35,7 +35,8 @@ public class WeaponExplain : MonoBehaviour
 
         _toolTip.Init();
     }
-
+    //스킬리스트 페어로 바꾸기
+    //등급도 표시
     public void ON(Vector2 pos, Sprite image, string name, float power, string explain, string[] skillList)
     {
         _image.sprite = image;

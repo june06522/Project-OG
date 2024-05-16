@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHP : MonoBehaviour, IHitAble
 {
-    [field:SerializeField]
+    [field: SerializeField]
     public FeedbackPlayer feedbackPlayer { get; set; }
 
     // maxHP, currentHP
@@ -33,7 +34,7 @@ public class PlayerHP : MonoBehaviour, IHitAble
             Die();
             return false;
         }
-         
+
         return true;
     }
 
@@ -63,5 +64,7 @@ public class PlayerHP : MonoBehaviour, IHitAble
     private void Die()
     {
         _isDead = true;
+
+        SceneManager.LoadScene("DieScene");
     }
 }

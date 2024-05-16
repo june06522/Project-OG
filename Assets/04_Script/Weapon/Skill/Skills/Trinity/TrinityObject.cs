@@ -12,21 +12,23 @@ public class TrinityObject : MonoBehaviour
 
     public void Execute(Weapon weapon, Transform target, int power)
     {
-        if (power != lastPower)
+        if (power != lastPower && co != null)
         {
             weapon.Data.AddDamege -= GetDamage(weapon, lastPower);
-            weapon.Data.AddDamege += GetDamage(weapon, power);
             lastPower = power;
+            weapon.Data.AddDamege += GetDamage(weapon, lastPower);
         }
+
         isOn = true;
         if (co == null)
-        {
             co = StartCoroutine(ISkillOn(weapon));
-        }
     }
 
     IEnumerator ISkillOn(Weapon weapon)
     {
+
+        weapon.Data.AddDamege += GetDamage(weapon, lastPower);
+
         while (isOn)
         {
             isOn = false;
