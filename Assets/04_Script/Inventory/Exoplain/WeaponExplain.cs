@@ -18,11 +18,11 @@ public class WeaponExplain : MonoBehaviour
     private void Awake()
     {
         _image = GameObject.Find("Image").GetComponent<Image>();
-        _weaponName = GameObject.Find("WeaponName").GetComponent<TextMeshProUGUI>();
-        _power = GameObject.Find("WeaponPower").GetComponent<TextMeshProUGUI>();
-        _explain = GameObject.Find("WeaponExplain").GetComponent<TextMeshProUGUI>();
-        _skillList = GameObject.Find("WeaponSkillExplain").GetComponent<TextMeshProUGUI>();
-        _evaluation = GameObject.Find("WeaponEvaluation").GetComponent<TextMeshProUGUI>();
+        _weaponName = GameObject.Find("Name").GetComponent<TextMeshProUGUI>();
+        _power = GameObject.Find("Power").GetComponent<TextMeshProUGUI>();
+        _explain = GameObject.Find("Explain").GetComponent<TextMeshProUGUI>();
+        _skillList = GameObject.Find("SkillExplain").GetComponent<TextMeshProUGUI>();
+        _evaluation = GameObject.Find("Evaluation").GetComponent<TextMeshProUGUI>();
         _toolTip = GetComponent<Tooltip>();
     
     }
