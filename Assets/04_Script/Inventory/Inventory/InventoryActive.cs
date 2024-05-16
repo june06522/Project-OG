@@ -70,8 +70,6 @@ public class InventoryActive : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.C))
-            WarningText();
         if (canOpen)
         {
             if (((KeyManager.Instance == null && Input.GetKeyDown(KeyCode.Tab)) ||
