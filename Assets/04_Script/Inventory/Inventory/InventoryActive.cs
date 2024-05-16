@@ -98,8 +98,8 @@ public class InventoryActive : MonoBehaviour
 
         fade.Fade(true);
         
-        var energeBar = FindObjectOfType<PlayerEnergeBar>();
-        energeBar.Image.color = new Color(energeBar.Image.color.r, energeBar.Image.color.g, energeBar.Image.color.b, 0);
+        //var energeBar = FindObjectOfType<PlayerEnergeBar>();
+        //energeBar.Image.color = new Color(energeBar.Image.color.r, energeBar.Image.color.g, energeBar.Image.color.b, 0);
         
         _components.localPosition = new Vector3(0, 0, 0);
         _invenPanel.transform.DOLocalMoveY(_inveny, 0f);
@@ -120,8 +120,8 @@ public class InventoryActive : MonoBehaviour
 
         fade.Fade(false);
 
-        var energeBar = FindObjectOfType<PlayerEnergeBar>();
-        energeBar.Image.color = new Color(energeBar.Image.color.r, energeBar.Image.color.g, energeBar.Image.color.b, 1);
+        //var energeBar = FindObjectOfType<PlayerEnergeBar>();
+        //energeBar.Image.color = new Color(energeBar.Image.color.r, energeBar.Image.color.g, energeBar.Image.color.b, 1);
         
         _components.localPosition = new Vector3(0, 1000, 0);
         ScreenManager.Instance.SetEffect(0, 0.5f, DG.Tweening.Ease.InQuart);
