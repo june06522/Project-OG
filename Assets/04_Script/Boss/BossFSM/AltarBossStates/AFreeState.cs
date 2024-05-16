@@ -40,14 +40,14 @@ public class AFreeState : BossBaseState
 
     public override void OnBossStateUpdate()
     {
-        
+
     }
 
     public IEnumerator RandomPattern(float waitTime)
     {
-        while(!_altar.IsDie)
+        while (!_altar.IsDie)
         {
-            if(_altar.isAttacking)
+            if (_altar.isAttacking)
             {
                 yield return null;
                 continue;
@@ -55,11 +55,11 @@ public class AFreeState : BossBaseState
 
             yield return new WaitForSeconds(waitTime);
 
-            int rand = 3;// Random.Range(1, 4);
+            int rand = Random.Range(1, 4);
 
             if (rand == 3)
             {
-                if(_altar.isIW)
+                if (_altar.isIW)
                 {
                     rand = Random.Range(1, 3);
                 }
