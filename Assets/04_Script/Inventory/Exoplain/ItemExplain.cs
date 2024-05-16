@@ -58,7 +58,7 @@ public class ItemExplain : MonoBehaviour
         }
     }
 
-    public void HoverWeapon(Vector2 invenPoint, Sprite image, string name, float power, string explain, string[] skillList)
+    public void HoverWeapon(Vector2 invenPoint, Sprite image, string name, float power, string explain, string[] skillList,string evaluation)
     {
         if (invenPoint == curInvenPoint) return;
         if (weaponExplain.gameObject.activeSelf == false)
@@ -68,12 +68,12 @@ public class ItemExplain : MonoBehaviour
         }
         
         curInvenPoint = invenPoint;
-        weaponExplain.ON(invenPoint, image, name, power, explain, skillList);
+        weaponExplain.ON(invenPoint, image, name, power, explain, skillList,evaluation);
 
         //weaponExplain.ON(image, name, power, explain, skillList);
     }
 
-    public void HoverGenerator(Vector2 invenPoint, Sprite image, string trigger, string explain)
+    public void HoverGenerator(Vector2 invenPoint, Sprite image, string trigger, string explain, string evaluation, string name)
     {
         //generatorExplain.gameObject.SetActive(true);
         //weaponExplain.gameObject.SetActive(false);
@@ -86,7 +86,7 @@ public class ItemExplain : MonoBehaviour
         }
 
         curInvenPoint = invenPoint;
-        generatorExplain.ON(invenPoint, image, trigger, explain);
+        generatorExplain.ON(invenPoint, image, trigger, explain, evaluation, name);
 
         //generatorExplain.ON(image, trigger, skillList);
     }

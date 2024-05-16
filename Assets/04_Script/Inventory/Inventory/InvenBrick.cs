@@ -15,7 +15,6 @@ public enum ItemType
 
 public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
-
     public GameObject origin;
     [field: SerializeField] public InventoryObjectData InvenObject { get; private set; }
     public Vector2 InvenPoint { get; set; }
@@ -26,6 +25,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     protected InventoryActive inventoryActive;
 
     public ItemType Type = ItemType.Weapon;
+    [SerializeField] protected ItemRate itemRate = ItemRate.NORMAL;
 
     protected bool isDrag;
     protected bool isHover;
@@ -279,7 +279,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
         //ItemExplain.Instance.HoverEvent(invenPoint);
         if (Type == ItemType.Generator)
-            ItemExplain.Instance.HoverGenerator(invenPoint, image.sprite, WeaponExplainManager.triggerExplain[InvenObject.generatorID].ToString(), WeaponExplainManager.weaponExplain[InvenObject.generatorID]);
+            ItemExplain.Instance.HoverGenerator(invenPoint, image.sprite, WeaponExplainManager.triggerExplain[InvenObject.generatorID].ToString(), WeaponExplainManager.weaponExplain[InvenObject.generatorID], itemRate.ToString(),InvenObject.generatorID.ToString());
     }
 
     public void OnDestroy()
