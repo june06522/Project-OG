@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -58,7 +59,7 @@ public class ItemExplain : MonoBehaviour
         }
     }
 
-    public void HoverWeapon(Vector2 invenPoint, Sprite image, string name, float power, string explain, string[] skillList,string evaluation)
+    public void HoverWeapon(Vector2 invenPoint, Sprite image, string name, float power, string explain, Tuple<string,int>[] skillList,string evaluation)
     {
         if (invenPoint == curInvenPoint) return;
         if (weaponExplain.gameObject.activeSelf == false)

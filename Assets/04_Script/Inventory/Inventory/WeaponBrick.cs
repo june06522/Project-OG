@@ -74,9 +74,9 @@ public class WeaponBrick : InvenBrick
 
     private string GetEvaluation() => itemRate.ToString();
 
-    private string[] GetOnSkillList()
+    private Tuple<string, int>[] GetOnSkillList()
     {
-        List<string> list = InventoryWeaponInfo.Instance.GetConnect(InvenObject.originPos.x, InvenObject.originPos.y);
+        List<Tuple<string, int>> list = InventoryWeaponInfo.Instance.GetConnect(InvenObject.originPos.x, InvenObject.originPos.y);
 
         return list.ToArray();
     }
