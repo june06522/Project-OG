@@ -29,7 +29,6 @@ public class ImageDissolve : MonoBehaviour
 
     public Tween Dissolve()
     {
-        Debug.Log("why");
         return DOTween.To(() => startPos,
                   (value) => mat.SetFloat(shader, value),
                   endPos,

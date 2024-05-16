@@ -8,7 +8,6 @@ public class GeneratorExplain : MonoBehaviour
 {
     private Image _iamge;
     private TextMeshProUGUI _trigger;
-    private TextMeshProUGUI _skillList;
     private TextMeshProUGUI _skillExplain;
     private Tooltip _toolTip;
 
@@ -17,7 +16,6 @@ public class GeneratorExplain : MonoBehaviour
         _iamge = GameObject.Find("Image").GetComponent<Image>();
         _trigger = GameObject.Find("GeneratorTrigger").GetComponent<TextMeshProUGUI>();
         _skillExplain = GameObject.Find("GeneratorExplain").GetComponent<TextMeshProUGUI>();
-        //_skillList = GameObject.Find("GeneratorSkillExplain").GetComponent<TextMeshProUGUI>();
         _toolTip = GetComponent<Tooltip>();
     }
 
@@ -27,7 +25,8 @@ public class GeneratorExplain : MonoBehaviour
 
         _toolTip.Init();
     }
-
+    //스킬 이름
+    //등급도 표시
     public void ON(Vector2 invenPos, Sprite image, string trigger, string skill)
     {
         _iamge.sprite = image;
@@ -35,13 +34,5 @@ public class GeneratorExplain : MonoBehaviour
         _skillExplain.text = skill;
 
         _toolTip.On(invenPos);
-        //if (skill != null )
-        //{
-        //    _skillList.text = skill;
-        //    //for (int i = 1; i <= skillList.Length; i++)
-        //    //{
-        //    //    _skillList.text += $"{i}개 - {skillList[i - 1]}\n";
-        //    //}
-        //}
     }
 }
