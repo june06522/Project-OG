@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,7 @@ public class InventoryWeaponInfo : MonoBehaviour
     InvenBrick[] brickList = null;
     int[] dx = { 0, 0, 1, -1 };
     int[] dy = { 1, -1, 0, 0 };
-    List<string> list = new List<string>();
+    List<Tuple<string, int>> list = new List<Tuple<string, int>>();
     private void Awake()
     {
         if (Instance == null)
@@ -23,10 +24,10 @@ public class InventoryWeaponInfo : MonoBehaviour
         inventory = FindObjectOfType<WeaponInventory>();
     }
 
-    public List<string> GetConnect(int x, int y)
+    public List<Tuple<string, int>> GetConnect(int x, int y)
     {
         //변수
-        list = new List<string>();
+        list = new List<Tuple<string, int>>();
         isVisit = new Hashtable();
         end = new Hashtable();
         brickList = GetComponentsInChildren<InvenBrick>();
@@ -62,7 +63,7 @@ public class InventoryWeaponInfo : MonoBehaviour
         foreach (DictionaryEntry item in end)
         {
             InventoryObjectData obj = (InventoryObjectData)item.Key;
-            list.Add(WeaponExplainManager.weaponExplain[obj.generatorID]); // 나중에 Min으로 제한두기 생성기 땜에
+            list.Add(Tuple.Create(obj.generatorID.ToString(),(int)item.Value + 1)); 
         }
 
         return list;
@@ -100,7 +101,7 @@ public class InventoryWeaponInfo : MonoBehaviour
 
             if (isfind)
             {
-                list.Add(WeaponExplainManager.weaponExplain[tempData.generatorID]);
+                list.Add(Tuple.Create(tempData.generatorID.ToString(), 1));
             }
         }
 
@@ -188,7 +189,7 @@ public class InventoryWeaponInfo : MonoBehaviour
 
                 if (isfind)
                 {
-                    int index = Mathf.Min(data.Count - 1,5);
+                    int index = data.Count - 1;
                     if (!end.ContainsKey(tempData))
                         end.Add(tempData, index);
                     else

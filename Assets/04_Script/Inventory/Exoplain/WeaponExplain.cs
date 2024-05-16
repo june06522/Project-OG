@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -11,6 +12,7 @@ public class WeaponExplain : MonoBehaviour
     private TextMeshProUGUI _power;
     private TextMeshProUGUI _explain;
     private TextMeshProUGUI _skillList;
+    private TextMeshProUGUI _evaluation;
     private Tooltip _toolTip;
 
     private void Awake()
@@ -20,6 +22,7 @@ public class WeaponExplain : MonoBehaviour
         _power = GameObject.Find("WeaponPower").GetComponent<TextMeshProUGUI>();
         _explain = GameObject.Find("WeaponExplain").GetComponent<TextMeshProUGUI>();
         _skillList = GameObject.Find("WeaponSkillExplain").GetComponent<TextMeshProUGUI>();
+        _evaluation = GameObject.Find("WeaponEvaluation").GetComponent<TextMeshProUGUI>();
         _toolTip = GetComponent<Tooltip>();
     
     }
@@ -37,19 +40,20 @@ public class WeaponExplain : MonoBehaviour
     }
     //스킬리스트 페어로 바꾸기
     //등급도 표시
-    public void ON(Vector2 pos, Sprite image, string name, float power, string explain, string[] skillList)
+    public void ON(Vector2 pos, Sprite image, string name, float power, string explain, Tuple<string, int>[] skillList, string evaluation)
     {
         _image.sprite = image;
         _weaponName.text = $"{name}";
         _power.text = $"공격력: {power}";
         _explain.text = explain;
+        _evaluation.text = evaluation;
 
         if (skillList != null)
         {
             _skillList.text = "";
             for (int i = 0; i < skillList.Length; i++)
             {
-                _skillList.text += skillList[i] + '\n';
+                _skillList.text += $"{skillList[i].Item1} {skillList[i].Item2}레벨 \n";
             }
         }
 
