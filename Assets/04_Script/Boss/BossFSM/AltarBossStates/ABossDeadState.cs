@@ -22,6 +22,7 @@ public class ABossDeadState : BossBaseState
     {
         _altar.gameObject.layer = LayerMask.NameToLayer("Default");
 
+        CameraManager.Instance.SetLookObj(null, 10.8f, 1.5f);
         _altar.bigestBody.SetActive(false);
         _altar.mediumSizeBody.SetActive(false);
         _altar.smallestBody.SetActive(false);

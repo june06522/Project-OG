@@ -6,17 +6,25 @@ public class BossMove : MonoBehaviour
 {
     public Boss boss;
 
+    public bool isArrive;
+
     private bool _stop = false;
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(boss.transform.position, boss.so.WallCheckRadius);
+    }
 
     public void StopMovement(bool b)
     {
         _stop = b;
     }
 
-    public IEnumerator BossMovement(float waitTime, float randX, float randY, float speed, float wallCheckRadius)
+    public IEnumerator BossMovement(float waitTime, float maxX, float minX, float maxY, float minY, float speed, float wallCheckRadius)
     {
         Vector3 targetpatrolPos = transform.localPosition;
         bool wallChecked = false;
+        _stop = false;
 
         while (!boss.IsDie && !_stop)
         {
@@ -24,17 +32,20 @@ public class BossMove : MonoBehaviour
             {
                 wallChecked = true;
                 yield return new WaitForSeconds(waitTime);
-                targetpatrolPos = (GameManager.Instance.player.transform.position - transform.position).normalized;
+                targetpatrolPos = MakeNewTargetPos(maxX, minX, maxY, minY);
             }
 
             if (Arrive(transform.localPosition, targetpatrolPos))
             {
+                isArrive = true;
                 if (wallChecked)
                 {
                     wallChecked = false;
                 }
+
                 yield return new WaitForSeconds(waitTime);
-                targetpatrolPos = MakeNewTargetPos(randX, randY);
+                isArrive = false;
+                targetpatrolPos = MakeNewTargetPos(maxX, minX, maxY, minY);
             }
             else
             {
@@ -76,10 +87,18 @@ public class BossMove : MonoBehaviour
         return false;
     }
 
-    private Vector3 MakeNewTargetPos(float randX, float randY)
+    private Vector3 MakeNewTargetPos(float maxX, float minX, float maxY, float minY)
     {
-        Vector3 newPatrolPos = new Vector2(UnityEngine.Random.Range(-randX, randX), UnityEngine.Random.Range(-randY, randY));
+        Vector3 newPatrolPos = new Vector2(UnityEngine.Random.Range(minX, maxX), UnityEngine.Random.Range(minY, maxY));
 
         return newPatrolPos;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
+        {
+            MakeNewTargetPos(boss.so.MoveX, -boss.so.MoveX, boss.so.MoveY, -boss.so.MoveY);
+        }
     }
 }
