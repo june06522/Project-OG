@@ -15,6 +15,7 @@ public class ImageDissolve : MonoBehaviour
     float startPos = 0f;
     float endPos = 1f;
 
+    Color color;
     private void Awake()
     {
         image = GetComponent<Image>();
@@ -22,9 +23,10 @@ public class ImageDissolve : MonoBehaviour
         mat = image.materialForRendering;
     }
 
-    public void Init()
+    public void Init(Color color)
     {
         mat.SetFloat(shader, startPos);
+        mat.SetColor("_HologramTint", color);
     }
 
     public Tween Dissolve()
