@@ -9,7 +9,8 @@ public class DieScene : MonoBehaviour
 
     private void Start()
     {
-        fadeImage.DOFade(0f, 1f);
+        Time.timeScale = 1f;
+        fadeImage.DOFade(0f, 2f);
     }
 
     public void ReturnToIntro()
