@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,8 @@ public class PlayerEnergeBar : MonoBehaviour
 
     [SerializeField] RectTransform ui;
     [SerializeField] Image image;
+
+    public Image Image => image;
 
     [SerializeField] Color ableColor;
     [SerializeField] Color disableColor;
@@ -27,7 +30,7 @@ public class PlayerEnergeBar : MonoBehaviour
 
     private void Update()
     {
-        
+
         ui.transform.position = Camera.main.WorldToScreenPoint(player.position);
         image.fillAmount = Mathf.Lerp(targetAmount, image.fillAmount, 0.6f);
 

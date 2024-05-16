@@ -74,7 +74,7 @@ public class InventoryActive : MonoBehaviour
         if (canOpen && !GameManager.Instance.isPlay)
         {
             if (((KeyManager.Instance == null && Input.GetKeyDown(KeyCode.Tab)) ||
-                (KeyManager.Instance != null && Input.GetKeyDown(KeyManager.Instance.inven)) || 
+                (KeyManager.Instance != null && Input.GetKeyDown(KeyManager.Instance.inven)) ||
                 (Input.GetKeyDown(KeyCode.Escape) && isOn)) && isAnimation)
             {
                 isAnimation = false;
@@ -98,42 +98,38 @@ public class InventoryActive : MonoBehaviour
     private void ShowInven()
     {
         isOn = true;
-        //DOTween.Kill(seq);
+
         fade.Fade(true);
         _components.localPosition = new Vector3(0, 0, 0);
         _invenPanel.transform.DOLocalMoveY(_inveny, 0f);
         invenRenderer.enabled = true;
         float initValue = mat.GetFloat(invenShader);
+
         seq = DOTween.Sequence();
-        //seq.Append(_invenPanel.transform.DOLocalMoveY(_inveny, time)).SetEase(Ease.OutBounce);
-        //seq.Join(_invenInfoPanel.transform.DOLocalMoveY(_inveny, time)).SetEase(Ease.OutBounce);
-        //seq.Append(_invenInfoPanel.transform.DOLocalMoveX(_infox, time)).SetEase(Ease.OutBounce);
-        seq.Append(DOTween.To(()=> initValue, value => mat.SetFloat(invenShader, value), 15f, easingtime)).SetEase(ease);
+        seq.Append(DOTween.To(() => initValue, value => mat.SetFloat(invenShader, value), 15f, easingtime)).SetEase(ease);
         seq.Join(ScreenManager.Instance.SetEffect(0.3f, 0.65f, DG.Tweening.Ease.InQuad));
-        //seq.Join(_playerUI.transform.DOMoveX(_uix - moveXVal, time));
+
         seq.AppendCallback(() => { isAnimation = true; });
-        
-        //ScreenManager.Instance.SetEffect(5, easingtime, ease);
+
+        var energeBar = FindObjectOfType<PlayerEnergeBar>();
+        energeBar.Image.color = new Color(energeBar.Image.color.r, energeBar.Image.color.g, energeBar.Image.color.b, 0);
     }
 
     public void ShowUI()
     {
-        //DOTween.Kill(seq);
         isOn = false;
 
         fade.Fade(false);
         _components.localPosition = new Vector3(0, 1000, 0);
         ScreenManager.Instance.SetEffect(0, 0.5f, DG.Tweening.Ease.InQuart);
         float initValue = mat.GetFloat(invenShader);
-        //_playerUI.transform.DOMoveX(_uix, time).SetEase(Ease.OutBack);
+
         seq = DOTween.Sequence();
-        //seq.Append(_invenInfoPanel.transform.DOLocalMoveX(_invenx + moveXVal, time)).SetEase(Ease.OutBack);
-        //seq.Append(_invenPanel.transform.DOLocalMoveY(_inveny + moveYVal, time)).SetEase(Ease.OutBack);
-        //seq.Join(_invenInfoPanel.transform.DOLocalMoveY(_inveny + moveYVal, time)).SetEase(Ease.OutBack);
         seq.Append(DOTween.To(() => initValue, value => mat.SetFloat(invenShader, value), 0f, easingtime).SetEase(ease));
         seq.AppendCallback(() => { StartCoroutine(DelayCo()); });
-            
-        //ScreenManager.Instance.SetEffect(0, 0.5f, ease);
+
+        var energeBar = FindObjectOfType<PlayerEnergeBar>();
+        energeBar.Image.color = new Color(energeBar.Image.color.r, energeBar.Image.color.g, energeBar.Image.color.b, 1);
     }
 
     IEnumerator DelayCo()
