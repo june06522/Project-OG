@@ -63,7 +63,7 @@ public class WeaponBrick : InvenBrick
         if (isHover == true) return;
         isHover = true;
 
-        ItemExplain.Instance.HoverWeapon(invenPoint, image.sprite, GetName(), GetDamage(), GetExplain(), GetOnSkillList());
+        ItemExplain.Instance.HoverWeapon(invenPoint, image.sprite, GetName(), GetDamage(), GetExplain(), GetOnSkillList(),GetEvaluation());
     }
 
     private float GetDamage() => weaponPrefab.Data.GetDamage();
@@ -71,6 +71,8 @@ public class WeaponBrick : InvenBrick
     private string GetName() => weaponPrefab.GetName();
 
     private string GetExplain() => weaponPrefab.explainTxt;
+
+    private string GetEvaluation() => itemRate.ToString();
 
     private string[] GetOnSkillList()
     {
