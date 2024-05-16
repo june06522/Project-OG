@@ -229,6 +229,7 @@ public class Stage : MonoBehaviour
             }
             else
             {
+                GameManager.Instance.isPlay = true;
                 isMonsterSpawning = true;
                 StartWave();
             }

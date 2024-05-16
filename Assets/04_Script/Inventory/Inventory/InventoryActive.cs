@@ -70,6 +70,8 @@ public class InventoryActive : MonoBehaviour
 
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.C))
+            WarningText();
         if (canOpen)
         {
             if (((KeyManager.Instance == null && Input.GetKeyDown(KeyCode.Tab)) ||
@@ -135,6 +137,7 @@ public class InventoryActive : MonoBehaviour
 
     private void WarningText()
     {
+        CameraManager.Instance.CameraShake(3f, 0.05f);
         _warningText.DOFade(1f, 0f);
         _warningText.DOFade(0f, 2f);
     }
