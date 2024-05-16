@@ -24,7 +24,6 @@ public class WeaponExplain : MonoBehaviour
         _skillList = GameObject.Find("WeaponSkillExplain").GetComponent<TextMeshProUGUI>();
         _evaluation = GameObject.Find("WeaponEvaluation").GetComponent<TextMeshProUGUI>();
         _toolTip = GetComponent<Tooltip>();
-    
     }
 
     private void Start()
