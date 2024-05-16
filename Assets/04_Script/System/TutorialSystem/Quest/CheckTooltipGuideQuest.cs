@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckTooltipGuideQuest : GuideQuest
+public class CheckTooltipGuideQuest : BaseTextGuideQuest
 {
     ItemExplain weaponExplain;
 

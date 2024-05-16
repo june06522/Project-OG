@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpeakGuide : GuideQuest
+public class SpeakGuide : BaseTextGuideQuest
 {
     private bool _isEndSpeak = false;
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveGuideQuest : GuideQuest
+public class MoveGuideQuest : BaseTextGuideQuest
 {
     public override bool IsQuestComplete()
     {

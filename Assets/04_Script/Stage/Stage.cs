@@ -208,6 +208,8 @@ public class Stage : MonoBehaviour
         if(monsterCount <= 0 && isMonsterSpawning == false)
         {
             GameManager.Instance.isPlay = false;
+
+
             if(_stageType == StageType.BossStage)
             {
                 ExpansionManager.Instance.AddSlotcnt(5);
@@ -221,6 +223,7 @@ public class Stage : MonoBehaviour
                 ExpansionManager.Instance.AddSlotcnt(2);
 
                 EventTriggerManager.Instance?.StageClearExecute();
+                OnStageClearEvent?.Invoke();
                 AppearGate();
                 AppearChest();
             }
@@ -274,6 +277,8 @@ public class Stage : MonoBehaviour
 
     private void SpawnGate(Stage stage, Vector3 offset = new Vector3())
     {
+        if (stageGate == null)
+            return;
 
         StageGate gate = null;
         if(_gateSpawnPos == null)

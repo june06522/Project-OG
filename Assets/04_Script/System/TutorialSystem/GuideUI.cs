@@ -8,6 +8,8 @@ using UnityEngine.UI;
 public class GuideUI : MonoBehaviour
 {
     [SerializeField]
+    private GameObject _guideTextObject;
+    [SerializeField]
     private TextMeshProUGUI _guideText;
     [SerializeField]
     private List<ContentSizeFitter> _textSizeFitter;
@@ -17,6 +19,7 @@ public class GuideUI : MonoBehaviour
     public void ResetGuideText()
     {
         _guideText.text = string.Empty;
+        _guideTextObject.SetActive(false);
     }
 
     public void SetGuideText(string text, float time)
@@ -26,6 +29,9 @@ public class GuideUI : MonoBehaviour
 
         if (string.IsNullOrEmpty(text))
             ResetGuideText();
+
+        if (_guideTextObject.activeInHierarchy == false)
+            _guideTextObject.SetActive(true);
 
         text = $"{text} ";
 
