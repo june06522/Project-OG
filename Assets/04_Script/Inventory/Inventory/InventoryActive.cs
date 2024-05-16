@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -48,22 +49,20 @@ public class InventoryActive : MonoBehaviour
 
     PanelFade fade;
 
+    TextMeshProUGUI _warningText;
+
     readonly string invenShader = "_SourceGlowDissolveFade";
 
     private void Start()
     {
-        //_uix = _playerUI.transform.position.x;
         _invenx = _invenPanel.transform.localPosition.x;
         _inveny = _invenPanel.transform.localPosition.y;
         _infox = _invenInfoPanel.transform.localPosition.x;
 
-        //_invenInfoPanel.transform.DOLocalMoveX(_invenx + moveXVal, 0f);
-        //_invenPanel.transform.DOLocalMoveY(_inveny + moveYVal, 0f);
-        //_invenInfoPanel.transform.DOLocalMoveY(_inveny + moveYVal, 0f);
-
         _components = _invenPanel.transform.Find("Components").transform;
         invenRenderer = _invenPanel.GetComponent<Image>();
         fade = transform.Find("FadePanel").GetComponent<PanelFade>();
+        _warningText = transform.Find("WarningText").GetComponent<TextMeshProUGUI>();
         mat = invenRenderer.material;
 
         mat.SetFloat(invenShader, 0f);
@@ -71,12 +70,17 @@ public class InventoryActive : MonoBehaviour
 
     private void Update()
     {
-        if (canOpen && !GameManager.Instance.isPlay)
+        if (canOpen)
         {
             if (((KeyManager.Instance == null && Input.GetKeyDown(KeyCode.Tab)) ||
                 (KeyManager.Instance != null && Input.GetKeyDown(KeyManager.Instance.inven)) ||
                 (Input.GetKeyDown(KeyCode.Escape) && isOn)) && isAnimation)
             {
+                if(GameManager.Instance.isPlay)
+                {
+                    WarningText();
+                    return;
+                }
                 isAnimation = false;
                 StartCoroutine(ShowLineRender());
                 isOn = !isOn;
@@ -127,6 +131,12 @@ public class InventoryActive : MonoBehaviour
         seq.Append(DOTween.To(() => initValue, value => mat.SetFloat(invenShader, value), 0f, easingtime).SetEase(ease));
         seq.AppendCallback(() => { StartCoroutine(DelayCo()); });
 
+    }
+
+    private void WarningText()
+    {
+        _warningText.DOFade(1f, 0f);
+        _warningText.DOFade(0f, 2f);
     }
 
     IEnumerator DelayCo()

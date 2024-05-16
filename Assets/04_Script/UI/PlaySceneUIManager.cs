@@ -49,10 +49,12 @@ public class PlaySceneUIManager : MonoBehaviour
         PlayEFF();
         ScreenManager.Instance.SetEffect(0.5f, 0.5f, DG.Tweening.Ease.InQuart);
         pausePanel.SetActive(true);
+        Time.timeScale = 0.0f;
     }
 
     public void CloseBtn()
     {
+        Time.timeScale = 1.0f;
         PlayEFF();
         ScreenManager.Instance.SetEffect(0, 0.5f, DG.Tweening.Ease.InQuart);
         pausePanel.SetActive(false);
@@ -60,12 +62,14 @@ public class PlaySceneUIManager : MonoBehaviour
 
     public void ReGameBtn()
     {
+        Time.timeScale = 1.0f;
         PlayEFF();
         SceneManager.LoadScene("Play");
     }
 
     public void MainMenuBtn()
     {
+        Time.timeScale = 1.0f;
         PlayEFF();
         SceneManager.LoadScene("Intro");
     }
@@ -84,6 +88,7 @@ public class PlaySceneUIManager : MonoBehaviour
 
     public void QuitBtn()
     {
+        Time.timeScale = 1.0f;
         PlayEFF();
         Application.Quit();
     }
