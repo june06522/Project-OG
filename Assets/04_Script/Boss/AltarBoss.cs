@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 // inspector에서 보이는 변수들 
 public partial class AltarBoss
@@ -10,6 +13,17 @@ public partial class AltarBoss
     public GameObject bigestBody;
     public GameObject mediumSizeBody;
     public GameObject smallestBody;
+    public GameObject warningLine;
+    public GameObject IW_1_1;
+    public GameObject IW_1_2;
+    public GameObject IW_2_1;
+    public GameObject IW_2_2;
+    public GameObject IW_3_1;
+    public GameObject IWW_1_1;
+    public GameObject IWW_1_2;
+    public GameObject IWW_2_1;
+    public GameObject IWW_2_2;
+    public GameObject IWW_3_1;
 
     [field: Header("AudioClip")]
     public AudioClip fireClip;
@@ -18,16 +32,26 @@ public partial class AltarBoss
     public AudioClip dashClip;
     public AudioClip unChainClip;
 
+    [field: Header("TileMap")]
+    public Tilemap smallStage;
+    public Tilemap smallStageLeft;
+    public Tilemap smallStageRight;
+    public Tilemap bigStage;
+
+    [field: Header("UI")]
+    public Image blink;
+
     [field: Header("Sprite")]
     public Sprite bigTriangleSprite;
+
+    [field: Header("Transform")]
+    public Transform[] restraints = new Transform[2];
 
     [field: Header("AltarOnly")]
     [SerializeField]
     private float _restraintDistance;
     [SerializeField]
     private float _unChainTime;
-
-    
 }
 
 public partial class AltarBoss : Boss
@@ -36,6 +60,8 @@ public partial class AltarBoss : Boss
     [HideInInspector] public bool isOneBroken;
     [HideInInspector] public bool isDashing;
     [HideInInspector] public bool isIdleEnded;
+    [HideInInspector] public bool isUnChained;
+    [HideInInspector] public bool isIW;
 
     [HideInInspector] public Vector3 originPos;
 
@@ -45,8 +71,6 @@ public partial class AltarBoss : Boss
 
     private AltarPattern _pattern;
 
-    private GameObject[] _restraints = new GameObject[2];
-
     private GameObject[,] _chains = new GameObject[2, 5];
 
     private int _restraintIndex = 0;
@@ -55,6 +79,8 @@ public partial class AltarBoss : Boss
     private int _shortenChainIndex = 0;
 
     private float _currentTime = 0;
+
+    private bool _isAnimationEnd;
 
     private void Awake()
     {
@@ -71,7 +97,7 @@ public partial class AltarBoss : Boss
 
         _currentTime = 0;
         _restraintIndex = 0;
-        _restrainCount = _restraints.Length;
+        _restrainCount = restraints.Length;
         _chainCount = _chains.GetLength(1);
         _shortenChainIndex = 0;
 
@@ -79,6 +105,9 @@ public partial class AltarBoss : Boss
         isOneBroken = false;
         isDashing = false;
         isIdleEnded = false;
+        isUnChained = false;
+        isIW = false;
+        _isAnimationEnd = false;
 
         originPos = transform.position;
 
@@ -104,7 +133,7 @@ public partial class AltarBoss : Boss
             ChangeBossState(BossState.Tied);
         }
 
-        if(_curBossState != BossState.Idle)
+        if (_curBossState != BossState.Idle)
         {
             if (!isDead)
             {
@@ -117,7 +146,7 @@ public partial class AltarBoss : Boss
 
                 if (_restraintIndex < _restrainCount)
                 {
-                    TimeChecker(Time.deltaTime * (_restraintIndex + 1));
+                    TimeChecker(Time.deltaTime);
                 }
 
                 _bossFSM.UpdateBossState();
@@ -142,25 +171,46 @@ public partial class AltarBoss : Boss
         {
             if (objs[i] == null)
                 continue;
-            ObjectPool.Instance.ReturnObject(objs[i]);
+            Destroy(objs[i]);
         }
+    }
+
+    private IEnumerator ChangeStageSize(float changeTime)
+    {
+        blink.gameObject.SetActive(true);
+        smallStage.gameObject.SetActive(false);
+        smallStageLeft.gameObject.SetActive(false);
+        smallStageRight.gameObject.SetActive(false);
+        bigStage.gameObject.SetActive(true);
+
+        float currentTime = 0;
+        float a = 1;
+
+        while(currentTime < changeTime)
+        {
+            currentTime += Time.deltaTime;
+            a -= Time.deltaTime / changeTime;
+            blink.color = new Color(1, 1, 1, a);
+            yield return null;
+        }
+
+        blink.gameObject.SetActive(false);
     }
 
     private void ChainSetting()
     {
         for (int i = 0; i < _restrainCount; i++)
         {
-            _restraints[i] = ObjectPool.Instance.GetObject(ObjectPoolType.AltarRestraint, altarCollector.transform);
             var rad = Mathf.Deg2Rad * i * 360 / _restrainCount;
             var x = _restraintDistance * Mathf.Cos(rad);
             var y = _restraintDistance * Mathf.Sin(rad);
-            _restraints[i].transform.position = transform.GetChild(i).position + new Vector3(x, y, 0);
-            _restraints[i].transform.rotation = Quaternion.identity;
+            restraints[i].position = transform.GetChild(i).position + new Vector3(x, y, 0);
+
             for (int j = 1; j <= _chainCount; j++)
             {
                 var xx = j * _restraintDistance / _chainCount * Mathf.Cos(rad);
                 var yy = j * _restraintDistance / _chainCount * Mathf.Sin(rad);
-                _chains[i, j - 1] = ObjectPool.Instance.GetObject(ObjectPoolType.AltarChain, _restraints[i].transform.GetChild(0).transform);
+                _chains[i, j - 1] = ObjectPool.Instance.GetObject(ObjectPoolType.AltarChain, restraints[i]);
                 _chains[i, j - 1].transform.position = transform.GetChild(i).position + new Vector3(xx, yy, 0);
                 _chains[i, j - 1].transform.rotation = Quaternion.identity;
             }
@@ -171,9 +221,9 @@ public partial class AltarBoss : Boss
     {
         for (int i = 0; i < _restrainCount; i++)
         {
-            float angle = Mathf.Atan2(transform.position.y - _restraints[i].transform.position.y, transform.position.x - _restraints[i].transform.position.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(transform.position.y - restraints[i].position.y, transform.position.x - restraints[i].position.x) * Mathf.Rad2Deg;
 
-            _restraints[i].transform.GetChild(0).rotation = Quaternion.AngleAxis(angle + 180 - i * 180, Vector3.forward);
+            restraints[i].rotation = Quaternion.AngleAxis(angle + 180 - i * 180, Vector3.forward);
         }
     }
 
@@ -213,7 +263,7 @@ public partial class AltarBoss : Boss
         if(IsDie)
         {
             if(_restraintIndex < 2)
-                ReturnRestraintAndChains();
+                ReturnChains();
             CameraManager.Instance.StopCameraShake();
             isTied = false;
             isOneBroken = false;
@@ -229,13 +279,21 @@ public partial class AltarBoss : Boss
                     case BossState.Tied:
                         if (_restraintIndex > 0)
                         {
-                            ChangeBossState(BossState.OneBroken);
+                            if (_isAnimationEnd)
+                            {
+                                ChangeBossState(BossState.OneBroken);
+                                _isAnimationEnd = false;
+                            }
                         }
                         break;
                     case BossState.OneBroken:
                         if (_restraintIndex > 1)
                         {
-                            ChangeBossState(BossState.Free);
+                            if (_isAnimationEnd)
+                            {
+                                ChangeBossState(BossState.Free);
+                                _isAnimationEnd = false;
+                            }
                         }
                         break;
                 }
@@ -283,14 +341,58 @@ public partial class AltarBoss : Boss
         else
         {
             SoundManager.Instance.SFXPlay("UnChain", unChainClip, 1);
-            CameraManager.Instance.CameraShake(5, 1f);
+            isUnChained = true;
             StartCoroutine(UnChain(3));
             _currentTime = 0;
         }
     }
 
+    private IEnumerator UnChainMove()
+    {
+        Vector3 dir = (transform.position - restraints[_restraintIndex].transform.position).normalized;
+        while(true)
+        {
+            for (int i = 0; i < _chainCount; i++)
+            {
+                _chains[_restraintIndex, i].transform.position = Vector3.MoveTowards(_chains[_restraintIndex, i].transform.position, _chains[_restraintIndex, i].transform.position + dir, Time.deltaTime);
+            }
+
+            yield return null;
+        }
+        
+    }
+
     private IEnumerator UnChain(float speed)
     {
+        IEnumerator co = UnChainMove();
+        StartCoroutine(co);
+        CameraManager.Instance.SetLookObj(this.gameObject, 8, 1.5f);
+        yield return new WaitForSeconds(1.5f);
+
+        StartCoroutine(UnChainAnimation(_restraintIndex, 2, 500, 1f, 0.5f));
+        CameraManager.Instance.Shockwave(restraints[_restraintIndex].position, -0.1f, 0.3f, 0.5f);
+        if (_restraintIndex < 1)
+        {
+            // 더 길게
+            smallStageRight.gameObject.transform.DOMoveX(-3, 0.25f).SetEase(Ease.InOutSine)
+                .OnComplete(() =>
+                {
+                    smallStageRight.gameObject.transform.DOMoveX(0, 0.25f).SetEase(Ease.InOutSine);
+                });
+        }
+        else
+        {
+            smallStageLeft.gameObject.transform.DOMoveX(3, 0.25f).SetEase(Ease.InOutSine)
+                .OnComplete(() =>
+                {
+                    smallStageLeft.gameObject.transform.DOMoveX(0, 0.25f).SetEase(Ease.InOutSine);
+                });
+        }
+
+
+        CameraManager.Instance.CameraShake(5, 0.5f);
+        StopCoroutine(co);
+
         for (int i = 0; i < _chainCount; i++)
         {
             GameObject chainFragment = ObjectPool.Instance.GetObject(ObjectPoolType.ChainFragment, altarCollector.transform);
@@ -302,41 +404,74 @@ public partial class AltarBoss : Boss
             Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * UnityEngine.Random.Range(0, 361) / 360), Mathf.Sin(Mathf.PI * 2 * UnityEngine.Random.Range(0, 361) / 360));
             rigid.velocity = dir.normalized * speed;
         }
-        for(int i = 0; i < _chainCount; i++)
-        {
-            GameObject split = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, altarCollector.transform);
-            split.GetComponent<BossBullet>().Attack(so.Damage);
-            split.transform.position = _restraints[_restraintIndex].transform.position;
-            split.transform.rotation = Quaternion.identity;
 
-            Rigidbody2D rigid = split.GetComponent<Rigidbody2D>();
-            Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / _chainCount), Mathf.Sin(Mathf.PI * 2 * i / _chainCount));
-            rigid.velocity = dir.normalized * speed;
-
-            Vector3 rotation = Vector3.forward * 360 * i / _chainCount + Vector3.forward * -90;
-            split.transform.Rotate(rotation);
-        }
-
-        ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarRestraint, _restraints[_restraintIndex]);
         for (int i = 0; i < _chainCount; i++)
         {
             ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarChain, _chains[_restraintIndex, i]);
         }
 
         _restraintIndex++;
-        if(_restraintIndex == 1)
+
+        yield return new WaitForSeconds(0.5f);
+        CameraManager.Instance.SetLookObj(null, 10.8f, 1.5f);
+        yield return new WaitForSeconds(0.5f);
+
+        if (_restraintIndex > 1)
         {
-            originPos = _restraints[_restraintIndex].transform.localPosition;
+            StartCoroutine(ChangeStageSize(0.5f));
         }
 
-        yield return null;
+        if(_restraintIndex == 1)
+        {
+            originPos = restraints[_restraintIndex].transform.localPosition;
+        }
+
+        yield return new WaitForSeconds(0.5f);
+        _isAnimationEnd = true;
+        isUnChained = false;
     }
 
-    private void ReturnRestraintAndChains()
+    private IEnumerator UnChainAnimation(int num, float speed, float rotateSpeed, float moveTime, float moveDistance)
+    {
+        float currentTime = 0;
+        float deg = 0;
+        int plus;
+        if(num < 1)
+        {
+            plus = 1;
+        }
+        else
+        {
+            plus = -1;
+        }
+        Vector3 dir = -(restraints[num].transform.position - transform.position).normalized;
+
+        while(currentTime < moveTime)
+        {
+            currentTime += Time.deltaTime * speed;
+            deg += Time.deltaTime * rotateSpeed * plus;
+
+            if(deg < 360)
+            {
+                bigestBody.transform.rotation = Quaternion.Euler(0, 0, deg);
+            }
+            else
+            {
+                deg = 0;
+            }
+
+            transform.position = Vector3.MoveTowards(transform.position, transform.position + dir * moveDistance, Time.deltaTime * speed);
+
+            yield return null;
+        }
+
+        SetBody(bigestBody, Vector3.one, Vector3.zero, bossColor, 0.5f);
+    }
+
+    private void ReturnChains()
     {
         if(_restraintIndex > 0)
         {
-            ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarRestraint, _restraints[_restraintIndex]);
             for (int j = 0; j < _chainCount; j++)
             {
                 ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarChain, _chains[_restraintIndex, j]);
@@ -346,7 +481,6 @@ public partial class AltarBoss : Boss
         {
             for (int i = 0; i < _restrainCount; i++)
             {
-                ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarRestraint, _restraints[i]);
                 for (int j = 0; j < _chainCount; j++)
                 {
                     ObjectPool.Instance.ReturnObject(ObjectPoolType.AltarChain, _chains[i, j]);

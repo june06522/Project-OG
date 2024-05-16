@@ -47,7 +47,7 @@ public class SHalfHPState : BossBaseState
         CreateMinimi();
         _slate.StartCoroutine(NowMove(0.5f));
         _slate.StartCoroutine(RandomPattern(_slate.so.PatternChangeTime));
-        _slate.StartCoroutine(_slate.bossMove.BossMovement(_slate.so.StopTime, _slate.so.MoveX, _slate.so.MoveY, _slate.so.Speed, _slate.so.WallCheckRadius));
+        _slate.StartCoroutine(_slate.bossMove.BossMovement(_slate.so.StopTime, _slate.so.MoveX, -_slate.so.MoveX, _slate.so.MoveY, -_slate.so.MoveY, _slate.so.Speed, _slate.so.WallCheckRadius));
     }
 
     private void CreateMinimi()
