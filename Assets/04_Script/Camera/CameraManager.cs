@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using UnityEngine.Rendering;
+using System;
 
 public class CameraManager : MonoSingleton<CameraManager>
 {
@@ -85,7 +86,11 @@ public class CameraManager : MonoSingleton<CameraManager>
         {
             StopCoroutine(_damageVolumeCoroutine);
         }
-        _damageVolumeCoroutine = StartCoroutine(DamageVolumeCoroutine(_damageVolume, endValue, time));
+
+        _damageVolumeCoroutine = StartCoroutine(DamageVolumeCoroutine(_damageVolume, endValue, time, ()=>
+        {
+            _damageVolumeCoroutine = null;
+        }));
     }
     public void PlayerDamageVolume(float endValue, float time)
     {
@@ -93,15 +98,19 @@ public class CameraManager : MonoSingleton<CameraManager>
         {
             StopCoroutine(_playerDamageVolumeCoroutine);
         }
-        _playerDamageVolumeCoroutine = StartCoroutine(DamageVolumeCoroutine(_playerHitDamageVolume, endValue, time));
+
+        _playerDamageVolumeCoroutine = StartCoroutine(DamageVolumeCoroutine(_playerHitDamageVolume, endValue, time, ()=>
+        {
+            _playerDamageVolumeCoroutine = null;
+        }));
     }
 
-    private IEnumerator DamageVolumeCoroutine(Volume volume, float endValue, float time)
+    private IEnumerator DamageVolumeCoroutine(Volume volume, float endValue, float time, Action endFunc)
     {
         volume.weight = endValue;
         yield return new WaitForSeconds(time);
         volume.weight = 0f;
-        _playerDamageVolumeCoroutine = null;
+        endFunc?.Invoke();
     }
 
     public void CameraShake(float shakeIntensity, float shakeTime)

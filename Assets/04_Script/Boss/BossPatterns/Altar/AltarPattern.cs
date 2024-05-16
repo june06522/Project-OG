@@ -162,8 +162,8 @@ public class AltarPattern : BossPatternBase
     {
         Teleport(boss, Vector3.zero, warningTime);
 
-        Vector3 originPos1 = boss.IW_1_1.transform.position;
-        Vector3 originPos2 = boss.IW_1_2.transform.position;
+        Vector3 originPos1 = boss.IW_1_1.transform.localPosition;
+        Vector3 originPos2 = boss.IW_1_2.transform.localPosition;
 
         boss.IWW_1_1.gameObject.SetActive(true);
         boss.IWW_1_2.gameObject.SetActive(true);
@@ -174,15 +174,15 @@ public class AltarPattern : BossPatternBase
         boss.IWW_1_2.gameObject.SetActive(false);
 
         CameraManager.Instance.CameraShake(5, 0.5f);
-        boss.IW_1_1.transform.DOMove(new Vector3(-29, 18), moveTime).SetEase(Ease.InOutSine);
-        boss.IW_1_2.transform.DOMove(new Vector3(22, -27), moveTime).SetEase(Ease.InOutSine);
+        boss.IW_1_1.transform.DOLocalMove(new Vector3(-29, 18), moveTime).SetEase(Ease.InOutSine);
+        boss.IW_1_2.transform.DOLocalMove(new Vector3(22, -27), moveTime).SetEase(Ease.InOutSine);
 
         boss.isAttacking = false;
 
         yield return new WaitForSeconds(time);
 
-        boss.IW_1_1.transform.DOMove(originPos1, moveTime).SetEase(Ease.InOutSine);
-        boss.IW_1_2.transform.DOMove(originPos2, moveTime).SetEase(Ease.InOutSine);
+        boss.IW_1_1.transform.DOLocalMove(originPos1, moveTime).SetEase(Ease.InOutSine);
+        boss.IW_1_2.transform.DOLocalMove(originPos2, moveTime).SetEase(Ease.InOutSine);
 
         yield return new WaitForSeconds(moveTime);
 
@@ -194,8 +194,8 @@ public class AltarPattern : BossPatternBase
         Teleport(boss, Vector3.zero, warningTime);
 
 
-        Vector3 originPos1 = boss.IW_2_1.transform.position;
-        Vector3 originPos2 = boss.IW_2_2.transform.position;
+        Vector3 originPos1 = boss.IW_2_1.transform.localPosition;
+        Vector3 originPos2 = boss.IW_2_2.transform.localPosition;
 
         boss.IWW_2_1.gameObject.SetActive(true);
         boss.IWW_2_2.gameObject.SetActive(true);
@@ -206,15 +206,15 @@ public class AltarPattern : BossPatternBase
         boss.IWW_2_2.gameObject.SetActive(false);
 
         CameraManager.Instance.CameraShake(5, 0.5f);
-        boss.IW_2_1.transform.DOMove(new Vector3(-29, 18), moveTime).SetEase(Ease.InOutSine);
-        boss.IW_2_2.transform.DOMove(new Vector3(0, 26), moveTime).SetEase(Ease.InOutSine);
+        boss.IW_2_1.transform.DOLocalMove(new Vector3(-29, 18), moveTime).SetEase(Ease.InOutSine);
+        boss.IW_2_2.transform.DOLocalMove(new Vector3(0, 26), moveTime).SetEase(Ease.InOutSine);
 
         boss.isAttacking = false;
 
         yield return new WaitForSeconds(time);
 
-        boss.IW_2_1.transform.DOMove(originPos1, moveTime).SetEase(Ease.InOutSine);
-        boss.IW_2_2.transform.DOMove(originPos2, moveTime).SetEase(Ease.InOutSine);
+        boss.IW_2_1.transform.DOLocalMove(originPos1, moveTime).SetEase(Ease.InOutSine);
+        boss.IW_2_2.transform.DOLocalMove(originPos2, moveTime).SetEase(Ease.InOutSine);
 
         yield return new WaitForSeconds(moveTime);
 
@@ -226,7 +226,7 @@ public class AltarPattern : BossPatternBase
         Teleport(boss, Vector3.zero, warningTime);
 
 
-        Vector3 originPos1 = boss.IW_3_1.transform.position;
+        Vector3 originPos1 = boss.IW_3_1.transform.localPosition;
 
         boss.IWW_3_1.gameObject.SetActive(true);
 
@@ -235,13 +235,13 @@ public class AltarPattern : BossPatternBase
         boss.IWW_3_1.gameObject.SetActive(false);
 
         CameraManager.Instance.CameraShake(5, 0.5f);
-        boss.IW_3_1.transform.DOMove(new Vector3(-31, -13), moveTime).SetEase(Ease.InOutSine);
+        boss.IW_3_1.transform.DOLocalMove(new Vector3(-31, -13), moveTime).SetEase(Ease.InOutSine);
 
         boss.isAttacking = false;
 
         yield return new WaitForSeconds(time);
 
-        boss.IW_3_1.transform.DOMove(originPos1, moveTime).SetEase(Ease.InOutSine);
+        boss.IW_3_1.transform.DOLocalMove(originPos1, moveTime).SetEase(Ease.InOutSine);
 
         yield return new WaitForSeconds(moveTime);
 
@@ -253,7 +253,7 @@ public class AltarPattern : BossPatternBase
         boss.transform.DOScale(Vector3.zero, teleportAnimTime / 2).SetEase(Ease.InOutSine)
             .OnComplete(() =>
             {
-                boss.transform.position = pos;
+                boss.transform.localPosition = pos;
                 boss.transform.DOScale(Vector3.one, teleportAnimTime / 2).SetEase(Ease.InOutSine);
             });
     }
