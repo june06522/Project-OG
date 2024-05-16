@@ -86,13 +86,6 @@ public class InventoryActive : MonoBehaviour
                     ShowUI();
             }
         }
-
-        //images = GetComponentsInChildren<Image>();
-        //foreach (var image in images)
-        //{
-        //    if(image.GetComponent<InvenBrick>() != null)
-        //        image.enabled = isOn;
-        //}
     }
 
     private void ShowInven()
@@ -100,6 +93,10 @@ public class InventoryActive : MonoBehaviour
         isOn = true;
 
         fade.Fade(true);
+        
+        var energeBar = FindObjectOfType<PlayerEnergeBar>();
+        energeBar.Image.color = new Color(energeBar.Image.color.r, energeBar.Image.color.g, energeBar.Image.color.b, 0);
+        
         _components.localPosition = new Vector3(0, 0, 0);
         _invenPanel.transform.DOLocalMoveY(_inveny, 0f);
         invenRenderer.enabled = true;
@@ -111,8 +108,6 @@ public class InventoryActive : MonoBehaviour
 
         seq.AppendCallback(() => { isAnimation = true; });
 
-        var energeBar = FindObjectOfType<PlayerEnergeBar>();
-        energeBar.Image.color = new Color(energeBar.Image.color.r, energeBar.Image.color.g, energeBar.Image.color.b, 0);
     }
 
     public void ShowUI()
@@ -120,6 +115,10 @@ public class InventoryActive : MonoBehaviour
         isOn = false;
 
         fade.Fade(false);
+
+        var energeBar = FindObjectOfType<PlayerEnergeBar>();
+        energeBar.Image.color = new Color(energeBar.Image.color.r, energeBar.Image.color.g, energeBar.Image.color.b, 1);
+        
         _components.localPosition = new Vector3(0, 1000, 0);
         ScreenManager.Instance.SetEffect(0, 0.5f, DG.Tweening.Ease.InQuart);
         float initValue = mat.GetFloat(invenShader);
@@ -128,8 +127,6 @@ public class InventoryActive : MonoBehaviour
         seq.Append(DOTween.To(() => initValue, value => mat.SetFloat(invenShader, value), 0f, easingtime).SetEase(ease));
         seq.AppendCallback(() => { StartCoroutine(DelayCo()); });
 
-        var energeBar = FindObjectOfType<PlayerEnergeBar>();
-        energeBar.Image.color = new Color(energeBar.Image.color.r, energeBar.Image.color.g, energeBar.Image.color.b, 1);
     }
 
     IEnumerator DelayCo()

@@ -44,13 +44,13 @@ public class PlayerEnergeBar : MonoBehaviour
         if (image.fillAmount < 0.2f)
         {
 
-            image.color = disableColor;
+            image.color = new Color(disableColor.r, disableColor.g, disableColor.b, image.color.a);
 
         }
         else
         {
 
-            image.color = ableColor;
+            image.color = new Color(ableColor.r, ableColor.g, ableColor.b, image.color.a);
 
         }
 
