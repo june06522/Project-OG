@@ -335,6 +335,8 @@ public class Stage : MonoBehaviour
         {
             CameraManager.Instance.SetOtherCam(_vStageCam, true);
         }
+        else
+            CameraManager.Instance.SetDefaultCam();
 
         return (_vStageCam != null);
     }

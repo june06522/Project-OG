@@ -23,15 +23,23 @@ public class RandomStageSystem : MonoBehaviour
     private Stage _firstStage;
     private int _step = 0;
     private int _stageInterval = 80;
+
+    [SerializeField]
+    private bool _isStartPrinting = true;
+    [SerializeField]
     private Vector3 _spawnPos = Vector3.zero;
 
     private void Start()
     {
-        CreateStage();
+
+        if(_isStartPrinting)
+            CreateStage();
     }
 
     public void CreateStage()
     {
+        if (_floorStageList.Count <= _step)
+            AsyncSceneLoader.LoadScene("Credit");
         _spawnPos = _spawnPos + new Vector3(0, _stageInterval, 0);
 
         FloorInfoSO floorInfo = GetRandomFloor(_floorStageList[_step].floors);

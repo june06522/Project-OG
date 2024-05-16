@@ -66,7 +66,7 @@ public class TutorialManager : MonoSingleton<TutorialManager>
             if (_currentGuideIndex == _guideLine.Count - 1)
             {
                 _tutorialClear = true;
-                AsyncSceneLoader.LoadScene("Play");
+                enabled = false;
                 return;
             }
 

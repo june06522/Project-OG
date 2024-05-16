@@ -8,7 +8,7 @@ public class PlayerInvincible : MonoBehaviour
     [SerializeField]
     PlayerHP _playerHP;
 
-    private void Awake()
+    private void OnEnable()
     {
         _playerHP.HitEvent += HandleInvincibleHP;
     }
@@ -23,5 +23,10 @@ public class PlayerInvincible : MonoBehaviour
             _playerHP.SetPlayerHP(maxHP, 1);
 
         }
+    }
+
+    private void OnDisable()
+    {
+        _playerHP.HitEvent -= HandleInvincibleHP;
     }
 }
