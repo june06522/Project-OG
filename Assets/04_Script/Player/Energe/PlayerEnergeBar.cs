@@ -9,11 +9,10 @@ public class PlayerEnergeBar : MonoBehaviour
     Transform player;
     PlayerEnerge _playerEnerge;
 
+    [SerializeField] SpriteRenderer sprite;
+    [SerializeField] Material mat;
 
-    [SerializeField] RectTransform ui;
-    [SerializeField] Image image;
-
-    public Image Image => image;
+    public SpriteRenderer Sprite => sprite;
 
     [SerializeField] Color ableColor;
     [SerializeField] Color disableColor;
@@ -26,13 +25,16 @@ public class PlayerEnergeBar : MonoBehaviour
         _playerEnerge.OnChangeEnergeEvent += HandleUpdateEnergeUI;
         HandleUpdateEnergeUI(_playerEnerge.MaxEnerge, _playerEnerge.CurrentEnerge);
         player = GameManager.Instance.player;
+
+        mat.SetFloat("_Fill", 1);
+        mat.SetColor("_Color", new Color(ableColor.r, ableColor.g, ableColor.b));
     }
 
     private void Update()
     {
 
-        ui.transform.position = Camera.main.WorldToScreenPoint(player.position);
-        image.fillAmount = Mathf.Lerp(targetAmount, image.fillAmount, 0.6f);
+        //ui.transform.position = Camera.main.WorldToScreenPoint(player.position);
+        mat.SetFloat("_Fill", Mathf.Lerp(targetAmount, mat.GetFloat("_Fill"), 0.6f));
 
     }
 
@@ -41,16 +43,16 @@ public class PlayerEnergeBar : MonoBehaviour
 
         targetAmount = (float)currentEnerge / (float)maxEnerge;
 
-        if (image.fillAmount < 0.2f)
+        if (mat.GetFloat("_Fill") < 0.2f)
         {
 
-            image.color = new Color(disableColor.r, disableColor.g, disableColor.b, image.color.a);
+            mat.SetColor("_Color", new Color(disableColor.r, disableColor.g, disableColor.b));
 
         }
         else
         {
 
-            image.color = new Color(ableColor.r, ableColor.g, ableColor.b, image.color.a);
+            mat.SetColor("_Color", new Color(ableColor.r, ableColor.g, ableColor.b));
 
         }
 
