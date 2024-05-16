@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemLinkGuideQuest : GuideQuest
+public class ItemLinkGuideQuest : BaseTextGuideQuest
 {
     public int linkPower;
 

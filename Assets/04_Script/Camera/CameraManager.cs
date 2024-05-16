@@ -101,6 +101,7 @@ public class CameraManager : MonoSingleton<CameraManager>
         volume.weight = endValue;
         yield return new WaitForSeconds(time);
         volume.weight = 0f;
+        _playerDamageVolumeCoroutine = null;
     }
 
     public void CameraShake(float shakeIntensity, float shakeTime)

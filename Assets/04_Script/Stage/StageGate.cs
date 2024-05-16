@@ -8,7 +8,9 @@ public class StageGate : MonoBehaviour, IInteractable
 {
     public event Action OnGateEvent;
     public event Action OnMoveEndEvent;
-    public Stage NextStage {  get; private set; }
+
+    [field:SerializeField]
+    public Stage NextStage { get; private set; }
 
     private bool _interactCheck = true;
     private StageTransition stageTransition;

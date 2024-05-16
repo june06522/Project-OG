@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class InteractGuideQuest : GuideQuest
 {
-    public Transform itemSpawnPos;
-    public Item spawnItemPrefab;
-    private Item spawnItem;
+
+    [SerializeField]
+    private Item _interactItem;
 
     private bool _isQuestEnd = false;
 
@@ -15,16 +15,12 @@ public class InteractGuideQuest : GuideQuest
     {
         base.SetQuestSetting();
 
-        if (spawnItemPrefab == null)
-            return;
-
-        spawnItem = Instantiate(spawnItemPrefab, itemSpawnPos.position, Quaternion.identity);
-        spawnItem.OnInteractItem += HandleInteractItem;
+        _interactItem.OnInteractItem += HandleInteractItem;
     }
 
     private void HandleInteractItem(Transform transform)
     {
-        spawnItem.OnInteractItem -= HandleInteractItem;
+        _interactItem.OnInteractItem -= HandleInteractItem;
 
         _isQuestEnd = true;
     }

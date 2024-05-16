@@ -4,14 +4,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpeakGuide : GuideQuest
+public class SpeakGuide : BaseTextGuideQuest
 {
+    [SerializeField]
+    private bool _isResetSpeak = true;
+
     private bool _isEndSpeak = false;
 
     public override void SetQuestSetting()
     {
         base.SetQuestSetting();
-        FAED.InvokeDelay(() => { _isEndSpeak = true; }, guideTextTime + 3f);
+
+        if(_isResetSpeak == false)
+            FAED.InvokeDelay(() => { _isEndSpeak = true; }, guideTextTime + 3f);
+        else
+        {
+
+            _isEndSpeak = true;
+            TutorialManager.Instance.TutorialUI.ResetGuideText();
+        }
     }
 
     public override bool IsQuestComplete()
