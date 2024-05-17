@@ -39,7 +39,7 @@ public class WeaponExplain : MonoBehaviour
     }
     //스킬리스트 페어로 바꾸기
     //등급도 표시
-    public void ON(Vector2 pos, Sprite image, string name, float power, string explain, Tuple<string, int>[] skillList, string evaluation)
+    public void ON(Vector2 pos, Sprite image, string name, float power, string explain, Tuple<GeneratorID, int>[] skillList, string evaluation)
     {
         _image.sprite = image;
         _weaponName.text = $"{name}";
@@ -53,7 +53,7 @@ public class WeaponExplain : MonoBehaviour
             for (int i = 0; i < skillList.Length; i++)
             {
                 if (i != 0 && i % 2 == 0) _skillList.text += "\n";
-                _skillList.text += $"{skillList[i].Item1} {skillList[i].Item2}레벨\t";
+                _skillList.text += $"{WeaponExplainManager.generatorName[skillList[i].Item1]} {skillList[i].Item2}레벨\t";
             }
         }
 
