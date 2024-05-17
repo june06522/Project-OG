@@ -7,7 +7,7 @@ public class MagneticLaser : Skill
     [SerializeField] MagneticObject prefab;
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
-        if (weaponTrm.GetComponent<Weapon>() != trigger.startWeapon)
+        if (weaponTrm == null || trigger == null || weaponTrm.GetComponent<Weapon>() != trigger.startWeapon)
             return;
 
         RaycastHit2D hit = Physics2D.Raycast(weaponTrm.position, weaponTrm.right, int.MaxValue, LayerMask.GetMask("Wall"));

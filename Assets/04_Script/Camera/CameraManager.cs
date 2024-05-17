@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using UnityEngine.Rendering;
+using System;
 
 public class CameraManager : MonoSingleton<CameraManager>
 {
@@ -85,7 +86,11 @@ public class CameraManager : MonoSingleton<CameraManager>
         {
             StopCoroutine(_damageVolumeCoroutine);
         }
-        _damageVolumeCoroutine = StartCoroutine(DamageVolumeCoroutine(_damageVolume, endValue, time));
+
+        _damageVolumeCoroutine = StartCoroutine(DamageVolumeCoroutine(_damageVolume, endValue, time, ()=>
+        {
+            _damageVolumeCoroutine = null;
+        }));
     }
     public void PlayerDamageVolume(float endValue, float time)
     {
@@ -93,15 +98,19 @@ public class CameraManager : MonoSingleton<CameraManager>
         {
             StopCoroutine(_playerDamageVolumeCoroutine);
         }
-        _playerDamageVolumeCoroutine = StartCoroutine(DamageVolumeCoroutine(_playerHitDamageVolume, endValue, time));
+
+        _playerDamageVolumeCoroutine = StartCoroutine(DamageVolumeCoroutine(_playerHitDamageVolume, endValue, time, ()=>
+        {
+            _playerDamageVolumeCoroutine = null;
+        }));
     }
 
-    private IEnumerator DamageVolumeCoroutine(Volume volume, float endValue, float time)
+    private IEnumerator DamageVolumeCoroutine(Volume volume, float endValue, float time, Action endFunc)
     {
         volume.weight = endValue;
         yield return new WaitForSeconds(time);
         volume.weight = 0f;
-        _playerDamageVolumeCoroutine = null;
+        endFunc?.Invoke();
     }
 
     public void CameraShake(float shakeIntensity, float shakeTime)
@@ -135,5 +144,59 @@ public class CameraManager : MonoSingleton<CameraManager>
             _minimapCamera.transform.position = worldPos;
 
         }
+    }
+
+    public void SetLookObj(GameObject obj, float orthographicSize, float changeTime)
+    {
+        if(obj == null)
+        {
+            cam.LookAt = null;
+            cam.Follow = GameManager.Instance.player;
+            Vector3 localpos = GameManager.Instance.player.localPosition;
+            Vector3 pos = GameManager.Instance.player.position;
+            Vector3 camPos = localpos - pos;
+            cam.transform.position = new Vector3(Mathf.CeilToInt(camPos.x), Mathf.CeilToInt(camPos.y), -10);
+        }
+        else
+        {
+            cam.LookAt = obj.transform;
+            cam.Follow = obj.transform;
+        }
+
+        StartCoroutine(ZoomChange(orthographicSize, changeTime));
+    }
+
+    private IEnumerator ZoomChange(float orthographicSize, float changeTime)
+    {
+        float originSize = cam.m_Lens.OrthographicSize;
+        float ratio;
+        float curTime = 0;
+        float changeSpeed;
+        int plus;
+
+        if (originSize < orthographicSize)
+        {
+            plus = 1;
+            ratio = Mathf.Abs(orthographicSize - originSize);
+            changeSpeed = ratio / changeTime;
+        }
+        else
+        {
+            plus = -1;
+            ratio = Mathf.Abs(orthographicSize - originSize);
+            changeSpeed = ratio / changeTime;
+        }
+        
+
+        while (curTime < changeTime)
+        {
+            curTime += Time.deltaTime;
+
+            cam.m_Lens.OrthographicSize += Time.deltaTime * changeSpeed * plus;
+
+            yield return null;
+        }
+
+        cam.m_Lens.OrthographicSize = orthographicSize;
     }
 }

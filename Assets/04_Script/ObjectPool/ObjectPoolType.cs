@@ -25,5 +25,9 @@ public enum ObjectPoolType
     SlateDeadEffect,
     SlateBullet,
 
-    ScatterBullet
+    ScatterBullet,
+
+    CrabNormalBullet,
+    CrabLaser,
+    CrabBubbleBullet
 }
