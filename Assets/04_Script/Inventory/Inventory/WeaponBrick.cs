@@ -72,7 +72,8 @@ public class WeaponBrick : InvenBrick
 
     private string GetExplain() => weaponPrefab.explainTxt;
 
-    private string GetEvaluation() => WeaponExplainManager.itemRate[itemRate];
+    //private string GetEvaluation() => WeaponExplainManager.itemRate[itemRate];
+    private ItemRate GetEvaluation() => itemRate;
 
     private Tuple<GeneratorID, int>[] GetOnSkillList()
     {

@@ -277,6 +277,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         if (isHover == true) return;
         isHover = true;
 
+        Debug.Log("Gagag");
         //ItemExplain.Instance.HoverEvent(invenPoint);
         if (Type == ItemType.Generator)
             ItemExplain.Instance.HoverGenerator(
@@ -284,7 +285,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
                 image.sprite, 
                 WeaponExplainManager.triggerExplain[InvenObject.generatorID].ToString(),
                 WeaponExplainManager.generatorExplain[InvenObject.generatorID],
-                WeaponExplainManager.itemRate[itemRate],
+                itemRate,
                 WeaponExplainManager.generatorName[InvenObject.generatorID]
             );
     }
