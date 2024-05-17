@@ -87,15 +87,16 @@ public class Tooltip : MonoBehaviour
                   duration));
         
         seq.Append(image.Dissolve());
+        float time = seq.Duration();
+
         for(int i = 0; i < titleTexts.Count; ++i)
         {
             seq.Join(titleTexts[i].Dissolve(true));
         }
 
-        float time = seq.Duration();
         for (int i = 0; i < mainTexts.Count; ++i)
         {
-            seq.Insert(time - 0.1f, mainTexts[i].Dissolve(true));
+            seq.Insert(time + 0.1f, mainTexts[i].Dissolve(true));
         }
         
         seq.Restart();
