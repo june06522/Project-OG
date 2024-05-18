@@ -41,7 +41,7 @@ public class RotateClone : MonoBehaviour
         this.damage = _DataSO.GetDamage();
         material.SetFloat("_FullGlowDissolveFade", 0);
         
-        InvokeRepeating(nameof(Attack), 1f, _DataSO.AttackCoolDown.GetValue());
+        InvokeRepeating(nameof(Attack), 0.5f, _DataSO.AttackCoolDown.GetValue());
     }
 
     public void PlayAppearEffect() => effect.Play();
