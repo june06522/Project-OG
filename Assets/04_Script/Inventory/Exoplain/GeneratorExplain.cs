@@ -31,14 +31,15 @@ public class GeneratorExplain : MonoBehaviour
     }
     //스킬 이름
     //등급도 표시
-    public void ON(Vector2 invenPos, Sprite image, string trigger, string skill, string evaluation, string name)
+    public void ON(Vector2 invenPos, Sprite image, string trigger, string skill, ItemRate evaluation, string name)
     {
         _iamge.sprite = image;
         _trigger.text = $"{trigger}";
         _skillExplain.text = skill;
-        _evaluation.text = evaluation;
+        _evaluation.text = evaluation.ToString();
         _name.text = name;
 
+        _toolTip.CurrentItemRate = evaluation;
         _toolTip.On(invenPos);
     }
 }

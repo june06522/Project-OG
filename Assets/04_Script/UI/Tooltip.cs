@@ -24,14 +24,15 @@ public class Tooltip : MonoBehaviour
     private ImageDissolve image;
 
     private readonly string shader = "_DirectionalGlowFadeFade";
-    private readonly float fadeEnd = 0;
-    private readonly float fadeStart = 1.5f;
+    private readonly float fadeEnd = -0.2f;
+    private readonly float fadeStart = 1.6f;
 
     public ItemRate CurrentItemRate { get; set; }
     Material mat;
 
     RectTransform rectTransform;
     Sequence seq;
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -84,19 +85,22 @@ public class Tooltip : MonoBehaviour
         seq.Append(DOTween.To(() => fadeStart,
                   (value) => mat.SetFloat(shader, value), 
                   fadeEnd,
-                  duration));
+                  duration).SetEase(ease));
         
-        seq.Append(image.Dissolve());
-        for(int i = 0; i < titleTexts.Count; ++i)
-        {
-            seq.Join(titleTexts[i].Dissolve(true));
-        }
-
         float time = seq.Duration();
+        seq.Append(titleTexts[0].Dissolve(true));
+        //for(int i = 0; i < titleTexts.Count; ++i)
+        //{
+        //    seq.Append(titleTexts[0].Dissolve(true));
+        //}
+        
         for (int i = 0; i < mainTexts.Count; ++i)
         {
-            seq.Insert(time - 0.1f, mainTexts[i].Dissolve(true));
+            seq.Join(mainTexts[i].Dissolve(true));
         }
+
+        seq.Append(image.Dissolve());
+
         
         seq.Restart();
     }
