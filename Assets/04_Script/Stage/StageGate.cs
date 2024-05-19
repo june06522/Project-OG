@@ -84,9 +84,9 @@ public class StageGate : MonoBehaviour, IInteractable
 
             yield return new WaitForSeconds(0.8f);
         }
+        GameManager.Instance.Inventory.SettingLineRender();
 
 
-        
         stageTransition.StartTransition(1f);
         yield return new WaitForSeconds(2f);
         OnGateEvent?.Invoke();
