@@ -35,6 +35,10 @@ public class WeaponDataSO : ScriptableObject
 
     }
 
+    public float GetOriginCool() => AttackCoolDown.GetValue();
+
+    public float GetCool() => AttackCoolDown.GetValue() / (1f + CoolDown / 100f);
+
     private IEnumerator SetCoolDownCo()
     {
 

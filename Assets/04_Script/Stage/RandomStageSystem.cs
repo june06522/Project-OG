@@ -39,7 +39,10 @@ public class RandomStageSystem : MonoBehaviour
     public void CreateStage()
     {
         if (_floorStageList.Count <= _step)
+        {
             AsyncSceneLoader.LoadScene("Credit");
+            return;
+        }
         _spawnPos = _spawnPos + new Vector3(0, _stageInterval, 0);
 
         FloorInfoSO floorInfo = GetRandomFloor(_floorStageList[_step].floors);
