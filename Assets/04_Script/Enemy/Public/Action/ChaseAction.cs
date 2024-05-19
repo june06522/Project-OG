@@ -45,20 +45,27 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     public override void OnFixedUpdate()
     {
         Vector2 dir = (targetTrm.position - controller.transform.position);
-
-        if(controller.AIdata.IsDetectObstacle() && 
-           controller.GetNextPath(ref nextPos) == false)
+        Vector2 movementInput;
+        
+        if(controller.IsBetweenObstacle())
         {
             controller.FindPath();
-            controller.GetNextPath(ref nextPos);
-
-            Debug.Log(nextPos);
         }
-        if (dir.magnitude > _data.AttackAbleRange)
+
+        if( controller.GetNextPath(ref nextPos) == true)
+        {
+            if (Vector2.Distance(nextPos, controller.transform.position) < 0.01f)
+                controller.GetNextPath(ref nextPos);
+
+            movementInput = (nextPos - (Vector2)controller.transform.position).normalized;
+            controller.Enemy.MovementInput = movementInput;
+            
+        }
+        else if (dir.magnitude > _data.AttackAbleRange)
         {
             if(controller.Enemy.enemyAnimController.IsMove == false)
                 controller.Enemy.enemyAnimController.SetMove(true);
-            Vector2 movementInput = controller.Solver.GetDirectionToMove(behaviours, controller.AIdata);
+            movementInput = controller.Solver.GetDirectionToMove(behaviours, controller.AIdata);
             controller.Enemy.MovementInput = movementInput;
         }
         else
