@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 3168560435909413188}
   - component: {fileID: 814301245025049237}
   - component: {fileID: 1009574451655646485}
+  - component: {fileID: -1374340604894909531}
   m_Layer: 14
   m_Name: ShapeEnemy_2Triangle
   m_TagString: HitAble
@@ -169,6 +170,23 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.4
+--- !u!114 &-1374340604894909531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814301245025049256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61f326f337a58ed47a3b1842fdd6ef48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_priorityQueueMaxCapacity: 200
+  m_pathResultPoolMaxCapacity: 100
+  m_closeListCapacity: 100
+  m_optimizePath: 1
+  m_findWalkableOnBlockedGoal: 1
 --- !u!1 &911366774501448690
 GameObject:
   m_ObjectHideFlags: 0

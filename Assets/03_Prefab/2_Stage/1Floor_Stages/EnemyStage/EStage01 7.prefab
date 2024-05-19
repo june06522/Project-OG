@@ -1917,6 +1917,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1975566701717600876}
   - component: {fileID: 1975566701717600875}
+  - component: {fileID: -3957944422251590234}
   m_Layer: 0
   m_Name: EStage01 7
   m_TagString: Untagged
@@ -1953,8 +1954,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22173e9312beb324c8afcfb11174f610, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _useStageTitle: 0
+  _titleText: 
+  _explainText: 
   _useChangeCameraSize: 0
-  _cameraSize: 0
   _vStageCam: {fileID: 0}
   _monsterSpawnClip: {fileID: 8300000, guid: 9bee4d637ceacdd429bac6fb5beb73cc, type: 3}
   _stageClearClip: {fileID: 8300000, guid: 24a8f656b2200b9458d80c54a0d535ad, type: 3}
@@ -2150,6 +2153,27 @@ MonoBehaviour:
       - enemy: {fileID: 4887433696866833868, guid: fe35f00e025bcd44480d4c23fbcc646f, type: 3}
         count: 2
     anchoredMobInfo: []
+--- !u!114 &-3957944422251590234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1975566701717600877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19854cf9271d5ca49a69f80107400833, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InGridStartPoint: {x: -20, y: -15}
+  m_InGridEndPoint: {x: 20, y: 15}
+  m_InGridHorizontalSize: 50
+  m_InGridVerticalSize: 50
+  m_collisionCheckSensorSize: {x: 1, y: 1}
+  m_InLayerToCheckCollide:
+    serializedVersion: 2
+    m_Bits: 2048
+  DrawGizmo: 0
 --- !u!1 &1975566701719767521
 GameObject:
   m_ObjectHideFlags: 0
