@@ -51,6 +51,8 @@ public class ShopInventory : MonoBehaviour
             slot.transform.position = pos + new Vector3(50 * transform.localScale.x, 50 * transform.localScale.y);
             slots.Add(slot);
         }
+
+        GameManager.Instance.Inventory.SettingLineRender();
     }
 
     void DestroySlot()
