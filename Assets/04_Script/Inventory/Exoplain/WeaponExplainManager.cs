@@ -11,18 +11,18 @@ public class WeaponExplainManager : MonoBehaviour
         {GeneratorID.DeathRay,         "죽음의 광선"}, // 마관광살포
         {GeneratorID.Electronic,       "일렉 뚜리뚜리"}, // 전기 지짐이
         {GeneratorID.ErrorDice,        "@#!%&($@1@$q!!"}, // 에러다이스
-        {GeneratorID.Firecracker,      "축포를 터트린다"}, // 축포
+        {GeneratorID.Firecracker,      "축포를 터트립니다."}, // 축포
         {GeneratorID.Force,            "쾅"}, // 포쓰
         {GeneratorID.HeartBeat,        "쿵"}, // 하트비트
-        {GeneratorID.LaserPointer,     "전방에 레이저를 발사 합니다."}, // 레이저 포인터
+        {GeneratorID.LaserPointer,     "무기에서 레이저를 발사합니다."}, // 레이저 포인터
         {GeneratorID.MagneticField,    "자기장을 만들어 냅니다."}, //자기장
         {GeneratorID.OverLoad,         "과부화"}, // 과부화
         {GeneratorID.Reboot,           "리부트"}, // 리부트
         {GeneratorID.RotateWeapon,     "무기를 돌려 공격합니다."}, // 로테이트 웨폰
-        {GeneratorID.SequenceAttack,   "시퀀스어택"}, // 시퀀스
-        {GeneratorID.SiegeMode,        "이동할 필요가 없다면 이동하지 않아도 된다."}, // 시즈모드
-        {GeneratorID.Trinity,          "트포"}, //삼위일체
-        {GeneratorID.WeaponShot,       "이 대신 잇몸으로"}, // Weapon Shot
+        {GeneratorID.SequenceAttack,   "연속 공격"}, // 시퀀스
+        {GeneratorID.SiegeMode,        "시즈모드 가동"}, // 시즈모드
+        {GeneratorID.Trinity,          "데미지 증가"}, //삼위일체
+        {GeneratorID.WeaponShot,       "무기를 날려 공격합니다"}, // Weapon Shot
     };
     public static Dictionary<GeneratorID, TriggerID> triggerExplain = new()
     {
