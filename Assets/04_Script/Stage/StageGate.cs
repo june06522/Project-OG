@@ -9,7 +9,7 @@ public class StageGate : MonoBehaviour, IInteractable
     public event Action OnGateEvent;
     public event Action OnMoveEndEvent;
 
-    [field:SerializeField]
+    [field: SerializeField]
     public Stage NextStage { get; private set; }
 
     private bool _interactCheck = true;
@@ -57,14 +57,14 @@ public class StageGate : MonoBehaviour, IInteractable
     public void SetStage(Stage nextStage)
     {
         NextStage = nextStage;
-        
+
 
     }
 
     public void OnInteract()
     {
         if (_interactCheck || GameManager.Instance.InventoryActive.IsOn) return;
-        
+
         _interactCheck = true;
 
         StartCoroutine(GoNextStage());
@@ -78,13 +78,16 @@ public class StageGate : MonoBehaviour, IInteractable
         Transform playerTrm = GameManager.Instance.player;
         if (_isPlayJumpAnim)
         {
-             
+
             Sequence seq = DOTween.Sequence();
             seq.Append(playerTrm.DOJump(transform.position + Vector3.down, 5f, 1, 1f));
+            seq.AppendCallback(() =>
+            {
+                GameManager.Instance.Inventory.SettingLineRender();
+            });
 
             yield return new WaitForSeconds(0.8f);
         }
-        GameManager.Instance.Inventory.SettingLineRender();
 
 
         stageTransition.StartTransition(1f);
@@ -106,7 +109,7 @@ public class StageGate : MonoBehaviour, IInteractable
         yield return new WaitForSeconds(0.2f);
         _playerController.ChangeState(EnumPlayerState.Move);
 
-        if(NextStage != null)
+        if (NextStage != null)
         {
 
             if (NextStage.ThisStageType == StageType.EnemyStage || NextStage.ThisStageType == StageType.BossStage)
@@ -120,7 +123,7 @@ public class StageGate : MonoBehaviour, IInteractable
         yield return new WaitForSeconds(1f);
 
         EventTriggerManager.Instance?.RoomEnterExecute();
-        
+
         if (NextStage != null)
         {
             NextStage?.StartWave();
@@ -128,7 +131,6 @@ public class StageGate : MonoBehaviour, IInteractable
         }
 
         OnMoveEndEvent?.Invoke();
-        GameManager.Instance.Inventory.SettingLineRender();
         invenactive.canOpen = true;
     }
 }
