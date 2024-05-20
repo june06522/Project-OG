@@ -8,6 +8,8 @@ public partial class CrabBoss
     public GameObject crabLaserCollector;
     public GameObject crabLeftNipper;
     public GameObject crabRightNipper;
+    public GameObject leftJoints;
+    public GameObject rightJoints;
 
     [Header("Transform")]
     public Transform leftFirePos;

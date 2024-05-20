@@ -206,11 +206,39 @@ public class CrabPattern : BossPatternBase
         _boss.isAttacking = true;
         _boss.animator.enabled = false;
 
-        Vector2 dir = GameManager.Instance.player.position - _boss.leftFirePos.position;
+        Vector2 dir = GameManager.Instance.player.position - _boss.crabLeftNipper.transform.position;
         float z = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        _boss.crabLeftNipper.transform.localRotation = Quaternion.Euler(0, 0, z);
+        _boss.crabLeftNipper.transform.localRotation = Quaternion.Euler(0, 0, z + 30);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.2f);
+
+        float curTime = 0;
+        float animTime = 1;
+        Vector3 originPos = _boss.crabLeftNipper.transform.position;
+        Vector3 beforePos;
+
+        while(curTime < animTime)
+        {
+            curTime += Time.deltaTime;
+            _boss.crabLeftNipper.transform.position = Vector3.MoveTowards(_boss.crabLeftNipper.transform.position, _boss.crabLeftNipper.transform.position + (Vector3)dir, Time.deltaTime * 30);
+            beforePos = _boss.crabLeftNipper.transform.position;
+            if(curTime > animTime / 4)
+            {
+                int count = _boss.leftJoints.transform.childCount;
+                for(int i = 0; i < count; i++)
+                {
+                    GameObject obj = _boss.leftJoints.transform.GetChild(i).gameObject;
+                    Vector3 temp = obj.transform.position;
+                    obj.transform.position = Vector3.MoveTowards(obj.transform.position, beforePos, Time.deltaTime * 30 / i + 1);
+                    beforePos = temp;
+                }
+            }
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        _boss.crabLeftNipper.transform.position = originPos;
 
         _boss.isAttacking = false;
         _boss.animator.enabled = true;
