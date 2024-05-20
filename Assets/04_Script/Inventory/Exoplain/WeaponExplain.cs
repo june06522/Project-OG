@@ -54,7 +54,7 @@ public class WeaponExplain : MonoBehaviour
             {
                 _skillList.text += $"{WeaponExplainManager.generatorName[skillList[i].Item1]} {skillList[i].Item2}레벨";
                 if (i != 0 && i % 2 == 0) _skillList.text += "\n";
-                else _skillList.text += "\t\t";
+                else _skillList.text += "\t";
             }
         }
 
