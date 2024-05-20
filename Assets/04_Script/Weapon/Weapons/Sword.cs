@@ -84,16 +84,19 @@ public class Sword : InvenWeapon
     }
 
 
-    public void ReinforceAttack(Transform target, Vector2 targetScale)
+    public IEnumerator ReinforceAttack(Transform target, Vector3 targetScale)
     {
-        if (attackCor != null)
-            StopCoroutine(attackCor);
+        transform.localScale = targetScale;
 
-        transform
-           .DOScale(targetScale, duration)
-           .SetEase(ease);
+        yield return new WaitForSeconds(1f);
 
-        attackCor = StartCoroutine(AttackTween(true, target));
+        transform.localScale = Vector3.one;
+        //transform
+        //   .DOScale(targetScale, 0f)
+        //   .SetEase(ease).OnComplete(() =>
+        //   {
+        //attackCor = StartCoroutine(AttackTween(true, target));
+        //});
     }
 
     int sign = 1;

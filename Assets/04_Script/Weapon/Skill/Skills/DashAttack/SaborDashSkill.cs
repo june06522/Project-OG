@@ -8,8 +8,10 @@ public class SaborDashSkill : Skill
     [SerializeField] private float duration;
     [SerializeField] private Ease ease;
 
-    private Vector2 targetScale;
+    private Vector3 targetScale;
     private Sword sword;
+
+    Coroutine coroutine;
     
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
@@ -19,31 +21,34 @@ public class SaborDashSkill : Skill
             sword = weaponTrm.GetComponent<Sword>();
         
         Debug.Log("ReinForce");
-        sword.ReinforceAttack(target, targetScale);
+        if (coroutine != null)
+            StopCoroutine(coroutine);
+
+        coroutine = StartCoroutine(sword.ReinforceAttack(target, targetScale));
     }
 
     public override void Power1()
     {
-        targetScale = Vector2.one * 1.5f;
+        targetScale = Vector3.one * 1.5f;
     }
 
     public override void Power2()
     {
-        targetScale = Vector2.one * 2f;
+        targetScale = Vector3.one * 2f;
     }
 
     public override void Power3()
     {
-        targetScale = Vector2.one * 2.5f;
+        targetScale = Vector3.one * 2.5f;
     }
 
     public override void Power4()
     { 
-        targetScale = Vector2.one * 3f;
+        targetScale = Vector3.one * 3f;
     }
 
     public override void Power5()
     {
-        targetScale = Vector2.one * 5f;
+        targetScale = Vector3.one * 5f;
     }
 }
