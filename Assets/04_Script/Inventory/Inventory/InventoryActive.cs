@@ -50,6 +50,7 @@ public class InventoryActive : MonoBehaviour
     PanelFade fade;
 
     TextMeshProUGUI _warningText;
+    TextMeshProUGUI _warningTextInven;
 
     readonly string invenShader = "_SourceGlowDissolveFade";
 
@@ -63,6 +64,7 @@ public class InventoryActive : MonoBehaviour
         invenRenderer = _invenPanel.GetComponent<Image>();
         fade = transform.Find("FadePanel").GetComponent<PanelFade>();
         _warningText = transform.Find("WarningText").GetComponent<TextMeshProUGUI>();
+        _warningTextInven = transform.Find("WarningTextInven").GetComponent<TextMeshProUGUI>();
         mat = invenRenderer.material;
 
         mat.SetFloat(invenShader, 0f);
@@ -138,6 +140,13 @@ public class InventoryActive : MonoBehaviour
         CameraManager.Instance.CameraShake(3f, 0.05f);
         _warningText.DOFade(1f, 0f);
         _warningText.DOFade(0f, 2f);
+    }
+
+    public void WarningTextInvenFull()
+    {
+        CameraManager.Instance.CameraShake(3f, 0.05f);
+        _warningTextInven.DOFade(1f, 0f);
+        _warningTextInven.DOFade(0f, 2f);
     }
 
     IEnumerator DelayCo()
