@@ -44,7 +44,7 @@ public class LaserSkillObj : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(_weaponTrm.position, _target.position - _weaponTrm.position, int.MaxValue, LayerMask.GetMask("Enemy"));
 
             if(hit.collider == null)
-            hit = Physics2D.Raycast(_weaponTrm.position, _target.position - _weaponTrm.position, int.MaxValue, LayerMask.GetMask("Enemy"));
+            hit = Physics2D.Raycast(_weaponTrm.position, _target.position - _weaponTrm.position, int.MaxValue, LayerMask.GetMask("Boss"));
 
             if (hit.collider != null)
             {
