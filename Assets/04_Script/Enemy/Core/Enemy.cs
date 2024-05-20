@@ -54,6 +54,7 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
     //PathFinding
     private JPSPathFinderFaster m_jpsPathFinderFaster;
     public JPSPathFinderFaster GetPathFinder => m_jpsPathFinderFaster;
+    public Stage OwnerStage { get; set; }
 
     //Debuff
     public EDebuffType DebuffType { get; set; }

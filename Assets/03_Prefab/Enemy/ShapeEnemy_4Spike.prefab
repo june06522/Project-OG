@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2910700034615785567}
   - component: {fileID: 1271857690570348402}
   - component: {fileID: 4529928127874005601}
+  - component: {fileID: -7750093037527779676}
   m_Layer: 14
   m_Name: ShapeEnemy_4Spike
   m_TagString: HitAble
@@ -131,6 +132,23 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.3
+--- !u!114 &-7750093037527779676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271857690570348367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61f326f337a58ed47a3b1842fdd6ef48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_priorityQueueMaxCapacity: 200
+  m_pathResultPoolMaxCapacity: 100
+  m_closeListCapacity: 100
+  m_optimizePath: 1
+  m_findWalkableOnBlockedGoal: 1
 --- !u!1 &6064227577146123574
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,8 +267,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b8c23d8711efd149b9824440dd9a127, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  endValue: 0.5
   time: 0.1
+  isPlayer: 0
 --- !u!1 &6653646009477312630
 GameObject:
   m_ObjectHideFlags: 0
