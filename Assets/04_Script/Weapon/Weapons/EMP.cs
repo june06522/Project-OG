@@ -91,9 +91,9 @@ public class EMP : InvenWeapon
 
     }
 
-    public override void Run(Transform target)
+    public override void Run(Transform target, bool isSkill = false)
     {
-        base.Run(target);
+        base.Run(target, isSkill);
 
         if (!isAttack)
         {

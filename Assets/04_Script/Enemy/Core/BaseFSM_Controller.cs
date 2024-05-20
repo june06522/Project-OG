@@ -138,30 +138,30 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
 
     private void OnDrawGizmos()
     {
-        if (EditorApplication.isPlaying)
-        {
-            Color originalColor = Gizmos.color;
+        //if (EditorApplication.isPlaying)
+        //{
+        //    Color originalColor = Gizmos.color;
 
-            if (m_fasterPath.Count > 0)
-            {
-                Gizmos.color = Color.green;
+        //    if (m_fasterPath.Count > 0)
+        //    {
+        //        Gizmos.color = Color.green;
 
-                foreach (var loc in m_fasterPath)
-                    Gizmos.DrawCube(new Vector3(loc.x, loc.y, 0), new Vector3(0.5f, 0.5f, 0.5f));
+        //        foreach (var loc in m_fasterPath)
+        //            Gizmos.DrawCube(new Vector3(loc.x, loc.y, 0), new Vector3(0.5f, 0.5f, 0.5f));
 
-                Gizmos.DrawLine(transform.position, m_fasterPath.First.Value);
+        //        Gizmos.DrawLine(transform.position, m_fasterPath.First.Value);
 
-                for (LinkedListNode<Vector2> iter = m_fasterPath.First; iter.Next != null; iter = iter.Next)
-                {
-                    Vector3 from = iter.Value;
-                    Vector3 to = iter.Next.Value;
+        //        for (LinkedListNode<Vector2> iter = m_fasterPath.First; iter.Next != null; iter = iter.Next)
+        //        {
+        //            Vector3 from = iter.Value;
+        //            Vector3 to = iter.Next.Value;
 
-                    Gizmos.DrawLine(from, to);
-                }
-            }
+        //            Gizmos.DrawLine(from, to);
+        //        }
+        //    }
 
-            Gizmos.color = originalColor;
-        }
+        //    Gizmos.color = originalColor;
+        //}
     }
     //public void PrintRoute(List<Vector3> route)
     //{

@@ -15,9 +15,7 @@ public class SequenceAttackSkill : Skill
     {
         for (int i = 0; i < power; i++)
         {
-            weapon.Data.isSkillAttack = true;
-            weapon.Run(target);
-            weapon.Data.isSkillAttack = false;
+            weapon.Run(target,true);
             yield return new WaitForSeconds(0.1f);
         }
         yield return null;

@@ -52,6 +52,10 @@ public class Item : MonoBehaviour, IInteractable
                 Destroy(gameObject);
             }
         }
+        else
+        {
+            GameManager.Instance.InventoryActive.WarningTextInvenFull();
+        }
     }
 
     public InvenBrick GetBrick() => brick;
