@@ -12,8 +12,9 @@ public class DashDrone : Skill
     {
 
         var blt = Instantiate(bullet, weaponTrm.position, weaponTrm.rotation);
-        blt.Shoot(bullet.Data.Damage * power);
-        blt.transform.localScale = Vector3.one * 2f;
+        blt.GetComponent<SpriteRenderer>().color = new Color(1, 0, 1, 1);
+        blt.Shoot(bullet.Data.Damage * power * power);
+        blt.transform.localScale = Vector3.one * 4f;
 
         transform.DOShakePosition(0.1f, 0.25f);
 
