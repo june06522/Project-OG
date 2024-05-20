@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
 [System.Serializable]
@@ -138,10 +139,30 @@ public class Stage : MonoBehaviour
     // GridInfo
     private JPSGridInfoFaster m_jpsGridInfoFaster;
     public JPSGridInfoFaster GridInfo => m_jpsGridInfoFaster;
-    
+
+    private Tilemap tilemap;
+
     private void Awake()
     {
-        m_jpsGridInfoFaster = GetComponent<JPSGridInfoFaster>();
+        if(TryGetComponent<JPSGridInfoFaster>(out m_jpsGridInfoFaster))
+        {
+            transform.Find("TempStage/Grid/Tilemap").TryGetComponent<Tilemap>(out tilemap);
+        }
+        
+    }
+
+    private void Start()
+    {
+        SetJPSGridPos();
+    }
+
+    public void SetJPSGridPos()
+    {
+        if(m_jpsGridInfoFaster != null)
+        {
+            m_jpsGridInfoFaster.SetGridPoint(tilemap);
+            m_jpsGridInfoFaster.BakeGridInfo();
+        }
     }
 
     public void AddNextStage(Stage stage)
@@ -361,6 +382,7 @@ public class Stage : MonoBehaviour
 
         SoundManager.Instance.SFXPlay("MonsterSpawn", _monsterSpawnClip, 0.4f);
     }
+
     IEnumerator MonsterSpawn()
     {
         isMonsterSpawning = true;
@@ -422,14 +444,12 @@ public class Stage : MonoBehaviour
         for(int i = 0; i < minValue; ++i)
         {
             monsterCount++;
-            Enemy spawnEnemy = Instantiate(enemyList[i], spawnPoints[i].position + offset, Quaternion.identity);
-            spawnEnemy.DeadEvent += HandleWaveClearCheck;
+            SpawnEnemy(enemyList[i], spawnPoints[i].position + offset, Quaternion.identity);
         }
         for (int i = 0; i < waveInfo.anchoredMobInfo.Count; ++i)
         {
             monsterCount++;
-            Enemy spawnEnemy = Instantiate(waveInfo.anchoredMobInfo[i].enemy, waveInfo.anchoredMobInfo[i].spawnPos.position, Quaternion.identity);
-            spawnEnemy.DeadEvent += HandleWaveClearCheck;
+            SpawnEnemy(waveInfo.anchoredMobInfo[i].enemy, waveInfo.anchoredMobInfo[i].spawnPos.position, Quaternion.identity);
         }
         #endregion
         #region Delayed Spawn Monster
@@ -487,18 +507,23 @@ public class Stage : MonoBehaviour
             for (int i = 0; i < minValue; ++i)
             {
                 monsterCount++;
-                Enemy spawnEnemy = Instantiate(spawnEnemies[i], delaySpawnList[i].position + offset, Quaternion.identity);
-                spawnEnemy.DeadEvent += HandleWaveClearCheck;
+                SpawnEnemy(spawnEnemies[i], delaySpawnList[i].position + offset, Quaternion.identity);
             }
 
-            
         }
-
 
         #endregion
 
 
         isMonsterSpawning = false;
+    }
+
+
+    public void SpawnEnemy(Enemy enemy, Vector2 pos, Quaternion quaternion)
+    {
+        Enemy spawnEnemy = Instantiate(enemy, pos, quaternion);
+        spawnEnemy.DeadEvent += HandleWaveClearCheck;
+        spawnEnemy.OwnerStage = this;
     }
 
     public void DiscountMonster()

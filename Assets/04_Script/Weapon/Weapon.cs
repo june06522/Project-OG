@@ -66,6 +66,6 @@ public abstract class Weapon : MonoBehaviour
 
     public string GetName()
     {
-        return id.ToString();
+        return WeaponExplainManager.weaponName[id];
     }
 }

@@ -24,6 +24,7 @@ public class RotateSkillManager : MonoBehaviour
 
     private float curWidth;
     private float curHeight;
+    private float curRotateSpeed;
 
     private List<RotateClone> rotateClones;
 
@@ -60,7 +61,14 @@ public class RotateSkillManager : MonoBehaviour
     //RotateSkill���� ȣ��.
     public void SetCloneInfo(WeaponID id, int count)
     {
-        _cloneDictionary[id] = count;
+        if (_cloneDictionary.ContainsKey(id))
+        {
+            _cloneDictionary[id] += count;
+        }
+        else
+        {
+            _cloneDictionary[id] = count;
+        }
     }
 
     public RotateClone GetClonePrefabInfo(WeaponID id)
@@ -91,9 +99,11 @@ public class RotateSkillManager : MonoBehaviour
 
         // Ŭ�� ��ġ ���� & Dissolve ����
         int cloneCnt = rotateClones.Count;
+        float modifyValue = (cloneCnt / radiusIncreaseFlag);
 
-        curWidth = width + (cloneCnt/ radiusIncreaseFlag) * 0.5f;
-        curHeight = height + (cloneCnt/ radiusIncreaseFlag) * 0.5f;
+        curWidth = width + modifyValue * 0.5f;
+        curHeight = height + modifyValue * 0.5f;
+        curRotateSpeed = maxRotateSpeed + maxRotateSpeed * modifyValue;
 
         for (int i = 0; i < cloneCnt; i++)
         {
@@ -151,6 +161,8 @@ public class RotateSkillManager : MonoBehaviour
         {
             _cloneDictionary[(WeaponID)type] = 0;
         }
+
+        curRotateSpeed = maxRotateSpeed;
     }
 
     private void Start()
@@ -159,7 +171,6 @@ public class RotateSkillManager : MonoBehaviour
         {
             PlayerController.EventController.OnMove += SetRunning;
             PlayerController.EventController.OnIdle += SetIdle;
-
         }
     }
 
@@ -181,8 +192,7 @@ public class RotateSkillManager : MonoBehaviour
         if (isRunning && _endSetting)
         {
             int cloneCnt = rotateClones.Count;
-            //Debug.Log($"ang : " + cloneCnt);
-            float addRotateValue = maxRotateSpeed * Time.deltaTime;
+            float addRotateValue = curRotateSpeed * Time.deltaTime;
             for (int i = 0; i < cloneCnt; i++)
             {
                 RotateClone clone = rotateClones[i];

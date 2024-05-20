@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
@@ -19,7 +20,6 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
     public Enemy Enemy { get; private set; }
     public AIData AIdata { get; private set; }
 
-    private Stage m_ownerStage; 
     private LinkedList<Vector2> m_fasterPath = new();
 
     protected override void Awake()
@@ -57,7 +57,6 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
         Enemy.MovementInput = Vector2.zero;
     }
 
-
     public void Flip(bool left)
     {
         transform.rotation = left ? Quaternion.identity : Quaternion.Euler(0, 180, 0);
@@ -84,17 +83,18 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
     {
         if (Enemy.GetPathFinder == null)
             return;
-
+        if(Enemy.OwnerStage == null) 
+            return;    
         
         Vector2 m_start = transform.position;
         Vector2 m_goal = Target.position;
 
         m_fasterPath.Clear();
         {
-            if(m_ownerStage.GridInfo != null)
+            if(Enemy.OwnerStage.GridInfo != null)
             {
                 bool isPathFound = Enemy.GetPathFinder.FindPath
-                    (m_ownerStage.GridInfo,
+                    (Enemy.OwnerStage.GridInfo,
                     m_start,
                     m_goal,
                     ref m_fasterPath); // ** find path from start to goal **
@@ -107,8 +107,10 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
         if (m_fasterPath != null && m_fasterPath.Count > 0)
         {
             nextPos = m_fasterPath.First.Value;
-            m_fasterPath.RemoveFirst();
-
+            if (Vector2.Distance((Vector2)transform.position, m_fasterPath.First.Value) < 0.05f)
+            {
+                m_fasterPath.RemoveFirst();
+            }
             return true;
         }
         else
@@ -118,6 +120,49 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
 
     }
 
+    public bool IsBetweenObstacle()
+    {
+        if (AIdata.currentTarget != null)
+        {
+            Vector2 dir = AIdata.currentTarget.transform.position - transform.position;
+            if (Physics2D.Raycast(transform.position, 
+                dir.normalized, 
+                dir.magnitude, 
+                EnemyDataSO.ObstacleLayer))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (EditorApplication.isPlaying)
+        {
+            Color originalColor = Gizmos.color;
+
+            if (m_fasterPath.Count > 0)
+            {
+                Gizmos.color = Color.green;
+
+                foreach (var loc in m_fasterPath)
+                    Gizmos.DrawCube(new Vector3(loc.x, loc.y, 0), new Vector3(0.5f, 0.5f, 0.5f));
+
+                Gizmos.DrawLine(transform.position, m_fasterPath.First.Value);
+
+                for (LinkedListNode<Vector2> iter = m_fasterPath.First; iter.Next != null; iter = iter.Next)
+                {
+                    Vector3 from = iter.Value;
+                    Vector3 to = iter.Next.Value;
+
+                    Gizmos.DrawLine(from, to);
+                }
+            }
+
+            Gizmos.color = originalColor;
+        }
+    }
     //public void PrintRoute(List<Vector3> route)
     //{
     //    if (route == null) return;

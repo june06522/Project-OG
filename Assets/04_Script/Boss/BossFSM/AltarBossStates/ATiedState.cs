@@ -6,6 +6,9 @@ public class ATiedState : BossBaseState
     private AltarBoss _altar;
     private AltarPattern _pattern;
 
+    private IEnumerator RandomPatternCo;
+    private IEnumerator patternCo;
+
     public ATiedState(AltarBoss boss, AltarPattern pattern) : base(boss, pattern)
     {
         _altar = boss;
@@ -14,6 +17,7 @@ public class ATiedState : BossBaseState
 
     public override void OnBossStateExit()
     {
+        StopNowCoroutine();
         _altar.bossMove.StopMovement(true);
 
         _altar.SetBody(_altar.bigestBody, Vector3.one, Vector3.zero, _altar.bossColor, 0.5f);
@@ -28,16 +32,18 @@ public class ATiedState : BossBaseState
         _altar.isStop = false;
         _altar.isTied = true;
 
-        _altar.StartCoroutine(RandomPattern(_altar.so.PatternChangeTime));
-        _altar.StartCoroutine(_altar.bossMove.BossMovement(_altar.so.StopTime, 0.5f, 0.5f, _altar.so.Speed, _altar.so.WallCheckRadius));
+        RandomPatternCo = RandomPattern(_altar.so.PatternChangeTime / 2);
+        _altar.StartCoroutine(RandomPatternCo);
+        _altar.StartCoroutine(_altar.bossMove.BossMovement(_altar.so.StopTime / 2, 1, -1, 1, -1, _altar.so.Speed, _altar.so.WallCheckRadius));
     }
 
     public override void OnBossStateUpdate()
     {
-        if(!_altar.isTied)
+        if(!_altar.isTied || _altar.isUnChained)
         {
-            _altar.StopCoroutine(RandomPattern(_altar.so.PatternChangeTime));
-            StopNowCoroutine();
+            _altar.StopCoroutine(RandomPatternCo);
+            _altar.StopCoroutine(patternCo);
+            _altar.isAttacking = false;
         }
     }
 
@@ -53,19 +59,10 @@ public class ATiedState : BossBaseState
 
             yield return new WaitForSeconds(waitTime);
 
-            int rand = Random.Range(1, 3);
-
             _altar.isAttacking = true;
 
-            switch (rand)
-            {
-                case 1:
-                    NowCoroutine(_pattern.OmnidirAttack(_altar, 18, 5, 1, 1));
-                    break;
-                case 2:
-                    NowCoroutine(_pattern.OmniGuidPlayerAttack(_altar, 18, 5, 1, 1));
-                    break;
-            }
+            patternCo = _pattern.OmniGuidPlayerAttack(_altar, 18, 5, 2, 1);
+            NowCoroutine(patternCo);
         }
     }
 }

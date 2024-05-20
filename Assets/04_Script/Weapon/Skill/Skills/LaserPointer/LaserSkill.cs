@@ -12,7 +12,7 @@ public class LaserSkill : Skill
 
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
-        if (target == null || weaponTrm == null || trigger.trigger == null)
+        if (target == null || weaponTrm == null || trigger == null || trigger.trigger == null)
             return;
 
         var tuple = Tuple.Create(weaponTrm, trigger.trigger);

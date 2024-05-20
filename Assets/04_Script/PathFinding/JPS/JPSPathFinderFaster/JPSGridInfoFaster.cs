@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Tilemaps;
 
 
 namespace DSNavigation
@@ -40,6 +41,15 @@ namespace DSNavigation
         [SerializeField] uint m_InGridHorizontalSize;
         [SerializeField] uint m_InGridVerticalSize;
 
+        public void SetGridPoint(Tilemap tilemap)
+        {
+            //tilemap.CompressBounds();
+            Bounds bounds = tilemap.localBounds;
+            m_InGridStartPoint = tilemap.transform.TransformPoint(bounds.min);
+            m_InGridEndPoint = tilemap.transform.TransformPoint(bounds.max);
+
+            Init();
+        }
 
         [Header("Bake Info")]
         [SerializeField] Vector2 m_collisionCheckSensorSize = new Vector2(1, 1);
@@ -52,7 +62,8 @@ namespace DSNavigation
         public Vector2 CollisionCheckSensorSize => m_collisionCheckSensorSize;
         public LayerMask LayerToCheckCollide => m_InLayerToCheckCollide;
 
-        void Awake()
+
+        void Init()
         {
 
             Assert.IsTrue(m_InGridHorizontalSize > 0);

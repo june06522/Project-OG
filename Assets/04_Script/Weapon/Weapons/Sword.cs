@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 // �׽�Ʈ��
@@ -20,6 +21,8 @@ public class Sword : InvenWeapon
 
     Transform wayPointTrmParent;
     Coroutine attackCor;
+
+    private int _leftAttack = 0;
 
     protected override void Awake()
     {
@@ -67,7 +70,13 @@ public class Sword : InvenWeapon
 
     public override void Attack(Transform target)
     {
-        if (isAttack) return;
+        if (isAttack)
+        {
+            _leftAttack = Mathf.Min(7,_leftAttack + 1);
+            return;
+        }
+        if (_leftAttack > 0)
+            _leftAttack--;
         if (attackCor != null)
             StopCoroutine(attackCor);
 
@@ -107,7 +116,8 @@ public class Sword : InvenWeapon
             wayPoints.Append(transform.localPosition);
             if (sign == -1)
                 wayPoints.Reverse();
-        }else
+        }
+        else
         {
             wayPoints = GetLocalWayPoints(Vector3.zero);
             sign = 1;
@@ -120,9 +130,9 @@ public class Sword : InvenWeapon
 
         float duration = this.duration - 0.2f;
         DOTween.Sequence().
-            Append(transform.DOLocalPath(wayPoints, duration, PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
-            Insert(0.05f, transform.DORotate(new Vector3(0, 0, endAngle), duration + 0.05f).SetEase(ease));
-      
+            Append(transform.DOLocalPath(wayPoints, duration * GetCoolDown(), PathType.CatmullRom, PathMode.TopDown2D, 30).SetEase(ease)).
+            Insert(0.05f, transform.DORotate(new Vector3(0, 0, endAngle), (duration + 0.05f) * GetCoolDown()).SetEase(ease));
+
         if (_attackSoundClip != null)
         {
 
@@ -141,26 +151,26 @@ public class Sword : InvenWeapon
         Debug.Log($"Reinforce : " + reinforce);
         isAttack = true;
         _col.enabled = true;
-        
-      
+
+
         //transform.DOKill();
 
-        if(reinforce)
+        if (reinforce)
         {
             AttackSequence(target);
-            yield return new WaitForSeconds(duration);
-            transform.DOScale(Vector3.one, 0.35f)
+            yield return new WaitForSeconds(duration * GetCoolDown());
+            transform.DOScale(Vector3.one, 0.35f * GetCoolDown())
                 .SetEase(Ease.InOutSine);
         }
         else
         {
             AttackSequence(target);
-            yield return new WaitForSeconds(duration);
+            yield return new WaitForSeconds(duration * GetCoolDown());
         }
 
         _col.enabled = false;
         //_col.transform.localPosition = origin;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.2f * GetCoolDown());
         isAttack = false;
     }
 
@@ -231,4 +241,10 @@ public class Sword : InvenWeapon
         }
     }
 
+    private float GetCoolDown()
+    {
+        if (_leftAttack > 0)
+            return 1f / 5f;
+        return Mathf.Max(Data.GetCool() / Data.GetOriginCool() , 1f / 5f);
+    }
 }

@@ -70,8 +70,6 @@ public class InventoryActive : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.C))
-            WarningText();
         if (canOpen)
         {
             if (((KeyManager.Instance == null && Input.GetKeyDown(KeyCode.Tab)) ||
@@ -110,7 +108,7 @@ public class InventoryActive : MonoBehaviour
 
         seq = DOTween.Sequence();
         seq.Append(DOTween.To(() => initValue, value => mat.SetFloat(invenShader, value), 15f, easingtime)).SetEase(ease);
-        seq.Join(ScreenManager.Instance.SetEffect(0.3f, 0.65f, DG.Tweening.Ease.InQuad));
+        seq.Join(ScreenManager.Instance.SetEffect(0.11f, 0.65f, DG.Tweening.Ease.InQuad));
 
         seq.AppendCallback(() => { isAnimation = true; });
 

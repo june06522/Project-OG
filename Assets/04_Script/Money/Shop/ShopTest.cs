@@ -10,7 +10,7 @@ public class ShopTest : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.M) && Input.GetKey(KeyCode.LeftControl))
             _shop.PlayerMoney.EarnGold(10);
         if (Input.GetKeyDown(KeyCode.Escape))
         {

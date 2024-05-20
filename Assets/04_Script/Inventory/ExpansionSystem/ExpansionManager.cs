@@ -44,10 +44,8 @@ public class ExpansionManager : MonoSingleton<ExpansionManager>
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Z))
+        if (Input.GetKeyUp(KeyCode.Z) && Input.GetKey(KeyCode.LeftControl))
             AddSlotcnt(5);
-        if (Input.GetKeyUp(KeyCode.X))
-            UseSlot(5);
     }
 
     public void AddSlotcnt(int plusVal = 1)

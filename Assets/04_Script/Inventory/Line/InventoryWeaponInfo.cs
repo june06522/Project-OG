@@ -13,7 +13,7 @@ public class InventoryWeaponInfo : MonoBehaviour
     InvenBrick[] brickList = null;
     int[] dx = { 0, 0, 1, -1 };
     int[] dy = { 1, -1, 0, 0 };
-    List<Tuple<string, int>> list = new List<Tuple<string, int>>();
+    List<Tuple<GeneratorID, int>> list = new List<Tuple<GeneratorID, int>>();
     private void Awake()
     {
         if (Instance == null)
@@ -24,10 +24,10 @@ public class InventoryWeaponInfo : MonoBehaviour
         inventory = FindObjectOfType<WeaponInventory>();
     }
 
-    public List<Tuple<string, int>> GetConnect(int x, int y)
+    public List<Tuple<GeneratorID, int>> GetConnect(int x, int y)
     {
         //변수
-        list = new List<Tuple<string, int>>();
+        list = new List<Tuple<GeneratorID, int>>();
         isVisit = new Hashtable();
         end = new Hashtable();
         brickList = GetComponentsInChildren<InvenBrick>();
@@ -63,7 +63,7 @@ public class InventoryWeaponInfo : MonoBehaviour
         foreach (DictionaryEntry item in end)
         {
             InventoryObjectData obj = (InventoryObjectData)item.Key;
-            list.Add(Tuple.Create(obj.generatorID.ToString(),(int)item.Value + 1)); 
+            list.Add(Tuple.Create(obj.generatorID,(int)item.Value + 1)); 
         }
 
         return list;
@@ -101,7 +101,7 @@ public class InventoryWeaponInfo : MonoBehaviour
 
             if (isfind)
             {
-                list.Add(Tuple.Create(tempData.generatorID.ToString(), 1));
+                list.Add(Tuple.Create(tempData.generatorID, 1));
             }
         }
 
