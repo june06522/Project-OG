@@ -110,7 +110,7 @@ public class Stage : MonoBehaviour
     private List<GameObject> stageItems = new List<GameObject>();
 
     [SerializeField]
-    private Chest _stageChest;
+    private StageChest _stageChest;
 
     [SerializeField]
     private StageType _stageType = StageType.EnemyStage;

@@ -96,7 +96,7 @@ public class StageGate : MonoBehaviour, IInteractable
         if (NextStage != null)
         {
 
-            GameManager.Instance.player.position = NextStage.playerSpawnPos;
+            GameManager.Instance.PlayerTeleport(NextStage.playerSpawnPos);
             NextStage.SetGlobalLight();
             NextStage.SetCameraSize();
 

@@ -73,7 +73,6 @@ public class RandomStageSystem : MonoBehaviour
 
         #region Create Stages
         Stage lastStage = _firstStage = Instantiate(floorInfo.StartStage, _spawnPos, Quaternion.identity);
-        CameraManager.Instance.SetMinimapCameraPostion(_firstStage.transform.position);
 
         for (int i = 0; i < printStageInfo.Count; ++i)
         {
@@ -109,7 +108,7 @@ public class RandomStageSystem : MonoBehaviour
         }
         #endregion
 
-        GameManager.Instance.player.position = _firstStage.playerSpawnPos;
+        GameManager.Instance.PlayerTeleport(_firstStage.playerSpawnPos);
         _firstStage.AppearGate();
         lastStage.OnGateEvent += ClearBossStage;
         
