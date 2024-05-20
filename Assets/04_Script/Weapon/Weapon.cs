@@ -26,14 +26,14 @@ public abstract class Weapon : MonoBehaviour
 
     }
 
-    public virtual void Run(Transform target)
+    public virtual void Run(Transform target, bool isSkill = false)
     {
 
         this.target = target;
 
         RotateWeapon(target);
 
-        if ((!Data.isAttackCoolDown || Data.isSkillAttack) && target != null)
+        if ((!Data.isAttackCoolDown || isSkill) && target != null)
         {
             if(!Data.isAttackCoolDown)
                 Data.SetCoolDown();

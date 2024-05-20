@@ -18,12 +18,12 @@ public class WeaponDataSO : ScriptableObject
     private Weapon owner;
 
     public bool isAttackCoolDown { get; protected set; }
-    public bool isSkillAttack = false;
+    //public bool isSkillAttack = false;
 
     public void Init(Weapon owner)
     {
 
-        isSkillAttack = false;
+        //isSkillAttack = false;
         this.owner = owner;
 
     }
