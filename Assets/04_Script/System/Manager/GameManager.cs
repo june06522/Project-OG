@@ -31,15 +31,24 @@ public class GameManager : MonoSingleton<GameManager>
     #region 상태 관련
     [HideInInspector] public bool isShopOpen = false;
     [HideInInspector] public bool isPlay = false;
+    [HideInInspector] public bool canControl = true;
     #endregion
 
     [NonSerialized] public Transform player;
+    private PlayerController playerController;
 
     private void Awake()
     {
 
         #region 객체 할당
         player = GameObject.Find("Player").GetComponent<Transform>();
+
+        if (player != null)
+        {
+
+            playerController = player.GetComponent<PlayerController>();
+
+        }
 
         if (inventory == null)
         {
@@ -69,5 +78,19 @@ public class GameManager : MonoSingleton<GameManager>
                 Debug.LogError("invenAddType is null! You should add Component InvenBrickAddType in Inven Parent!");
         }
         #endregion
+    }
+
+    public void PlayerTeleport(Vector3 pos)
+    {
+        
+        if (playerController != null)
+        {
+
+            playerController.ChangeState(EnumPlayerState.Idle);
+
+        }
+
+        player.position = pos;
+
     }
 }
