@@ -43,6 +43,9 @@ public class LaserSkillObj : MonoBehaviour
             obj.LineRenderer.positionCount = 2;
             RaycastHit2D hit = Physics2D.Raycast(_weaponTrm.position, _target.position - _weaponTrm.position, int.MaxValue, LayerMask.GetMask("Enemy"));
 
+            if(hit.collider == null)
+            hit = Physics2D.Raycast(_weaponTrm.position, _target.position - _weaponTrm.position, int.MaxValue, LayerMask.GetMask("Enemy"));
+
             if (hit.collider != null)
             {
                 obj.SetLine(_weaponTrm.position, hit.point, _power, 0.01f * _power * _power);
