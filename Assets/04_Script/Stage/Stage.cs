@@ -213,9 +213,9 @@ public class Stage : MonoBehaviour
         {
             GameObject chest = null;
             if (_gateSpawnPos == null)
-                chest = Instantiate(_stageChest, transform.position - new Vector3(0, 3, 0), Quaternion.identity).gameObject;
+                chest = Instantiate(_stageChest, transform.position - new Vector3(0, 5, 0), Quaternion.identity).gameObject;
             else
-                chest = Instantiate(_stageChest, _gateSpawnPos.position - new Vector3(0, 3, 0), Quaternion.identity).gameObject;
+                chest = Instantiate(_stageChest, _gateSpawnPos.position - new Vector3(0, 5, 0), Quaternion.identity).gameObject;
 
             stageItems.Add(chest);
 
