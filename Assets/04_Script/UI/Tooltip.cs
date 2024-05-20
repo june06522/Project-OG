@@ -67,6 +67,8 @@ public class Tooltip : MonoBehaviour
         titleTexts.ForEach((text) => text.Init());
         mainTexts.ForEach((text) => text.Init());
         image.Init(GetColor(CurrentItemRate));
+
+        seq.Kill();
     }
 
     private Color GetColor(ItemRate currentItemRate)
@@ -80,7 +82,6 @@ public class Tooltip : MonoBehaviour
 
         Init();
 
-        seq.Kill();
         seq = DOTween.Sequence();
         seq.Append(DOTween.To(() => fadeStart,
                   (value) => mat.SetFloat(shader, value), 
