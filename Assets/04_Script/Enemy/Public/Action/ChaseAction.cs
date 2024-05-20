@@ -13,7 +13,6 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
     bool useNav;
 
-    Vector2 nextPos;
     Vector3 currentPos;
     List<Vector3> route;
 
@@ -22,6 +21,9 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
 
     List<SteeringBehaviour> behaviours;
     Vector2 movementInput;
+
+    float t = 0f;
+    float pathTimer = 0.5f;
     
     public ChaseAction(BaseFSM_Controller<T> controller, List<SteeringBehaviour> behaviours, bool checkCollision) : base(controller)
     {
@@ -33,7 +35,8 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     public override void OnEnter()
     {
         controller.Enemy.enemyAnimController.SetMove(true);
-        controller.FixedUpdateAction += OnFixedUpdate;  
+        controller.FixedUpdateAction += OnFixedUpdate;
+        controller.FindPath();
     }
 
     public override void OnExit()
@@ -46,31 +49,39 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
     {
         Vector2 dir = (targetTrm.position - controller.transform.position);
         Vector2 movementInput;
+        Vector2 nextPos = controller.transform.position;
         
         if(controller.IsBetweenObstacle())
         {
-            controller.FindPath();
-        }
-
-        if( controller.GetNextPath(ref nextPos) == true)
-        {
-            if (Vector2.Distance(nextPos, controller.transform.position) < 0.01f)
-                controller.GetNextPath(ref nextPos);
-
-            movementInput = (nextPos - (Vector2)controller.transform.position).normalized;
-            controller.Enemy.MovementInput = movementInput;
-            
-        }
-        else if (dir.magnitude > _data.AttackAbleRange)
-        {
-            if(controller.Enemy.enemyAnimController.IsMove == false)
-                controller.Enemy.enemyAnimController.SetMove(true);
-            movementInput = controller.Solver.GetDirectionToMove(behaviours, controller.AIdata);
-            controller.Enemy.MovementInput = movementInput;
+            if (controller.GetNextPath(ref nextPos))
+            {
+                movementInput = (nextPos - (Vector2)controller.transform.position).normalized;
+                controller.Enemy.MovementInput = movementInput;
+                Debug.Log(nextPos);
+            }
         }
         else
         {
-            controller.StopImmediately();
+            controller.ResetPath();
+            if (dir.magnitude > _data.AttackAbleRange)
+            {
+                if(controller.Enemy.enemyAnimController.IsMove == false)
+                    controller.Enemy.enemyAnimController.SetMove(true);
+                movementInput = controller.Solver.GetDirectionToMove(behaviours, controller.AIdata);
+                controller.Enemy.MovementInput = movementInput;
+            }
+            else
+            {
+                controller.StopImmediately();
+            }
+
+        }
+
+        t += Time.fixedDeltaTime;
+        if(t > pathTimer)
+        {
+            t = 0;
+            controller.FindPath();
         }
     }
 
