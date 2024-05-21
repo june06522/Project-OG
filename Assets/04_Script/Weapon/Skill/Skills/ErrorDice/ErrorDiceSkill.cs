@@ -38,8 +38,9 @@ public class ErrorDiceSkill : Skill
                 s = weaponList[i].skillList[j];
         }
 
-        Debug.Log("스킬실행");
-        if (WeaponExplainManager.triggerExplain[(GeneratorID)i] == TriggerID.Idle ||
+        if((GeneratorID)i == GeneratorID.RotateWeapon)
+            s.Excute(weaponTrm, target, power);
+        else if (WeaponExplainManager.triggerExplain[(GeneratorID)i] == TriggerID.Idle ||
         WeaponExplainManager.triggerExplain[(GeneratorID)i] == TriggerID.Move)
             StartCoroutine(Co(s, weaponTrm, target, power));
         else
