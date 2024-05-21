@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System.Collections;
+using System.Globalization;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -23,6 +24,7 @@ public class Sword : InvenWeapon
     Coroutine attackCor;
 
     private int _leftAttack = 0;
+    private bool _isTween;
 
     protected override void Awake()
     {
@@ -86,17 +88,20 @@ public class Sword : InvenWeapon
 
     public IEnumerator ReinforceAttack(Transform target, Vector3 targetScale)
     {
-        transform.localScale = targetScale;
+        if (!_isTween)
+            SetScaleTween(targetScale);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
         transform.localScale = Vector3.one;
-        //transform
-        //   .DOScale(targetScale, 0f)
-        //   .SetEase(ease).OnComplete(() =>
-        //   {
-        //attackCor = StartCoroutine(AttackTween(true, target));
-        //});
+        _isTween = false;
+
+    }
+
+    private void SetScaleTween(Vector3 targetScale)
+    {
+        _isTween = true;
+        transform.DOScale(targetScale, duration).SetEase(ease);
     }
 
     int sign = 1;
