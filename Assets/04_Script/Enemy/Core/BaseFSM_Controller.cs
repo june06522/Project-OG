@@ -11,7 +11,6 @@ using UnityEngine;
 public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
 {
     [field: SerializeField] public EnemyDataSO EnemyDataSO { get; protected set; }
-    [SerializeField] public EnemyFindEffect enemyFindEffect;
     //public Navigation Nav;
     public ContextSolver Solver;
 
@@ -71,12 +70,6 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
         else
             spriteRender.color = color;
 
-    }
-
-    public void PlayDiscoverAnim()
-    {
-        Vector2 spawnPoint = new Vector2(-0.8f, 1.2f);
-        Instantiate(enemyFindEffect, transform).transform.localPosition = spawnPoint;
     }
 
     public void FindPath()
