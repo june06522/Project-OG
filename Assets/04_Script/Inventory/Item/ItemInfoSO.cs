@@ -26,14 +26,14 @@ public class ItemInfoSO : ScriptableObject
 #if UNITY_EDITOR
     private void OnValidate()
     {
-
+        
         //Brick = Brick.GetComponent<InvenBrick>();
         if (Brick == null)
             Debug.LogError("Don't find Item Class");
         else
         {
             Image image = Brick.GetComponent<Image>();
-            if (image != null)
+            if( image != null )
                 Sprite = image.sprite;
         }
     }
