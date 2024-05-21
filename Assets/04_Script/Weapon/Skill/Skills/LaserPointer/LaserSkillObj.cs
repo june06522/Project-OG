@@ -40,21 +40,25 @@ public class LaserSkillObj : MonoBehaviour
         while (isMoving)
         {
             isMoving = false;
-            obj.LineRenderer.positionCount = 2;
-            RaycastHit2D hit = Physics2D.Raycast(_weaponTrm.position, _target.position - _weaponTrm.position, int.MaxValue, LayerMask.GetMask("Enemy"));
-
-            if(hit.collider == null)
-            hit = Physics2D.Raycast(_weaponTrm.position, _target.position - _weaponTrm.position, int.MaxValue, LayerMask.GetMask("Boss"));
-
-            if (hit.collider != null)
+            if(_target != null)
             {
-                obj.SetLine(_weaponTrm.position, hit.point, _power, 0.01f * _power * _power);
-                obj.LineRenderer.enabled = true;
-                obj.EdgeCollider.SetPoints(new List<Vector2>
-            {
-                _weaponTrm.position,
-                hit.point
-            });
+                obj.LineRenderer.positionCount = 2;
+                RaycastHit2D hit = Physics2D.Raycast(_weaponTrm.position, _target.position - _weaponTrm.position, int.MaxValue, LayerMask.GetMask("Enemy"));
+
+                if(hit.collider == null)
+                hit = Physics2D.Raycast(_weaponTrm.position, _target.position - _weaponTrm.position, int.MaxValue, LayerMask.GetMask("Boss"));
+
+                if (hit.collider != null)
+                {
+                    obj.SetLine(_weaponTrm.position, hit.point, _power, 0.01f * _power * _power);
+                    obj.LineRenderer.enabled = true;
+                    obj.EdgeCollider.SetPoints(new List<Vector2>
+                {
+                    _weaponTrm.position,
+                    hit.point
+                });
+
+                }
 
             }
             yield return null;
