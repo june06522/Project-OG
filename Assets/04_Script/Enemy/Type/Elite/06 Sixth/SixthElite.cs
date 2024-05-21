@@ -82,6 +82,13 @@ public partial class SixthElite : MonoBehaviour, IHitAble
         StartCoroutine(Charging(1, transform.position, _rigid.velocity));
     }
 
+    private void Update()
+    {
+        Vector2 dir = GameManager.Instance.player.position - transform.position;
+        float z = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        _visual.transform.rotation = Quaternion.Euler(0, 0, z - 90);
+    }
+
     public bool Hit(float damage)
     {
         if (_isDead) return false;
