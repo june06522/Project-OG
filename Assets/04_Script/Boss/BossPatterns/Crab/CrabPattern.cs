@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 // Laser랑 Bubble은 연계기로 사용하자
 public class CrabPattern : BossPatternBase
@@ -212,27 +213,24 @@ public class CrabPattern : BossPatternBase
 
         yield return new WaitForSeconds(0.2f);
 
+        int count = _boss.leftJoints.transform.childCount;
+        List<Vector3> originSize = new ();
+        for (int i = 0; i < count; i++)
+        {
+            GameObject obj = _boss.leftJoints.transform.GetChild(i).gameObject;
+            originSize.Add(obj.transform.localScale);
+            obj.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InOutSine);
+        }
+
         float curTime = 0;
         float animTime = 1;
+        float speed;
         Vector3 originPos = _boss.crabLeftNipper.transform.position;
-        Vector3 beforePos;
 
         while(curTime < animTime)
         {
             curTime += Time.deltaTime;
             _boss.crabLeftNipper.transform.position = Vector3.MoveTowards(_boss.crabLeftNipper.transform.position, _boss.crabLeftNipper.transform.position + (Vector3)dir, Time.deltaTime * 30);
-            beforePos = _boss.crabLeftNipper.transform.position;
-            if(curTime > animTime / 4)
-            {
-                int count = _boss.leftJoints.transform.childCount;
-                for(int i = 0; i < count; i++)
-                {
-                    GameObject obj = _boss.leftJoints.transform.GetChild(i).gameObject;
-                    Vector3 temp = obj.transform.position;
-                    obj.transform.position = Vector3.MoveTowards(obj.transform.position, beforePos, Time.deltaTime * 30 / i + 1);
-                    beforePos = temp;
-                }
-            }
             yield return null;
         }
 
