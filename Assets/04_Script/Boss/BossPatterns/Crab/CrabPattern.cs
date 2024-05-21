@@ -207,38 +207,73 @@ public class CrabPattern : BossPatternBase
         _boss.isAttacking = true;
         _boss.animator.enabled = false;
 
-        Vector2 dir = GameManager.Instance.player.position - _boss.crabLeftNipper.transform.position;
-        float z = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        _boss.crabLeftNipper.transform.localRotation = Quaternion.Euler(0, 0, z + 30);
-
-        yield return new WaitForSeconds(0.2f);
-
         int count = _boss.leftJoints.transform.childCount;
         List<Vector3> originSize = new ();
         for (int i = 0; i < count; i++)
         {
             GameObject obj = _boss.leftJoints.transform.GetChild(i).gameObject;
-            originSize.Add(obj.transform.localScale);
-            obj.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InOutSine);
+            if(obj.activeSelf != false)
+            {
+                originSize.Add(obj.transform.localScale);
+                obj.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InOutSine);
+
+                yield return new WaitForSeconds(0.2f);
+            }
         }
+        originSize.Add(_boss.crabLeftNipper.transform.localScale);
 
         float curTime = 0;
-        float animTime = 1;
-        float speed;
-        Vector3 originPos = _boss.crabLeftNipper.transform.position;
-
-        while(curTime < animTime)
+        float warningTime = 1f;
+        GameObject warningLine = ObjectPool.Instance.GetObject(ObjectPoolType.CrabWarningLine, _boss.leftFirePos);
+        warningLine.transform.localPosition = Vector3.zero;
+        Vector2 dir = Vector2.zero;
+        while (curTime < warningTime)
         {
             curTime += Time.deltaTime;
-            _boss.crabLeftNipper.transform.position = Vector3.MoveTowards(_boss.crabLeftNipper.transform.position, _boss.crabLeftNipper.transform.position + (Vector3)dir, Time.deltaTime * 30);
+            dir = GameManager.Instance.player.position - _boss.crabLeftNipper.transform.position;
+            float z = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            _boss.crabLeftNipper.transform.DORotate(new Vector3(0, 0, z + 30), 0.2f).SetEase(Ease.InOutSine);
+
             yield return null;
         }
 
+        curTime = 0;
+        float speed = 60;
+        float animTime = 30 / speed;
+        Vector3 originPos = _boss.crabLeftNipper.transform.position;
+
+        while (curTime < animTime)
+        {
+            curTime += Time.deltaTime;
+            _boss.crabLeftNipper.transform.position = Vector3.MoveTowards(_boss.crabLeftNipper.transform.position, _boss.crabLeftNipper.transform.position + (Vector3)dir, Time.deltaTime * speed);
+            yield return null;
+        }
+
+        _boss.crabLeftNipper.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InOutSine)
+            .OnComplete(() =>
+            {
+                _boss.crabLeftNipper.SetActive(false);
+            });
+
         yield return new WaitForSeconds(0.5f);
 
-        _boss.crabLeftNipper.transform.position = originPos;
+        for (int i = 0; i < originSize.Count; i++)
+        {
+            GameObject obj = _boss.leftJoints.transform.GetChild(i).gameObject;
+            obj.transform.DOScale(originSize[i], 0.5f).SetEase(Ease.InOutSine);
 
-        _boss.isAttacking = false;
-        _boss.animator.enabled = true;
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        _boss.crabLeftNipper.transform.position = originPos;
+        _boss.crabLeftNipper.transform.rotation = Quaternion.identity;
+        _boss.crabLeftNipper.SetActive(true);
+
+        _boss.crabLeftNipper.transform.DOScale(originSize[originSize.Count - 1], 0.5f).SetEase(Ease.InOutSine)
+            .OnComplete(() =>
+            {
+                _boss.isAttacking = false;
+                _boss.animator.enabled = true;
+            });
     }
 }
