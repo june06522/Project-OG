@@ -42,66 +42,66 @@ public class EventTriggerManager : MonoBehaviour
     #region 익스큐트 관리
     public void CoolExecute()
     {
-        PlayerController.EventController.OnCoolExecute();
+        PlayerController.EventController?.OnCoolExecute();
     }
 
     public void IdleExecute()
     {
         if (_playerRb.velocity == Vector2.zero)
         {
-            PlayerController.EventController.OnIdleExecute();
+            PlayerController.EventController?.OnIdleExecute();
         }
     }
 
     public void BasicAttackExecute(Weapon weapon)
     {
-        PlayerController.EventController.OnBasicAttackExecute(weapon);
+        PlayerController.EventController?.OnBasicAttackExecute(weapon);
     }
 
     public void RunExecute()
     {
         if (_playerRb.velocity != Vector2.zero)
-            PlayerController.EventController.OnMoveExecute();
+            PlayerController.EventController?.OnMoveExecute();
     }
 
     public void DashExecute()
     {
-        PlayerController.EventController.OnDashExecute();
+        PlayerController.EventController?.OnDashExecute();
     }
 
     public void HitExecute()
     {
-        PlayerController.EventController.OnHitExecute();
+        PlayerController.EventController?.OnHitExecute();
     }
 
     public void RoomEnterExecute()
     {
-        PlayerController.EventController.OnRoomEnterExecute();
+        PlayerController.EventController?.OnRoomEnterExecute();
     }
 
     public void StageClearExecute()
     {
-        PlayerController.EventController.OnStageClearExecute();
+        PlayerController.EventController?.OnStageClearExecute();
     }
 
     public void WaveStartExecute()
     {
-        PlayerController.EventController.OnWaveStartExecute();
+        PlayerController.EventController?.OnWaveStartExecute();
     }
 
     public void SkillExecute()
     {
-        PlayerController.EventController.OnSkillxecute();
+        PlayerController.EventController?.OnSkillxecute();
     }
 
     public void EnemyDieExecute()
     {
-        PlayerController.EventController.OnEnemyDieExecute();
+        PlayerController.EventController?.OnEnemyDieExecute();
     }
 
     public void AlwaysExecute()
     {
-        PlayerController.EventController.OnAlwaysExecute();
+        PlayerController.EventController?.OnAlwaysExecute();
     }
 
     #endregion
