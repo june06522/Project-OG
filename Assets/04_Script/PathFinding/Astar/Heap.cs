@@ -5,19 +5,19 @@ using UnityEngine;
 
 namespace Astar
 {
-    public class Heap
+    public class Heap<T> where T : IComparable<T>
     {
-        private List<Node> _heap;
+        private List<T> _heap;
 
         public int Count => _heap.Count;
-        public Node Root => _heap[0];
+        public T Root => _heap[0];
 
         public Heap(int roomNodeSize)
         {
-            _heap = new List<Node>(roomNodeSize);
+            _heap = new List<T>(roomNodeSize);
         }
 
-        public void Push(Node data)
+        public void Push(T data)
         {
             _heap.Add(data);
             int idx = _heap.Count - 1;
@@ -37,12 +37,12 @@ namespace Astar
             }
         }
 
-        public Node Pop()
+        public T Pop()
         {
             if (_heap.Count == 0)
                 throw new InvalidOperationException();
 
-            Node ret = _heap[0];
+            T ret = _heap[0];
 
             int lastIndex = _heap.Count - 1;
             _heap[0] = _heap[lastIndex];
@@ -78,10 +78,11 @@ namespace Astar
             return ret;
         }
 
-        public Node Contains(Node other)
+        public T Contains(T other)
         {
-            return _heap.Find((node) => node == other);
+            return _heap.Find((node) => node.CompareTo(other) == 0);
         }
+
 
         public void Clear()
         {

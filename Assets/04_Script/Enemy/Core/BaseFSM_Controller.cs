@@ -11,7 +11,7 @@ using UnityEngine;
 public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
 {
     [field: SerializeField] public EnemyDataSO EnemyDataSO { get; protected set; }
-    //public Navigation Nav;
+    public Navigation Nav;
     public ContextSolver Solver;
 
     public event Action FixedUpdateAction;
@@ -25,7 +25,6 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
     {
         Enemy = GetComponent<Enemy>();
         AIdata = GetComponent<AIData>();
-        //spriteRender = transform.Find("Body").GetComponent<SpriteRenderer>();
     }
 
     protected virtual void Start()
@@ -33,14 +32,12 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
         EnemyDataSO = Instantiate(EnemyDataSO);
         //Nav = new(Enemy);
         Solver = new();
-        //    Target = GameManager.Instance.player;
-        Target = GameObject.Find("Player").transform;
+        Target = GameManager.Instance.player;
     }
 
     protected override void Update()
     {
         if (Enemy.Dead) return;
-        //Debug.Log(currentState);
         base.Update();
     }
 
@@ -130,6 +127,16 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
         return false;
     }
 
+    public bool IsPath()
+    {
+        return m_fasterPath.Count > 0;
+    }
+
+    public void ResetPath()
+    {
+        m_fasterPath.Clear();
+    }
+
     private void OnDrawGizmos()
     {
         //if (EditorApplication.isPlaying)
@@ -157,22 +164,4 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
         //    Gizmos.color = originalColor;
         //}
     }
-
-    public bool IsPath()
-    {
-        return m_fasterPath.Count > 0;
-    }
-
-    public void ResetPath()
-    {
-        m_fasterPath.Clear();
-    }
-    //public void PrintRoute(List<Vector3> route)
-    //{
-    //    if (route == null) return;
-    //    if (route.Count < 2) return;
-    //    lineRenderer.positionCount = route.Count;
-
-    //    lineRenderer.SetPositions(route.ToArray());
-    //}
 }

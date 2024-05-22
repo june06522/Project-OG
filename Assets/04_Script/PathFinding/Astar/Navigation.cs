@@ -9,7 +9,7 @@ namespace Astar
     {
         List<Node> roomNodes; // 맵에 미리 구워놓고 그걸로 판단하려면 얘 살려야함. 나중에 최적화용.
         List<Node> closeNodes;
-        Heap openNodes;
+        Heap<Node> openNodes;
 
         BoundsInt roomBounds;
 
@@ -32,7 +32,7 @@ namespace Astar
 
             //this.obstacleLayer = enemy.EnemyDataSO.ObstacleLayer;
 
-           
+
             //int capacity = enemy.RoomInfo.bound.size.x * enemy.RoomInfo.bound.size.y;
             //openNodes = new Heap(capacity);
             //closeNodes = new List<Node>(capacity);
