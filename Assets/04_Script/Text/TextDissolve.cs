@@ -12,43 +12,18 @@ public enum TextType
     MAIN
 }
 
-public class TextDissolve : MonoBehaviour
+public class TextDissolve : DissolveBase
 {
-    TextMeshProUGUI m_text;
-    Material mat;
 
     [SerializeField] TextType m_type;
-    [SerializeField] Ease ease;
-    [SerializeField] float duration;
-
     public TextType Type { get { return m_type; } }
 
-    private readonly string shader = "_FullAlphaDissolveFade";
-    private void Awake()
-    {
-        m_text = GetComponent<TextMeshProUGUI>();
-        m_text.material = Instantiate(m_text.material);
-        mat = m_text.materialForRendering;
-    }
+    private new readonly string shader = "_FullAlphaDissolveFade";
 
-    public void Init()
+    TextMeshProUGUI m_text;
+    
+    public override void Init(Color color = default)
     {
         mat.SetFloat(shader, 0);
-    }
-
-    public Tween Dissolve(bool value)
-    {
-        //float width = m_text.preferredWidth;
-        //Debug.Log(width);
-        //float leftPos = m_text.rectTransform.anchoredPosition.x;
-        //float rightPos = m_text.rectTransform.anchoredPosition.x + width;
-
-        float startPos = 0f;
-        float endPos = 1f;
-
-        return DOTween.To(() => startPos, 
-                  (value) => mat.SetFloat(shader, value),
-                  endPos, 
-                  duration);
     }
 }

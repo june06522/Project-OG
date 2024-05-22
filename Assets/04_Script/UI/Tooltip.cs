@@ -15,23 +15,36 @@ struct RateColor
 
 public class Tooltip : MonoBehaviour
 {
+    [Header("Tooltip value")]
     [SerializeField] List<RateColor> colorList;
     [SerializeField] float duration;
     [SerializeField] Ease ease;
+    Material tooltipMat;
 
-    private List<TextDissolve> titleTexts;
-    private List<TextDissolve> mainTexts;
-    private ImageDissolve image;
+    [Header("TextValue")]
+    [SerializeField]
+    Material textMat;
+    [SerializeField]
+    float textTweenDuration;
 
-    private readonly string shader = "_DirectionalGlowFadeFade";
-    private readonly float fadeEnd = -0.2f;
-    private readonly float fadeStart = 1.6f;
+    private readonly float _tooltipDissolveStart = 1.6f;
+    private readonly float _tooltipDissolveEnd = -0.2f;
+ 
+    private readonly float _textDissolveStart = 0f;
+    private readonly float _textDissolveEnd = 1f;
+
+    private readonly string directionalGlowFade = "_DirectionalGlowFadeFade";
+    private readonly string alphaFade = "_FullAlphaDissolveFade";
 
     public ItemRate CurrentItemRate { get; set; }
-    Material mat;
 
     RectTransform rectTransform;
     Sequence seq;
+
+    DissolveParameters tooltipDissolveParmas;
+    DissolveParameters textDissolveParams;
+
+    private ImageDissolve imageDissolve;
 
     private void Awake()
     {
@@ -39,20 +52,15 @@ public class Tooltip : MonoBehaviour
 
         Image img = GetComponent<Image>();
         img.material = Instantiate(img.material);
-        mat = img.materialForRendering;
-        mat.SetFloat(shader, fadeStart); 
-        
+        tooltipMat = img.materialForRendering;
 
-        image = transform.Find("Image").GetComponent<ImageDissolve>();
-        TextDissolve[] texts = GetComponentsInChildren<TextDissolve>();
-        
-        titleTexts = (from text in texts
-                     where text.Type == TextType.TITLE
-                     select text).ToList();
+        imageDissolve = transform.Find("Image").GetComponent<ImageDissolve>();
 
-        mainTexts = (from text in texts
-                      where text.Type == TextType.MAIN
-                      select text).ToList();
+        tooltipDissolveParmas = 
+            new DissolveParameters(tooltipMat, _tooltipDissolveStart, _tooltipDissolveEnd, duration, ease, directionalGlowFade);
+    
+        textDissolveParams = 
+            new DissolveParameters(textMat, _textDissolveStart, _textDissolveEnd, textTweenDuration, Ease.Linear, alphaFade);
     }
 
     private void Start()
@@ -60,14 +68,13 @@ public class Tooltip : MonoBehaviour
         Init();
     }
 
-
     public void Init()
-    {
-        mat.SetFloat(shader, fadeStart);    
-        titleTexts.ForEach((text) => text.Init());
-        mainTexts.ForEach((text) => text.Init());
-        image.Init(GetColor(CurrentItemRate));
-
+    { 
+        //Material ÃÊ±âÈ­
+        tooltipMat.SetFloat(directionalGlowFade, _textDissolveStart);
+        textMat.SetFloat(alphaFade, _textDissolveStart);
+        imageDissolve.Init(GetColor(CurrentItemRate));
+        
         seq.Kill();
     }
 
@@ -83,26 +90,11 @@ public class Tooltip : MonoBehaviour
         Init();
 
         seq = DOTween.Sequence();
-        seq.Append(DOTween.To(() => fadeStart,
-                  (value) => mat.SetFloat(shader, value), 
-                  fadeEnd,
-                  duration).SetEase(ease));
-        
-        float time = seq.Duration();
-        seq.Append(titleTexts[0].Dissolve(true));
-        //for(int i = 0; i < titleTexts.Count; ++i)
-        //{
-        //    seq.Append(titleTexts[0].Dissolve(true));
-        //}
-        
-        for (int i = 0; i < mainTexts.Count; ++i)
-        {
-            seq.Join(mainTexts[i].Dissolve(true));
-        }
 
-        seq.Append(image.Dissolve());
-
-        
+        seq.Append(Dissolver.Dissolve(tooltipDissolveParmas, true));
+        seq.Append(Dissolver.Dissolve(textDissolveParams, true));
+        seq.Append(imageDissolve.Dissolve(true));
+                
         seq.Restart();
     }
 }
