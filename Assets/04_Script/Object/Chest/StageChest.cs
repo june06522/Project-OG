@@ -25,7 +25,7 @@ public class StageChest : MonoBehaviour, IInteractable
     [SerializeField]
     private int _dropMaxGold = 50;
 
-    private Dictionary<ItemRate, List<ItemInfoSO>> _rateItems = new Dictionary<ItemRate, List<ItemInfoSO>>();
+    private Dictionary<ItemRate, Queue<ItemInfoSO>> _rateItems = new Dictionary<ItemRate, Queue<ItemInfoSO>>();
 
     [Header("Chest Info")]
     [SerializeField] private Sprite _openSprite;
@@ -47,31 +47,37 @@ public class StageChest : MonoBehaviour, IInteractable
             return;
         }
         
-        SetRateItems(_itemList.ItemInfoList.ToArray());
     }
 
-    private void SetRateItems(ItemInfoSO[] itemInfoSOs)
+    public void SetRateItems(ItemType itemType)
     {
+        List<ItemInfoSO> itemInfoSOs = _itemList.ItemInfoList;
+
         _rateItems.Clear();
-        _rateItems[ItemRate.NORMAL] = new List<ItemInfoSO>();
-        _rateItems[ItemRate.RARE] = new List<ItemInfoSO>();
-        _rateItems[ItemRate.EPIC] = new List<ItemInfoSO>();
-        _rateItems[ItemRate.LEGEND] = new List<ItemInfoSO>();
+        _rateItems[ItemRate.NORMAL]     = new Queue<ItemInfoSO>();
+        _rateItems[ItemRate.RARE]       = new Queue<ItemInfoSO>();
+        _rateItems[ItemRate.EPIC]       = new Queue<ItemInfoSO>();
+        _rateItems[ItemRate.LEGEND]     = new Queue<ItemInfoSO>();
+
+        Dictionary<ItemRate, List<ItemInfoSO>> rateItems = new Dictionary<ItemRate, List<ItemInfoSO>>();
 
         foreach (ItemInfoSO item in itemInfoSOs)
         {
-            _rateItems[item.Rate].Add(item);
+            if (item.Brick.Type != itemType)
+                continue;
+
+            rateItems[item.Rate].Add(item);
         }
 
         // List Shuffle
-        foreach (var items in _rateItems)
+        foreach (var items in rateItems)
         {
-            ShuffleList(items.Value);
+            SetRateItemQueue(items.Key, items.Value);
         }
 
     }
 
-    private void ShuffleList(List<ItemInfoSO> list)
+    private void SetRateItemQueue(ItemRate type, List<ItemInfoSO> list)
     {
         int shuffleCount = Mathf.Min(_itemCount, list.Count);
 
@@ -79,10 +85,8 @@ public class StageChest : MonoBehaviour, IInteractable
         {
             int randomIdx = Random.Range(i, list.Count);
 
-            ItemInfoSO temp = list[randomIdx];
+            _rateItems[type].Enqueue(list[randomIdx]);
             list[randomIdx] = list[i];
-            list[i] = temp;
-
         }
     }
 
@@ -148,32 +152,19 @@ public class StageChest : MonoBehaviour, IInteractable
         List<ItemInfoSO> itemList = new List<ItemInfoSO>();
 
         // Set ItemRate
-        float percent = Random.Range(0f, 100f); // 0 ~ 100
-        ItemRate rate = ItemRate.NORMAL;
-
-        int index = 0;
-
-        if (percent <= _legendProbability)
-            rate = ItemRate.LEGEND;
-        else if (percent <= _legendProbability + _epicProbability)
-            rate = ItemRate.EPIC;
-        else if (percent <= _legendProbability + _epicProbability + _rareProbability)
-            rate = ItemRate.RARE;
-
-        while (itemList.Count < _itemCount)
+        for(int i = 0; i < _itemCount; ++i)
         {
-            while (_rateItems[rate].Count <= index)
-            {
-                if (rate == ItemRate.LEGEND)
-                    rate = ItemRate.NORMAL;
-                else
-                    rate = rate + 1;
+            float percent = Random.Range(0f, 100f); // 0 ~ 100
+            ItemRate rate = ItemRate.NORMAL;
 
-                index = 0;
-            }
+            if (percent <= _legendProbability)
+                rate = ItemRate.LEGEND;
+            else if (percent <= _legendProbability + _epicProbability)
+                rate = ItemRate.EPIC;
+            else if (percent <= _legendProbability + _epicProbability + _rareProbability)
+                rate = ItemRate.RARE;
 
-            itemList.Add(_rateItems[rate][index]);
-            index++;
+            itemList.Add(_rateItems[rate].Dequeue());
         }
         
         return itemList;
