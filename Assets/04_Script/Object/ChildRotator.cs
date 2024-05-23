@@ -13,10 +13,20 @@ public class ChildRotator : MonoBehaviour
 
     private void OnEnable()
     {
-        children = gameObject.GetComponentsInChildren<Transform>().ToList<Transform>();
+        for(int i = 0; i < transform.childCount; ++i)
+        {
+            Transform child = transform.GetChild(i).GetComponent<Transform>();
+            if (child != null)
+            {
+                children.Add(child);
+            }
+        }
+        
 
         if (children.Count > 0 && children[0] == transform)
             children.RemoveAt(0);
+
+
     }
 
     private void Update()

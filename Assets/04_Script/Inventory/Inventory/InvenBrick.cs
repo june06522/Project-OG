@@ -8,7 +8,7 @@ using DG.Tweening;
 
 public enum ItemType
 {
-    Weapon,
+    Weapon = 0,
     Generator,
     Connector
 }

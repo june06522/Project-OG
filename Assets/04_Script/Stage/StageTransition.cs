@@ -13,23 +13,20 @@ public class StageTransition : MonoBehaviour
 
     public void StartTransition(float time)
     {
-
-
         if(_stageTransitionClip != null)
             SoundManager.Instance.SFXPlay("Transition", _stageTransitionClip, 1f);
 
-        _circleTransition.SetOnOff(true);
         _circleTransition.PlayCircleSizeChange(Vector3.one * 2800, Vector3.zero, time, true);
     }
 
     public void EndTransition(float time)
     {
         
-        _circleTransition.PlayCircleSizeChange(Vector3.zero, Vector3.one * 2800, time);
+        _circleTransition.PlayCircleSizeChange(Vector3.zero, Vector3.one * _circleTransition.CircleMaxValue, time);
         FAED.InvokeDelay(() =>
         {
             _circleTransition.SetOnOff(false);
-        }, time + 0.01f);
+        }, time + 0.1f);
 
     }
 

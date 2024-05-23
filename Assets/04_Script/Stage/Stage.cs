@@ -56,7 +56,7 @@ public enum StageType
 
 public class Stage : MonoBehaviour
 {
-    public List<Stage> NextStage { get; private set; } = new List<Stage>();
+    public Stage NextStage { get; private set; }
     public event Action OnStageClearEvent;
     public event Action OnGateEvent;
 
@@ -111,6 +111,7 @@ public class Stage : MonoBehaviour
 
     [SerializeField]
     private StageChest _stageChest;
+    private ItemType _itemType;
 
     [SerializeField]
     private StageType _stageType = StageType.EnemyStage;
@@ -165,9 +166,13 @@ public class Stage : MonoBehaviour
         }
     }
 
-    public void AddNextStage(Stage stage)
+    public void SetNextStage(Stage stage)
     {
-        NextStage.Add(stage);
+        NextStage = stage;
+    }
+    public void SetType(ItemType type)
+    {
+        _itemType = type;
     }
 
     public void StartWave()
@@ -211,13 +216,14 @@ public class Stage : MonoBehaviour
 
         if (_stageChest != null)
         {
-            GameObject chest = null;
+            StageChest chest = null;
             if (_gateSpawnPos == null)
-                chest = Instantiate(_stageChest, transform.position - new Vector3(0, 5, 0), Quaternion.identity).gameObject;
+                chest = Instantiate(_stageChest, transform.position - new Vector3(0, 5, 0), Quaternion.identity);
             else
-                chest = Instantiate(_stageChest, _gateSpawnPos.position - new Vector3(0, 5, 0), Quaternion.identity).gameObject;
+                chest = Instantiate(_stageChest, _gateSpawnPos.position - new Vector3(0, 5, 0), Quaternion.identity);
 
-            stageItems.Add(chest);
+            chest.SetRateItems(_itemType);
+            stageItems.Add(chest.gameObject);
 
         }
     }
@@ -271,18 +277,30 @@ public class Stage : MonoBehaviour
         if(_stageClearClip != null)
             SoundManager.Instance.SFXPlay("Clear", _stageClearClip, 1f);
 
-        if (_stageType == StageType.BossStage || NextStage.Count == 0)
+        if (_stageType == StageType.BossStage)
         {
             SpawnGate(null);
         }
-        else if (NextStage.Count == 1)
+        else if (_stageType == StageType.Start)
         {
-            SpawnGate(NextStage[0]);
+            SpawnGate(NextStage, Vector3.zero, ItemType.Generator);
         }
-        else if (NextStage.Count == 2)
+        else
         {
-            SpawnGate(NextStage[0], -new Vector3(2, 0, 0));
-            SpawnGate(NextStage[1], new Vector3(2, 0, 0));
+            //Shuffle
+            ItemType[] itemTypes = { ItemType.Weapon, ItemType.Generator, ItemType.Connector };
+            for(int i = 0; i < 2; ++i)
+            {
+                int randIndex = Random.Range(i, itemTypes.Length);
+
+                ItemType temp = itemTypes[i];
+                itemTypes[i] = itemTypes[randIndex];
+                itemTypes[randIndex] = temp;
+
+            }
+
+            SpawnGate(NextStage, -new Vector3(3, 0, 0), itemTypes[0]);
+            SpawnGate(NextStage, new Vector3(3, 0, 0), itemTypes[1]);
         }
 
         // effect or tween
@@ -297,16 +315,39 @@ public class Stage : MonoBehaviour
             CameraManager.Instance.SetDefaultCam();
     }
 
-    private void SpawnGate(Stage stage, Vector3 offset = new Vector3())
+    private void SpawnGate(Stage stage, Vector3 offset, ItemType type)
+    {
+        if (stageGate == null)
+            return;
+
+        StageGate gate = null;
+        if (_gateSpawnPos == null)
+            gate = Instantiate(stageGate, transform.position + offset, Quaternion.identity);
+        else
+            gate = Instantiate(stageGate, _gateSpawnPos.position + offset, Quaternion.identity);
+
+        gate.OnGateEvent += HandleGateEvent;
+        gate.OnMoveEndEvent += HandleDestroyGate;
+        stageItems.Add(gate.gameObject);
+
+        if (stage != null)
+        {
+
+            gate.SetStage(stage, type);
+
+        }
+    }
+
+    private void SpawnGate(Stage stage)
     {
         if (stageGate == null)
             return;
 
         StageGate gate = null;
         if(_gateSpawnPos == null)
-            gate = Instantiate(stageGate, transform.position + offset, Quaternion.identity);
+            gate = Instantiate(stageGate, transform.position, Quaternion.identity);
         else
-            gate = Instantiate(stageGate, _gateSpawnPos.position + offset, Quaternion.identity);
+            gate = Instantiate(stageGate, _gateSpawnPos.position, Quaternion.identity);
 
         gate.OnGateEvent += HandleGateEvent;
         gate.OnMoveEndEvent += HandleDestroyGate;
@@ -319,12 +360,10 @@ public class Stage : MonoBehaviour
 
         }
     }
+
     public void DestroyStage()
     {
-        foreach(var stage in NextStage)
-        {
-            stage.DestroyStage();
-        }
+        NextStage.DestroyStage();
         Destroy(gameObject);
     }
     private void HandleDestroyGate()
