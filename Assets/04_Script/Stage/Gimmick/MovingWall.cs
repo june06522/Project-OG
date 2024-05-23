@@ -16,6 +16,14 @@ public class MovingWall : MonoBehaviour
     private void Start()
     {
 
+        Init();
+
+    }
+
+    [ContextMenu("Test")]
+    private void Init()
+    {
+
         anchorPos = transform.position;
         moveDir.Normalize();
 
@@ -27,7 +35,6 @@ public class MovingWall : MonoBehaviour
 
         line.SetPosition(0, new Vector2(minX, minY));
         line.SetPosition(1, new Vector2(maxX, maxY));
-
     }
 
     private void Update()
