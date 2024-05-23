@@ -60,6 +60,10 @@ public class StageChest : MonoBehaviour, IInteractable
         _rateItems[ItemRate.LEGEND]     = new Queue<ItemInfoSO>();
 
         Dictionary<ItemRate, List<ItemInfoSO>> rateItems = new Dictionary<ItemRate, List<ItemInfoSO>>();
+        rateItems[ItemRate.NORMAL]     = new List<ItemInfoSO>();
+        rateItems[ItemRate.RARE]       = new List<ItemInfoSO>();
+        rateItems[ItemRate.EPIC]       = new List<ItemInfoSO>();
+        rateItems[ItemRate.LEGEND]     = new List<ItemInfoSO>();
 
         foreach (ItemInfoSO item in itemInfoSOs)
         {
