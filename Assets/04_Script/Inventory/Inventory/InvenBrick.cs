@@ -26,6 +26,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     public ItemType Type = ItemType.Weapon;
     [SerializeField] protected ItemRate itemRate = ItemRate.NORMAL;
+    public ItemRate ItemRate => itemRate;
 
     protected bool isDrag;
     protected bool isHover;

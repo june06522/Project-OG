@@ -14,6 +14,11 @@ public class IngameUIManager : MonoSingleton<IngameUIManager>
 
     private Sequence _sequence = null;
 
+    [Header("Ingame UI")]
+    [SerializeField]
+    private IngameTooltip _ingameTooltip;
+    public IngameTooltip IngameTooltip => _ingameTooltip;
+
     public void SetStageTitle(string titleText, string subText, float interval = 0f, float textTime = 0.1f, float time = 1f)
     {
         if (_titleText == null || _subText == null)
