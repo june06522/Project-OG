@@ -15,7 +15,6 @@ public class InventoryActive : MonoBehaviour
     [SerializeField]
     AnimationCurve animCurve;
 
-
     [HideInInspector]
     public Image[] images;
     [HideInInspector]
@@ -23,7 +22,6 @@ public class InventoryActive : MonoBehaviour
 
     bool isOn = false;
 
-    //[SerializeField] GameObject _playerUI;
     [SerializeField] GameObject _invenPanel;
     [SerializeField] GameObject _invenInfoPanel;
     [SerializeField] Transform _components;
