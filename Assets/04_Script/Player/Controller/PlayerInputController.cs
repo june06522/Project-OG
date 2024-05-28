@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public delegate void TwoDirInput(Vector2 dir);
 public delegate void OneDirInput(float value);
@@ -16,7 +17,11 @@ public class PlayerInputController : IDisposable
 
     private Vector3 _lastNearObjPos = Vector3.zero;
     public GameObject _interactUI { get; private set; }
+    private GameObject _interactObject;
     private bool _isDetectIntractObj = false;
+
+    private Item _detectItem = null;
+    private bool _isDetectItem = false;
 
     public AudioClip clip;
 
@@ -28,6 +33,7 @@ public class PlayerInputController : IDisposable
         CheckMovementKeyInput(rb2D);
         CheckDashKey();
         CheckInteractable();
+        CheckItemInfo();
 
         if (Input.GetKeyDown(KeyCode.P))
         {
@@ -37,6 +43,7 @@ public class PlayerInputController : IDisposable
         }
 
     }
+
 
     // 남준성 인벤토리 열리는 거 이거 쓰면 됌
     public void Animation()
@@ -75,6 +82,7 @@ public class PlayerInputController : IDisposable
         {
 
             _isDetectIntractObj = false;
+            _interactObject = null;
 
             if (_interactUI != null)
             {
@@ -110,6 +118,14 @@ public class PlayerInputController : IDisposable
         Vector3 uiPos = nearObject.transform.position;
         uiPos.y = nearObject.bounds.max.y + 0.2f;
 
+        if (nearObject.gameObject != _interactObject)
+        {
+
+            _detectItem = null;
+            _interactObject = nearObject.gameObject;
+
+        }
+
         if (_interactUI != null && (_isDetectIntractObj == false || uiPos != _lastNearObjPos))
         {
 
@@ -136,6 +152,45 @@ public class PlayerInputController : IDisposable
             }
 
         }
+
+    }
+
+    private void CheckItemInfo()
+    {
+
+        if (_interactObject == null)
+        {
+
+            if (_isDetectItem)
+            {
+
+                IngameUIManager.Instance.IngameTooltip.OffInfo();
+                _isDetectItem = false;
+
+            }
+
+            return;
+        }
+
+        if (_isDetectItem && _detectItem != null)
+        {
+            IngameUIManager.Instance.IngameTooltip.SetInfo(_detectItem);
+        }
+        else if (_interactObject.TryGetComponent<Item>(out Item item) && item.Brick.Type != ItemType.Connector)
+        {
+
+            _detectItem = item;
+            IngameUIManager.Instance.IngameTooltip.SetInfo(item);
+            _isDetectItem = true;
+
+        }
+        else if (_isDetectItem)
+        {
+            IngameUIManager.Instance.IngameTooltip.OffInfo();
+            _isDetectItem = false;
+        }
+
+
 
     }
 

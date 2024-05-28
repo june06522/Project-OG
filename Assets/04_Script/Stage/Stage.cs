@@ -285,6 +285,10 @@ public class Stage : MonoBehaviour
         {
             SpawnGate(NextStage, Vector3.zero, ItemType.Generator);
         }
+        else if (NextStage.ThisStageType != StageType.EnemyStage)
+        {
+            SpawnGate(NextStage);
+        }
         else
         {
             //Shuffle

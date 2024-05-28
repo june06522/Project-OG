@@ -16,12 +16,17 @@ public class Item : MonoBehaviour, IInteractable
     private WeaponInventory inventory;
     private Transform parent;
 
+    private Collider2D _collider2D;
+    public Vector3 UIPos => new Vector3(transform.position.x, _collider2D.bounds.max.y + 1f, 0);
+
     public event Action<Transform> OnInteractItem;
 
     private void Awake()
     {
 
         inventory = GameManager.Instance.Inventory;
+
+        _collider2D = GetComponent<Collider2D>();
 
         if (brick.InvenObject.colorMat != null)
             parent = GameManager.Instance.invenAddType.generator;

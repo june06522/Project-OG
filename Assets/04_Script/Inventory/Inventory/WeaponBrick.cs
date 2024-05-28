@@ -8,7 +8,8 @@ using UnityEngine.EventSystems;
 
 public class WeaponBrick : InvenBrick
 {
-    [SerializeField] private InvenWeapon weaponPrefab;
+    [SerializeField] private InvenWeapon _weaponPrefab;
+    public InvenWeapon WeaponPrefab => _weaponPrefab;
 
     private WeaponController weaponController;
     private InvenWeapon weapon;
@@ -26,7 +27,7 @@ public class WeaponBrick : InvenBrick
     // 장착 시 실행
     public override void Settings()
     {
-        weapon = Instantiate(weaponPrefab);
+        weapon = Instantiate(_weaponPrefab);
         //Debug.Log("이건가");
         InvenObject.OnSignalReceived -= HandleWeaponSiganl;
         InvenObject.OnSignalReceived += HandleWeaponSiganl;
@@ -66,11 +67,11 @@ public class WeaponBrick : InvenBrick
         ItemExplain.Instance.HoverWeapon(invenPoint, image.sprite, GetName(), GetDamage(), GetExplain(), GetOnSkillList(),GetEvaluation());
     }
 
-    private float GetDamage() => weaponPrefab.Data.GetDamage();
+    private float GetDamage() => _weaponPrefab.Data.GetDamage();
 
-    private string GetName() => weaponPrefab.GetName();
+    private string GetName() => _weaponPrefab.GetName();
 
-    private string GetExplain() => weaponPrefab.explainTxt;
+    private string GetExplain() => _weaponPrefab.explainTxt;
 
     //private string GetEvaluation() => WeaponExplainManager.itemRate[itemRate];
     private ItemRate GetEvaluation() => itemRate;

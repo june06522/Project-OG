@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class StageChest : MonoBehaviour, IInteractable
 {
@@ -109,6 +110,7 @@ public class StageChest : MonoBehaviour, IInteractable
             _spriteRenderer.sprite = _openSprite;
 
         List<ItemInfoSO> randomItems = GetRandomItems();
+        _itemCount = randomItems.Count;
         for(int i = 0; i < _itemCount; ++i)
         {
             float angle = (360 / _itemCount) * i * Mathf.Deg2Rad;
@@ -158,20 +160,60 @@ public class StageChest : MonoBehaviour, IInteractable
         // Set ItemRate
         for(int i = 0; i < _itemCount; ++i)
         {
-            float percent = Random.Range(0f, 100f); // 0 ~ 100
+
+            float endPercent = 100f;
+            float normalProbability = Mathf.Clamp(endPercent - _legendProbability - _epicProbability - _rareProbability, 0f, 100f);
+
+            // 해당 등급의 Item이 없을 경우 미리 체크하기
+            bool normalCheck    = RateItemQueueCheck(ItemRate.NORMAL, normalProbability, ref endPercent);
+            bool rareCheck      = RateItemQueueCheck(ItemRate.RARE, _rareProbability, ref endPercent);
+            bool epicCheck      = RateItemQueueCheck(ItemRate.EPIC, _epicProbability, ref endPercent);
+            bool legendCheck    = RateItemQueueCheck(ItemRate.LEGEND, _legendProbability, ref endPercent);
+
+            if (!normalCheck && !rareCheck && !epicCheck && !legendCheck)
+                break;
+
+            float value = Random.Range(0f, endPercent); // 0 ~ 100
             ItemRate rate = ItemRate.NORMAL;
 
-            if (percent <= _legendProbability)
+
+            if (legendCheck && ItemPercentCheck(ItemRate.LEGEND, _legendProbability, ref value))
                 rate = ItemRate.LEGEND;
-            else if (percent <= _legendProbability + _epicProbability)
+            else if (epicCheck && ItemPercentCheck(ItemRate.EPIC, _epicProbability, ref value))
                 rate = ItemRate.EPIC;
-            else if (percent <= _legendProbability + _epicProbability + _rareProbability)
+            else if (rareCheck && ItemPercentCheck(ItemRate.RARE, _rareProbability, ref value))
                 rate = ItemRate.RARE;
 
             itemList.Add(_rateItems[rate].Dequeue());
         }
         
         return itemList;
+    }
+
+    private bool RateItemQueueCheck(ItemRate rate, float rateProability ,ref float endPercent)
+    {
+        if(_rateItems[rate].Count == 0)
+        {
+
+            endPercent -= rateProability;
+            return false;
+
+        }
+
+        return true;
+    }
+    private bool ItemPercentCheck(ItemRate rate, float rateProbability, ref float value)
+    {
+        if (value <= rateProbability)
+        {
+
+            return true;
+
+        }
+
+        value -= rateProbability;
+        return false;
+
     }
 
     public void OnInteract()
