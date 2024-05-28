@@ -17,22 +17,28 @@ public class StageGate : MonoBehaviour, IInteractable
     [field: SerializeField]
     public Stage NextStage { get; private set; }
 
+    // Transition
     private bool _interactCheck = true;
     private StageTransition stageTransition;
 
+    // Player
     private PlayerController _playerController;
+    private InventoryActive invenactive;
 
+    // Anim
     [SerializeField]
     private Transform _spawnTweeningObject;
 
+    // BossGate Property
     [SerializeField]
     private bool _isPlayJumpAnim;
+    private Collider2D _gateCollider;
 
-    private InventoryActive invenactive;
 
 
     private void Awake()
     {
+        _gateCollider = GetComponent<Collider2D>();
         stageTransition = FindObjectOfType<StageTransition>();
         _playerController = GameManager.Instance.player.GetComponent<PlayerController>();
         invenactive = FindObjectOfType<InventoryActive>();
@@ -71,6 +77,7 @@ public class StageGate : MonoBehaviour, IInteractable
         if (_interactCheck || GameManager.Instance.InventoryActive.IsOn) return;
 
         _interactCheck = true;
+        _gateCollider.enabled = false;
 
         StartCoroutine(GoNextStage());
     }

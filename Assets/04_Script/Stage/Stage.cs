@@ -367,7 +367,9 @@ public class Stage : MonoBehaviour
 
     public void DestroyStage()
     {
-        NextStage.DestroyStage();
+
+        if(NextStage != null)
+            NextStage.DestroyStage();
         Destroy(gameObject);
     }
     private void HandleDestroyGate()
