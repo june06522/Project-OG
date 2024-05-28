@@ -1,7 +1,6 @@
 using DG.Tweening;
 using System;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public delegate void TwoDirInput(Vector2 dir);
 public delegate void OneDirInput(float value);

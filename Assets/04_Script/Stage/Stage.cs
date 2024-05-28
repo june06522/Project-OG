@@ -270,12 +270,14 @@ public class Stage : MonoBehaviour
         //PlaySceneEffectSound.Instance.PlayGateSound();
 
         // appear Gate ...it need tween
-
         if (_stageType != StageType.EventStage && _stageType != StageType.Shop)
             DeleteStageCameraSetting();
         GameManager.Instance.isPlay = false;
         if(_stageClearClip != null)
             SoundManager.Instance.SFXPlay("Clear", _stageClearClip, 1f);
+
+        if (stageGate == null)
+            return;
 
         if (_stageType == StageType.BossStage)
         {
@@ -285,7 +287,7 @@ public class Stage : MonoBehaviour
         {
             SpawnGate(NextStage, Vector3.zero, ItemType.Generator);
         }
-        else if (NextStage.ThisStageType != StageType.EnemyStage)
+        else if (NextStage != null && NextStage.ThisStageType != StageType.EnemyStage)
         {
             SpawnGate(NextStage);
         }

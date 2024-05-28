@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class CircleTransition : MonoBehaviour
 {
-    private Vector3 _resolution = new Vector3(1920, 1080);
+    private Vector3 _resolution = new Vector3(0, 0);
     public float CircleMaxValue => ((_resolution.y > _resolution.x) ? _resolution.y : _resolution.x) + 300;
 
     private Image _image;
@@ -49,12 +49,9 @@ public class CircleTransition : MonoBehaviour
         Resolution resolution = Screen.currentResolution;
         Vector3 resolutionVec = new Vector3(resolution.width, resolution.height, 0);
 
-#if DEBUG
-        resolutionVec = new Vector3(1920, 1080);
-#endif
-
         if (_resolution != resolutionVec)
         {
+            _resolution = resolutionVec;
             _circleMat.SetVector(resolutionVecName, resolutionVec);
             Screen.SetResolution((int)_resolution.x, (int)_resolution.y, true);
         }
