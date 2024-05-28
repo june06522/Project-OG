@@ -20,7 +20,7 @@ public class PlayerDashState : PlayerRootState
     protected override void EnterState()
     {
 
-        var hitRay = Physics2D.Raycast(transform.position, inputController.LastMoveDir, playerData[PlayerStatsType.DashLenght], playerData.DashObstacleLayer);
+        var hitRay = Physics2D.Raycast(transform.position, inputController.LastMoveDir, playerData[PlayerStatsType.DashLength], playerData.DashObstacleLayer);
 
 
         if (hitRay)
@@ -53,7 +53,7 @@ public class PlayerDashState : PlayerRootState
         {
 
 
-            var dashPos = (Vector2)transform.position + (inputController.LastMoveDir * playerData[PlayerStatsType.DashLenght]);
+            var dashPos = (Vector2)transform.position + (inputController.LastMoveDir * playerData[PlayerStatsType.DashLength]);
 
             var hitBox = Physics2D.OverlapBox(dashPos, new Vector2(1, 1), 0, playerData.DashObstacleLayer);
 

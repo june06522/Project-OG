@@ -4,13 +4,20 @@ using UnityEngine;
 
 public enum PlayerStatsType
 {
+
+    AttackSpeed,
+    Bloodsucking,
+    Cooltime,
+    EarningGold,
     MaxHP,
     MaxEnerge,
     RegenEnergePerSec,
     MoveSpeed,
+    Damage,
     DashCoolDown,
-    DashLenght,
-    DashSpeed
+    DashLength,
+    DashSpeed,
+    Defence,
 
 }
 
@@ -24,6 +31,7 @@ public enum PlayerCoolDownType
 [CreateAssetMenu(menuName = "SO/Player/Data")]
 public class PlayerDataSO : ScriptableObject
 {
+    [Header("NormalStat")]
     [SerializeField] private Stats maxHp;
     [SerializeField] private Stats maxEnerge;
     [SerializeField] private Stats regenEnergePerSec;
@@ -33,7 +41,16 @@ public class PlayerDataSO : ScriptableObject
     [SerializeField] private Stats dashLength;
     [SerializeField] private Stats dashSpeed;
 
-    [field:SerializeField] public LayerMask DashObstacleLayer { get; private set; }
+    [Header("ExtraStat")]
+    [Space(1f)]
+    [SerializeField] private Stats attackSpeed;
+    [SerializeField] private Stats bloodSucking;
+    [SerializeField] private Stats cooltime;
+    [SerializeField] private Stats earningGold;
+    [SerializeField] private Stats damage;
+    [SerializeField] private Stats defence;
+
+    [field: SerializeField] public LayerMask DashObstacleLayer { get; private set; }
 
     private Dictionary<PlayerStatsType, Stats> playerStatsContainer = new();
     private Dictionary<PlayerCoolDownType, bool> playerCoolDownContainer = new();
@@ -45,11 +62,11 @@ public class PlayerDataSO : ScriptableObject
     public bool this[PlayerCoolDownType type]
     {
 
-        get 
+        get
         {
 
             return playerCoolDownContainer[type];
-            
+
         }
 
     }
@@ -66,9 +83,9 @@ public class PlayerDataSO : ScriptableObject
 
     }
 
-    public void SetOwner(PlayerController controller) 
+    public void SetOwner(PlayerController controller)
     {
-        
+
         owner = controller;
 
         playerStatsContainer.Add(PlayerStatsType.MaxHP, maxHp);
@@ -78,15 +95,15 @@ public class PlayerDataSO : ScriptableObject
 
         playerStatsContainer.Add(PlayerStatsType.MoveSpeed, moveSpeed);
         playerStatsContainer.Add(PlayerStatsType.DashCoolDown, dashCoolDown);
-        playerStatsContainer.Add(PlayerStatsType.DashLenght, dashLength);
+        playerStatsContainer.Add(PlayerStatsType.DashLength, dashLength);
         playerStatsContainer.Add(PlayerStatsType.DashSpeed, dashSpeed);
 
-        foreach(var type in System.Enum.GetValues(typeof(PlayerCoolDownType))) 
+        foreach (var type in System.Enum.GetValues(typeof(PlayerCoolDownType)))
         {
 
             //Debug.Log(type.ToString());
             playerCoolDownContainer.Add(System.Enum.Parse<PlayerCoolDownType>(type.ToString()), false);
-        
+
         }
 
 
