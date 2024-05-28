@@ -54,7 +54,7 @@ public class ExpansionManager : MonoSingleton<ExpansionManager>
         if (_leftCnt - plusVal <= 0)
             ShowAddTileBtn();
         if (leftText != null)
-            leftText.text = $"추가 갯수: {_leftCnt}";
+            leftText.text = $"추가 갯수: {Mathf.Clamp(_leftCnt, 0, int.MaxValue)}";
     }
 
     public void UseSlot(int miusVal = 1)
