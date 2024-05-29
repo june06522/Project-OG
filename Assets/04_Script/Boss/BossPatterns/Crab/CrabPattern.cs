@@ -161,6 +161,7 @@ public class CrabPattern : BossPatternBase
 
         if (hit.point != null)
         {
+            Debug.Log(hit.collider.gameObject.name);
             return hit.point;
         }
 
@@ -269,7 +270,7 @@ public class CrabPattern : BossPatternBase
         MakeSwingBullet(_boss.rightFirePos.position, 10, 5);
     }
 
-    private void SwingEnded()
+    public void SwingEnded()
     {
         _boss.animator.SetBool(_boss.swing, false);
         _boss.isAttacking = false;
@@ -292,7 +293,7 @@ public class CrabPattern : BossPatternBase
 
     public void Shake()
     {
-        CameraManager.Instance.CameraShake(5, 0.1f);
+        CameraManager.Instance.CameraShake(10, 0.2f);
     }
 
     public IEnumerator BubbleAttack()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 // inspector에서 보이는 변수들
 public partial class CrabBoss
@@ -82,6 +83,83 @@ public partial class CrabBoss : Boss
         _bossFSM.UpdateBossState();
     }
 
+    private IEnumerator EyesAnimation(float animationTime)
+    {
+        bool left = true;
+        int animationCount = 0;
+        Vector3 originEyeSize = leftEye.transform.localScale;
+
+        while(!IsDie)
+        {
+            if(animationCount > 2)
+            {
+                animationCount = 0;
+            }
+
+            if(left)
+            {
+                ScaleChangeAnimationTypes(ref animationCount, leftEye, originEyeSize, animationTime, 0.5f);
+                yield return new WaitForSeconds(animationTime);
+                left = false;
+            }
+            else
+            {
+                ScaleChangeAnimationTypes(ref animationCount, rightEye, originEyeSize, animationTime, 0.5f);
+                yield return new WaitForSeconds(animationTime);
+                left = true;
+            }
+            yield return null;
+        }
+    }
+
+    private void ScaleChangeAnimationTypes(ref int num, GameObject obj, Vector3 originSize, float animationTime, float changeValue)
+    {
+        float biggerValue = 1 + changeValue;
+        float smallerValue = 1 - changeValue;
+
+        switch(num)
+        {
+            case 0:
+                obj.transform.DOScaleX(originSize.x * biggerValue, animationTime / 3).SetEase(Ease.InOutSine)
+                    .OnComplete(() =>
+                    {
+                        obj.transform.DOScaleX(originSize.x * smallerValue, animationTime / 3).SetEase(Ease.InOutSine)
+                        .OnComplete(() =>
+                        {
+                            obj.transform.DOScaleX(originSize.x, animationTime / 3).SetEase(Ease.InOutSine);
+                        });
+                    });
+                num++;
+                break;
+            case 1:
+                obj.transform.DOScaleY(originSize.y * biggerValue, animationTime / 3).SetEase(Ease.InOutSine)
+                    .OnComplete(() =>
+                    {
+                        obj.transform.DOScaleY(originSize.y * smallerValue, animationTime / 3).SetEase(Ease.InOutSine)
+                        .OnComplete(() =>
+                        {
+                            obj.transform.DOScaleY(originSize.y, animationTime / 3).SetEase(Ease.InOutSine);
+                        });
+                    });
+                num++;
+                break;
+            case 2:
+                obj.transform.DOScale(originSize * biggerValue, animationTime / 3).SetEase(Ease.InOutSine)
+                    .OnComplete(() =>
+                    {
+                        obj.transform.DOScale(originSize * smallerValue, animationTime / 3).SetEase(Ease.InOutSine)
+                        .OnComplete(() =>
+                        {
+                            obj.transform.DOScale(originSize, animationTime / 3).SetEase(Ease.InOutSine);
+                        });
+                    });
+                num++;
+                break;
+            default:
+                break;
+        }
+    }
+
     private void ChangeState()
     {
         switch (_curBossState)
@@ -90,6 +168,7 @@ public partial class CrabBoss : Boss
                 if(idleAnimationEnd)
                 {
                     ChangeBossState(BossState.Alive);
+                    StartCoroutine(EyesAnimation(0.6f));
                 }
                 break;
             case BossState.Alive:

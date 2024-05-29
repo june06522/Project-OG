@@ -16,7 +16,6 @@ public class CAliveState : BossBaseState
 
     public override void OnBossStateExit()
     {
-        // 죽을 때 경고표시 없애고 애니메이션 기본 애니메이션으로 바꾸기
         int instantWallCount = _crab.instantWalls.transform.childCount;
         for(int i = 0; i < instantWallCount; i++)
         {
@@ -42,7 +41,9 @@ public class CAliveState : BossBaseState
 
     private IEnumerator RandomPattern(float waitTime)
     {
-        while(!_crab.IsDie)
+        int beforeRand = 0;
+
+        while (!_crab.IsDie)
         {
             if(_crab.isAttacking)
             {
@@ -52,7 +53,24 @@ public class CAliveState : BossBaseState
 
             yield return new WaitForSeconds(waitTime);
 
-            int rand = 5;// Random.Range(1, 6);
+            int rand = Random.Range(1, 6);
+            if(beforeRand == rand)
+            {
+                if(rand == 1)
+                {
+                    rand = Random.Range(2, 6);
+                }
+                else if(rand == 5)
+                {
+                    rand = Random.Range(1, 5);
+                }
+                else
+                {
+                    rand = rand - 1;
+                }
+            }
+
+            beforeRand = rand;
 
             switch(rand)
             {
