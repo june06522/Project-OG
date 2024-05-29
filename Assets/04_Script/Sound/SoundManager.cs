@@ -15,15 +15,27 @@ public enum SoundType
 
 public class SoundManager : MonoBehaviour
 {
-    public AudioMixer _mixer;
-    public AudioSource _bgSound;
-    public AudioClip[] _bgList;
+    [Header("Audio Info")]
+    public AudioMixer Mixer;
+    public AudioSource BgSound;
+    public AudioClip DefaultBGM;
 
     public static SoundManager Instance { get; private set; }
 
+    [Header("Sound UI Slider")]
     public Slider MainSlider;
     public Slider BGMSlider;
     public Slider SFXSlider;
+
+    private Dictionary<StageType, AudioClip> _stageBGMSoundContainer = new Dictionary<StageType, AudioClip>();
+
+    [Header("Stage BGMSound Clip")]
+    public AudioClip StartStageBGMClip;
+    public AudioClip EnemyStageBGMClip;
+    public AudioClip BossStageBGMClip;
+
+    public AudioClip EventStageBGMClip;
+    public AudioClip ShopStageBGMClip;
 
     SoundData _data;
 
@@ -45,34 +57,42 @@ public class SoundManager : MonoBehaviour
     {
         _data = DataManager.Instance.soundData;
         InitVolumeValue();
+
+        // Set StageBGM
+        _stageBGMSoundContainer.Add(StageType.Start,        StartStageBGMClip);
+        _stageBGMSoundContainer.Add(StageType.EnemyStage,   EnemyStageBGMClip);
+        _stageBGMSoundContainer.Add(StageType.BossStage,    BossStageBGMClip);
+        _stageBGMSoundContainer.Add(StageType.EventStage,   EventStageBGMClip);
+        _stageBGMSoundContainer.Add(StageType.Shop,         ShopStageBGMClip);
+
     }
 
     public void BGMPlay()
     {
-        for (int i = 0; i < _bgList.Length; i++)
-        {
-            if (SceneManager.GetActiveScene().name == _bgList[i].name)
-                BgSoundPlay(_bgList[i]);
+        BgSoundPlay(DefaultBGM);
+    }
 
+    public void BGMPlay(StageType stageType)
+    {
+        if (_stageBGMSoundContainer[stageType] == null)
+        {
+            Debug.LogError("SoundManager's value, StageSound is null");
+            return;
         }
+
+        BgSoundPlay(_stageBGMSoundContainer[stageType], 0.6f);
     }
 
     private void OnSceneLoded(Scene arg0, LoadSceneMode arg1)
     {
-        for (int i = 0; i < _bgList.Length; i++)
-        {
-            if (arg0.name == _bgList[i].name)
-                BgSoundPlay(_bgList[i]);
-
-
-        }
+        BGMPlay();
     }
 
     private void InitVolumeValue()
     {
-        _mixer.SetFloat("Master", Mathf.Log10(_data.MasterSoundVal) * 20);
-        _mixer.SetFloat("BGSound", Mathf.Log10(_data.BGMSoundVal) * 20);
-        _mixer.SetFloat("SFXvolume", Mathf.Log10(_data.SFXSoundVal) * 20);
+        Mixer.SetFloat("Master", Mathf.Log10(_data.MasterSoundVal) * 20);
+        Mixer.SetFloat("BGSound", Mathf.Log10(_data.BGMSoundVal) * 20);
+        Mixer.SetFloat("SFXvolume", Mathf.Log10(_data.SFXSoundVal) * 20);
         //MainSlider.value = _data.MasterSoundVal;
         //BGMSlider.value = _data.BGMSoundVal;
         //SFXSlider.value = _data.SFXSoundVal;
@@ -80,7 +100,7 @@ public class SoundManager : MonoBehaviour
 
     public void MasterSoundVolume(float val)
     {
-        _mixer.SetFloat("Master", Mathf.Log10(val) * 20);
+        Mixer.SetFloat("Master", Mathf.Log10(val) * 20);
         _data.MasterSoundVal = val;
         DataManager.Instance.soundData = _data;
         DataManager.Instance.SaveOption();
@@ -88,7 +108,7 @@ public class SoundManager : MonoBehaviour
 
     public void BGSoundVolume(float val)
     {
-        _mixer.SetFloat("BGSound", Mathf.Log10(val) * 20);
+        Mixer.SetFloat("BGSound", Mathf.Log10(val) * 20);
         _data.BGMSoundVal = val;
         DataManager.Instance.soundData = _data;
         DataManager.Instance.SaveOption();
@@ -96,7 +116,7 @@ public class SoundManager : MonoBehaviour
 
     public void SFXVolume(float val)
     {
-        _mixer.SetFloat("SFXvolume", Mathf.Log10(val) * 20);
+        Mixer.SetFloat("SFXvolume", Mathf.Log10(val) * 20);
         _data.SFXSoundVal = val;
         DataManager.Instance.soundData = _data;
         DataManager.Instance.SaveOption();
@@ -112,7 +132,7 @@ public class SoundManager : MonoBehaviour
 
         GameObject go = new GameObject(sfxName + "Sound");
         AudioSource audioSource = go.AddComponent<AudioSource>();
-        audioSource.outputAudioMixerGroup = _mixer.FindMatchingGroups("SFX")[0];
+        audioSource.outputAudioMixerGroup = Mixer.FindMatchingGroups("SFX")[0];
         audioSource.clip = clip;
         audioSource.volume = volume;
         audioSource.Play();
@@ -125,7 +145,7 @@ public class SoundManager : MonoBehaviour
         GameObject go = new GameObject(sfxName + "Sound");
         go.transform.parent = parent;
         AudioSource audioSource = go.AddComponent<AudioSource>();
-        audioSource.outputAudioMixerGroup = _mixer.FindMatchingGroups("SFX")[0];
+        audioSource.outputAudioMixerGroup = Mixer.FindMatchingGroups("SFX")[0];
         audioSource.clip = clip;
         audioSource.volume = volume;
         audioSource.Play();
@@ -135,18 +155,18 @@ public class SoundManager : MonoBehaviour
 
     public void BgSoundPlay(AudioClip clip, float volume = 0.5f)
     {
-        _bgSound.outputAudioMixerGroup = _mixer.FindMatchingGroups("BGSound")[0];
+        BgSound.outputAudioMixerGroup = Mixer.FindMatchingGroups("BGSound")[0];
 
-        _bgSound.clip = clip;
-        _bgSound.loop = true;
-        _bgSound.volume = volume;
-        _bgSound.Play();
+        BgSound.clip = clip;
+        BgSound.loop = true;
+        BgSound.volume = volume;
+        BgSound.Play();
     }
 
     public void BgStop()
     {
 
-        _bgSound.Stop();
+        BgSound.Stop();
 
     }
 
@@ -157,9 +177,9 @@ public class SoundManager : MonoBehaviour
 
     IEnumerator FadeSoundCo()
     {
-        while (_bgSound.volume > 0.0f)
+        while (BgSound.volume > 0.0f)
         {
-            _bgSound.volume -= 0.01f;
+            BgSound.volume -= 0.01f;
             yield return new WaitForSeconds(0.1f);
         }
     }
