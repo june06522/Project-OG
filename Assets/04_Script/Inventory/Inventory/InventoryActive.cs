@@ -1,3 +1,4 @@
+using Cinemachine;
 using DG.Tweening;
 using System.Collections;
 using TMPro;
@@ -15,6 +16,7 @@ public class InventoryActive : MonoBehaviour
     [SerializeField]
     AnimationCurve animCurve;
 
+    private ConnectVisible cv;
 
     [HideInInspector]
     public Image[] images;
@@ -22,6 +24,7 @@ public class InventoryActive : MonoBehaviour
     public bool canOpen = true;
 
     bool isOn = false;
+    public bool isDrag = false;
 
     //[SerializeField] GameObject _playerUI;
     [SerializeField] GameObject _invenPanel;
@@ -47,15 +50,21 @@ public class InventoryActive : MonoBehaviour
     Image invenRenderer;
     Material mat;
 
+    Vector3 playerPos;
+
     PanelFade fade;
 
     TextMeshProUGUI _warningText;
     TextMeshProUGUI _warningTextInven;
+    CinemachineVirtualCamera _cmVCam;
 
     readonly string invenShader = "_SourceGlowDissolveFade";
 
     private void Start()
     {
+        if (CameraMovementChecker.Instance == null)
+            Debug.LogError($"CameraMovementChecker is null! : 아무데다가 이 스크립트 넣으셈");
+
         _invenx = _invenPanel.transform.localPosition.x;
         _inveny = _invenPanel.transform.localPosition.y;
         _infox = _invenInfoPanel.transform.localPosition.x;
@@ -65,6 +74,9 @@ public class InventoryActive : MonoBehaviour
         fade = transform.Find("FadePanel").GetComponent<PanelFade>();
         _warningText = transform.Find("WarningText").GetComponent<TextMeshProUGUI>();
         _warningTextInven = transform.Find("WarningTextInven").GetComponent<TextMeshProUGUI>();
+
+        cv = FindObjectOfType<ConnectVisible>();
+
         mat = invenRenderer.material;
 
         mat.SetFloat(invenShader, 0f);
@@ -78,13 +90,12 @@ public class InventoryActive : MonoBehaviour
                 (KeyManager.Instance != null && Input.GetKeyDown(KeyManager.Instance.inven)) ||
                 (Input.GetKeyDown(KeyCode.Escape) && isOn)) && isAnimation)
             {
-                if(GameManager.Instance.isPlay)
+                if (GameManager.Instance.isPlay)
                 {
                     WarningText();
                     return;
                 }
                 isAnimation = false;
-                StartCoroutine(ShowLineRender());
                 isOn = !isOn;
                 if (isOn)
                     ShowInven();
@@ -99,16 +110,18 @@ public class InventoryActive : MonoBehaviour
         isOn = true;
 
         fade.Fade(true);
-        
-        //var energeBar = FindObjectOfType<PlayerEnergeBar>();
-        //energeBar.Image.color = new Color(energeBar.Image.color.r, energeBar.Image.color.g, energeBar.Image.color.b, 0);
-        
+
         _components.localPosition = new Vector3(0, 0, 0);
-        _invenPanel.transform.DOLocalMoveY(_inveny, 0f);
+        seq = DOTween.Sequence();
+        seq.Append(_invenPanel.transform.DOLocalMoveY(_inveny, 0f));
+        seq.AppendCallback(() =>
+        {
+            cv.VisibleLineAllChange();
+        });
+
         invenRenderer.enabled = true;
         float initValue = mat.GetFloat(invenShader);
 
-        seq = DOTween.Sequence();
         seq.Append(DOTween.To(() => initValue, value => mat.SetFloat(invenShader, value), 15f, easingtime)).SetEase(ease);
         seq.Join(ScreenManager.Instance.SetEffect(0.11f, 0.65f, DG.Tweening.Ease.InQuad));
 
@@ -124,8 +137,9 @@ public class InventoryActive : MonoBehaviour
 
         //var energeBar = FindObjectOfType<PlayerEnergeBar>();
         //energeBar.Image.color = new Color(energeBar.Image.color.r, energeBar.Image.color.g, energeBar.Image.color.b, 1);
-        
+
         _components.localPosition = new Vector3(0, 1000, 0);
+        cv.ClearLineRender();
         ScreenManager.Instance.SetEffect(0, 0.5f, DG.Tweening.Ease.InQuart);
         float initValue = mat.GetFloat(invenShader);
 
@@ -155,15 +169,5 @@ public class InventoryActive : MonoBehaviour
         invenRenderer.enabled = false;
         yield return new WaitForSeconds(time);
         isAnimation = true;
-    }
-
-    IEnumerator ShowLineRender()
-    {
-        ConnectVisible cv = FindObjectOfType<ConnectVisible>();
-        while (!isAnimation)
-        {
-            cv.VisibleLine();
-            yield return null;
-        }
     }
 }
