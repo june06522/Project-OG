@@ -55,7 +55,7 @@ public partial class Boss : MonoBehaviour, IHitAble
 
     [HideInInspector] public Color bossColor;
 
-    public event Action DieEvt;
+    public Action DieEvt;
     public event Action DeadEndEvt;
 
     public bool IsDie
@@ -87,6 +87,17 @@ public partial class Boss : MonoBehaviour, IHitAble
     protected virtual void Update()
     {
         bossHPSlider.value = _currentHP / so.MaxHP;
+    }
+
+
+    public float GetCurrentHp()
+    {
+        return _currentHP;
+    }
+
+    public void MinusCurrentHp(float damage)
+    {
+        _currentHP -= damage;
     }
 
     public void SetBody(GameObject obj, Vector3 scale, Vector3 rotation, Color color, float changeTime, bool chageColor = true)

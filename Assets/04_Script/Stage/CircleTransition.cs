@@ -49,6 +49,11 @@ public class CircleTransition : MonoBehaviour
         Resolution resolution = Screen.currentResolution;
         Vector3 resolutionVec = new Vector3(resolution.width, resolution.height, 0);
 
+#if DEBUG
+        resolutionVec = new Vector2(1920, 1080);
+#endif
+
+
         if (_resolution != resolutionVec)
         {
             _resolution = resolutionVec;

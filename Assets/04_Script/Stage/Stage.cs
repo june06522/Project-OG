@@ -178,20 +178,20 @@ public class Stage : MonoBehaviour
     public void StartWave()
     {
 
-        if(_stageType == StageType.EventStage)
-        {
-
-            FAED.InvokeDelay(AppearGate, 1.5f);
-            return;
-
-        }
-        else if (_stageType == StageType.BossStage)
+        if (_stageType == StageType.BossStage)
         {
             _bossObject.gameObject.SetActive(true);
             monsterCount++;
             _bossObject.DeadEndEvt += HandleWaveClearCheck;
             // After Creating Boss, Delete AppearGate
             return;
+        }
+        else if (_stageType != StageType.EnemyStage)
+        {
+
+            FAED.InvokeDelay(AppearGate, 1.5f);
+            return;
+
         }
 
         StartCoroutine(MonsterSpawn());
@@ -235,7 +235,7 @@ public class Stage : MonoBehaviour
         if(monsterCount <= 0 && isMonsterSpawning == false)
         {
             GameManager.Instance.isPlay = false;
-
+            
 
             if(_stageType == StageType.BossStage)
             {
@@ -243,6 +243,8 @@ public class Stage : MonoBehaviour
 
                 EventTriggerManager.Instance?.StageClearExecute();
                 OnStageClearEvent?.Invoke();
+
+                SoundManager.Instance.BGMPlay(StageType.Start);
             }    
 
             if(waveCount >= waveList.Count)
@@ -253,6 +255,8 @@ public class Stage : MonoBehaviour
                 OnStageClearEvent?.Invoke();
                 AppearGate();
                 AppearChest();
+
+                SoundManager.Instance.BGMPlay(StageType.Start);
             }
             else
             {

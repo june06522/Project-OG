@@ -4,9 +4,16 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class GuideUI : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject _videoGuideObject;
+    [SerializeField]
+    private VideoPlayer _videoPlayer;
+
+
     [SerializeField]
     private GameObject _guideTextObject;
     [SerializeField]
@@ -15,6 +22,20 @@ public class GuideUI : MonoBehaviour
     private List<ContentSizeFitter> _textSizeFitter;
 
     private Sequence _sequence;
+
+    public void SetVideo(VideoClip clip)
+    {
+        _videoPlayer.clip = clip;
+    }
+
+    public void SetVideoOnOff(bool isOn)
+    {
+        if (isOn)
+            _videoPlayer.Play();
+        else
+            _videoPlayer.Stop();
+        _videoGuideObject.SetActive(isOn);
+    }
 
     public void ResetGuideText()
     {
