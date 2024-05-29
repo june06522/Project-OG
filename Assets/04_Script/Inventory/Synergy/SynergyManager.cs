@@ -8,10 +8,8 @@ public class SynergyManager : MonoBehaviour
 
     private static SynergyManager instance;
     public static SynergyManager Instance => instance;
-
-
     
-    Dictionary<TriggerID, int> synergyContainer;
+    Dictionary<TriggerID, int> synergyCount;
     
     private void Awake()
     {
@@ -31,28 +29,31 @@ public class SynergyManager : MonoBehaviour
     public void AddItem(TriggerID id)
     {
 
-        synergyContainer[id]++;
+        synergyCount[id]++;
+        UpdateSynergy();
 
     }
 
     public void RemoveItem(TriggerID id)
     {
 
-        if (synergyContainer.ContainsKey(id))
+        if (synergyCount.ContainsKey(id))
         {
 
-            if (synergyContainer[id] != 0)
+            if (synergyCount[id] != 0)
             {
 
-                synergyContainer[id]--;
+                synergyCount[id]--;
 
             }
 
         }
 
+        UpdateSynergy();
+
     }
 
-    public void UpdateStat()
+    public void UpdateSynergy()
     {
 
     }
