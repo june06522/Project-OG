@@ -4,9 +4,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-// Laser랑 Bubble은 연계기로 사용하자
+
 public class CrabPattern : BossPatternBase
 {
+    [SerializeField] private GameObject _instantWallWarningLB;
+    [SerializeField] private GameObject _instantWallWarningRB;
+    [SerializeField] private GameObject _instantWallWarningLM;
+
+    [SerializeField] private GameObject _instantWallLB;
+    [SerializeField] private GameObject _instantWallRB;
+    [SerializeField] private GameObject _instantWallLM;
+
+    [SerializeField] private GameObject _swingWarning;
+
+    [SerializeField] private GameObject _leftWarningLine;
+    [SerializeField] private GameObject _rightWarningLine;
+
     [SerializeField] private CrabBoss _boss;
 
     private event Action _laserShotEnded;
@@ -45,10 +58,24 @@ public class CrabPattern : BossPatternBase
         }
     }
 
+    private void Update()
+    {
+        if(_boss.IsDie)
+        {
+            StopAllCoroutines();
+        }
+    }
+
     public IEnumerator NipperLaserAttack()
     {
         _laserShooting = true;
         _boss.isAttacking = true;
+        float animTime = 0.5f;
+        float waitTime = 1f;
+
+        StartCoroutine(MakeLaserInstantWall(waitTime, animTime));
+        yield return new WaitForSeconds(waitTime);
+
         _boss.animator.SetBool(_boss.laserShooting, _laserShooting);
 
         while(_laserShooting)
@@ -59,14 +86,21 @@ public class CrabPattern : BossPatternBase
                 Vector3 rightDir = _boss.rightGuidePos.position - _boss.rightFirePos.position;
 
                 MakeLine(lines[0], _boss.leftFirePos.position, leftDir, _laserWidth);
+                PlayerCheckRay(_boss.leftFirePos.position, leftDir);
                 MakeLine(lines[1], _boss.rightFirePos.position, rightDir, _laserWidth);
+                PlayerCheckRay(_boss.rightFirePos.position, rightDir);
             }
 
             yield return null;
         }
 
-        _boss.isAttacking = false;
-        _realLaserShoot = false;
+        _instantWallLM.transform.DOScale(new Vector3(0, 30, 0), animTime).SetEase(Ease.InOutSine)
+            .OnComplete(() =>
+            {
+                _instantWallLM.SetActive(false);
+                _boss.isAttacking = false;
+                _realLaserShoot = false;
+            });
     }
 
     public void LaserShot()
@@ -84,6 +118,19 @@ public class CrabPattern : BossPatternBase
     public void CallSwingShootEnded()
     {
         _swingEnded?.Invoke();
+    }
+
+    private IEnumerator MakeLaserInstantWall(float waitTime, float makeTime)
+    {
+        _instantWallWarningLM.SetActive(true);
+
+        yield return new WaitForSeconds(waitTime);
+
+        _instantWallWarningLM.SetActive(false);
+
+        _instantWallLM.SetActive(true);
+        CameraManager.Instance.CameraShake(5, makeTime);
+        _instantWallLM.transform.DOScale(_instantWallWarningLM.transform.localScale, makeTime).SetEase(Ease.InOutSine);
     }
 
     private void LaserShootingEnded()
@@ -118,6 +165,92 @@ public class CrabPattern : BossPatternBase
         }
 
         return Vector3.zero;
+    }
+
+    private void PlayerCheckRay(Vector3 startPos, Vector3 dir)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(startPos, dir, int.MaxValue, LayerMask.GetMask("Player"));
+        PlayerHP player;
+
+        if (hit.collider != null)
+        {
+            if(hit.collider.gameObject.TryGetComponent<PlayerHP>(out player))
+            {
+                player.Hit(1);
+            }
+            else
+            {
+                return;
+            }
+        }
+    }
+
+    public void JointsLaserAnimation()
+    {
+        StartCoroutine(LeftJointsAnimation());
+        StartCoroutine(RightJointsAnimation());
+    }
+
+    private IEnumerator LeftJointsAnimation(bool animationStop = false, float waitTime = 0.1f)
+    {
+        int leftjointCount = _boss.leftJoints.transform.childCount;
+
+        for (int i = 0; i < leftjointCount; i++)
+        {
+            if (_boss.leftJoints.transform.GetChild(i).gameObject.activeSelf != false)
+            {
+                StartCoroutine(Blinking(_boss.leftJoints.transform.GetChild(i).gameObject, Color.white, 0.2f));
+
+                yield return new WaitForSeconds(waitTime);
+            }
+        }
+
+        if (animationStop)
+        {
+            if (!_boss.IsDie)
+            {
+                _swingWarning.SetActive(false);
+                _boss.animator.speed = 1;
+            }
+        }
+    }
+
+    private IEnumerator RightJointsAnimation(bool animationStop = false, float waitTime = 0.1f)
+    {
+        int rightjointCount = _boss.rightJoints.transform.childCount;
+
+        for (int i = 0; i < rightjointCount; i++)
+        {
+            if (_boss.rightJoints.transform.GetChild(i).gameObject.activeSelf != false)
+            {
+                StartCoroutine(Blinking(_boss.rightJoints.transform.GetChild(i).gameObject, Color.white, 0.2f));
+
+                yield return new WaitForSeconds(waitTime);
+            }
+        }
+
+        if (animationStop)
+        {
+            if (!_boss.IsDie)
+            {
+                _swingWarning.SetActive(false);
+                _boss.animator.speed = 1;
+            }
+        }
+    }
+
+    public void CallRightJointsAnimation()
+    {
+        _boss.animator.speed = 0;
+        _swingWarning.SetActive(true);
+        StartCoroutine(RightJointsAnimation(true, 0.3f));
+    }
+
+    public void CallLeftJointsAnimation()
+    {
+        _boss.animator.speed = 0;
+        _swingWarning.SetActive(true);
+        StartCoroutine(LeftJointsAnimation(true, 0.3f));
     }
 
     public void SwingAttack()
@@ -157,24 +290,62 @@ public class CrabPattern : BossPatternBase
         }
     }
 
+    public void Shake()
+    {
+        CameraManager.Instance.CameraShake(5, 0.1f);
+    }
+
     public IEnumerator BubbleAttack()
     {
         _bubbleShooting = true;
         _boss.isAttacking = true;
+        float animTime = 0.5f;
+        float waitTime = 1f;
+
+        StartCoroutine(MakeBubbleInstantWall(waitTime, animTime));
+
+        yield return new WaitForSeconds(waitTime);
+
         _boss.animator.SetBool(_boss.bubbleShooting, _bubbleShooting);
 
         while(_bubbleShooting)
         {
             if(_realBubbleShoot)
             {
-                MakeBubbleBullet(200, 2, 10, 3);
+                CameraManager.Instance.CameraShake(10, 0.25f);
+                MakeBubbleBullet(300, 2, 10);
             }
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.2f);
         }
+
+        yield return new WaitForSeconds(waitTime);
+
+        _instantWallLB.transform.DOLocalMove(new Vector3(-28, 94, 0), animTime).SetEase(Ease.InOutSine);
+        _instantWallRB.transform.DOLocalMove(new Vector3(28, 94, 0), animTime).SetEase(Ease.InOutSine);
+
+        yield return new WaitForSeconds(animTime);
 
         _realBubbleShoot = false;
         _boss.isAttacking = false;
+    }
+
+    private IEnumerator MakeBubbleInstantWall(float waitTime, float makeTime)
+    {
+        _instantWallWarningLB.SetActive(true);
+        _instantWallWarningRB.SetActive(true);
+
+        yield return new WaitForSeconds(waitTime);
+
+        _instantWallWarningLB.SetActive(false);
+        _instantWallWarningRB.SetActive(false);
+
+        _instantWallLB.transform.DOLocalMove(_instantWallWarningLB.transform.localPosition, makeTime).SetEase(Ease.InOutSine);
+        _instantWallRB.transform.DOLocalMove(_instantWallWarningRB.transform.localPosition, makeTime).SetEase(Ease.InOutSine);
+
+        yield return new WaitForSeconds(makeTime);
+
+        CameraManager.Instance.CameraShake(10, 0.1f);
     }
 
     public void BubbleShot()
@@ -188,30 +359,38 @@ public class CrabPattern : BossPatternBase
         _boss.animator.SetBool(_boss.bubbleShooting, _bubbleShooting);
     }
 
-    private void MakeBubbleBullet(float angle, float minSpeed, float maxSpeed, int burstCount)
+    private void MakeBubbleBullet(float angle, float minSpeed, float maxSpeed)
     {
-        for(int i = 0; i < burstCount; i++)
+        for(int i = 0; i < 3; i++)
         {
             GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.CrabBubbleBullet, _boss.bulletCollector.transform);
-            bullet.transform.position = _boss.mouthFirePos.position;
+            bullet.transform.position = _boss.mouthFirePos.GetChild(i).position;
             bullet.transform.rotation = Quaternion.identity;
 
             Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
-            Vector3 dir = Quaternion.Euler(0, 0, UnityEngine.Random.Range(-angle / 2, angle / 2)) * Vector3.down;
+            Vector3 dir = Quaternion.Euler(0, 0, UnityEngine.Random.Range(-angle, angle)) * Vector3.down;
             rigid.velocity = dir.normalized * UnityEngine.Random.Range(minSpeed, maxSpeed);
         }
     }
 
-    public IEnumerator NipperLeftPunch()
+    public IEnumerator NipperPunch(GameObject nipper, GameObject joints, bool left = true)
     {
+        if(left)
+        {
+            _boss.crabLeftNipper.gameObject.layer = LayerMask.NameToLayer("Default");
+        }
+        else
+        {
+            _boss.crabRightNipper.gameObject.layer = LayerMask.NameToLayer("Default");
+        }
         _boss.isAttacking = true;
         _boss.animator.enabled = false;
 
-        int count = _boss.leftJoints.transform.childCount;
+        int count = joints.transform.childCount;
         List<Vector3> originSize = new ();
         for (int i = 0; i < count; i++)
         {
-            GameObject obj = _boss.leftJoints.transform.GetChild(i).gameObject;
+            GameObject obj = joints.transform.GetChild(i).gameObject;
             if(obj.activeSelf != false)
             {
                 originSize.Add(obj.transform.localScale);
@@ -220,60 +399,119 @@ public class CrabPattern : BossPatternBase
                 yield return new WaitForSeconds(0.2f);
             }
         }
-        originSize.Add(_boss.crabLeftNipper.transform.localScale);
+        originSize.Add(nipper.transform.localScale);
 
         float curTime = 0;
-        float warningTime = 1f;
-        GameObject warningLine = ObjectPool.Instance.GetObject(ObjectPoolType.CrabWarningLine, _boss.leftFirePos);
-        warningLine.transform.localPosition = Vector3.zero;
+        float warningTime = 2f;
+        if (left)
+        {
+            _leftWarningLine.SetActive(true);
+        }
+        else
+        {
+            _rightWarningLine.SetActive(true);
+        }
+        
         Vector2 dir = Vector2.zero;
         while (curTime < warningTime)
         {
             curTime += Time.deltaTime;
-            dir = GameManager.Instance.player.position - _boss.crabLeftNipper.transform.position;
-            float z = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-            _boss.crabLeftNipper.transform.DORotate(new Vector3(0, 0, z + 30), 0.2f).SetEase(Ease.InOutSine);
+            dir = GameManager.Instance.player.position - nipper.transform.position;
+            float z;
+            if(left)
+            {
+                z = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                nipper.transform.DORotate(new Vector3(0, 0, z + 65), 0.2f).SetEase(Ease.InOutSine);
+            }
+            else
+            {
+                // 요고 한 번 정도 360도를 돌아버림 해결해라
+                z = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                nipper.transform.DORotate(new Vector3(0, 0, z - 235), 0.2f).SetEase(Ease.InOutSine);
+            }
 
             yield return null;
         }
 
-        curTime = 0;
-        float speed = 60;
-        float animTime = 30 / speed;
-        Vector3 originPos = _boss.crabLeftNipper.transform.position;
 
-        while (curTime < animTime)
+        StartCoroutine(Blinking(_boss.leftEye, _boss.eyesColor, 0.3f));
+        StartCoroutine(Blinking(_boss.rightEye, _boss.eyesColor, 0.3f));
+        _leftWarningLine.SetActive(false);
+        _rightWarningLine.SetActive(false);
+        yield return new WaitForSeconds(0.5f);
+
+        float speed = 120;
+        Vector3 originPos = nipper.transform.position;
+        
+        while (true)
         {
-            curTime += Time.deltaTime;
-            _boss.crabLeftNipper.transform.position = Vector3.MoveTowards(_boss.crabLeftNipper.transform.position, _boss.crabLeftNipper.transform.position + (Vector3)dir, Time.deltaTime * speed);
+            Collider2D hit = Physics2D.OverlapCircle(nipper.transform.position, 5, LayerMask.GetMask("Wall"));
+            if (hit)
+            {
+                if(hit.gameObject.name == "CheckWall")
+                {
+                    CameraManager.Instance.CameraShake(10, 0.5f);
+                    break;
+                }
+            }
+
+            nipper.transform.position = Vector3.MoveTowards(nipper.transform.position, nipper.transform.position + (Vector3)dir, Time.deltaTime * speed);
             yield return null;
         }
 
-        _boss.crabLeftNipper.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InOutSine)
+        yield return new WaitForSeconds(0.5f);
+
+        nipper.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InOutSine)
             .OnComplete(() =>
             {
-                _boss.crabLeftNipper.SetActive(false);
+                nipper.transform.position = originPos;
+                if(left)
+                {
+                    nipper.transform.rotation = Quaternion.Euler(0, 0, 270);
+                }
+                else
+                {
+                    nipper.transform.rotation = Quaternion.Euler(0, 0, 90);
+                }
+                nipper.SetActive(false);
             });
 
         yield return new WaitForSeconds(0.5f);
 
         for (int i = 0; i < originSize.Count; i++)
         {
-            GameObject obj = _boss.leftJoints.transform.GetChild(i).gameObject;
+            GameObject obj = joints.transform.GetChild(i).gameObject;
             obj.transform.DOScale(originSize[i], 0.5f).SetEase(Ease.InOutSine);
 
             yield return new WaitForSeconds(0.2f);
         }
 
-        _boss.crabLeftNipper.transform.position = originPos;
-        _boss.crabLeftNipper.transform.rotation = Quaternion.identity;
-        _boss.crabLeftNipper.SetActive(true);
+        nipper.SetActive(true);
 
-        _boss.crabLeftNipper.transform.DOScale(originSize[originSize.Count - 1], 0.5f).SetEase(Ease.InOutSine)
+        nipper.transform.DOScale(originSize[originSize.Count - 1], 0.5f).SetEase(Ease.InOutSine)
             .OnComplete(() =>
             {
+                if (left)
+                {
+                    _boss.crabLeftNipper.gameObject.layer = LayerMask.NameToLayer("Boss");
+                }
+                else
+                {
+                    _boss.crabRightNipper.gameObject.layer = LayerMask.NameToLayer("Boss");
+                }
                 _boss.isAttacking = false;
                 _boss.animator.enabled = true;
             });
+    }
+
+    private IEnumerator Blinking(GameObject obj, Color changeColor, float blinkTime)
+    {
+        Color originColor = obj.GetComponent<SpriteRenderer>().color;
+
+        obj.GetComponent<SpriteRenderer>().color = changeColor;
+
+        yield return new WaitForSeconds(blinkTime);
+
+        obj.GetComponent<SpriteRenderer>().color = originColor;
     }
 }

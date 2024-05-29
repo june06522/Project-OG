@@ -6,17 +6,32 @@ using UnityEngine;
 public partial class CrabBoss
 {
     public GameObject crabLaserCollector;
+
     public GameObject crabLeftNipper;
     public GameObject crabRightNipper;
+
     public GameObject leftJoints;
     public GameObject rightJoints;
+
+    public GameObject leftEye;
+    public GameObject rightEye;
+
+    public GameObject instantWalls;
 
     [Header("Transform")]
     public Transform leftFirePos;
     public Transform rightFirePos;
+
     public Transform leftGuidePos;
     public Transform rightGuidePos;
+
     public Transform mouthFirePos;
+
+    [Header("SpriteRenderer")]
+    public List<SpriteRenderer> spriteRendererList;
+
+    [Header("Color")]
+    public Color eyesColor;
 
     [Header("Animator")]
     public Animator animator;
@@ -28,6 +43,10 @@ public partial class CrabBoss : Boss
     [HideInInspector] public readonly int swing = Animator.StringToHash("IsSwing");
     [HideInInspector] public readonly int bubbleShooting = Animator.StringToHash("IsBubbleShooting");
     [HideInInspector] public readonly int leftPunching = Animator.StringToHash("IsLeftPunching");
+    [HideInInspector] public readonly int die = Animator.StringToHash("Die");
+    [HideInInspector] public readonly int start = Animator.StringToHash("Start");
+
+    [HideInInspector] public bool idleAnimationEnd;
 
     private BossState _curBossState;
 
@@ -37,6 +56,7 @@ public partial class CrabBoss : Boss
 
     private void Awake()
     {
+        gameObject.layer = LayerMask.NameToLayer("Default");
         _pattern = GetComponent<CrabPattern>();
     }
 
@@ -62,17 +82,15 @@ public partial class CrabBoss : Boss
         _bossFSM.UpdateBossState();
     }
 
-    private void BodyAnimation()
-    {
-
-    }
-
     private void ChangeState()
     {
         switch (_curBossState)
         {
             case BossState.Idle:
-                ChangeBossState(BossState.Alive);
+                if(idleAnimationEnd)
+                {
+                    ChangeBossState(BossState.Alive);
+                }
                 break;
             case BossState.Alive:
                 if(IsDie)
@@ -80,6 +98,27 @@ public partial class CrabBoss : Boss
                     ChangeBossState(BossState.Dead);
                 }
                 break;
+        }
+    }
+
+    public void CrabReturnAll()
+    {
+        int childCount;
+        GameObject[] objs;
+
+        childCount = crabLaserCollector.transform.childCount;
+        objs = new GameObject[childCount];
+
+        for (int i = 0; i < childCount; i++)
+        {
+            objs[i] = crabLaserCollector.transform.GetChild(i).gameObject;
+        }
+
+        for (int i = 0; i < childCount; i++)
+        {
+            if (objs[i] == null)
+                continue;
+            ObjectPool.Instance.ReturnObject(objs[i]);
         }
     }
 
@@ -96,5 +135,35 @@ public partial class CrabBoss : Boss
                 _bossFSM.ChangeBossState(new CDeadState(this, _pattern));
                 break;
         }
+    }
+
+    public void StartAnimationEnded()
+    {
+        idleAnimationEnd = true;
+    }
+
+    public void BossIdlePos()
+    {
+        if(idleAnimationEnd)
+        {
+            transform.localPosition = new Vector3(0, 9.5f, 0);
+        }
+        else
+        {
+            transform.localPosition = new Vector3(0, 35f, 0);
+        }
+    }
+
+    public void CallRoar()
+    {
+        StartCoroutine(Roar());
+    }
+
+    private IEnumerator Roar()
+    {
+        animator.speed = 0;
+        CameraManager.Instance.CameraShake(10, 1);
+        yield return new WaitForSeconds(1);
+        animator.speed = 1;
     }
 }
