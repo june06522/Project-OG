@@ -28,7 +28,7 @@ public class RotateSkillManager : MonoBehaviour
 
     private List<RotateClone> rotateClones;
 
-    private Dictionary<WeaponID, int> _cloneDictionary; // ���⺰ �����ؾ� �� Ŭ�� �����ص� Dictionary.
+    private Dictionary<WeaponID, List<int>> _cloneDictionary; // ���⺰ �����ؾ� �� Ŭ�� �����ص� Dictionary.
     public List<RotateCloneInfo> CloneInfo; // Enum�� ClonePrefab ���ε� ���� ����.
 
     private bool _endSetting = false;
@@ -48,7 +48,6 @@ public class RotateSkillManager : MonoBehaviour
                 }
                 else
                 {
-                    //RotateStartSetting();
                     StopAllCoroutines();
                     StartCoroutine(RotateStartSetting());
                 }
@@ -59,16 +58,15 @@ public class RotateSkillManager : MonoBehaviour
     }
 
     //RotateSkill���� ȣ��.
-    public void SetCloneInfo(WeaponID id, int count)
+
+    public void SetCloneInfo(WeaponID id, int power)
     {
-        if (_cloneDictionary.ContainsKey(id))
-        {
-            _cloneDictionary[id] += count;
+        if (!_cloneDictionary.ContainsKey(id))
+        {   
+            _cloneDictionary[id] = new List<int>();
         }
-        else
-        {
-            _cloneDictionary[id] = count;
-        }
+        
+        _cloneDictionary[id].Add(power);
     }
 
     public RotateClone GetClonePrefabInfo(WeaponID id)
@@ -89,7 +87,7 @@ public class RotateSkillManager : MonoBehaviour
         // Ŭ�� ����.
         foreach (var info in  _cloneDictionary) 
         {
-            for(int i = 0 ; i < info.Value; ++i)
+            for(int i = 0 ; i < info.Value.Count; ++i)
             {
                 RotateClone clone = Instantiate(GetClonePrefabInfo(info.Key), playerTrm);
                 clone.Init();
@@ -159,7 +157,7 @@ public class RotateSkillManager : MonoBehaviour
 
         foreach(var type in Enum.GetValues(typeof(WeaponID)))
         {
-            _cloneDictionary[(WeaponID)type] = 0;
+            _cloneDictionary[(WeaponID)type] = new List<int>();
         }
 
         curRotateSpeed = maxRotateSpeed;
