@@ -57,7 +57,6 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
             {
                 movementInput = (nextPos - (Vector2)controller.transform.position).normalized;
                 controller.Enemy.MovementInput = movementInput;
-                Debug.Log(nextPos);
             }
         }
         else
