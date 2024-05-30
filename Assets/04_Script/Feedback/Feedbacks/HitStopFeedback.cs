@@ -10,7 +10,7 @@ public class HitStopFeedback : Feedback
     public override void Play(float damage)
     {
 
-        TimeManager.instance.Stop(_stopTime, 0.03f);
+        TimeManager.instance.Stop(0.03f, _stopTime);
 
     }
 
