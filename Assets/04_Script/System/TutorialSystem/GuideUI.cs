@@ -26,15 +26,18 @@ public class GuideUI : MonoBehaviour
     public void SetVideo(VideoClip clip)
     {
         _videoPlayer.clip = clip;
+        _videoPlayer.isLooping = true;
+        
     }
 
     public void SetVideoOnOff(bool isOn)
     {
+        _videoGuideObject.SetActive(isOn);
+
         if (isOn)
             _videoPlayer.Play();
         else
             _videoPlayer.Stop();
-        _videoGuideObject.SetActive(isOn);
     }
 
     public void ResetGuideText()
