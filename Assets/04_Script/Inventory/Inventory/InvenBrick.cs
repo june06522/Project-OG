@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Threading.Tasks;
 
 public enum ItemType
 {
@@ -23,6 +24,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     protected WeaponInventory inventory;
     protected InventoryActive inventoryActive;
+    protected ConnectVisible cv;
 
     public ItemType Type = ItemType.Weapon;
     [SerializeField] protected ItemRate itemRate = ItemRate.NORMAL;
@@ -51,6 +53,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         inventoryActive = FindObjectOfType<InventoryActive>();
         invensize = FindObjectOfType<InventorySize>();
         rectTransform = GetComponent<RectTransform>();
+        cv = FindObjectOfType<ConnectVisible>();
         if(transform.Find("ExplainPoint"))
         {
             explainPoint = transform.Find("ExplainPoint").GetComponent<RectTransform>();
@@ -132,7 +135,6 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
         if (inventory.CheckFills(InvenObject.bricks, point.Value))
         {
-            inventory.AddItem(InvenObject, point.Value);
             InvenPoint = point.Value;
 
             rectTransform.localPosition = p * 100;
@@ -145,6 +147,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
                 rectTransform.localPosition += new Vector3(0, 50);
 
             Setting();
+            inventory.AddItem(InvenObject, point.Value,this);
 
             Vector2 explainPosition = explainPoint == null
                 ? (Vector2)(rectTransform.position) + explainPos
@@ -165,7 +168,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
                 ((int)rectTransform.rect.width - 100,
                 ((int)rectTransform.rect.height) - 100) / 2) / 100));
 
-            inventory.AddItem(InvenObject, prev.Value);
+            inventory.AddItem(InvenObject, prev.Value, this);
             InvenPoint = prev.Value;
 
             transform.localPosition = prevPos;
@@ -176,6 +179,9 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
+        if (cv.IsRun)
+            return;
+
         StopCoroutine("CheckMouse");
         ItemExplain.Instance.HoverEnd();
 
@@ -186,6 +192,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         StartCoroutine("IDoShake");
         ItemExplain.Instance.isDrag = true;
         inventory.RemoveItem(InvenObject, InvenObject.originPos);
+        cv.EraseBrickLine(this);
 
     }
 
@@ -249,6 +256,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     IEnumerator IDoShake()
     {
+        GameManager.Instance.InventoryActive.isDrag = true;
         float rotation = 4f;
         float rotationTime = 0.08f;
         WaitForSeconds wfs = new WaitForSeconds(rotationTime);
@@ -263,6 +271,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         }
         transform.DORotate(new Vector3(0, 0, 0f), 0.01f);
         transform.DOScale(new Vector3(1, 1, 1), 0.01f);
+        GameManager.Instance.InventoryActive.isDrag = false;
         yield return null;
     }
 
@@ -278,7 +287,6 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         if (isHover == true) return;
         isHover = true;
 
-        Debug.Log("Gagag");
         //ItemExplain.Instance.HoverEvent(invenPoint);
         if (Type == ItemType.Generator)
             ItemExplain.Instance.HoverGenerator(
@@ -295,5 +303,6 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     {
         foreach(var v in InvenObject.includes)
             Destroy(v);
+        GameManager.Instance.InventoryActive.isDrag = false;
     }
 }

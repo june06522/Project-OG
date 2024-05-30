@@ -33,6 +33,7 @@ public class WeaponInventory : MonoBehaviour
     public WeaponInventoryViewer viewer { get; private set; }
     private List<SlotData> invenslots = new();
     private List<InventoryObjectData> container = new();
+    private ConnectVisible line;
 
     public event SlotAdded OnSlotAddEvent;
     public event CameraSetting camerasetting;
@@ -45,6 +46,7 @@ public class WeaponInventory : MonoBehaviour
     private void Awake()
     {
 
+        line = FindObjectOfType<ConnectVisible>();
         viewer = FindObjectOfType<WeaponInventoryViewer>();
 
     }
@@ -150,7 +152,7 @@ public class WeaponInventory : MonoBehaviour
 
     }
 
-    public bool AddItem(InventoryObjectData item, Vector2Int origin)
+    public bool AddItem(InventoryObjectData item, Vector2Int origin, InvenBrick brick)
     {
 
         if (CheckFills(item.bricks, origin))
@@ -159,6 +161,7 @@ public class WeaponInventory : MonoBehaviour
             item.originPos = origin;
             container.Add(item);
             FillSlots(item.bricks, origin, true);
+            line.AddBrick(brick);
             OnAddItem?.Invoke();
             return true;
 

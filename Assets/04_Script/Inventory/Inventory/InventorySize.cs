@@ -63,7 +63,7 @@ public class InventorySize : MonoBehaviour
             connectVisible.mulY = (0.2f + (7 - GetSize()) * 0.02f);// * ratio;
         }
 
-        GameManager.Instance.Inventory.SettingLineRender();
+        //GameManager.Instance.Inventory.SettingLineRender();
     }
 
     public int GetSize()

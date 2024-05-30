@@ -36,6 +36,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     [NonSerialized] public Transform player;
     private PlayerController playerController;
+    public PlayerController PlayerController => playerController;
 
     private void Awake()
     {

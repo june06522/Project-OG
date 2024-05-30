@@ -70,7 +70,6 @@ public class ItemExplain : MonoBehaviour
         
         curInvenPoint = invenPoint;
         weaponExplain.ON(invenPoint, image, name, power, explain, skillList,evaluation);
-        Debug.Log("Gang");
         //weaponExplain.ON(image, name, power, explain, skillList);
     }
 

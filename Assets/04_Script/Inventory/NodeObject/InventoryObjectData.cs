@@ -37,10 +37,12 @@ public class InventoryObjectData : ScriptableObject
     public Vector2Int originPos { get; set; }
     public Material colorMat;
 
+    [HideInInspector] public InvenBrick invenBrick;
+
     public void Init(Transform owner)
     {
 
-        inventory = UnityEngine.Object.FindObjectOfType<WeaponInventory>();
+        inventory = FindObjectOfType<WeaponInventory>();
 
         for (int i = 0; i < includes.Count; i++)
         {
@@ -63,6 +65,7 @@ public class InventoryObjectData : ScriptableObject
 
         }
 
+        invenBrick = owner.GetComponent<InvenBrick>();
     }
 
     public void GetSignal(object signal)
