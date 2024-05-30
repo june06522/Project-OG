@@ -18,7 +18,7 @@ public class RotateSkill : Skill
     {
         CurPowerInit(power);
 
-        rotateManager.SetCloneInfo(_ID, spawnCount);
+        rotateManager.SetCloneInfo(_ID, power);
     }
 
 
