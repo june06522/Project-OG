@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
 using System;
-using static UnityEditor.PlayerSettings;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using System.Collections;
@@ -31,7 +30,6 @@ public struct FinalInfo
 
 public class ConnectVisible : MonoBehaviour
 {
-    Dictionary<InventoryObjectData, HashSet<InvenBrick>> generatorDic = new();// connect Trigger
     Dictionary<InvenBrick, List<LineRenderer>> lineRenderDic = new(); // 바뀌면 Brick 연결된 친구들 싹 지우고 다시 할당
     Dictionary<InvenBrick, List<Coroutine>> coroutineDic = new();
 
@@ -83,7 +81,7 @@ public class ConnectVisible : MonoBehaviour
     }
 
     //라인 처음부터 다시 그릴때
-    public async void VisibleLineAllChange()
+    public async void VisibleLineAllChange(bool isSkip = false)
     {
         finalInfos = new();
 
@@ -97,13 +95,17 @@ public class ConnectVisible : MonoBehaviour
                 generatorList.Add(brick);
         }
 
+        
+
         isRun = true;
         foreach (var generator in generatorList)
         {
             Draw(generator);
         }
         await Task.WhenAll(allTasks);
-        DrawLine();
+        Debug.Log(allTasks.Count);
+        Debug.Log(finalInfos.Count);
+        DrawLine(isSkip);
         allTasks = new();
         isRun = false;
     }
@@ -113,7 +115,7 @@ public class ConnectVisible : MonoBehaviour
     {
         if (!GameManager.Instance.InventoryActive.IsOn)
             return;
-        
+
         var task = Task.Run(() => VisibleLineOneChange(generator));
         allTasks.Add(task);
         //var result = await task;
@@ -149,8 +151,10 @@ public class ConnectVisible : MonoBehaviour
             } while (b != null);
         }
         FinalInfo finalInfo = new FinalInfo(generator, savePoints);
-        finalInfos.Add(finalInfo);
-
+        lock (lockObj)
+        { 
+            finalInfos.Add(finalInfo);
+        }
         return 1;
     }
 
@@ -423,7 +427,7 @@ public class ConnectVisible : MonoBehaviour
     }
 
     //라인렌더러 그리기
-    private void DrawLine()
+    private void DrawLine(bool isSkip = false)
     {
         List<FinalInfo> modifierInfos = new();
         foreach(var a  in finalInfos)
@@ -462,7 +466,7 @@ public class ConnectVisible : MonoBehaviour
 
                         if (!coroutineDic.ContainsKey(info1.generator))
                             coroutineDic.Add(info1.generator, new());
-                        coroutineDic[info1.generator].Add(StartCoroutine(LineAnimation(line, info1, invenpoint, info.Value)));
+                        coroutineDic[info1.generator].Add(StartCoroutine(LineAnimation(line, info1, invenpoint, info.Value, isSkip)));
 
                     }
                 }
@@ -492,6 +496,7 @@ public class ConnectVisible : MonoBehaviour
     //블록 추가 됐을때 연결된 애들만 바꾸게 하는 함수
     public async void AddBrick(InvenBrick brick)
     {
+        finalInfos = new();
         if (brick.Type == ItemType.Generator)
         {
             isRun = true;
@@ -658,7 +663,7 @@ public class ConnectVisible : MonoBehaviour
     }
 
     //애니메이션
-    IEnumerator LineAnimation(LineRenderer line, FinalInfo info, Vector2Int invenpoint, List<Vector2Int> points)
+    IEnumerator LineAnimation(LineRenderer line, FinalInfo info, Vector2Int invenpoint, List<Vector2Int> points, bool skip = false)
     {
         //첫번째 점 그리기
         {
@@ -671,10 +676,6 @@ public class ConnectVisible : MonoBehaviour
             Vector3 endPos = new Vector3(realPos.Value.x, realPos.Value.y, -4);
 
             line.SetPosition(line.positionCount - 1, endPos);
-
-            if (!generatorDic.ContainsKey(data))
-                generatorDic.Add(data, new());
-            generatorDic[data].Add(info.generator);
         }
 
         float curTime = 0f;
@@ -719,14 +720,21 @@ public class ConnectVisible : MonoBehaviour
             {
                 curTime += Time.deltaTime;
 
-                drawPos.x = Mathf.Lerp(startPos.x, endPos.x, curTime / 0.1f);
-                drawPos.y = Mathf.Lerp(startPos.y, endPos.y, curTime / 0.1f);
+                if(skip)
+                {
+                    curTime = delayTime + 0.01f;
+                }
+
+                drawPos.x = Mathf.Lerp(startPos.x, endPos.x, curTime / delayTime);
+                drawPos.y = Mathf.Lerp(startPos.y, endPos.y, curTime / delayTime);
                 if (line != null)
                     line.SetPosition(line.positionCount - 1, drawPos);
-                yield return null;
+                if(!skip)
+                    yield return null;
             }
             curTime = 0.0f;
 
+            #region 예외처리
             if (realPos == null)
                 Destroy(line.gameObject);
 
@@ -738,11 +746,8 @@ public class ConnectVisible : MonoBehaviour
 
             if (line == null)
                 break;
-
-            //정보 추가
-            if (!generatorDic.ContainsKey(data))
-                generatorDic.Add(data, new());
-            generatorDic[data].Add(info.generator);
+            #endregion
         }
+        yield return null;
     }
 }
