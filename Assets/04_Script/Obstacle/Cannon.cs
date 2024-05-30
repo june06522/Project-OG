@@ -10,6 +10,9 @@ public class Cannon : MonoBehaviour
     [SerializeField] Transform shootPoint;
     [SerializeField] float speedRatio;
     [SerializeField] float scaleRatio;
+    [SerializeField] int vibrato = 10;
+    [SerializeField] float elasticity = 1;
+    [SerializeField] Ease ease;
     
     [SerializeField]
     AnimationCurve curve;
@@ -20,7 +23,7 @@ public class Cannon : MonoBehaviour
 
     private void Awake()
     {
-        MeshRenderer mr = GetComponent<MeshRenderer>();
+        Renderer mr = GetComponent<Renderer>();
         mat = Instantiate(mr.material);
         mr.material = mat;
         originScale = transform.localScale;
@@ -36,6 +39,9 @@ public class Cannon : MonoBehaviour
 
     public IEnumerator ShootCoroutine()
     {
+        transform.DOKill();
+        transform.localScale = originScale;
+
         Vector2 dir = transform.right;
         float start = 0f;
         float end = 1f;
@@ -49,7 +55,7 @@ public class Cannon : MonoBehaviour
             yield return null;
         }
 
-        transform.DOPunchScale(originScale * scaleRatio, 0.5f);
+        transform.DOPunchScale(originScale * scaleRatio, 0.5f, vibrato, elasticity).SetEase(ease);
         EnemyBullet clone = Instantiate(bullet, shootPoint.position, Quaternion.identity);
         clone.Shoot(transform.up);
     }
