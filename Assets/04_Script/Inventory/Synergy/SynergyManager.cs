@@ -1,16 +1,23 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Linq;
 using UnityEngine;
 
+[Serializable]
+public struct SynergyData
+{
+    public TriggerID type;
+    public List<float> table;
+}
 public class SynergyManager : MonoBehaviour
 {
 
     private static SynergyManager instance;
     public static SynergyManager Instance => instance;
-    
-    Dictionary<TriggerID, int> synergyCount;
-    
+
+    Dictionary<TriggerID, int> synergyLevel;
+    [SerializeField] List<SynergyData> tableList = new List<SynergyData>();
+
     private void Awake()
     {
 
@@ -29,21 +36,22 @@ public class SynergyManager : MonoBehaviour
     public void AddItem(TriggerID id)
     {
 
-        synergyCount[id]++;
+        synergyLevel[id]++;
         UpdateSynergy();
+        float modifyAmount = tableList.FirstOrDefault((x) => x.type == id).table[synergyLevel[id]];
 
     }
-
+     
     public void RemoveItem(TriggerID id)
     {
 
-        if (synergyCount.ContainsKey(id))
+        if (synergyLevel.ContainsKey(id))
         {
 
-            if (synergyCount[id] != 0)
+            if (synergyLevel[id] != 0)
             {
 
-                synergyCount[id]--;
+                synergyLevel[id]--;
 
             }
 
