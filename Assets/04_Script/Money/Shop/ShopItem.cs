@@ -49,6 +49,9 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (_isSold)
+            return;
+
         if(_shop.PlayerMoney.SpendGold(_itemPrice))
         {
             if(_item.GetItem())
