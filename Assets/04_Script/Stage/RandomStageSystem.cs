@@ -103,7 +103,7 @@ public class RandomStageSystem : MonoBehaviour
 
             _spawnPos = _spawnPos + new Vector3(0, _stageInterval, 0);
             stage = Instantiate(stage, _spawnPos, Quaternion.identity);
-            lastStage.AddNextStage(stage);
+            lastStage.SetNextStage(stage);
             lastStage = stage;
         }
         #endregion

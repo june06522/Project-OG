@@ -9,29 +9,41 @@ public class StageGate : MonoBehaviour, IInteractable
     public event Action OnGateEvent;
     public event Action OnMoveEndEvent;
 
+    [SerializeField]
+    private ItemType _gateItemType;
+    [SerializeField]
+    private List<GameObject> _itemTypeIcon;
+
     [field: SerializeField]
     public Stage NextStage { get; private set; }
 
+    // Transition
     private bool _interactCheck = true;
     private StageTransition stageTransition;
 
+    // Player
     private PlayerController _playerController;
+    private InventoryActive invenactive;
 
+    // Anim
     [SerializeField]
     private Transform _spawnTweeningObject;
 
+    // BossGate Property
     [SerializeField]
     private bool _isPlayJumpAnim;
+    private Collider2D _gateCollider;
 
-    private InventoryActive invenactive;
 
 
     private void Awake()
     {
+        _gateCollider = GetComponent<Collider2D>();
         stageTransition = FindObjectOfType<StageTransition>();
         _playerController = GameManager.Instance.player.GetComponent<PlayerController>();
         invenactive = FindObjectOfType<InventoryActive>();
 
+        // Tween
         Sequence seq = DOTween.Sequence();
         transform.localScale = Vector3.zero;
         seq.Append(transform.DOScale(Vector3.one, 1f).SetEase(Ease.OutBounce));
@@ -47,18 +59,17 @@ public class StageGate : MonoBehaviour, IInteractable
         });
     }
 
-    //test
-    private void Update()
+    public void SetStage(Stage nextStage, ItemType type)
     {
-        if (Input.GetKeyDown(KeyCode.P))
-            OnInteract();
-    }
+        NextStage = nextStage;
+        _gateItemType = type;
 
+        // Set Type Icon
+        _itemTypeIcon[(int)type].SetActive(true);
+    }
     public void SetStage(Stage nextStage)
     {
         NextStage = nextStage;
-
-
     }
 
     public void OnInteract()
@@ -66,15 +77,18 @@ public class StageGate : MonoBehaviour, IInteractable
         if (_interactCheck || GameManager.Instance.InventoryActive.IsOn) return;
 
         _interactCheck = true;
+        _gateCollider.enabled = false;
 
         StartCoroutine(GoNextStage());
     }
 
     IEnumerator GoNextStage()
     {
-
+        // Next Stage
         invenactive.canOpen = false;
         _playerController.ChangeState(EnumPlayerState.Idle);
+
+        // Jump Anim Sequence
         Transform playerTrm = GameManager.Instance.player;
         if (_isPlayJumpAnim)
         {
@@ -89,9 +103,12 @@ public class StageGate : MonoBehaviour, IInteractable
             yield return new WaitForSeconds(0.8f);
         }
 
-
+        // Transition
         stageTransition.StartTransition(1f);
+        SoundManager.Instance.BgStop();
         yield return new WaitForSeconds(2f);
+
+        // Teleport
         OnGateEvent?.Invoke();
         if (NextStage != null)
         {
@@ -105,13 +122,18 @@ public class StageGate : MonoBehaviour, IInteractable
             GameManager.Instance.ResetGlobalLight();
 
         yield return new WaitForSeconds(1f);
+
+        // Transition
         stageTransition.EndTransition(1f);
+        SoundManager.Instance.BGMPlay(NextStage.ThisStageType);
+
         yield return new WaitForSeconds(0.2f);
         _playerController.ChangeState(EnumPlayerState.Move);
 
+        // Stage Setting
         if (NextStage != null)
         {
-
+            NextStage.SetType(_gateItemType);
             if (NextStage.ThisStageType == StageType.EnemyStage || NextStage.ThisStageType == StageType.BossStage)
                 GameManager.Instance.isPlay = true;
 
@@ -120,8 +142,10 @@ public class StageGate : MonoBehaviour, IInteractable
 
         }
 
+        // Delay
         yield return new WaitForSeconds(1f);
 
+        // Enter Room Event
         EventTriggerManager.Instance?.RoomEnterExecute();
 
         if (NextStage != null)

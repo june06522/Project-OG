@@ -11,8 +11,7 @@ using UnityEngine;
 public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
 {
     [field: SerializeField] public EnemyDataSO EnemyDataSO { get; protected set; }
-    [SerializeField] public EnemyFindEffect enemyFindEffect;
-    //public Navigation Nav;
+    public Navigation Nav;
     public ContextSolver Solver;
 
     public event Action FixedUpdateAction;
@@ -26,7 +25,6 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
     {
         Enemy = GetComponent<Enemy>();
         AIdata = GetComponent<AIData>();
-        //spriteRender = transform.Find("Body").GetComponent<SpriteRenderer>();
     }
 
     protected virtual void Start()
@@ -34,14 +32,12 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
         EnemyDataSO = Instantiate(EnemyDataSO);
         //Nav = new(Enemy);
         Solver = new();
-        //    Target = GameManager.Instance.player;
-        Target = GameObject.Find("Player").transform;
+        Target = GameManager.Instance.player;
     }
 
     protected override void Update()
     {
         if (Enemy.Dead) return;
-        //Debug.Log(currentState);
         base.Update();
     }
 
@@ -71,12 +67,6 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
         else
             spriteRender.color = color;
 
-    }
-
-    public void PlayDiscoverAnim()
-    {
-        Vector2 spawnPoint = new Vector2(-0.8f, 1.2f);
-        Instantiate(enemyFindEffect, transform).transform.localPosition = spawnPoint;
     }
 
     public void FindPath()
@@ -137,34 +127,6 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
         return false;
     }
 
-    private void OnDrawGizmos()
-    {
-        if (EditorApplication.isPlaying)
-        {
-            Color originalColor = Gizmos.color;
-
-            if (m_fasterPath.Count > 0)
-            {
-                Gizmos.color = Color.green;
-
-                foreach (var loc in m_fasterPath)
-                    Gizmos.DrawCube(new Vector3(loc.x, loc.y, 0), new Vector3(0.5f, 0.5f, 0.5f));
-
-                Gizmos.DrawLine(transform.position, m_fasterPath.First.Value);
-
-                for (LinkedListNode<Vector2> iter = m_fasterPath.First; iter.Next != null; iter = iter.Next)
-                {
-                    Vector3 from = iter.Value;
-                    Vector3 to = iter.Next.Value;
-
-                    Gizmos.DrawLine(from, to);
-                }
-            }
-
-            Gizmos.color = originalColor;
-        }
-    }
-
     public bool IsPath()
     {
         return m_fasterPath.Count > 0;
@@ -174,12 +136,32 @@ public class BaseFSM_Controller<T> : FSM_System.FSM_Controller<T> where T : Enum
     {
         m_fasterPath.Clear();
     }
-    //public void PrintRoute(List<Vector3> route)
-    //{
-    //    if (route == null) return;
-    //    if (route.Count < 2) return;
-    //    lineRenderer.positionCount = route.Count;
 
-    //    lineRenderer.SetPositions(route.ToArray());
-    //}
+    private void OnDrawGizmos()
+    {
+        //if (EditorApplication.isPlaying)
+        //{
+        //    Color originalColor = Gizmos.color;
+
+        //    if (m_fasterPath.Count > 0)
+        //    {
+        //        Gizmos.color = Color.green;
+
+        //        foreach (var loc in m_fasterPath)
+        //            Gizmos.DrawCube(new Vector3(loc.x, loc.y, 0), new Vector3(0.5f, 0.5f, 0.5f));
+
+        //        Gizmos.DrawLine(transform.position, m_fasterPath.First.Value);
+
+        //        for (LinkedListNode<Vector2> iter = m_fasterPath.First; iter.Next != null; iter = iter.Next)
+        //        {
+        //            Vector3 from = iter.Value;
+        //            Vector3 to = iter.Next.Value;
+
+        //            Gizmos.DrawLine(from, to);
+        //        }
+        //    }
+
+        //    Gizmos.color = originalColor;
+        //}
+    }
 }

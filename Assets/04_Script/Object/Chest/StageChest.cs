@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class StageChest : MonoBehaviour, IInteractable
 {
@@ -25,7 +26,7 @@ public class StageChest : MonoBehaviour, IInteractable
     [SerializeField]
     private int _dropMaxGold = 50;
 
-    private Dictionary<ItemRate, List<ItemInfoSO>> _rateItems = new Dictionary<ItemRate, List<ItemInfoSO>>();
+    private Dictionary<ItemRate, Queue<ItemInfoSO>> _rateItems = new Dictionary<ItemRate, Queue<ItemInfoSO>>();
 
     [Header("Chest Info")]
     [SerializeField] private Sprite _openSprite;
@@ -47,31 +48,41 @@ public class StageChest : MonoBehaviour, IInteractable
             return;
         }
         
-        SetRateItems(_itemList.ItemInfoList.ToArray());
     }
 
-    private void SetRateItems(ItemInfoSO[] itemInfoSOs)
+    public void SetRateItems(ItemType itemType)
     {
+        List<ItemInfoSO> itemInfoSOs = _itemList.ItemInfoList;
+
         _rateItems.Clear();
-        _rateItems[ItemRate.NORMAL] = new List<ItemInfoSO>();
-        _rateItems[ItemRate.RARE] = new List<ItemInfoSO>();
-        _rateItems[ItemRate.EPIC] = new List<ItemInfoSO>();
-        _rateItems[ItemRate.LEGEND] = new List<ItemInfoSO>();
+        _rateItems[ItemRate.NORMAL]     = new Queue<ItemInfoSO>();
+        _rateItems[ItemRate.RARE]       = new Queue<ItemInfoSO>();
+        _rateItems[ItemRate.EPIC]       = new Queue<ItemInfoSO>();
+        _rateItems[ItemRate.LEGEND]     = new Queue<ItemInfoSO>();
+
+        Dictionary<ItemRate, List<ItemInfoSO>> rateItems = new Dictionary<ItemRate, List<ItemInfoSO>>();
+        rateItems[ItemRate.NORMAL]     = new List<ItemInfoSO>();
+        rateItems[ItemRate.RARE]       = new List<ItemInfoSO>();
+        rateItems[ItemRate.EPIC]       = new List<ItemInfoSO>();
+        rateItems[ItemRate.LEGEND]     = new List<ItemInfoSO>();
 
         foreach (ItemInfoSO item in itemInfoSOs)
         {
-            _rateItems[item.Rate].Add(item);
+            if (item.Brick.Type != itemType)
+                continue;
+
+            rateItems[item.Rate].Add(item);
         }
 
         // List Shuffle
-        foreach (var items in _rateItems)
+        foreach (var items in rateItems)
         {
-            ShuffleList(items.Value);
+            SetRateItemQueue(items.Key, items.Value);
         }
 
     }
 
-    private void ShuffleList(List<ItemInfoSO> list)
+    private void SetRateItemQueue(ItemRate type, List<ItemInfoSO> list)
     {
         int shuffleCount = Mathf.Min(_itemCount, list.Count);
 
@@ -79,10 +90,8 @@ public class StageChest : MonoBehaviour, IInteractable
         {
             int randomIdx = Random.Range(i, list.Count);
 
-            ItemInfoSO temp = list[randomIdx];
+            _rateItems[type].Enqueue(list[randomIdx]);
             list[randomIdx] = list[i];
-            list[i] = temp;
-
         }
     }
 
@@ -101,6 +110,7 @@ public class StageChest : MonoBehaviour, IInteractable
             _spriteRenderer.sprite = _openSprite;
 
         List<ItemInfoSO> randomItems = GetRandomItems();
+        _itemCount = randomItems.Count;
         for(int i = 0; i < _itemCount; ++i)
         {
             float angle = (360 / _itemCount) * i * Mathf.Deg2Rad;
@@ -148,35 +158,62 @@ public class StageChest : MonoBehaviour, IInteractable
         List<ItemInfoSO> itemList = new List<ItemInfoSO>();
 
         // Set ItemRate
-        float percent = Random.Range(0f, 100f); // 0 ~ 100
-        ItemRate rate = ItemRate.NORMAL;
-
-        int index = 0;
-
-        if (percent <= _legendProbability)
-            rate = ItemRate.LEGEND;
-        else if (percent <= _legendProbability + _epicProbability)
-            rate = ItemRate.EPIC;
-        else if (percent <= _legendProbability + _epicProbability + _rareProbability)
-            rate = ItemRate.RARE;
-
-        while (itemList.Count < _itemCount)
+        for(int i = 0; i < _itemCount; ++i)
         {
-            while (_rateItems[rate].Count <= index)
-            {
-                if (rate == ItemRate.LEGEND)
-                    rate = ItemRate.NORMAL;
-                else
-                    rate = rate + 1;
 
-                index = 0;
-            }
+            float endPercent = 100f;
+            float normalProbability = Mathf.Clamp(endPercent - _legendProbability - _epicProbability - _rareProbability, 0f, 100f);
 
-            itemList.Add(_rateItems[rate][index]);
-            index++;
+            // 해당 등급의 Item이 없을 경우 미리 체크하기
+            bool normalCheck    = RateItemQueueCheck(ItemRate.NORMAL, normalProbability, ref endPercent);
+            bool rareCheck      = RateItemQueueCheck(ItemRate.RARE, _rareProbability, ref endPercent);
+            bool epicCheck      = RateItemQueueCheck(ItemRate.EPIC, _epicProbability, ref endPercent);
+            bool legendCheck    = RateItemQueueCheck(ItemRate.LEGEND, _legendProbability, ref endPercent);
+
+            if (!normalCheck && !rareCheck && !epicCheck && !legendCheck)
+                break;
+
+            float value = Random.Range(0f, endPercent); // 0 ~ 100
+            ItemRate rate = ItemRate.NORMAL;
+
+
+            if (legendCheck && ItemPercentCheck(ItemRate.LEGEND, _legendProbability, ref value))
+                rate = ItemRate.LEGEND;
+            else if (epicCheck && ItemPercentCheck(ItemRate.EPIC, _epicProbability, ref value))
+                rate = ItemRate.EPIC;
+            else if (rareCheck && ItemPercentCheck(ItemRate.RARE, _rareProbability, ref value))
+                rate = ItemRate.RARE;
+
+            itemList.Add(_rateItems[rate].Dequeue());
         }
         
         return itemList;
+    }
+
+    private bool RateItemQueueCheck(ItemRate rate, float rateProability ,ref float endPercent)
+    {
+        if(_rateItems[rate].Count == 0)
+        {
+
+            endPercent -= rateProability;
+            return false;
+
+        }
+
+        return true;
+    }
+    private bool ItemPercentCheck(ItemRate rate, float rateProbability, ref float value)
+    {
+        if (value <= rateProbability)
+        {
+
+            return true;
+
+        }
+
+        value -= rateProbability;
+        return false;
+
     }
 
     public void OnInteract()

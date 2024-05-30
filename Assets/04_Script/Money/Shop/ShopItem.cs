@@ -23,6 +23,7 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler
     ItemInfoSO _item;
 
     private AudioClip _buyItemClip;
+    private bool _isSold = false;
 
     public void SetShopItem(ItemInfoSO item, AudioClip buyItemSound)
     {
@@ -40,6 +41,8 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler
         _itemName.text = item.ItemName;
         _buyItemClip = buyItemSound;
 
+        _isSold = false;
+
         SetColor(item.Rate);
         SetPrice(item.Rate);
     }
@@ -52,11 +55,12 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler
             {
                 _itemPrice = 0;
                 _itemPriceText.text = string.Empty;
-                _itemName.text = "Solved";
+                _itemName.text = "Sold Out";
                 _itemName.color = Color.white;
 
                 _itemImage.color = Color.clear;
 
+                _isSold = true;
                 SoundManager.Instance.SFXPlay("Buy", _buyItemClip, 0.6f);
 
             }

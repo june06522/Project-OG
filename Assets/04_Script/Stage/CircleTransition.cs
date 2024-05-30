@@ -1,11 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CircleTransition : MonoBehaviour
 {
-    private Vector3 _resolution = new Vector3(1920, 1080);
+    private Vector3 _resolution = new Vector3(0, 0);
+    public float CircleMaxValue => ((_resolution.y > _resolution.x) ? _resolution.y : _resolution.x) + 300;
 
     private Image _image;
     private Transform _player;
@@ -20,12 +23,19 @@ public class CircleTransition : MonoBehaviour
     private void Start()
     {
         _player = GameManager.Instance.player;
-        _image = GetComponent<Image>(); 
-        _circleMat = _image.material;
+        _image = GetComponent<Image>();
+        _circleMat = _image.material = Instantiate(_image.material);
+
+        SetResolution();
     }
 
     public void PlayCircleSizeChange(Vector3 startSize, Vector3 endSize, float time, bool lastTween = false)
     {
+        SetOnOff(true);
+
+        // Resolution Setting 
+        SetResolution();
+
         Vector3 pos = Camera.main.WorldToScreenPoint(_player.position) - (_resolution * 0.5f);
         _circleMat.SetVector(circlePosVecName, pos);
 
@@ -33,9 +43,28 @@ public class CircleTransition : MonoBehaviour
             StopCoroutine(_coroutine);
         _coroutine = StartCoroutine(CircleSizeChange(startSize, endSize, time, lastTween));
     }
-    public void SetOnOff(bool onoff)
+
+    private void SetResolution()
     {
-        _image.enabled = onoff;
+        Resolution resolution = Screen.currentResolution;
+        Vector3 resolutionVec = new Vector3(resolution.width, resolution.height, 0);
+
+#if DEBUG
+        resolutionVec = new Vector2(1920, 1080);
+#endif
+
+
+        if (_resolution != resolutionVec)
+        {
+            _resolution = resolutionVec;
+            _circleMat.SetVector(resolutionVecName, resolutionVec);
+            Screen.SetResolution((int)_resolution.x, (int)_resolution.y, true);
+        }
+    }
+
+    public void SetOnOff(bool onOff)
+    {
+        _image.enabled = onOff;
     }
 
     IEnumerator CircleSizeChange(Vector3 startSize, Vector3 endSize, float time, bool lastTween = false)

@@ -79,4 +79,12 @@ public class WeaponExplainManager : MonoBehaviour
         {WeaponID.LightSaber,   "광선검" },
         {WeaponID.Drone,        "드론" }
     };
+    public static Dictionary<WeaponID, string> weaponExplain = new()
+    {
+        {WeaponID.Emp,          "폭탄을 던져 범위 피해를 입힙니다." },
+        {WeaponID.LaserGun,     "강력한 레이저를 발사합니다." },
+        {WeaponID.Speaker,      "전방위에 범위 피해를 입힙니다." },
+        {WeaponID.LightSaber,   "가까운 적을 공격합니다." },
+        {WeaponID.Drone,        "적에게 총알을 발사합니다." }
+    };
 }

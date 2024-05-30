@@ -52,8 +52,9 @@ public enum TriggerID
     Move,           // 이동
     Idle,           // 가만히
     RoomClear,      // 방 클리어
+    GetHit,         // 피격
+    Kill,           // 처치
 }
-
 
 // Skill 2차원 리스트는 인스펙터에서 안보임 이렇게 해야함
 [Serializable]

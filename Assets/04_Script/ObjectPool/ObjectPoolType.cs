@@ -29,5 +29,5 @@ public enum ObjectPoolType
 
     CrabNormalBullet,
     CrabLaser,
-    CrabBubbleBullet
+    CrabBubbleBullet,
 }

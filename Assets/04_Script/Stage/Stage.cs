@@ -56,7 +56,7 @@ public enum StageType
 
 public class Stage : MonoBehaviour
 {
-    public List<Stage> NextStage { get; private set; } = new List<Stage>();
+    public Stage NextStage { get; private set; }
     public event Action OnStageClearEvent;
     public event Action OnGateEvent;
 
@@ -111,6 +111,7 @@ public class Stage : MonoBehaviour
 
     [SerializeField]
     private StageChest _stageChest;
+    private ItemType _itemType;
 
     [SerializeField]
     private StageType _stageType = StageType.EnemyStage;
@@ -165,28 +166,32 @@ public class Stage : MonoBehaviour
         }
     }
 
-    public void AddNextStage(Stage stage)
+    public void SetNextStage(Stage stage)
     {
-        NextStage.Add(stage);
+        NextStage = stage;
+    }
+    public void SetType(ItemType type)
+    {
+        _itemType = type;
     }
 
     public void StartWave()
     {
 
-        if(_stageType == StageType.EventStage)
-        {
-
-            FAED.InvokeDelay(AppearGate, 1.5f);
-            return;
-
-        }
-        else if (_stageType == StageType.BossStage)
+        if (_stageType == StageType.BossStage)
         {
             _bossObject.gameObject.SetActive(true);
             monsterCount++;
             _bossObject.DeadEndEvt += HandleWaveClearCheck;
             // After Creating Boss, Delete AppearGate
             return;
+        }
+        else if (_stageType != StageType.EnemyStage)
+        {
+
+            FAED.InvokeDelay(AppearGate, 1.5f);
+            return;
+
         }
 
         StartCoroutine(MonsterSpawn());
@@ -211,13 +216,14 @@ public class Stage : MonoBehaviour
 
         if (_stageChest != null)
         {
-            GameObject chest = null;
+            StageChest chest = null;
             if (_gateSpawnPos == null)
-                chest = Instantiate(_stageChest, transform.position - new Vector3(0, 5, 0), Quaternion.identity).gameObject;
+                chest = Instantiate(_stageChest, transform.position - new Vector3(0, 5, 0), Quaternion.identity);
             else
-                chest = Instantiate(_stageChest, _gateSpawnPos.position - new Vector3(0, 5, 0), Quaternion.identity).gameObject;
+                chest = Instantiate(_stageChest, _gateSpawnPos.position - new Vector3(0, 5, 0), Quaternion.identity);
 
-            stageItems.Add(chest);
+            chest.SetRateItems(_itemType);
+            stageItems.Add(chest.gameObject);
 
         }
     }
@@ -229,7 +235,7 @@ public class Stage : MonoBehaviour
         if(monsterCount <= 0 && isMonsterSpawning == false)
         {
             GameManager.Instance.isPlay = false;
-
+            
 
             if(_stageType == StageType.BossStage)
             {
@@ -237,6 +243,8 @@ public class Stage : MonoBehaviour
 
                 EventTriggerManager.Instance?.StageClearExecute();
                 OnStageClearEvent?.Invoke();
+
+                SoundManager.Instance.BGMPlay(StageType.Start);
             }    
 
             if(waveCount >= waveList.Count)
@@ -247,6 +255,8 @@ public class Stage : MonoBehaviour
                 OnStageClearEvent?.Invoke();
                 AppearGate();
                 AppearChest();
+
+                SoundManager.Instance.BGMPlay(StageType.Start);
             }
             else
             {
@@ -264,25 +274,43 @@ public class Stage : MonoBehaviour
         //PlaySceneEffectSound.Instance.PlayGateSound();
 
         // appear Gate ...it need tween
-
         if (_stageType != StageType.EventStage && _stageType != StageType.Shop)
             DeleteStageCameraSetting();
         GameManager.Instance.isPlay = false;
         if(_stageClearClip != null)
             SoundManager.Instance.SFXPlay("Clear", _stageClearClip, 1f);
 
-        if (_stageType == StageType.BossStage || NextStage.Count == 0)
+        if (stageGate == null)
+            return;
+
+        if (_stageType == StageType.BossStage)
         {
             SpawnGate(null);
         }
-        else if (NextStage.Count == 1)
+        else if (_stageType == StageType.Start)
         {
-            SpawnGate(NextStage[0]);
+            SpawnGate(NextStage, Vector3.zero, ItemType.Generator);
         }
-        else if (NextStage.Count == 2)
+        else if (NextStage != null && NextStage.ThisStageType != StageType.EnemyStage)
         {
-            SpawnGate(NextStage[0], -new Vector3(2, 0, 0));
-            SpawnGate(NextStage[1], new Vector3(2, 0, 0));
+            SpawnGate(NextStage);
+        }
+        else
+        {
+            //Shuffle
+            ItemType[] itemTypes = { ItemType.Weapon, ItemType.Generator, ItemType.Connector };
+            for(int i = 0; i < 2; ++i)
+            {
+                int randIndex = Random.Range(i, itemTypes.Length);
+
+                ItemType temp = itemTypes[i];
+                itemTypes[i] = itemTypes[randIndex];
+                itemTypes[randIndex] = temp;
+
+            }
+
+            SpawnGate(NextStage, -new Vector3(3, 0, 0), itemTypes[0]);
+            SpawnGate(NextStage, new Vector3(3, 0, 0), itemTypes[1]);
         }
 
         // effect or tween
@@ -297,16 +325,39 @@ public class Stage : MonoBehaviour
             CameraManager.Instance.SetDefaultCam();
     }
 
-    private void SpawnGate(Stage stage, Vector3 offset = new Vector3())
+    private void SpawnGate(Stage stage, Vector3 offset, ItemType type)
+    {
+        if (stageGate == null)
+            return;
+
+        StageGate gate = null;
+        if (_gateSpawnPos == null)
+            gate = Instantiate(stageGate, transform.position + offset, Quaternion.identity);
+        else
+            gate = Instantiate(stageGate, _gateSpawnPos.position + offset, Quaternion.identity);
+
+        gate.OnGateEvent += HandleGateEvent;
+        gate.OnMoveEndEvent += HandleDestroyGate;
+        stageItems.Add(gate.gameObject);
+
+        if (stage != null)
+        {
+
+            gate.SetStage(stage, type);
+
+        }
+    }
+
+    private void SpawnGate(Stage stage)
     {
         if (stageGate == null)
             return;
 
         StageGate gate = null;
         if(_gateSpawnPos == null)
-            gate = Instantiate(stageGate, transform.position + offset, Quaternion.identity);
+            gate = Instantiate(stageGate, transform.position, Quaternion.identity);
         else
-            gate = Instantiate(stageGate, _gateSpawnPos.position + offset, Quaternion.identity);
+            gate = Instantiate(stageGate, _gateSpawnPos.position, Quaternion.identity);
 
         gate.OnGateEvent += HandleGateEvent;
         gate.OnMoveEndEvent += HandleDestroyGate;
@@ -319,12 +370,12 @@ public class Stage : MonoBehaviour
 
         }
     }
+
     public void DestroyStage()
     {
-        foreach(var stage in NextStage)
-        {
-            stage.DestroyStage();
-        }
+
+        if(NextStage != null)
+            NextStage.DestroyStage();
         Destroy(gameObject);
     }
     private void HandleDestroyGate()

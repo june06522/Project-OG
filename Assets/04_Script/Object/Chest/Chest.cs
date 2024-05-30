@@ -77,10 +77,6 @@ public class Chest : MonoBehaviour, IInteractable
         _collider.enabled = false;
         _isOpen = true;
 
-        //ChestOpenSound
-        //PlaySceneEffectSound.Instance.PlayChestOpenSound();
-        PlaySceneEffectSound.Instance.PlayMoneyDropSound();
-
         if(_spriteRenderer != null)
             _spriteRenderer.sprite = _openSprite;
 
@@ -97,8 +93,9 @@ public class Chest : MonoBehaviour, IInteractable
             PlayOpenEffect(item.Rate);
         _feedbackPlayer?.Play(0);
 
-        SoundManager.Instance.SFXPlay("ChestOpen", _openSound, 1f);
-        Money.Instance.EarnGold(Random.Range(_dropMinGold, _dropMaxGold + 1));
+        if (_openSound != null)
+            SoundManager.Instance.SFXPlay("ChestOpen", _openSound, 1f);
+
     }
 
     private void PlayOpenEffect(ItemRate rate)
