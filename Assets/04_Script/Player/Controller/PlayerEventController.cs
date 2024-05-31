@@ -8,7 +8,7 @@ public class PlayerEventController : IDisposable
     #region 액션 관리
     public event Action OnMove;         // 이동
     public event Action OnDash;         // 대쉬
-    public event BasicAttack OnBasicAttack;  // 기본 공격
+    public event Action OnBasicAttack;  // 기본 공격
     public event Action OnCool;         // 쿨타임
     public event Action OnIdle;         // Idle
     public event Action OnHit;          // 피격
@@ -27,11 +27,11 @@ public class PlayerEventController : IDisposable
     #region 함수 호출
     public void OnMoveExecute()                         => OnMove?.Invoke();
     public void OnDashExecute()                         => OnDash?.Invoke();
-    public void OnBasicAttackExecute(Weapon weapon)     => OnBasicAttack?.Invoke(weapon);
+    public void OnBasicAttackExecute()                  => OnBasicAttack?.Invoke();
     public void OnCoolExecute()                         => OnCool?.Invoke();
     public void OnIdleExecute()                         => OnIdle?.Invoke();
     public void OnHitExecute()                          => OnHit?.Invoke();
-    public void OnRoomEnterExecute()                    => OnRoomEnter?.Invoke();
+    public void OnRoomClearExecute()                    => OnRoomEnter?.Invoke();
     public void OnStageClearExecute()                   => OnStageClear?.Invoke();
     public void OnWaveStartExecute()                    => OnWaveStart?.Invoke();
     public void OnSkillxecute()                         => OnSkill?.Invoke();

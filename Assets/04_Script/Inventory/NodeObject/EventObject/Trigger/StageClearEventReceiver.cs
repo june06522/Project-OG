@@ -28,7 +28,7 @@ public class StageClearEventReceiver : InventoryEventReceiverBase
     private void HandleStageClear()
     {
 
-        SendData s = new SendData(generatorID, transform);
+        SendData s = new SendData(generatorID, transform,TriggerID.StageClear);
 
         GetSignal(s);
 

@@ -28,7 +28,7 @@ public class WaveStartEventReceiver : InventoryEventReceiverBase
     private void HandleWaveStart()
     {
 
-        SendData s = new SendData(generatorID, transform);
+        SendData s = new SendData(generatorID, transform,TriggerID.WaveStart);
 
         GetSignal(s);
 

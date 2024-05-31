@@ -6,14 +6,13 @@ public class SkillEventReceiver : InventoryEventReceiverBase
 {
     public GeneratorID generatorID;
     public int cnt = 1;
-    private int curskill = 0;
 
     protected override void OnInit()
     {
         if (PlayerController.EventController != null)
         {
 
-            PlayerController.EventController.OnSkill += UseSkill;
+            PlayerController.EventController.OnSkill += HandleSkill;
 
         }
 
@@ -27,20 +26,10 @@ public class SkillEventReceiver : InventoryEventReceiverBase
 
     }
 
-    private void UseSkill()
-    {
-        curskill++;
-        if (curskill >= cnt)
-        {
-            curskill -= cnt;
-            HandleSkill();
-        }
-    }
-
     private void HandleSkill()
     {
 
-        SendData s = new SendData(generatorID, transform);
+        SendData s = new SendData(generatorID, transform, TriggerID.UseSkill,cnt);
 
         GetSignal(s);
 
@@ -50,7 +39,7 @@ public class SkillEventReceiver : InventoryEventReceiverBase
     {
         if (PlayerController.EventController != null)
         {
-            PlayerController.EventController.OnSkill -= UseSkill;
+            PlayerController.EventController.OnSkill -= HandleSkill;
 
         }
 

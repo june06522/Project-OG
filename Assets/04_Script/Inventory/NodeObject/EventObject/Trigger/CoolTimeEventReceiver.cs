@@ -5,8 +5,7 @@ using UnityEngine;
 public class CoolTimeEventReceiver : InventoryEventReceiverBase
 {
     public GeneratorID generatorID;
-    public float cool;
-    private float curCool;
+    public double cool;
 
     protected override void OnInit()
     {
@@ -14,21 +13,10 @@ public class CoolTimeEventReceiver : InventoryEventReceiverBase
         if (PlayerController.EventController != null)
         {
 
-            PlayerController.EventController.OnCool += ReductionVal;
-            curCool = cool;
+            PlayerController.EventController.OnCool += HandleCool;
 
         }
 
-    }
-
-    public void ReductionVal()
-    {
-        curCool -= Time.deltaTime;
-        if(curCool < 0)
-        {
-            curCool = cool;
-            HandleCool();
-        }
     }
 
     [BindExecuteType(typeof(SendData))]
@@ -42,7 +30,7 @@ public class CoolTimeEventReceiver : InventoryEventReceiverBase
     private void HandleCool()
     {
 
-        SendData s = new SendData(generatorID, transform);
+        SendData s = new SendData(generatorID, transform, TriggerID.CoolTime, cool);
 
         GetSignal(s);
 
@@ -54,7 +42,7 @@ public class CoolTimeEventReceiver : InventoryEventReceiverBase
         if (PlayerController.EventController != null)
         {
 
-            PlayerController.EventController.OnCool -= ReductionVal;
+            PlayerController.EventController.OnCool -= HandleCool;
 
         }
 

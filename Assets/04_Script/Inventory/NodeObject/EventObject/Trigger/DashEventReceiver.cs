@@ -28,8 +28,7 @@ public class DashEventReceiver : InventoryEventReceiverBase
 
     private void HandleDash()
     {
-
-        SendData s = new SendData(generatorID, transform);
+        SendData s = new SendData(generatorID, transform,TriggerID.Dash);
 
         GetSignal(s);
 
