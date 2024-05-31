@@ -6,14 +6,13 @@ public class EnemyDieEventReceiver : InventoryEventReceiverBase
 {
     public GeneratorID generatorID;
     public int cnt = 1;
-    private int curdie = 0;
 
     protected override void OnInit()
     {
         if (PlayerController.EventController != null)
         {
 
-            PlayerController.EventController.OnEnemyDie += EnemyDie;
+            PlayerController.EventController.OnEnemyDie += HandleEnemyDie;
 
         }
 
@@ -27,20 +26,10 @@ public class EnemyDieEventReceiver : InventoryEventReceiverBase
 
     }
 
-    private void EnemyDie()
-    {
-        curdie++;
-        if (curdie >= cnt)
-        {
-            curdie -= cnt;
-            HandleEnemyDie();
-        }
-    }
-
     private void HandleEnemyDie()
     {
 
-        SendData s = new SendData(generatorID, transform);
+        SendData s = new SendData(generatorID, transform, TriggerID.Kill, cnt);
 
         GetSignal(s);
 
@@ -50,7 +39,7 @@ public class EnemyDieEventReceiver : InventoryEventReceiverBase
     {
         if (PlayerController.EventController != null)
         {
-            PlayerController.EventController.OnEnemyDie -= EnemyDie;
+            PlayerController.EventController.OnEnemyDie -= HandleEnemyDie;
 
         }
 

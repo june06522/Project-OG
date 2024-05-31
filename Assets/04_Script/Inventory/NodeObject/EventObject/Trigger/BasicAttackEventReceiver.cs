@@ -26,10 +26,10 @@ public class BasicAttackEventReceiver : InventoryEventReceiverBase
 
     }
 
-    private void HandleBasicAttack(Weapon weapon)
+    private void HandleBasicAttack()
     {
 
-        SendData s = new SendData(generatorID, transform,1,weapon);
+        SendData s = new SendData(generatorID, transform,TriggerID.NormalAttack ,1);
 
         GetSignal(s);
 

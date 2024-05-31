@@ -22,6 +22,8 @@ public class EventTriggerManager : MonoBehaviour
         #endregion
 
         _playerRb = GameObject.Find("Player").GetComponent<Rigidbody2D>();
+        if (SkillManager.Instance == null)
+            Debug.LogError("SkillManager is null! : 아무데나 넣으세여");
     }
 
     private void Update()
@@ -42,67 +44,84 @@ public class EventTriggerManager : MonoBehaviour
     #region 익스큐트 관리
     public void CoolExecute()
     {
-        PlayerController.EventController?.OnCoolExecute();
+        SkillManager.Instance?.DetectTrigger(TriggerID.CoolTime);
     }
 
     public void IdleExecute()
     {
         if (_playerRb.velocity == Vector2.zero)
         {
-            PlayerController.EventController?.OnIdleExecute();
+            SkillManager.Instance?.DetectTrigger(TriggerID.Idle);
         }
     }
 
     public void BasicAttackExecute(Weapon weapon)
     {
-        PlayerController.EventController?.OnBasicAttackExecute(weapon);
+        SkillManager.Instance?.DetectTrigger(TriggerID.NormalAttack,weapon);
     }
 
     public void RunExecute()
     {
         if (_playerRb.velocity != Vector2.zero)
-            PlayerController.EventController?.OnMoveExecute();
+            SkillManager.Instance?.DetectTrigger(TriggerID.Move);
     }
 
     public void DashExecute()
     {
-        PlayerController.EventController?.OnDashExecute();
+        SkillManager.Instance?.DetectTrigger(TriggerID.Dash);
     }
 
     public void HitExecute()
     {
-        PlayerController.EventController?.OnHitExecute();
+        SkillManager.Instance?.DetectTrigger(TriggerID.GetHit);
     }
 
-    public void RoomEnterExecute()
+    public void RoomClearExecute()
     {
-        PlayerController.EventController?.OnRoomEnterExecute();
+        SkillManager.Instance?.DetectTrigger(TriggerID.RoomClear);
     }
 
     public void StageClearExecute()
     {
-        PlayerController.EventController?.OnStageClearExecute();
+        SkillManager.Instance?.DetectTrigger(TriggerID.StageClear);
     }
 
     public void WaveStartExecute()
     {
-        PlayerController.EventController?.OnWaveStartExecute();
+        SkillManager.Instance?.DetectTrigger(TriggerID.WaveStart);
     }
 
     public void SkillExecute()
     {
-        PlayerController.EventController?.OnSkillxecute();
+        SkillManager.Instance?.DetectTrigger(TriggerID.UseSkill);
     }
 
     public void EnemyDieExecute()
     {
-        PlayerController.EventController?.OnEnemyDieExecute();
+        SkillManager.Instance?.DetectTrigger(TriggerID.Kill);
     }
 
     public void AlwaysExecute()
     {
+        SkillManager.Instance?.DetectTrigger(TriggerID.Always);
+    }
+    #endregion
+
+    public void ResetTrigger()
+    {
+        SkillManager.Instance.Init();
+
+        PlayerController.EventController?.OnMoveExecute();
+        PlayerController.EventController?.OnDashExecute();
+        PlayerController.EventController?.OnBasicAttackExecute();
+        PlayerController.EventController?.OnEnemyDieExecute();
+        PlayerController.EventController?.OnCoolExecute();
+        PlayerController.EventController?.OnIdleExecute();
+        PlayerController.EventController?.OnHitExecute();
+        PlayerController.EventController?.OnRoomClearExecute();
+        PlayerController.EventController?.OnStageClearExecute();
+        PlayerController.EventController?.OnWaveStartExecute();
+        PlayerController.EventController?.OnSkillxecute();
         PlayerController.EventController?.OnAlwaysExecute();
     }
-
-    #endregion
 }

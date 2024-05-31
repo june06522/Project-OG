@@ -103,8 +103,6 @@ public class ConnectVisible : MonoBehaviour
             Draw(generator);
         }
         await Task.WhenAll(allTasks);
-        Debug.Log(allTasks.Count);
-        Debug.Log(finalInfos.Count);
         DrawLine(isSkip);
         allTasks = new();
         isRun = false;

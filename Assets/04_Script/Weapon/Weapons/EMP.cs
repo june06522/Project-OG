@@ -54,14 +54,7 @@ public class EMP : InvenWeapon
 
         var data = (SendData)signal;
 
-        if (!sendDataList.ContainsKey(data.index))
-        {
-            sendDataList.Add(data.index, data);
-        }
-        else
-        {
-            sendDataList[data.index].Power = sendDataList[data.index].Power > data.Power ? sendDataList[data.index].Power : data.Power;
-        }
+        SkillManager.Instance.RegisterSkill(data.TriggerID, this, data);
 
     }
 

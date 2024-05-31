@@ -138,6 +138,8 @@ public class InventoryActive : MonoBehaviour
         //var energeBar = FindObjectOfType<PlayerEnergeBar>();
         //energeBar.Image.color = new Color(energeBar.Image.color.r, energeBar.Image.color.g, energeBar.Image.color.b, 1);
 
+        EventTriggerManager.Instance.ResetTrigger();
+
         _components.localPosition = new Vector3(0, 1000, 0);
         cv.ClearLineRender();
         ScreenManager.Instance.SetEffect(0, 0.5f, DG.Tweening.Ease.InQuart);

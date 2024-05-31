@@ -8,6 +8,7 @@ public abstract class Weapon : MonoBehaviour
     public WeaponID id;
 
     protected Transform target;
+    public Transform Target => target;
     private float chargeValue;
 
     [field: SerializeField] public WeaponDataSO Data { get; protected set; }

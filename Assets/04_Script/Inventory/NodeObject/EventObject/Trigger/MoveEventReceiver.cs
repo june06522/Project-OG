@@ -29,7 +29,7 @@ public class MoveEventReceiver : InventoryEventReceiverBase
     private void HandleMove()
     {
 
-        SendData s = new SendData(generatorID, transform);
+        SendData s = new SendData(generatorID, transform, TriggerID.Move);
 
         GetSignal(s);
 
