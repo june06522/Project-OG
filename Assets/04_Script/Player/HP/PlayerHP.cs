@@ -17,11 +17,24 @@ public class PlayerHP : MonoBehaviour, IHitAble
     public int MaxHP { get; private set; }
     public int CurrentHP { get; private set; }
 
+    private float defence = 0;
     private bool _isDead = false;
+
+    private void Start()
+    {
+        SynergyManager.Instance.OnSynergyChange += ChangeDefenceFactor;
+    }
+
+    private void ChangeDefenceFactor()
+    {
+        defence = SynergyManager.Instance.SynergyAmount[PlayerStatsType.Defence];
+    }
 
     public bool Hit(float damage)
     {
         if (_isDead) return false;
+        
+        damage = damage - (damage * defence);
 
         EventTriggerManager.Instance?.HitExecute();
         feedbackPlayer?.Play(damage);
@@ -66,5 +79,10 @@ public class PlayerHP : MonoBehaviour, IHitAble
         _isDead = true;
 
         SceneManager.LoadScene("DieScene");
+    }
+
+    private void OnDestroy()
+    {
+        SynergyManager.Instance.OnSynergyChange -= ChangeDefenceFactor;
     }
 }

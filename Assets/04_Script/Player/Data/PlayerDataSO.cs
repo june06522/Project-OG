@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum PlayerStatsType
 {
-
+    None,
     AttackSpeed,
     Bloodsucking,
     Cooltime,
@@ -40,15 +40,6 @@ public class PlayerDataSO : ScriptableObject
     [SerializeField] private Stats dashCoolDown;
     [SerializeField] private Stats dashLength;
     [SerializeField] private Stats dashSpeed;
-
-    [Header("ExtraStat")]
-    [Space(1f)]
-    [SerializeField] private Stats attackSpeed;
-    [SerializeField] private Stats bloodSucking;
-    [SerializeField] private Stats cooltime;
-    [SerializeField] private Stats earningGold;
-    [SerializeField] private Stats damage;
-    [SerializeField] private Stats defence;
 
     [field: SerializeField] public LayerMask DashObstacleLayer { get; private set; }
 
