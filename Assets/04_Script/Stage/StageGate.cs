@@ -84,6 +84,7 @@ public class StageGate : MonoBehaviour, IInteractable
 
     IEnumerator GoNextStage()
     {
+        EventTriggerManager.Instance.ResetTrigger();
         // Next Stage
         invenactive.canOpen = false;
         _playerController.ChangeState(EnumPlayerState.Idle);
