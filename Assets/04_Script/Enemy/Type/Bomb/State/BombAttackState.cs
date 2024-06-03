@@ -16,7 +16,7 @@ public class BombAttackState : NormalRootState
 
     protected override void EnterState()
     {
-        controller.InstantiateRange();
+        controller.InstantiateWarning();
         controller.StopImmediately();
         float randomTime = 0.8f;
         Attack(randomTime);

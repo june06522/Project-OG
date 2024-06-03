@@ -3,20 +3,20 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
+public class Enemy : MonoBehaviour, IHitAble
 {
-    [SerializeField] EnemyDataSO enemyDataSO;
+    [SerializeField]
+    EnemyDataSO enemyDataSO;
     public EnemyDataSO EnemyDataSO => enemyDataSO;
 
-    [Header("Visual")]
-    [SerializeField]
-    private Transform _visualTrm;
     [field: SerializeField]
     public EnemyAnimController enemyAnimController { get; set; }
 
     [Header("Movement")]
     [SerializeField]
-    float acceleration = 50, deacceleration = 100;
+    float acceleration = 50;
+    [SerializeField]
+    float deacceleration = 100;
     [SerializeField]
     private float currentSpeed = 0;
     private float speedRatio = 1;
@@ -39,8 +39,8 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
 
     [SerializeField]
     private AudioClip _hitSound;
-    //ETC
 
+    //ETC
     [field:SerializeField]
     public FeedbackPlayer feedbackPlayer { get; set; }
 
@@ -49,39 +49,24 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
     public Collider2D Collider => collider;
     public Rigidbody2D Rigidbody => rigidbody;
 
-    private SpriteRenderer spriteRender;
-
     //PathFinding
     private JPSPathFinderFaster m_jpsPathFinderFaster;
     public JPSPathFinderFaster GetPathFinder => m_jpsPathFinderFaster;
     public Stage OwnerStage { get; set; }
-
-    //Debuff
-    public EDebuffType DebuffType { get; set; }
-    public float DebuffCoolTime { get; set; }
-
-
-    public Color frozenColor = new Color(0.7584906f, 0.9797822f, 1, 1);
-
-    public bool IsDebuffing;
 
     private void Awake()
     {
         collider = GetComponent<Collider2D>();
         rigidbody = GetComponent<Rigidbody2D>();
 
-        spriteRender = _visualTrm.GetComponent<SpriteRenderer>();
-
         m_jpsPathFinderFaster = GetComponent<JPSPathFinderFaster>();
     }
 
     private void Start()
     {
-        DebuffType = EDebuffType.None;
         curHp = enemyDataSO.MaxHP;
         DeadEvent += DieEvent;
         speedRatio = 1;
-        IsDebuffing = false;
     }
 
     private void Update()
@@ -142,61 +127,5 @@ public class Enemy : MonoBehaviour, IHitAble, IDebuffReciever
     {
         EventTriggerManager.Instance?.EnemyDieExecute();
         Destroy(gameObject);
-    }
-
-    public void DisposeDebuff()
-    {
-        if (DebuffType.HasFlag(EDebuffType.Frozen))
-        {
-            speedRatio = 1f;
-        }
-        else if (DebuffType.HasFlag(EDebuffType.Burn))
-        {
-
-        }
-        else if (DebuffType.HasFlag(EDebuffType.Poison))
-        {
-
-        }
-        spriteRender.color = Color.white;
-
-        IsDebuffing = false;
-    }
-
-
-    public void DebuffEffect(EDebuffType debuffType, float coolTime)
-    {
-        if (IsDebuffing)
-            return;
-
-        Debug.Log(debuffType);
-        if(debuffType == EDebuffType.None)
-        {
-            return;
-        }
-        else if(debuffType.HasFlag(EDebuffType.Frozen))
-        {
-            Debug.Log("Gang");
-            spriteRender.color = frozenColor;
-            speedRatio = 0.2f;
-        }
-        else if (debuffType.HasFlag(EDebuffType.Burn))
-        {
-
-        }
-        else if (debuffType.HasFlag(EDebuffType.Poison))
-        {
-
-        }
-
-
-        IsDebuffing = true;
-        StopAllCoroutines();
-        StartCoroutine(DebuffCor(coolTime));
-    }
-    IEnumerator DebuffCor(float coolTime)
-    {
-        yield return new WaitForSeconds(coolTime);
-        DisposeDebuff();
     }
 }
