@@ -1,16 +1,29 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Linq;
 using UnityEngine;
+
+[Serializable]
+public struct SynergyData
+{
+    public TriggerID type;
+    public List<float> table;
+}
 
 public class SynergyManager : MonoBehaviour
 {
 
     private static SynergyManager instance;
     public static SynergyManager Instance => instance;
-    
-    Dictionary<TriggerID, int> synergyCount;
-    
+
+    public Action OnSynergyChange;
+
+    [SerializeField] List<SynergyData> tableList = new List<SynergyData>();
+    Dictionary<TriggerID, int> synergyLevel = new Dictionary<TriggerID, int>();
+
+    Dictionary<PlayerStatsType, float> synergyAmount = new Dictionary<PlayerStatsType, float>();
+    public Dictionary<PlayerStatsType, float> SynergyAmount => synergyAmount;
+
     private void Awake()
     {
 
@@ -24,37 +37,93 @@ public class SynergyManager : MonoBehaviour
 
         instance = this;
 
+        foreach (TriggerID id in Enum.GetValues(typeof(TriggerID)))
+        {
+            UpdateSynergyAmount(id);
+        }
+
     }
 
-    public void AddItem(TriggerID id)
+    public void EquipItem(TriggerID id)
     {
 
-        synergyCount[id]++;
-        UpdateSynergy();
+        synergyLevel[id]++;
+        UpdateSynergyAmount(id);
 
     }
 
     public void RemoveItem(TriggerID id)
     {
 
-        if (synergyCount.ContainsKey(id))
+        if (synergyLevel.ContainsKey(id))
         {
 
-            if (synergyCount[id] != 0)
+            if (synergyLevel[id] != 0)
             {
 
-                synergyCount[id]--;
+                synergyLevel[id]--;
 
             }
 
         }
 
-        UpdateSynergy();
+        UpdateSynergyAmount(id);
 
     }
 
-    public void UpdateSynergy()
+    public void UpdateSynergyAmount(TriggerID id)
     {
 
+        PlayerStatsType targetStat = PlayerStatsType.None;
+        switch (id)
+        {
+            case TriggerID.None:
+                break;
+            case TriggerID.Dash:
+                targetStat = PlayerStatsType.RegenEnergePerSec;
+                break;
+            case TriggerID.NormalAttack:
+                targetStat = PlayerStatsType.AttackSpeed;
+                break;
+            case TriggerID.CoolTime:
+                targetStat = PlayerStatsType.Cooltime;
+                break;
+            case TriggerID.Move:
+                targetStat = PlayerStatsType.MoveSpeed;
+                break;
+            case TriggerID.Idle:
+                targetStat = PlayerStatsType.Defence;
+                break;
+            case TriggerID.RoomClear:
+                targetStat = PlayerStatsType.EarningGold;
+                break;
+            case TriggerID.GetHit:
+                targetStat = PlayerStatsType.Bloodsucking;
+                break;
+            case TriggerID.Kill:
+                targetStat = PlayerStatsType.Damage;
+                break;
+            case TriggerID.UseSkill:
+                break;
+            case TriggerID.StageClear:
+                targetStat = PlayerStatsType.EarningGold;
+                break;
+            case TriggerID.WaveStart:
+                break;
+            case TriggerID.Always:
+                break;
+            default:
+                break;
+        }
+
+        if (targetStat != PlayerStatsType.None)
+        {
+
+            synergyAmount[targetStat] = tableList.FirstOrDefault((x) => x.type == id).table[synergyLevel[id]];
+            OnSynergyChange?.Invoke();
+
+        }
+
     }
+
 }
