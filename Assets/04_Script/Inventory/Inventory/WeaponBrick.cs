@@ -38,7 +38,8 @@ public class WeaponBrick : InvenBrick
     private void HandleWeaponSiganl(object obj)
     {
 
-        weapon.GetSignal(obj);
+        if(obj != null)
+            weapon.GetSignal(obj);
 
     }
 
@@ -50,7 +51,7 @@ public class WeaponBrick : InvenBrick
 
         if (weaponGuid != Guid.Empty)
         {
-
+            if(weapon != null)
             Destroy(weapon.gameObject); 
             weapon = null;
             weaponController.RemoveWeapon(weaponGuid);

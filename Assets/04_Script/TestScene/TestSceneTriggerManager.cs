@@ -17,7 +17,7 @@ public class TestSceneTriggerManager : MonoBehaviour
         }
     }
 
-    public void RoomEnterExecute() => EventTriggerManager.Instance.RoomEnterExecute();
+    public void RoomEnterExecute() => EventTriggerManager.Instance.RoomClearExecute();
     public void StageClearExecute() => EventTriggerManager.Instance.StageClearExecute();
     public void WaveStartExecute() => EventTriggerManager.Instance.WaveStartExecute();
 }
