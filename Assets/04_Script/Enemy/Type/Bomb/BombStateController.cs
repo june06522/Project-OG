@@ -70,7 +70,7 @@ public class BombStateController : BaseFSM_Controller<ENormalEnemyState>
         Enemy.Die();
     }
 
-    public void InstantiateRange()
+    public void InstantiateWarning()
     {
         if(_col != null)
             _col.enabled = false;

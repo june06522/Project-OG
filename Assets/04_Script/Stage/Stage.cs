@@ -59,6 +59,7 @@ public class Stage : MonoBehaviour
     public Stage NextStage { get; private set; }
     public event Action OnStageClearEvent;
     public event Action OnGateEvent;
+    public event Action OnStageStartEvent;
 
     [Header("UI Info")]
     [SerializeField]
@@ -130,6 +131,7 @@ public class Stage : MonoBehaviour
     private int waveCount = 0;
 
     private bool isMonsterSpawning = false;
+    public bool GetIsMonsterSpawning => isMonsterSpawning;
 
     [Header("Object Info")]
     [SerializeField]
@@ -177,7 +179,6 @@ public class Stage : MonoBehaviour
 
     public void StartWave()
     {
-
         if (_stageType == StageType.BossStage)
         {
             _bossObject.gameObject.SetActive(true);
@@ -262,10 +263,16 @@ public class Stage : MonoBehaviour
             {
                 GameManager.Instance.isPlay = true;
                 isMonsterSpawning = true;
+
                 StartWave();
             }
 
         }    
+    }
+
+    public void HandleStageStart()
+    {
+        OnStageStartEvent?.Invoke();
     }
 
     public void AppearGate()
