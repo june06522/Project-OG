@@ -8,6 +8,8 @@ public class CameraMovementChecker : MonoBehaviour
     public static CameraMovementChecker Instance;
 
     private CinemachineVirtualCamera virtualCamera;
+    private CinemachineTransposer transposer;
+
     private Vector3 lastPosition;
 
     [HideInInspector]
@@ -24,28 +26,9 @@ public class CameraMovementChecker : MonoBehaviour
         }
 
         virtualCamera = GameObject.Find("Manager/GameManager/GameVisual/CM").GetComponent<CinemachineVirtualCamera>();
+        transposer = virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
     }
 
-    void Start()
-    {
-        if (virtualCamera != null)
-        {
-            lastPosition = virtualCamera.transform.position;
-        }
-    }
-
-    void Update()
-    {
-        if (virtualCamera != null)
-        {
-            Vector3 currentPosition = virtualCamera.transform.position;
-            if (currentPosition != lastPosition)
-            {
-                isMoving = true;
-                lastPosition = currentPosition;
-            }
-            else
-                isMoving = false;
-        }
-    }
+    public void Off() => transposer.enabled = false;
+    public void On() => transposer.enabled = true;
 }
