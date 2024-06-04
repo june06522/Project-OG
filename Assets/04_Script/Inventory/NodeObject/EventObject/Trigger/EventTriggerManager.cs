@@ -45,8 +45,6 @@ public class EventTriggerManager : MonoBehaviour
     {
         #region 이벤트 연결
         OnIdleExecute += SkillManager.Instance.DetectTrigger;
-        print("구독완료");
-        print(OnIdleExecute);
         OnMoveExecute += SkillManager.Instance.DetectTrigger;
         #endregion
     }
