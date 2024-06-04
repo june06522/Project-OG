@@ -14,9 +14,12 @@ struct SkillInfo
     public Weapon weapon;
     public SendData data;
 }
+public delegate void Regist();
 
 public class SkillManager : MonoSingleton<SkillManager>
 {
+    public event Regist OnRegistEndEvent;
+
     private Dictionary<TriggerID, List<SkillInfo>> _skillList;
 
     private void Awake()
@@ -40,6 +43,12 @@ public class SkillManager : MonoSingleton<SkillManager>
     {
         foreach(var skillInfo in _skillList[id])
         {
+            if (skillInfo.weapon == null)
+            {
+                _skillList[id].Remove(skillInfo);
+                continue;
+            }
+
             if(weapon != null)
             {
                 if (skillInfo.weapon == weapon)
@@ -70,6 +79,7 @@ public class SkillManager : MonoSingleton<SkillManager>
         _skillList[id].Add(info);
     }
 
+    //스킬 받아오기
     public List<SendData> GetSkillList(Weapon weapon)
     {
         List<SendData> skillData = new();
@@ -85,4 +95,6 @@ public class SkillManager : MonoSingleton<SkillManager>
 
         return skillData;
     }
+    
+    public void RegistEndEvent() => OnRegistEndEvent?.Invoke();
 }
