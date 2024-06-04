@@ -1,15 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // inspector에서 보이는 변수들
 public partial class SlateBoss
 {
     public GameObject slateOnlyCollector;
     public GameObject minimisPositions;
+
     public GameObject bigestBody;
     public GameObject mediumSizeBody;
     public GameObject smallestBody;
+
+    public GameObject smallWall;
+    public GameObject bigWall;
+
+    [Header("UI")]
+    public Image blinkPanel;
 
     [field: Header("AudioClip")]
     public AudioClip deadClip;

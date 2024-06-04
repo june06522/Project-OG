@@ -16,11 +16,6 @@ public class FloweringState : BossBaseState
     public override void OnBossStateExit()
     {
         _flower.isAttacking = false;
-
-        _flower.gameObject.layer = LayerMask.NameToLayer("Default");
-        _flower.SetBody(_flower.bigestBody, Vector3.one, Vector3.zero, _flower.bossColor, 0.5f);
-        _flower.SetBody(_flower.mediumSizeBody, Vector3.one, Vector3.zero, _flower.bossColor, 0.5f);
-        _flower.SetBody(_flower.smallestBody, Vector3.one, Vector3.zero, _flower.bossColor, 0.5f);
     }
 
     public override void OnBossStateOn()
@@ -41,6 +36,7 @@ public class FloweringState : BossBaseState
 
     private IEnumerator RandomPattern(float waitTime)
     {
+        int beforeRand = 4;
         while(_flower.flowering)
         {
             if(_flower.isAttacking)
@@ -51,15 +47,43 @@ public class FloweringState : BossBaseState
 
             yield return new WaitForSeconds(waitTime);
 
-            int rand = Random.Range(1, 3);
+            int rand = Random.Range(1, 4);
+            if (beforeRand == rand)
+            {
+                if (rand == 1)
+                {
+                    rand = Random.Range(2, 4);
+                }
+                else if (rand == 3)
+                {
+                    rand = Random.Range(1, 3);
+                }
+                else
+                {
+                    int chooseRand = Random.Range(1, 3);
+                    switch (chooseRand)
+                    {
+                        case 1:
+                            rand = 1;
+                            break;
+                        case 2:
+                            rand = 3;
+                            break;
+                    }
+                }
+            }
+            beforeRand = rand;
 
             switch (rand)
             {
                 case 1:
-                    NowCoroutine(_pattern.FlowerShapeShot(_flower, 5, 3, 3, 10, 5, 1, false, 2));
+                    NowCoroutine(_pattern.FlowerShapeShot(_flower, 5, 5, 3, 10, 10, 1, false, 1f));
                     break;
                 case 2:
                     NowCoroutine(_pattern.ScatterShot(_flower, 5, 3, 2));
+                    break;
+                case 3:
+                    NowCoroutine(_pattern.ComeBackShot(_flower, 30, 5, 5));
                     break;
             }
         }

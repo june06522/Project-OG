@@ -20,7 +20,6 @@ public partial class FlowerBoss
 }
 
 
-// bigestBody만 히트 후 원래 색깔로 안돌아오는 버그
 public partial class FlowerBoss : Boss
 {
     [HideInInspector] public bool flowering;
@@ -89,6 +88,11 @@ public partial class FlowerBoss : Boss
     private IEnumerator NextState(BossState state)
     {
         gameObject.layer = LayerMask.NameToLayer("Default");
+        gameObject.tag = "Untagged";
+        SetBody(bigestBody, Vector3.one, Vector3.zero, bossColor, 0.5f);
+        SetBody(mediumSizeBody, Vector3.one, Vector3.zero, bossColor, 0.5f);
+        SetBody(smallestBody, Vector3.one, Vector3.zero, bossColor, 0.5f);
+
         ReturnAll();
         flowering = false;
 

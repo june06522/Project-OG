@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 479649342998001086}
   - component: {fileID: 479649342998001087}
   - component: {fileID: -5607970869643194855}
-  - component: {fileID: -4970796390157754832}
   - component: {fileID: -5353020850009808852}
+  - component: {fileID: 4391828580682723255}
   m_Layer: 0
   m_Name: FlowerBossBullet_Type2_Worm
   m_TagString: Untagged
@@ -108,22 +108,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &-4970796390157754832
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 479649342998001084}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!114 &-5353020850009808852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,3 +126,33 @@ MonoBehaviour:
   _speed: 100
   _angle: 45
   _time: 0.5
+--- !u!60 &4391828580682723255
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 479649342998001084}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.48, y: 0.44}
+    oldSize: {x: 1.92, y: 1.82}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.6248729, y: -0.80132663}
+      - {x: 0.9917636, y: 0.32936347}
+      - {x: 0.037528336, y: 1.0265446}
+      - {x: -0.91667074, y: 0.32919997}
+      - {x: -0.5562893, y: -0.79854417}
