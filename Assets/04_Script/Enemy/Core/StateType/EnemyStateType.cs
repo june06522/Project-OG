@@ -18,11 +18,3 @@ public enum ENormalPatrolEnemyState
     Move = 2,
     Attack
 }
-
-public enum ECrabEnemyState
-{
-    Idle = 0,
-    Patrol = 1,
-    Attack
-}
-

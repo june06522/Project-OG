@@ -84,14 +84,23 @@ public class StageGate : MonoBehaviour, IInteractable
 
     IEnumerator GoNextStage()
     {
+        EventTriggerManager.Instance.ResetTrigger();
         // Next Stage
         invenactive.canOpen = false;
         _playerController.ChangeState(EnumPlayerState.Idle);
+
+        
+
+        // Transition
+        stageTransition.StartTransition(1f);
+        SoundManager.Instance.BgStop();
 
         // Jump Anim Sequence
         Transform playerTrm = GameManager.Instance.player;
         if (_isPlayJumpAnim)
         {
+
+            yield return new WaitForSeconds(0.8f);
 
             Sequence seq = DOTween.Sequence();
             seq.Append(playerTrm.DOJump(transform.position + Vector3.down, 5f, 1, 1f));
@@ -100,12 +109,8 @@ public class StageGate : MonoBehaviour, IInteractable
                 GameManager.Instance.Inventory.SettingLineRender();
             });
 
-            yield return new WaitForSeconds(0.8f);
         }
 
-        // Transition
-        stageTransition.StartTransition(1f);
-        SoundManager.Instance.BgStop();
         yield return new WaitForSeconds(2f);
 
         // Teleport
@@ -126,6 +131,7 @@ public class StageGate : MonoBehaviour, IInteractable
         // Transition
         stageTransition.EndTransition(1f);
         SoundManager.Instance.BGMPlay(NextStage.ThisStageType);
+        NextStage.HandleStageStart();
 
         yield return new WaitForSeconds(0.2f);
         _playerController.ChangeState(EnumPlayerState.Move);

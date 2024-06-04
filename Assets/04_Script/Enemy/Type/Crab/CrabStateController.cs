@@ -3,27 +3,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CrabStateController : BaseFSM_Controller<ECrabEnemyState>
+public class CrabStateController : BaseFSM_Controller<ENormalPatrolEnemyState>
 {
+    public List<Transform> LaserAttackPoints;
+    
     protected override void Start()
     {
-        //base.Start();
+        base.Start();
 
-        
-        //var rootState = new CrabRootState(this);
-        //var rootToPatrol = new RoomOpenTransitions<ECrabEnemyState>(this, ECrabEnemyState.Patrol);
-        //rootState
-        //    .AddTransition<ECrabEnemyState>(rootToPatrol);
+        var rootState = new NormalPatrolRootState(this);
+        var rootToPatrol = new RoomOpenTransitions<ENormalPatrolEnemyState>(this, ENormalPatrolEnemyState.Patrol);
+        rootState
+            .AddTransition<ENormalPatrolEnemyState>(rootToPatrol);
+       
+        var patrolState = new CrabPatrolState(this);
+        var patrolToMove = new PatrolToChaseTransition<ENormalPatrolEnemyState>(this, ENormalPatrolEnemyState.Move);
+        patrolState
+             .AddTransition<ENormalPatrolEnemyState>(patrolToMove);
 
-        //var patrolState = new CrabPatrolState(this);
-        //var patrolToMove = new MoveToAttackTransition<ECrabEnemyState>(this, ECrabEnemyState.Attack, false);
-        //patrolState
-        //     .AddTransition<ECrabEnemyState>(patrolToMove);
+        var moveState = new NormalPatrolChaseStae(this);
+        var moveToAttack = new MoveToAttackTransition<ENormalPatrolEnemyState>(this, ENormalPatrolEnemyState.Attack, true);
+        moveState
+            .AddTransition<ENormalPatrolEnemyState>(moveToAttack);
 
-        //var attackState = new CrabAttackState(this);
+        var attackState = new CrabAttackState(this);
 
-        //AddState(rootState, ECrabEnemyState.Idle);
-        //AddState(patrolState, ECrabEnemyState.Patrol);
-        //AddState(attackState, ECrabEnemyState.Attack);
+        AddState(rootState, ENormalPatrolEnemyState.Idle);
+        AddState(patrolState, ENormalPatrolEnemyState.Patrol);
+        AddState(moveState, ENormalPatrolEnemyState.Move);
+        AddState(attackState, ENormalPatrolEnemyState.Attack);
     }
 }

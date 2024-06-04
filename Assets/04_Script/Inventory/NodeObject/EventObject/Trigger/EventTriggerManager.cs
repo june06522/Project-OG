@@ -107,6 +107,11 @@ public class EventTriggerManager : MonoBehaviour
     }
     #endregion
 
+    public void a()
+    {
+
+    }
+
     public void ResetTrigger()
     {
         SkillManager.Instance.Init();
@@ -123,5 +128,8 @@ public class EventTriggerManager : MonoBehaviour
         PlayerController.EventController?.OnWaveStartExecute();
         PlayerController.EventController?.OnSkillxecute();
         PlayerController.EventController?.OnAlwaysExecute();
+        
+        
+        SkillManager.Instance.RegistEndEvent();
     }
 }

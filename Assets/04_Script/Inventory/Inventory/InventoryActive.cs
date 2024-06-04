@@ -98,18 +98,19 @@ public class InventoryActive : MonoBehaviour
                 isAnimation = false;
                 isOn = !isOn;
                 if (isOn)
-                    ShowInven();
+                    StartCoroutine(ShowInven());
                 else
                     ShowUI();
             }
         }
     }
 
-    private void ShowInven()
+    IEnumerator ShowInven()
     {
         isOn = true;
-
+        CameraMovementChecker.Instance.Off();
         fade.Fade(true);
+        yield return null;
 
         _components.localPosition = new Vector3(0, 0, 0);
         seq = DOTween.Sequence();
@@ -133,6 +134,7 @@ public class InventoryActive : MonoBehaviour
     {
         isOn = false;
 
+        CameraMovementChecker.Instance.On();
         fade.Fade(false);
 
         //var energeBar = FindObjectOfType<PlayerEnergeBar>();

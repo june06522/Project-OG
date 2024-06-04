@@ -21,7 +21,7 @@ public class LaserGunClone : RotateClone
 
         if (hit.collider != null)
         {
-            obj.SetLine(_shootPos.position, hit.point, _DataSO.GetDamage());
+            obj.SetLine(_shootPos.position, hit.point, Data.GetDamage());
             obj.LineRenderer.enabled = true;
             obj.EdgeCollider.SetPoints(new List<Vector2>
             {

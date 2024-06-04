@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CrabPatrolState : MonoBehaviour
+public class CrabPatrolState : NormalPatrolRootState
 {
-    // Start is called before the first frame update
-    void Start()
+    PatrolAction<ENormalPatrolEnemyState> patrolAct;
+    public CrabPatrolState(BaseFSM_Controller<ENormalPatrolEnemyState> controller) : base(controller)
     {
-        
-    }
+        //behaviour
+        List<SteeringBehaviour> behaviourlist = new List<SteeringBehaviour>()
+        {
+            new PatrolBehaviour(controller.transform, patrolRadius: _data.Range),
+            new ObstacleAvoidanceBehaviour(controller.transform)
+        };
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        patrolAct = new PatrolAction<ENormalPatrolEnemyState>(controller, behaviourlist, null);
     }
 }

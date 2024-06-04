@@ -20,6 +20,8 @@ public class AppearWall : MonoBehaviour
     Vector2 _originScale;
     Color _originColor;
 
+    public event Action WallAppearEndEvent;
+
     private void Awake()
     {
         _renderer = GetComponent<SpriteRenderer>();
@@ -37,6 +39,7 @@ public class AppearWall : MonoBehaviour
     {
         _renderer.color = new Color(_originColor.r, _originColor.g, _originColor.b, 0f);
         transform.localScale = new Vector3(0f, _originScale.y, 1f);
+        col.enabled = false;
     }
 
     public void Prepare()
@@ -69,7 +72,13 @@ public class AppearWall : MonoBehaviour
         seq.Append(transform.DOScaleX(0f, disappearDuration));
         seq.Join(_renderer.DOFade(0f, disappearDuration));
 
-        seq.OnComplete(() => Init());
+        seq.OnComplete(() => EndDisAppear());
+    }
+
+    private void EndDisAppear()
+    {
+        Init();
+        WallAppearEndEvent?.Invoke();
     }
 
     private void CanCollisionEnter()
