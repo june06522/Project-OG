@@ -159,12 +159,12 @@ public class RotateSkillManager : MonoBehaviour
         rotateClones.Clear();
     }
 
-    private void SetRunning()
+    private void SetRunning(TriggerID trigger, Weapon weapon)
     {
         Debug.Log("Setting");
         IsRunning = true;
     }
-    private void SetIdle()
+    private void SetIdle(TriggerID trigger, Weapon weapon)
     {
         Debug.Log("Idle");
         //Debug.Log(IsRunning);
@@ -183,8 +183,8 @@ public class RotateSkillManager : MonoBehaviour
     {
         if (PlayerController.EventController != null)
         {
-            PlayerController.EventController.OnMove += SetRunning;
-            PlayerController.EventController.OnIdle += SetIdle;
+            EventTriggerManager.Instance.OnIdleExecute += SetIdle;
+            EventTriggerManager.Instance.OnMoveExecute += SetRunning;
         }
 
         SkillManager.Instance.OnRegistEndEvent += ClearDictionary;
@@ -195,8 +195,8 @@ public class RotateSkillManager : MonoBehaviour
         if (PlayerController.EventController != null)
         {
 
-            PlayerController.EventController.OnMove -= SetRunning;
-            PlayerController.EventController.OnIdle -= SetIdle;
+            EventTriggerManager.Instance.OnIdleExecute -= SetIdle;
+            EventTriggerManager.Instance.OnMoveExecute -= SetRunning;
 
         }
 
