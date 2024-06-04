@@ -4,10 +4,10 @@ using System.Linq;
 using UnityEngine;
 
 [Serializable]
-public struct SynergyData
+public class SynergyData
 {
     public TriggerID type;
-    public List<float> table;
+    public List<float> table = new List<float>();
 }
 
 public class SynergyManager : MonoBehaviour
@@ -18,9 +18,13 @@ public class SynergyManager : MonoBehaviour
 
     public Action OnSynergyChange;
 
+    // 시너지 별 스탯 테이블
     [SerializeField] List<SynergyData> tableList = new List<SynergyData>();
+
+    // 해당 시너지 레벨
     Dictionary<TriggerID, int> synergyLevel = new Dictionary<TriggerID, int>();
 
+    // 현재 시너지 적용치
     Dictionary<PlayerStatsType, float> synergyAmount = new Dictionary<PlayerStatsType, float>();
     public Dictionary<PlayerStatsType, float> SynergyAmount => synergyAmount;
 
@@ -33,12 +37,14 @@ public class SynergyManager : MonoBehaviour
             Debug.LogError("Multiple SynergyManager is running");
             Destroy(instance);
 
+
         }
 
         instance = this;
 
         foreach (TriggerID id in Enum.GetValues(typeof(TriggerID)))
         {
+            synergyLevel[id] = 0;
             UpdateSynergyAmount(id);
         }
 
