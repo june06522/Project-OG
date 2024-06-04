@@ -28,7 +28,10 @@ public class RotateSkillManager : MonoBehaviour
 
     private List<RotateClone> rotateClones;
 
-    private Dictionary<WeaponID, List<int>> _cloneDictionary; // ���⺰ �����ؾ� �� Ŭ�� �����ص� Dictionary.
+    //private Dictionary<Transform, Weapon> _cloneDictionary; // ���⺰ �����ؾ� �� Ŭ�� �����ص� Dictionary.
+    private Dictionary<Weapon, int> _weaponTrmDictionary; // 한 무기에 연결된 생성기 수.
+    private Dictionary<Weapon, List<SendData>> _weaponSkillList;
+
     public List<RotateCloneInfo> CloneInfo; // Enum�� ClonePrefab ���ε� ���� ����.
 
     private bool _endSetting = false;
@@ -59,14 +62,17 @@ public class RotateSkillManager : MonoBehaviour
 
     //RotateSkill���� ȣ��.
 
-    public void SetCloneInfo(WeaponID id, int power)
+    public void SetCloneInfo(Weapon weapon, WeaponID id)
     {
-        if (!_cloneDictionary.ContainsKey(id))
-        {   
-            _cloneDictionary[id] = new List<int>();
+
+        if(!_weaponTrmDictionary.ContainsKey(weapon))
+        {
+            _weaponTrmDictionary[weapon] = 1;
         }
-        
-        _cloneDictionary[id].Add(power);
+        else
+        {
+            _weaponTrmDictionary[weapon]++; // 클론 갯수 증가.
+        }
     }
 
     public RotateClone GetClonePrefabInfo(WeaponID id)
@@ -85,13 +91,19 @@ public class RotateSkillManager : MonoBehaviour
         Transform playerTrm = GameManager.Instance.player;
 
         // Ŭ�� ����.
-        foreach (var info in  _cloneDictionary) 
+        foreach (var info in _weaponTrmDictionary) 
         {
-            for(int i = 0 ; i < info.Value.Count; ++i)
+            for(int i = 0 ; i < info.Value; ++i)
             {
-                RotateClone clone = Instantiate(GetClonePrefabInfo(info.Key), playerTrm);
-                clone.Init();
+                RotateClone clone = Instantiate(GetClonePrefabInfo(info.Key.id), playerTrm); //재활용하는 걸로 바꿔야 함
+                clone.Init(_weaponSkillList[info.Key]);
                 rotateClones.Add(clone);
+
+                List<SendData> sendData = SkillManager.Instance.GetSkillList(clone); // 스킬 캐싱.
+                sendData.ForEach((data) =>
+                {
+                    SkillManager.Instance.RegisterSkill(data.TriggerID, clone, data);
+                });
             }
         }
 
@@ -120,6 +132,7 @@ public class RotateSkillManager : MonoBehaviour
         _endSetting = true;
     }
 
+    // 인벤토리 확정되는 시점에 초기화
     private void RotateEndSetting()
     {
         _endSetting = false;
@@ -129,6 +142,7 @@ public class RotateSkillManager : MonoBehaviour
         for (int i = 0; i < cloneCnt; i++)
         {
             // rotateClones[i].Dissolve(dissolveTime, false);
+            // rotateClones[i].EndDissolve(); //조금의 최적화.
             rotateClones[i].DestroyThis();
         }
         //Debug.Log("Clear");
@@ -136,7 +150,8 @@ public class RotateSkillManager : MonoBehaviour
         //{
         //    _cloneDictionary[info.Key] = 0;
         //}
-        _cloneDictionary.Clear();
+        _weaponSkillList.Clear();
+        _weaponTrmDictionary.Clear();
         rotateClones.Clear();
     }
 
@@ -153,13 +168,8 @@ public class RotateSkillManager : MonoBehaviour
     private void Awake()
     {
         rotateClones = new List<RotateClone>();
-        _cloneDictionary = new();
-
-        foreach(var type in Enum.GetValues(typeof(WeaponID)))
-        {
-            _cloneDictionary[(WeaponID)type] = new List<int>();
-        }
-
+        _weaponSkillList = new();
+        _weaponTrmDictionary = new();
         curRotateSpeed = maxRotateSpeed;
     }
 
@@ -198,7 +208,8 @@ public class RotateSkillManager : MonoBehaviour
                                 curWidth, curHeight, theta);
 
                 clone.CurAngle += addRotateValue;
-                clone.Move(pos, false);
+                clone.Move(pos);
+
             }
         }
     }
