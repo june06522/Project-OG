@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 
+public delegate void Trigger(TriggerID trigger, Weapon weapon);
 public class EventTriggerManager : MonoBehaviour
 {
     public static EventTriggerManager Instance;
@@ -8,6 +10,12 @@ public class EventTriggerManager : MonoBehaviour
 
     Rigidbody2D _playerRb;
 
+    #region 이벤트
+    public event Trigger OnIdleExecute;
+    public event Trigger OnMoveExecute;
+    #endregion
+
+    #region 초기화
     private void Awake()
     {
         #region 싱긅톤
@@ -21,11 +29,29 @@ public class EventTriggerManager : MonoBehaviour
         }
         #endregion
 
+        #region 객체 할당
         _playerRb = GameObject.Find("Player").GetComponent<Rigidbody2D>();
+        #endregion
+
+        #region 예외처리
         if (SkillManager.Instance == null)
             Debug.LogError("SkillManager is null! : 아무데나 넣으세여");
+        #endregion
+
+    }
+    #endregion
+
+    private void Start()
+    {
+        #region 이벤트 연결
+        OnIdleExecute += SkillManager.Instance.DetectTrigger;
+        print("구독완료");
+        print(OnIdleExecute);
+        OnMoveExecute += SkillManager.Instance.DetectTrigger;
+        #endregion
     }
 
+    #region 항상 호출되는 트리거
     private void Update()
     {
         AlwaysExecute();
@@ -33,7 +59,8 @@ public class EventTriggerManager : MonoBehaviour
         IdleExecute();
         RunExecute();
     }
-
+    #endregion
+    
     public static ulong GetIndex()
     {
         if (index++ == ulong.MaxValue)
@@ -51,7 +78,7 @@ public class EventTriggerManager : MonoBehaviour
     {
         if (_playerRb.velocity == Vector2.zero)
         {
-            SkillManager.Instance?.DetectTrigger(TriggerID.Idle);
+            OnIdleExecute.Invoke(TriggerID.Idle, null);
         }
     }
 
@@ -63,7 +90,9 @@ public class EventTriggerManager : MonoBehaviour
     public void RunExecute()
     {
         if (_playerRb.velocity != Vector2.zero)
-            SkillManager.Instance?.DetectTrigger(TriggerID.Move);
+        {
+            OnMoveExecute?.Invoke(TriggerID.Move, null);
+        }
     }
 
     public void DashExecute()
@@ -107,11 +136,7 @@ public class EventTriggerManager : MonoBehaviour
     }
     #endregion
 
-    public void a()
-    {
-
-    }
-
+    // 트리거 초기화 및 재탐색
     public void ResetTrigger()
     {
         SkillManager.Instance.Init();
