@@ -41,6 +41,9 @@ public class SkillManager : MonoSingleton<SkillManager>
     //트리거 넘어오면 스킬 실행
     public void DetectTrigger(TriggerID id, Weapon weapon = null)
     {
+        if (id == TriggerID.NormalAttack)
+            Debug.Log("1");
+
         foreach(var skillInfo in _skillList[id])
         {
             if (skillInfo.weapon == null)
@@ -57,10 +60,19 @@ public class SkillManager : MonoSingleton<SkillManager>
                     continue;
             }
 
+            if(skillInfo.weapon as RotateClone)
+            {
+                Skill skill = SkillContainer.Instance.GetSKill((int)skillInfo.weapon.id, (int)skillInfo.data.GeneratorID);
+                Debug.Log(skill.gameObject.name);
+            }
+
             if(skillInfo.data.GetTrriger() && skillInfo.weapon != null)
-            SkillContainer.Instance.GetSKill((int)skillInfo.weapon.id, (int)skillInfo.data.GeneratorID)?.
-                Excute(skillInfo.weapon.transform,skillInfo.weapon.Target,
-                skillInfo.data.Power,skillInfo.data);
+            {
+
+                SkillContainer.Instance.GetSKill((int)skillInfo.weapon.id, (int)skillInfo.data.GeneratorID)?.
+                    Excute(skillInfo.weapon.transform, skillInfo.weapon.Target,
+                    skillInfo.data.Power,skillInfo.data);
+            }
         }
     }
 
@@ -76,6 +88,7 @@ public class SkillManager : MonoSingleton<SkillManager>
                 return;
             }
         }
+
         _skillList[id].Add(info);
     }
 

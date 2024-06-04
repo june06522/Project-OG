@@ -1,8 +1,10 @@
+using System.Xml.Serialization;
 using UnityEngine;
 
 public class EventTriggerManager : MonoBehaviour
 {
     public static EventTriggerManager Instance;
+    RotateSkillManager rotateManager;
 
     static ulong index = 0;
 
@@ -24,6 +26,11 @@ public class EventTriggerManager : MonoBehaviour
         _playerRb = GameObject.Find("Player").GetComponent<Rigidbody2D>();
         if (SkillManager.Instance == null)
             Debug.LogError("SkillManager is null! : 아무데나 넣으세여");
+    }
+
+    private void Start()
+    {
+        rotateManager = FindObjectOfType<RotateSkillManager>(); 
     }
 
     private void Update()
@@ -52,6 +59,7 @@ public class EventTriggerManager : MonoBehaviour
         if (_playerRb.velocity == Vector2.zero)
         {
             SkillManager.Instance?.DetectTrigger(TriggerID.Idle);
+            rotateManager.IsRunning = false;
         }
     }
 
@@ -63,7 +71,10 @@ public class EventTriggerManager : MonoBehaviour
     public void RunExecute()
     {
         if (_playerRb.velocity != Vector2.zero)
+        {
             SkillManager.Instance?.DetectTrigger(TriggerID.Move);
+            rotateManager.IsRunning = true;
+        }
     }
 
     public void DashExecute()

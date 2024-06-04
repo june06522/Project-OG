@@ -10,9 +10,8 @@ public class LaserGunClone : RotateClone
     [SerializeField] Transform _shootPos;
     [SerializeField] LaserGunLine gunLine;
 
-    protected override void Attack()
+    public override void Attack(Transform targetTrm)
     {
-
         var obj = Instantiate(gunLine, transform);
 
         obj.LineRenderer.positionCount = 2;

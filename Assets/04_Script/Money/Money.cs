@@ -12,7 +12,7 @@ public class Money : MonoSingleton<Money>
 
     private void Start()
     {
-        SynergyManager.Instance.OnSynergyChange += ChangeGoldFactor;
+        //SynergyManager.Instance.OnSynergyChange += ChangeGoldFactor;
     }
 
     private void ChangeGoldFactor()
