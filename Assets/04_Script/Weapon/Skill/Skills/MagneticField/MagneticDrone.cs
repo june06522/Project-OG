@@ -7,6 +7,7 @@ public class MagneticDrone : Skill
     [SerializeField] MagneticObject prefab;
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
+        Debug.Log($"{weaponTrm.gameObject.name}: {weaponTrm.GetComponent<RotateClone>()}");
         if (trigger == null || weaponTrm.GetComponent<Weapon>() != trigger.startWeapon)
             return;
 

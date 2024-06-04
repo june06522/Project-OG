@@ -8,9 +8,8 @@ public class DroneClone : RotateClone
     [SerializeField] private Transform shootPos;
     [SerializeField] private Bullet bullet;
 
-    protected override void Attack()
+    public override void Attack(Transform targetTrm)
     {
-
         var blt = Instantiate(bullet, shootPos.position, transform.rotation);
         blt.Shoot(bullet.Data.Damage);
 
