@@ -16,7 +16,7 @@ public class PlayerEnerge : MonoBehaviour
 
     private void Start()
     {
-        SynergyManager.Instance.OnSynergyChange += ChangeFactor;
+        //SynergyManager.Instance.OnSynergyChange += ChangeFactor;
     }
 
     private void ChangeFactor()
@@ -64,6 +64,6 @@ public class PlayerEnerge : MonoBehaviour
     }
     private void OnDestroy()
     {
-        SynergyManager.Instance.OnSynergyChange -= ChangeFactor;
+        //SynergyManager.Instance.OnSynergyChange -= ChangeFactor;
     }
 }
