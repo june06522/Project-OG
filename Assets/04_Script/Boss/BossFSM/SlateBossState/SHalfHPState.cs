@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SHalfHPState : BossBaseState
 {
@@ -27,11 +28,17 @@ public class SHalfHPState : BossBaseState
 
     public override void OnBossStateOn()
     {
+        _slate.gameObject.tag = "Untagged";
+        _slate.gameObject.layer = LayerMask.NameToLayer("Default");
+
         _slate.isAttacking = false;
+
         g_minimis = new GameObject[_slate.MinimiCount];
         _minimiLaserLineRenderer = new LineRenderer[_slate.MinimiCount];
         _originPos = new Vector3[_slate.MinimiCount];
-        _slate.StartCoroutine(HalfAnimation(1));
+
+        _slate.StartCoroutine(HalfAnimation(1.2f));
+        _slate.StartCoroutine(ChangeWall(1f));
     }
 
     public override void OnBossStateUpdate()
@@ -39,19 +46,46 @@ public class SHalfHPState : BossBaseState
 
     }
 
+    private IEnumerator ChangeWall(float disappearTime)
+    {
+        Image image = _slate.blinkPanel;
+        float curTime = 0;
+        float a = 1;
+        float speed = a / disappearTime;
+
+        image.gameObject.SetActive(true);
+        _slate.smallWall.SetActive(false);
+
+        while(curTime < disappearTime)
+        {
+            curTime += Time.deltaTime;
+            image.color = new Color(image.color.r, image.color.g, image.color.b, a -= Time.deltaTime * speed);
+
+            yield return null;
+        }
+
+        image.gameObject.SetActive(false);
+    }
+
     private IEnumerator HalfAnimation(float animTime)
     {
         CameraManager.Instance.CameraShake(10, animTime);
         yield return new WaitForSeconds(animTime);
 
-        CreateMinimi();
+        _slate.StartCoroutine(CreateMinimi());
         _slate.StartCoroutine(NowMove(0.5f));
         _slate.StartCoroutine(RandomPattern(_slate.so.PatternChangeTime));
         _slate.StartCoroutine(_slate.bossMove.BossMovement(_slate.so.StopTime, _slate.so.MoveX, -_slate.so.MoveX, _slate.so.MoveY, -_slate.so.MoveY, _slate.so.Speed, _slate.so.WallCheckRadius));
+
+        _slate.gameObject.tag = "HitAble";
     }
 
-    private void CreateMinimi()
+    private IEnumerator CreateMinimi()
     {
+        CameraManager.Instance.Shockwave(_slate.transform.position, 0.2f, 0.4f, 0.3f);
+
+        yield return new WaitForSeconds(0.3f);
+
         for (int i = 0; i < g_minimis.Length; i++)
         {
             g_minimis[i] = ObjectPool.Instance.GetObject(ObjectPoolType.SlateMinimi, _slate.transform);
@@ -64,6 +98,7 @@ public class SHalfHPState : BossBaseState
 
         }
 
+        CameraManager.Instance.CameraShake(10, 0.2f);
         _slate.gameObject.layer = LayerMask.NameToLayer("Boss");
     }
 
@@ -76,7 +111,9 @@ public class SHalfHPState : BossBaseState
 
     private IEnumerator RandomPattern(float waitTime)
     {
-        while(_slate.halfHP)
+        int beforeRand = 0;
+
+        while (_slate.halfHP)
         {
             if (_slate.isAttacking)
             {
@@ -86,7 +123,23 @@ public class SHalfHPState : BossBaseState
 
             yield return new WaitForSeconds(waitTime);
 
-            int rand = Random.Range(1, 6);
+            int rand = Random.Range(1, 5);
+            if (beforeRand == rand)
+            {
+                if (rand == 1)
+                {
+                    rand = rand + 1;
+                }
+                else if (rand == 4)
+                {
+                    rand = Random.Range(1, 4);
+                }
+                else
+                {
+                    rand = rand - 1;
+                }
+            }
+            beforeRand = rand;
 
             _slate.isAttacking = true;
 
@@ -99,12 +152,9 @@ public class SHalfHPState : BossBaseState
                     NowCoroutine(_pattern.TornadoShot(_slate, g_minimis, 15, 5, 0.1f, 3, _slate.halfHP));
                     break;
                 case 3:
-                    NowCoroutine(_pattern.StarAttack(_slate, 32, 5, 1f, g_minimis.Length, _slate.halfHP));
-                    break;
-                case 4:
                     NowCoroutine(_pattern.RandomMoveAttack(_slate, g_minimis, 10, 5, 2, 3, _slate.halfHP));
                     break;
-                case 5:
+                case 4:
                     NowCoroutine(_pattern.StopAndGoAttack(_slate, 20, 3, 1, 3, _slate.halfHP));
                     break;
             }

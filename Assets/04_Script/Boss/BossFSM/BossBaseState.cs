@@ -37,12 +37,14 @@ public abstract class BossBaseState
     {
         float curTime = 0;
         float a = 1;
+        float speed = a / disappearingTime;
+
         while (curTime < disappearingTime)
         {
             curTime += Time.deltaTime;
             if (a > 0)
             {
-                obj.GetComponent<SpriteRenderer>().material.color = new Color(1, 1, 1, a -= Time.deltaTime * disappearingTime);
+                obj.GetComponent<SpriteRenderer>().material.color = new Color(1, 1, 1, a -= Time.deltaTime * speed);
             }
             yield return null;
         }
