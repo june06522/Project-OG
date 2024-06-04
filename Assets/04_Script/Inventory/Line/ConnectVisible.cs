@@ -43,6 +43,7 @@ public class ConnectVisible : MonoBehaviour
 
     [SerializeField] Material lineRenderMat;
     Material curMat = null;
+    private ItemRate rate = ItemRate.NORMAL;
 
     [HideInInspector] public float mulX = 2.0f;
     [HideInInspector] public float mulY = 2.0f;
@@ -477,10 +478,14 @@ public class ConnectVisible : MonoBehaviour
     {
         LineRenderer line = Instantiate(tempObj, transform);
         curMat = trigger.InvenObject.colorMat;
+        rate = trigger.ItemRate;
         if (curMat == null)
             line.material = lineRenderMat;
         else
+        {
             line.material = curMat;
+        }
+        line.sortingOrder= (int)rate;
         line.startWidth = width;
 
         if (!lineRenderDic.ContainsKey(trigger))
@@ -646,7 +651,6 @@ public class ConnectVisible : MonoBehaviour
     }
 
     //애니메이션 멈추는 예외처리
-    
     private void StopCo(InvenBrick brick)
     {
         lock (coroutineLockObj)
