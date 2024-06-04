@@ -119,6 +119,12 @@ public class RandomStageSystem : MonoBehaviour
         _step++;
 
         ResetStage();
+
+        // ColorShift
+        int hueShiftValueByStep = 20;
+        int saturationValueByStep = 30;
+        CameraManager.Instance.SetColor(_step * hueShiftValueByStep, _step * saturationValueByStep);
+
         CreateStage();
     }
 
