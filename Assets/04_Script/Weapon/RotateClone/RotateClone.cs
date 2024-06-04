@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class RotateClone : MonoBehaviour
+public class RotateClone : Weapon
 {
-    [SerializeField] protected WeaponDataSO _DataSO;
-    private float damage = 10f;
+    private float damage;
     private float dissolveTime;
 
     Material material;
@@ -17,14 +16,16 @@ public class RotateClone : MonoBehaviour
     public float CurAngle { get; set; }
     public bool EndDissolve { get; set; } = false;
 
-    private VisualEffect effect;
-
     private Tween dissolveTween;
-    protected virtual void Awake()
+
+    public List<SendData> SkillList;
+
+    protected override void Awake()
     {
+        base.Awake();
         visualTrm = transform.Find("Visual");
         spriteRenderer = visualTrm.GetComponent<SpriteRenderer>();
-        effect = transform.Find("Flash").GetComponent<VisualEffect>();
+
         material = spriteRenderer.material;
     }
 
@@ -32,19 +33,18 @@ public class RotateClone : MonoBehaviour
     {
         transform.localScale = scale;
 
-        this.damage = _DataSO.GetDamage();
+        this.damage = Data.GetDamage();
         material.SetFloat("_FullGlowDissolveFade", 0);
     }
 
-    public void Init()
+    public void Init(List<SendData> skillList)
     {
-        this.damage = _DataSO.GetDamage();
+        this.SkillList = skillList;
+        this.damage = Data.GetDamage();
         material.SetFloat("_FullGlowDissolveFade", 0);
-        
-        InvokeRepeating(nameof(Attack), 0.5f, _DataSO.AttackCoolDown.GetValue());
-    }
 
-    public void PlayAppearEffect() => effect.Play();
+        InvokeRepeating(nameof(Attack), 0.5f, Data.AttackCoolDown.GetValue());
+    }
 
     public void Dissolve(float dissolveTime, bool on)
     {
@@ -57,9 +57,9 @@ public class RotateClone : MonoBehaviour
 
         float value = material.GetFloat("_FullGlowDissolveFade");
         float endValue = Mathf.Abs(1 - initValue);
-        float curDissolveTime 
+        float curDissolveTime
             = dissolveTime * Mathf.Lerp(initValue, endValue, Mathf.Abs(initValue - value));
-        
+
         dissolveTween = DOTween.To(() => value, x => material.SetFloat("_FullGlowDissolveFade", x), endValue, dissolveTime)
            .OnComplete(() =>
            {
@@ -71,25 +71,17 @@ public class RotateClone : MonoBehaviour
     }
 
     protected virtual void Attack() { }
+    public override void Attack(Transform target) { } // ¾È¾¸
 
-    public void Move(Vector3 movePos, bool Tween)
+    public void Move(Vector3 movePos)
     {
-        //float angle = Mathf.Atan2(weaponTrm.right.y, weaponTrm.right.x) * Mathf.Rad2Deg;
+
         Vector3 dir = movePos.normalized;
         dir.z = 0;
 
-        if (Tween)
-        {
-        //    DOTween.To(() => transform.up, (vec) => transform.up = vec, dir, 0.25f).SetEase(Ease.InOutBack);
-        //    DOTween.To(() => transform.localPosition, (vec) => transform.localPosition = vec, movePos, 0.25f).SetEase(Ease.InOutBack).OnComplete(() => Dissolve(false));
+        transform.right = dir;
+        transform.localPosition = movePos;
 
-        }
-        else
-        {
-            transform.right = dir;
-            transform.localPosition = movePos;
-            
-        }
     }
 
     public void DestroyThis()

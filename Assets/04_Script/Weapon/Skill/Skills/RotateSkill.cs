@@ -6,7 +6,6 @@ public class RotateSkill : Skill
 {
     [SerializeField] WeaponID _ID;
 
-    private int spawnCount;
     RotateSkillManager rotateManager;
 
     private void Awake()
@@ -18,39 +17,29 @@ public class RotateSkill : Skill
     {
         CurPowerInit(power);
 
-        rotateManager.SetCloneInfo(_ID, power);
+        rotateManager.SetCloneInfo(weaponTrm.GetComponent<Weapon>(), _ID);      
     }
 
 
     //Power Init
     public override void Power1()
     {
-        spawnCount = 1;
-        isMaxPower = false;
     }
 
     public override void Power2()
     {
-        spawnCount = 2;
-        isMaxPower = false;
     }
 
     public override void Power3()
     {
-        spawnCount = 3;
-        isMaxPower = false;
     }
 
     public override void Power4()
     {
-        spawnCount = 4;
-        isMaxPower = false;
     }
 
     public override void Power5()
     {
-        spawnCount = 5;
-        isMaxPower = true;
     }
 
 
