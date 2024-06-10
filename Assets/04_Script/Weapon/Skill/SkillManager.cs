@@ -108,6 +108,10 @@ public class SkillManager : MonoSingleton<SkillManager>
 
         return skillData;
     }
-    
-    public void RegistEndEvent() => OnRegistEndEvent?.Invoke();
+
+    public void RegistEndEvent()
+    {
+        EventTriggerManager.Instance.RegistExecute();
+        OnRegistEndEvent?.Invoke();
+    }
 }

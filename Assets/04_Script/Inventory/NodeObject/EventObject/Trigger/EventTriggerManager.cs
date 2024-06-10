@@ -132,6 +132,11 @@ public class EventTriggerManager : MonoBehaviour
     {
         SkillManager.Instance?.DetectTrigger(TriggerID.Always);
     }
+
+    public void RegistExecute()
+    {
+        SkillManager.Instance?.DetectTrigger(TriggerID.Regist);
+    }
     #endregion
 
     // 트리거 초기화 및 재탐색
@@ -151,6 +156,7 @@ public class EventTriggerManager : MonoBehaviour
         PlayerController.EventController?.OnWaveStartExecute();
         PlayerController.EventController?.OnSkillxecute();
         PlayerController.EventController?.OnAlwaysExecute();
+        PlayerController.EventController?.OnRegistExecute();
         
         
         SkillManager.Instance.RegistEndEvent();
