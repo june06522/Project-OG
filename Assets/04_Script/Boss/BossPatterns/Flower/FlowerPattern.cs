@@ -5,6 +5,24 @@ using DG.Tweening;
 
 public class FlowerPattern : BossPatternBase
 {
+    private IEnumerator OutAnim(FlowerBoss boss, float time, float a)
+    {
+        StartCoroutine(boss.Blinking(boss.smallestBody, time, a, 1, Color.white));
+        yield return new WaitForSeconds(time);
+        StartCoroutine(boss.Blinking(boss.mediumSizeBody, time, a, 1, Color.white));
+        yield return new WaitForSeconds(time);
+        StartCoroutine(boss.Blinking(boss.bigestBody, time, a, 1, Color.white));
+    }
+
+    private IEnumerator InAnim(FlowerBoss boss, float time, float a)
+    {
+        StartCoroutine(boss.Blinking(boss.bigestBody, time, a, 1, Color.white));
+        yield return new WaitForSeconds(time);
+        StartCoroutine(boss.Blinking(boss.mediumSizeBody, time, a, 1, Color.white));
+        yield return new WaitForSeconds(time);
+        StartCoroutine(boss.Blinking(boss.smallestBody, time, a, 1, Color.white));
+    }
+
     public IEnumerator FlowerDeadShot(FlowerBoss boss, int dirCount, int bulletCount, int burstCount, float angle, float speed, float time)
     {
         for (int i = 0; i < burstCount; i++)
@@ -99,30 +117,32 @@ public class FlowerPattern : BossPatternBase
         float animTime = 0.5f;
 
         boss.bigestBody.transform.DORotate(new Vector3(0, 0, -180), animTime)
-            .SetEase(Ease.InOutSine)
-            .OnComplete(() =>
-            {
-                boss.bigestBody.transform.DORotate(new Vector3(0, 0, 360), animTime)
-                .SetEase(Ease.InOutSine)
-                .OnComplete(() =>
-                {
-                    boss.bigestBody.transform.rotation = Quaternion.identity;
-                });
-            });
-
+            .SetEase(Ease.InOutSine);
         boss.mediumSizeBody.transform.DORotate(new Vector3(0, 0, 180), animTime)
-            .SetEase(Ease.InOutSine)
-            .OnComplete(() =>
-            {
-                boss.mediumSizeBody.transform.DORotate(new Vector3(0, 0, -360), animTime)
-                .SetEase(Ease.InOutSine)
-                .OnComplete(() =>
-                {
-                    boss.mediumSizeBody.transform.rotation = Quaternion.identity;
-                });
-            });
+            .SetEase(Ease.InOutSine);
+        yield return new WaitForSeconds(animTime);
+
+        StartCoroutine(boss.Poping(boss.bigestBody, animTime / 2, 1.2f));
+        StartCoroutine(boss.Poping(boss.mediumSizeBody, animTime / 2, 1.2f));
+        yield return new WaitForSeconds(animTime / 2);
+
+        boss.bigestBody.transform.DORotate(new Vector3(0, 0, 360), animTime)
+        .SetEase(Ease.InOutSine)
+        .OnComplete(() =>
+        {
+            boss.bigestBody.transform.rotation = Quaternion.identity;
+        });
+
+        boss.mediumSizeBody.transform.DORotate(new Vector3(0, 0, -360), animTime)
+        .SetEase(Ease.InOutSine)
+        .OnComplete(() =>
+        {
+            boss.mediumSizeBody.transform.rotation = Quaternion.identity;
+        });
 
         yield return new WaitForSeconds(animTime / 2);
+
+        CameraManager.Instance.CameraShake(10, 0.5f);
         SoundManager.Instance.SFXPlay("Fire", boss.fireSound);
         for (int j = 0; j < dirCount; j++)
         {
@@ -140,7 +160,7 @@ public class FlowerPattern : BossPatternBase
         boss.isAttacking = false;
     }
 
-    public IEnumerator RandomOminidirShot(FlowerBoss boss, int burstCount, int bulletCount, float speed, float time, float waitTime)
+    public IEnumerator OminidirShot(FlowerBoss boss, int burstCount, int bulletCount, float speed, float time, float waitTime)
     {
         boss.isAttacking = true;
         GameObject[] objs = { boss.smallestBody, boss.mediumSizeBody, boss.bigestBody };
@@ -165,7 +185,7 @@ public class FlowerPattern : BossPatternBase
                 bullet.transform.rotation = Quaternion.identity;
 
                 Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
-                Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * Random.Range(0, 360) / 360), Mathf.Sin(Mathf.PI * 2 * Random.Range(0, 360) / 360));
+                Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * j / bulletCount), Mathf.Sin(Mathf.PI * 2 * j / bulletCount));
                 rigid.velocity = dir.normalized * speed;
             }
 
@@ -214,11 +234,12 @@ public class FlowerPattern : BossPatternBase
             });
 
         yield return new WaitForSeconds(animTime);
+        CameraManager.Instance.CameraShake(7, 1);
         SoundManager.Instance.SFXPlay("Fire", boss.fireSound);
         for (int i = 0; i < dirCount; i++)
         {
             Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / dirCount), Mathf.Sin(Mathf.PI * 2 * i / dirCount));
-            StartCoroutine(MakeWarm(boss, dir, bulletCount, speed, time));
+            StartCoroutine(MakeWarm(boss, dir, bulletCount, speed, time, 10));
         }
 
         boss.bigestBody.transform.DOScale(bigestOriginSize, animTime / 3)
@@ -233,12 +254,10 @@ public class FlowerPattern : BossPatternBase
                     .SetEase(Ease.InOutSine);
                 });
             });
-
-        yield return new WaitForSeconds(waitTime);
         boss.isAttacking = false;
     }
 
-    private IEnumerator MakeWarm(FlowerBoss boss, Vector2 dir, int bulletCount, float speed, float time)
+    private IEnumerator MakeWarm(FlowerBoss boss, Vector2 dir, int bulletCount, float speed, float time, float angle)
     {
         for (int j = 0; j < bulletCount; j++)
         {
@@ -249,7 +268,8 @@ public class FlowerPattern : BossPatternBase
             bullet.transform.rotation = Quaternion.identity;
 
             Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
-            rigid.velocity = dir.normalized * speed;
+            Vector2 realDir = Quaternion.Euler(0, 0, j * angle) * dir;
+            rigid.velocity = realDir.normalized * speed;
         }
     }
 
@@ -324,5 +344,45 @@ public class FlowerPattern : BossPatternBase
 
         boss.isAttacking = false;
         yield return null;
+    }
+
+    public IEnumerator ComeBackShot(FlowerBoss boss, int bulletCount, float waitTime, float speed)
+    {
+        boss.isAttacking = true;
+
+        float animTime = 0.2f;
+        StartCoroutine(OutAnim(boss, animTime / 2, 1));
+        yield return new WaitForSeconds(animTime);
+        CameraManager.Instance.CameraShake(10, animTime * 2);
+        CameraManager.Instance.Shockwave(boss.transform.position, 1, 0.3f, animTime);
+        yield return new WaitForSeconds(animTime / 2);
+
+        GameObject[] objs = new GameObject[bulletCount];
+        Rigidbody2D[] rigids = new Rigidbody2D[bulletCount];
+        Vector3[] dirs = new Vector3[bulletCount];
+
+        for(int i = 0; i < bulletCount; i++)
+        {
+            objs[i] = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
+            objs[i].transform.position = boss.transform.position;
+            objs[i].transform.rotation = Quaternion.identity;
+
+            rigids[i] = objs[i].GetComponent<Rigidbody2D>();
+            dirs[i] = new Vector3(Mathf.Cos(Mathf.PI * 2 * i / bulletCount), Mathf.Sin(Mathf.PI * 2 * i / bulletCount));
+            rigids[i].velocity = dirs[i] * speed;
+        }
+
+        yield return new WaitForSeconds(waitTime);
+
+        StartCoroutine(InAnim(boss, animTime / 2, 1));
+        CameraManager.Instance.CameraShake(10, animTime * 2);
+        boss.isAttacking = false;
+
+        yield return new WaitForSeconds(animTime);
+
+        for (int i = 0; i < bulletCount; i++)
+        {
+            rigids[i].velocity = -dirs[i] * speed;
+        }
     }
 }

@@ -26,6 +26,8 @@ public class FullBloomState : BossBaseState
     public override void OnBossStateOn()
     {
         _flower.gameObject.layer = LayerMask.NameToLayer("Boss");
+        _flower.gameObject.tag = "HitAble";
+
         _flower.fullBloom = true;
         NowCoroutine(_pattern.FullBloomPattern(_flower, 2, 100));
     }

@@ -161,7 +161,6 @@ public class CrabPattern : BossPatternBase
 
         if (hit.point != null)
         {
-            Debug.Log(hit.collider.gameObject.name);
             return hit.point;
         }
 

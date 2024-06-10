@@ -265,59 +265,6 @@ public class SlatePattern : BossPatternBase
         rigid.velocity = dir.normalized * speed;
     }
 
-    public IEnumerator StarAttack(SlateBoss boss, int bulletCount, float speed, float time, int burstCount, bool breaker)
-    {
-        if (!breaker)
-            yield break;
-
-        Vector3 originSize = boss.transform.localScale;
-        float animTime = 0.5f;
-
-        boss.isStop = true;
-        bool plus = true;
-        float r = 1;
-
-        for (int i = 0; i < burstCount; i++)
-        {
-            SoundManager.Instance.SFXPlay("Fire", boss.fireClip);
-            boss.bigestBody.transform.DOScale(originSize * 1.5f, animTime / 2)
-                .SetEase(Ease.InOutSine)
-                .OnComplete(() =>
-                {
-                    boss.bigestBody.transform.DOScale(originSize, animTime / 2)
-                    .SetEase(Ease.InOutSine);
-                });
-
-            yield return new WaitForSeconds(animTime);
-
-            for (int j = 0; j < bulletCount; j++)
-            {
-                if (r > 1.1f)
-                    plus = false;
-                else if (r == 1)
-                    plus = true;
-                GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
-                bullet.GetComponent<BossBullet>().Attack(boss.so.Damage);
-                bullet.transform.position = boss.transform.position;
-                bullet.transform.rotation = Quaternion.identity;
-
-                Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
-                Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * j / bulletCount), Mathf.Sin(Mathf.PI * 2 * j / bulletCount)) * r;
-                rigid.velocity = dir * speed;
-
-                if (plus)
-                    r += 0.1f;
-                else
-                    r -= 0.1f;
-            }
-
-            yield return new WaitForSeconds(time);
-        }
-
-        boss.isAttacking = false;
-        boss.isStop = false;
-    }
-
     public IEnumerator RandomMoveAttack(SlateBoss boss, GameObject[] objs, int bulletCount, float speed, float time, int burstCount, bool breaker)
     {
         if (!breaker)
@@ -398,6 +345,8 @@ public class SlatePattern : BossPatternBase
                     break;
             }
 
+            CameraManager.Instance.CameraShake(7, 0.2f);
+
             for (int j = 0; j < bulletCount; j++)
             {
                 for (int k = 0; k < objs.Length; k++)
@@ -458,6 +407,10 @@ public class SlatePattern : BossPatternBase
 
             for (int j = 0; j < bulletCount; j++)
             {
+                if (j == 0)
+                {
+                    CameraManager.Instance.CameraShake(7, 0.2f);
+                }
                 bullets[i, j].GetComponent<SpriteRenderer>().color = Color.white;
                 Rigidbody2D rigid = bullets[i, j].GetComponent<Rigidbody2D>();
                 rigid.velocity = Vector2.zero;
@@ -474,6 +427,10 @@ public class SlatePattern : BossPatternBase
         {
             for (int i = 0; i < bulletCount; i++)
             {
+                if(i == 0)
+                {
+                    CameraManager.Instance.CameraShake(7, 0.2f);
+                }
                 bullets[counting, i].GetComponent<SpriteRenderer>().color = Color.white;
                 Rigidbody2D rigid = bullets[counting, i].GetComponent<Rigidbody2D>();
                 rigid.velocity = Vector2.zero;
@@ -520,4 +477,57 @@ public class SlatePattern : BossPatternBase
 
         boss.isAttacking = false;
     }
+
+    //public IEnumerator StarAttack(SlateBoss boss, int bulletCount, float speed, float time, int burstCount, bool breaker)
+    //{
+    //    if (!breaker)
+    //        yield break;
+
+    //    Vector3 originSize = boss.transform.localScale;
+    //    float animTime = 0.5f;
+
+    //    boss.isStop = true;
+    //    bool plus = true;
+    //    float r = 1;
+
+    //    for (int i = 0; i < burstCount; i++)
+    //    {
+    //        SoundManager.Instance.SFXPlay("Fire", boss.fireClip);
+    //        boss.bigestBody.transform.DOScale(originSize * 1.5f, animTime / 2)
+    //            .SetEase(Ease.InOutSine)
+    //            .OnComplete(() =>
+    //            {
+    //                boss.bigestBody.transform.DOScale(originSize, animTime / 2)
+    //                .SetEase(Ease.InOutSine);
+    //            });
+
+    //        yield return new WaitForSeconds(animTime);
+
+    //        for (int j = 0; j < bulletCount; j++)
+    //        {
+    //            if (r > 1.1f)
+    //                plus = false;
+    //            else if (r == 1)
+    //                plus = true;
+    //            GameObject bullet = ObjectPool.Instance.GetObject(ObjectPoolType.BossBulletType0, boss.bulletCollector.transform);
+    //            bullet.GetComponent<BossBullet>().Attack(boss.so.Damage);
+    //            bullet.transform.position = boss.transform.position;
+    //            bullet.transform.rotation = Quaternion.identity;
+
+    //            Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
+    //            Vector2 dir = new Vector2(Mathf.Cos(Mathf.PI * 2 * j / bulletCount), Mathf.Sin(Mathf.PI * 2 * j / bulletCount)) * r;
+    //            rigid.velocity = dir * speed;
+
+    //            if (plus)
+    //                r += 0.1f;
+    //            else
+    //                r -= 0.1f;
+    //        }
+
+    //        yield return new WaitForSeconds(time);
+    //    }
+
+    //    boss.isAttacking = false;
+    //    boss.isStop = false;
+    //}
 }

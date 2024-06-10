@@ -12,16 +12,16 @@ public class PlayerEnerge : MonoBehaviour
     public float RegenEnergePerSec { get; private set; }
     private float _regenEnerge;
 
-    float regenFactor = 0;
+    //float regenFactor = 0;
 
     private void Start()
     {
-        SynergyManager.Instance.OnSynergyChange += ChangeFactor;
+        //SynergyManager.Instance.OnSynergyChange += ChangeFactor;
     }
 
     private void ChangeFactor()
     {
-        regenFactor = SynergyManager.Instance.SynergyAmount[PlayerStatsType.RegenEnergePerSec];
+        //regenFactor = SynergyManager.Instance.SynergyAmount[PlayerStatsType.RegenEnergePerSec];
     }
 
     private void Update()
@@ -33,7 +33,7 @@ public class PlayerEnerge : MonoBehaviour
     {
         if (CurrentEnerge >= MaxEnerge) return;
 
-        _regenEnerge += Time.deltaTime * RegenEnergePerSec + (Time.deltaTime * RegenEnergePerSec) * regenFactor;
+        _regenEnerge += Time.deltaTime * RegenEnergePerSec /*+ (Time.deltaTime * RegenEnergePerSec) * regenFactor*/;
         if (_regenEnerge > 1)
         {
             _regenEnerge--;
@@ -64,6 +64,6 @@ public class PlayerEnerge : MonoBehaviour
     }
     private void OnDestroy()
     {
-        SynergyManager.Instance.OnSynergyChange -= ChangeFactor;
+        //SynergyManager.Instance.OnSynergyChange -= ChangeFactor;
     }
 }
