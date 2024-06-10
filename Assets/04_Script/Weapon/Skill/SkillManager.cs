@@ -111,7 +111,7 @@ public class SkillManager : MonoSingleton<SkillManager>
 
     public void RegistEndEvent()
     {
-        EventTriggerManager.Instance.RegistExecute();
         OnRegistEndEvent?.Invoke();
+        EventTriggerManager.Instance.RegistExecute();
     }
 }
