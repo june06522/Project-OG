@@ -39,7 +39,7 @@ public class SynergyManager : MonoBehaviour
 
         foreach (TriggerID id in Enum.GetValues(typeof(TriggerID)))
         {
-            UpdateSynergyAmount(id);
+            //UpdateSynergyAmount(id);
         }
 
     }

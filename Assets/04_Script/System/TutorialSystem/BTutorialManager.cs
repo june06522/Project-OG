@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TutorialManager : MonoSingleton<TutorialManager>
+public class BTutorialManager : MonoSingleton<BTutorialManager>
 {
     [Header("Guide UI Info")]
     [SerializeField]

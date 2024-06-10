@@ -15,10 +15,10 @@ public enum EnumPlayerState
 [RequireComponent(typeof(CircleCollider2D))]
 public class PlayerController : FSM_Controller<EnumPlayerState>
 {
-    private SpriteRenderer _spriteRenderer;
-    private GameObject _interactKey;
-    private PlayerHP _playerHP;
-    private PlayerEnerge _playerEnerge;
+    protected SpriteRenderer _spriteRenderer;
+    protected GameObject _interactKey;
+    protected PlayerHP _playerHP;
+    protected PlayerEnerge _playerEnerge;
 
     public AudioClip _audioClip;
     [SerializeField] private GameObject visual;
