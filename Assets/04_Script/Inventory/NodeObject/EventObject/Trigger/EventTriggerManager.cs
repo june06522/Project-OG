@@ -158,7 +158,6 @@ public class EventTriggerManager : MonoBehaviour
         PlayerController.EventController?.OnAlwaysExecute();
         PlayerController.EventController?.OnRegistExecute();
         
-        
         SkillManager.Instance.RegistEndEvent();
     }
 }

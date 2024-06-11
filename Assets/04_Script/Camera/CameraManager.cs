@@ -17,7 +17,8 @@ public class CameraManager : MonoSingleton<CameraManager>
     private CinemachineBasicMultiChannelPerlin _defaultPerlin;
 
     [SerializeField]
-    private Camera _minimapCamera;
+    private Camera _uiCam;
+    public Camera UICam => _uiCam;
 
     [SerializeField]
     private Shockwave _shockwave;
@@ -144,17 +145,6 @@ public class CameraManager : MonoSingleton<CameraManager>
 
         perlin.m_AmplitudeGain = Mathf.Clamp(perlin.m_AmplitudeGain - shakeIntensity, 0, 100);
         perlin.m_FrequencyGain = Mathf.Clamp(perlin.m_FrequencyGain - shakeIntensity, 0, 100);
-    }
-
-    public void SetMinimapCameraPostion(Vector3 worldPos)
-    {
-        worldPos.z = -10;
-        if(_minimapCamera != null)
-        {
-
-            _minimapCamera.transform.position = worldPos;
-
-        }
     }
 
     public void SetLookObj(GameObject obj, float orthographicSize, float changeTime)

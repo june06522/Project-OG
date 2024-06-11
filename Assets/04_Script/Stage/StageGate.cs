@@ -143,7 +143,6 @@ public class StageGate : MonoBehaviour, IInteractable
             if (NextStage.ThisStageType == StageType.EnemyStage || NextStage.ThisStageType == StageType.BossStage)
                 GameManager.Instance.isPlay = true;
 
-            CameraManager.Instance.SetMinimapCameraPostion(NextStage.transform.position);
             NextStage.SetStageTitle();
 
         }
