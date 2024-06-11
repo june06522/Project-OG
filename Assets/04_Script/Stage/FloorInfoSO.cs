@@ -9,6 +9,9 @@ public class FloorInfoSO : ScriptableObject
     public string FloorName;
     public List<string> FloorTip;
 
+    public Color FloorPlayerColor = Color.white;
+    public Color FloorColor       = Color.white;
+
     public List<StageType> PrintStageInfo;
 
     [Header("StartStage")]

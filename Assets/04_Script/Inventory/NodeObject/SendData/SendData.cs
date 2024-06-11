@@ -30,7 +30,7 @@ public class SendData
             case TriggerID.NormalAttack:
             case TriggerID.Move:
             case TriggerID.Idle:
-            case TriggerID.RoomClear:
+            case TriggerID.RoomEnter:
             case TriggerID.GetHit:
             case TriggerID.StageClear:
             case TriggerID.WaveStart:

@@ -105,7 +105,7 @@ public class EventTriggerManager : MonoBehaviour
 
     public void RoomClearExecute()
     {
-        SkillManager.Instance?.DetectTrigger(TriggerID.RoomClear);
+        SkillManager.Instance?.DetectTrigger(TriggerID.RoomEnter);
     }
 
     public void StageClearExecute()

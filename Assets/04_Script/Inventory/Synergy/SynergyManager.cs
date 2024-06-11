@@ -105,7 +105,7 @@ public class SynergyManager : MonoBehaviour
             case TriggerID.Idle:
                 targetStat = PlayerStatsType.Defence;
                 break;
-            case TriggerID.RoomClear:
+            case TriggerID.RoomEnter:
                 targetStat = PlayerStatsType.EarningGold;
                 break;
             case TriggerID.GetHit:

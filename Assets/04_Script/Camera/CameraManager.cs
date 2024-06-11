@@ -26,9 +26,6 @@ public class CameraManager : MonoSingleton<CameraManager>
     private Volume _damageVolume;
     [SerializeField]
     private Volume _playerHitDamageVolume;
-    [SerializeField]
-    private Volume _colorVolume;
-    private ColorAdjustments _colorAdjustmentsInColorVolume;
 
     Coroutine _damageVolumeCoroutine;
     Coroutine _playerDamageVolumeCoroutine;
@@ -40,12 +37,6 @@ public class CameraManager : MonoSingleton<CameraManager>
 
         _brain = Camera.main.transform.GetComponent<CinemachineBrain>();
 
-        if(_colorVolume.profile.TryGet<ColorAdjustments>(out ColorAdjustments colorAdjustments))
-        {
-
-            _colorAdjustmentsInColorVolume = colorAdjustments;
-
-        }
     }
 
     public void SetOtherCam(CinemachineVirtualCamera changeCam, bool forceSet = false)
@@ -201,14 +192,10 @@ public class CameraManager : MonoSingleton<CameraManager>
         cam.m_Lens.OrthographicSize = orthographicSize;
     }
 
-    public void SetColor(int hueShift, int saturation)
+    public void SetColor(Color cameraBackgroundColor)
     {
 
-        if (_colorAdjustmentsInColorVolume == null)
-            return;
-
-        _colorAdjustmentsInColorVolume.hueShift.value = Mathf.Clamp(hueShift, -180, 180);
-        _colorAdjustmentsInColorVolume.saturation.value = Mathf.Clamp(saturation, -100, 100);
+        Camera.main.backgroundColor = cameraBackgroundColor;
 
     }
 }
