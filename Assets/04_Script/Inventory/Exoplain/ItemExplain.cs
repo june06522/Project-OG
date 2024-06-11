@@ -2,6 +2,15 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum ExplainType
+{
+    None,
+    Weapon,
+    Generator,
+    Connector,
+}
+
+
 public class ItemExplain : MonoBehaviour
 {
     public static ItemExplain Instance;
@@ -9,6 +18,7 @@ public class ItemExplain : MonoBehaviour
     [SerializeField] Image panelImage;
     [SerializeField] WeaponExplain weaponExplain;
     [SerializeField] GeneratorExplain generatorExplain;
+    [SerializeField] ConnectorExplain connectorExplain;
 
     private InventoryActive inventoryActive;
 
@@ -32,8 +42,30 @@ public class ItemExplain : MonoBehaviour
 
     private void Start()
     {
-        weaponExplain.gameObject.SetActive( false );
-        generatorExplain.gameObject.SetActive( false ); 
+        ActiveExplain(ExplainType.None);
+    }
+
+    private void ActiveExplain(ExplainType type)
+    {
+        bool activeWeapon, activeGenerator, activeConnector;
+        activeWeapon = activeGenerator = activeConnector = false;
+
+        switch (type)
+        {
+            case ExplainType.None:
+                break;
+            case ExplainType.Weapon: activeWeapon = true; 
+                break;
+            case ExplainType.Generator: activeGenerator = true;
+                break;
+            case ExplainType.Connector: activeConnector = true; 
+                break;
+        }
+
+        weaponExplain.gameObject.SetActive(activeWeapon);
+        generatorExplain.gameObject.SetActive(activeGenerator);
+        connectorExplain.gameObject.SetActive(activeConnector);
+
     }
 
     private void Update()
@@ -59,42 +91,46 @@ public class ItemExplain : MonoBehaviour
         }
     }
 
+    public void HoverConnector(Vector2 invenPoint, Sprite image, ItemRate evaluation)
+    {
+        if (invenPoint == curInvenPoint) return;
+        if(connectorExplain.gameObject.activeSelf == false)
+        {
+            ActiveExplain(ExplainType.Connector);   
+        }
+
+        curInvenPoint = invenPoint;
+        connectorExplain.ON(invenPoint, image, evaluation);
+    }
+
     public void HoverWeapon(Vector2 invenPoint, Sprite image, string name, float power, string explain, Tuple<GeneratorID, int>[] skillList, ItemRate evaluation)
     {
         if (invenPoint == curInvenPoint) return;
         if (weaponExplain.gameObject.activeSelf == false)
         {
-            generatorExplain.gameObject.SetActive(false);
-            weaponExplain.gameObject.SetActive(true);
+            ActiveExplain(ExplainType.Weapon);
         }
         
         curInvenPoint = invenPoint;
         weaponExplain.ON(invenPoint, image, name, power, explain, skillList,evaluation);
-        //weaponExplain.ON(image, name, power, explain, skillList);
     }
 
     public void HoverGenerator(Vector2 invenPoint, Sprite image, string trigger, string explain, ItemRate evaluation, string name)
     {
-        //generatorExplain.gameObject.SetActive(true);
-        //weaponExplain.gameObject.SetActive(false);
-
         if (invenPoint == curInvenPoint) return;
         if (generatorExplain.gameObject.activeSelf == false)
         {
-            generatorExplain.Active(true);
-            weaponExplain.Active(false);
+            ActiveExplain(ExplainType.Generator);
         }
 
         curInvenPoint = invenPoint;
         generatorExplain.ON(invenPoint, image, trigger, explain, evaluation, name);
-
-        //generatorExplain.ON(image, trigger, skillList);
     }
 
     public void HoverEnd()
     {
-        weaponExplain.Active(false);
-        generatorExplain.Active(false);   
+        //weaponExplain.Active(false);
+        //generatorExplain.Active(false);   
     }
 
 
