@@ -58,6 +58,7 @@ public enum TriggerID
     StageClear,     // 스테이지 클리어
     WaveStart,      // 웨이브 시작
     Always,         // 항상
+    Regist,         // 등록(로테이트 전용)
 }
 // Skill 2차원 리스트는 인스펙터에서 안보임 이렇게 해야함
 [Serializable]

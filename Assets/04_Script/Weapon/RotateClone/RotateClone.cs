@@ -61,7 +61,7 @@ public class RotateClone : Weapon
           Data.AttackRange.GetValue(),
           new ContactFilter2D { layerMask = enemyLayer, useLayerMask = true, useTriggers = true }, enemyArr);
 
-        Debug.Log($"{enemyArr.Length} : {cnt}");
+        //Debug.Log($"{enemyArr.Length} : {cnt}");
         if (cnt != 0)
         {
 

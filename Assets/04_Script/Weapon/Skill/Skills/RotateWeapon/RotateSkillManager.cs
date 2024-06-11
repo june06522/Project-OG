@@ -62,19 +62,16 @@ public class RotateSkillManager : MonoBehaviour
 
     //RotateSkill���� ȣ��.
 
-    public void SetCloneInfo(Weapon weapon, WeaponID id)
+    public void SetCloneInfo(Weapon weapon, WeaponID id, int count)
     {
-        if (weapon is RotateClone) // 넘어온 무기가 rotateClone이면 생성 X
-            return;
-
         if(!_weaponTrmDictionary.ContainsKey(weapon))
         {
-            _weaponTrmDictionary[weapon] = 1;
+            _weaponTrmDictionary[weapon] = count;
             _weaponSkillList[weapon] = SkillManager.Instance.GetSkillList(weapon);
         }
         else
         {
-            _weaponTrmDictionary[weapon]++; // 클론 갯수 증가.
+            _weaponTrmDictionary[weapon] += count; // 클론 갯수 증가.
         }
     }
 
@@ -154,7 +151,7 @@ public class RotateSkillManager : MonoBehaviour
     {
         _weaponSkillList.Clear();
         _weaponTrmDictionary.Clear();
-
+        
         rotateClones.ForEach((clone) => clone.DestroyThis());
         rotateClones.Clear();
     }

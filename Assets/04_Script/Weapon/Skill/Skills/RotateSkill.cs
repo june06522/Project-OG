@@ -8,6 +8,7 @@ public class RotateSkill : Skill
 
     RotateSkillManager rotateManager;
 
+    int cloneCnt = 0;
     private void Awake()
     {
         rotateManager = FindObjectOfType<RotateSkillManager>();
@@ -15,9 +16,19 @@ public class RotateSkill : Skill
 
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
-        CurPowerInit(power);
+        Weapon weapon = weaponTrm.GetComponent<Weapon>();
 
-        rotateManager.SetCloneInfo(weaponTrm.GetComponent<Weapon>(), _ID);      
+        // 넘어온 무기가 rotateClone이면 생성 X
+        if (weapon is not RotateClone)
+        {
+            Debug.Log("Excute");
+            int count = Mathf.Clamp((power + 1) / 2, 1, 5);
+            rotateManager.SetCloneInfo(weapon, _ID, count);  
+        }
+        else
+        {
+            Debug.Log("Is RotateClone");
+        }
     }
 
 

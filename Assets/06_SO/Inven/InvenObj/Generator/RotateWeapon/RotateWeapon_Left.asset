@@ -31,8 +31,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 3067479b-e16a-462b-879f-7e75cf5e5083
   connectedInput: []
-  connectedOutput:
-  - {fileID: 673156935237473557}
+  connectedOutput: []
   editorPos: {x: -1124.5226, y: 460.80002}
   generatorID: 12
 --- !u!114 &11400000
@@ -56,9 +55,10 @@ MonoBehaviour:
     dir: {x: -1, y: 0}
   includes:
   - {fileID: 673156935237473557}
-  - {fileID: -5359527079972089626}
+  - {fileID: 6311020667118384773}
   generatorID: 12
   colorMat: {fileID: 2100000, guid: 41f1364b307df884a8b8dfc18f084695, type: 2}
+  invenBrick: {fileID: 0}
 --- !u!114 &673156935237473557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: dba6fc491204d5345a47ffd096fce7cd
   connectedInput:
-  - {fileID: -5359527079972089626}
+  - {fileID: 6311020667118384773}
   connectedOutput: []
   editorPos: {x: -761, y: 450}
 --- !u!114 &1076542449526370482
@@ -92,6 +92,24 @@ MonoBehaviour:
   connectedInput: []
   connectedOutput: []
   editorPos: {x: -300, y: -100}
+--- !u!114 &6311020667118384773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ba2e8c072e310b499fe612f4992bfc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: b1c0b5e0-6bca-4800-801b-f487dc0dc73e
+  connectedInput: []
+  connectedOutput:
+  - {fileID: 673156935237473557}
+  editorPos: {x: -262, y: 9}
+  generatorID: 12
 --- !u!114 &8736072919707435356
 MonoBehaviour:
   m_ObjectHideFlags: 0

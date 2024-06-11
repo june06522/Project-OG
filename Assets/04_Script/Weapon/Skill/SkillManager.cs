@@ -60,11 +60,11 @@ public class SkillManager : MonoSingleton<SkillManager>
                     continue;
             }
 
-            if(skillInfo.weapon as RotateClone)
-            {
-                Skill skill = SkillContainer.Instance.GetSKill((int)skillInfo.weapon.id, (int)skillInfo.data.GeneratorID);
-                Debug.Log(skill.gameObject.name);
-            }
+            //if(skillInfo.weapon as RotateClone)
+            //{
+            //    Skill skill = SkillContainer.Instance.GetSKill((int)skillInfo.weapon.id, (int)skillInfo.data.GeneratorID);
+            //    Debug.Log(skill.gameObject.name);
+            //}
 
             if(skillInfo.data.GetTrriger() && skillInfo.weapon != null)
             {
@@ -108,6 +108,10 @@ public class SkillManager : MonoSingleton<SkillManager>
 
         return skillData;
     }
-    
-    public void RegistEndEvent() => OnRegistEndEvent?.Invoke();
+
+    public void RegistEndEvent()
+    {
+        OnRegistEndEvent?.Invoke();
+        EventTriggerManager.Instance.RegistExecute();
+    }
 }
