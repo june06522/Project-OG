@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ShopItem : MonoBehaviour, IPointerDownHandler
+public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField]
     private Shop _shop;
@@ -115,6 +115,8 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler
                 _isSold = true;
                 SoundManager.Instance.SFXPlay("Buy", _buyItemClip, 0.6f);
 
+                _shop.ShopItemInfoUI.SetEnableUI(false);
+
             }
             else
             {
@@ -166,5 +168,32 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler
         }
 
         _itemPriceText.text = $"{_itemPrice}G";
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        //
+        if (_item.Brick.Type == ItemType.Connector
+            || _isSold)
+            return;
+
+        Debug.Log($"Enter {_item.Brick.Type}");
+
+        _shop.ShopItemInfoUI.SetPos(transform.position);
+        _shop.ShopItemInfoUI.SetInfo(_item);
+        _shop.ShopItemInfoUI.SetEnableUI(true);
+
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (_item.Brick.Type == ItemType.Connector
+            || _isSold)
+            return;
+
+        Debug.Log($"Exit {_item.Brick.Type}");
+
+        _shop.ShopItemInfoUI.SetEnableUI(false);
+        
     }
 }

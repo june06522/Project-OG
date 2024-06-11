@@ -13,6 +13,9 @@ public class Shop : MonoBehaviour
     // canvas
     [SerializeField]
     private Canvas _canvas;
+    [SerializeField]
+    private ShopItemInfo _shopItemInfo;
+    public ShopItemInfo ShopItemInfoUI => _shopItemInfo;
 
     // value
     [SerializeField]
@@ -191,4 +194,10 @@ public class Shop : MonoBehaviour
         }
 
     }
+
+    private void OnDisable()
+    {
+        _shopItemInfo.SetEnableUI(false);
+    }
+
 }

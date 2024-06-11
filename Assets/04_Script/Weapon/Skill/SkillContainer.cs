@@ -51,7 +51,7 @@ public enum TriggerID
     CoolTime,       // 쿨타임
     Move,           // 이동
     Idle,           // 가만히
-    RoomClear,      // 방 클리어
+    RoomEnter,      // 방 클리어
     GetHit,         // 피격
     Kill,           // 처치
     UseSkill,       // 스킬 사용
