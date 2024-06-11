@@ -8,22 +8,27 @@ using UnityEngine.UI;
 public class WeaponExplain : MonoBehaviour
 {
     private Image _image;
-    private TextMeshProUGUI _weaponName;
+    private TextMeshProUGUI _name;
     private TextMeshProUGUI _power;
     private TextMeshProUGUI _explain;
     private TextMeshProUGUI _skillList;
     private TextMeshProUGUI _evaluation;
-    private Tooltip _toolTip;
+    //private Tooltip _toolTip;
 
     private void Awake()
     {
-        _image = transform.Find("Image").GetComponent<Image>();
-        _weaponName = transform.Find("Name").GetComponent<TextMeshProUGUI>();
-        _power = transform.Find("Power").GetComponent<TextMeshProUGUI>();
-        _explain = transform.Find("Explain").GetComponent<TextMeshProUGUI>();
-        _skillList = transform.Find("SkillExplain").GetComponent<TextMeshProUGUI>();
-        _evaluation = transform.Find("Evaluation").GetComponent<TextMeshProUGUI>();
-        _toolTip = GetComponent<Tooltip>();
+        Transform rootTrm = transform.Find("TooltipUp");
+        _image = rootTrm.Find("ImagePanel/Image").GetComponent<Image>();
+        _evaluation = rootTrm.Find("Evaluation").GetComponent<TextMeshProUGUI>();
+        _name = rootTrm.Find("Name").GetComponent<TextMeshProUGUI>();
+        _power = rootTrm.Find("Power").GetComponent<TextMeshProUGUI>();
+        
+        Transform middleTrm = transform.Find("TooltipMiddle");
+        _explain = middleTrm.Find("Explain").GetComponent<TextMeshProUGUI>();
+        
+        Transform underTrm = transform.Find("TooltipUnder");
+        _skillList = underTrm.Find("SkillExplain").GetComponent<TextMeshProUGUI>();
+        //_toolTip = GetComponent<Tooltip>();
     }
 
     private void Start()
@@ -35,14 +40,14 @@ public class WeaponExplain : MonoBehaviour
     {
         this.gameObject.SetActive(value);
 
-        _toolTip.Init();
+        //_toolTip.Init();
     }
     //스킬리스트 페어로 바꾸기
     //등급도 표시
     public void ON(Vector2 pos, Sprite image, string name, float power, string explain, Tuple<GeneratorID, int>[] skillList, ItemRate evaluation)
     {
         _image.sprite = image;
-        _weaponName.text = $"{name}";
+        _name.text = $"{name}";
         _power.text = $"공격력: {power}";
         _explain.text = explain;
         _evaluation.text = evaluation.ToString();
@@ -52,13 +57,15 @@ public class WeaponExplain : MonoBehaviour
             _skillList.text = "";
             for (int i = 0; i < skillList.Length; i++)
             {
-                _skillList.text += $"{WeaponExplainManager.generatorName[skillList[i].Item1]} {skillList[i].Item2}레벨";
-                if (i != 0 && i % 2 == 0) _skillList.text += "\n";
-                else _skillList.text += "\t";
+                _skillList.text += $"{WeaponExplainManager.generatorName[skillList[i].Item1]} {skillList[i].Item2}레벨\n";
+                //if (i != 0 && i % 2 == 0) _skillList.text += "\n";
+                //else _skillList.text += "\t";
+                //if (i != 0 && i % 2 == 0) _skillList.text += "\n";
+                //else _skillList.text += "\t";
             }
         }
 
-        _toolTip.CurrentItemRate = evaluation;
-        _toolTip.On(pos);
+        //_toolTip.CurrentItemRate = evaluation;
+        //_toolTip.On(pos);
     }
 }
