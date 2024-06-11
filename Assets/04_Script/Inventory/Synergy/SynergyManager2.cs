@@ -33,5 +33,9 @@ public class SynergyManager2 : MonoSingleton<SynergyManager2>
     public void EquipItem(TriggerID id) => level[id]++;
     public void RemoveItem(TriggerID id) => level[id]--;
 
+    public float GetStatFactor(TriggerID id)
+    {
+        return table.GetContainer()[id][level[id]];
+    }
 
 }
