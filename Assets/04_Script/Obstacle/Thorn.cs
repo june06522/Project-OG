@@ -27,10 +27,10 @@ public class Thorn : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            Appear();
-        }
+        //if(Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    Appear();
+        //}
     }
 
     private void Appear()

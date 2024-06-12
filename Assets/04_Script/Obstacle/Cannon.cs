@@ -31,8 +31,8 @@ public class Cannon : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            Shoot();
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //    Shoot();
     }
 
     public void Shoot() => StartCoroutine(ShootCoroutine());
