@@ -149,6 +149,7 @@ public class StageGate : MonoBehaviour, IInteractable
 
         // Delay
         yield return new WaitForSeconds(1f);
+        stageTransition.CircleTransitionUI.SetOnOff(false);
 
         // Enter Room Event
         EventTriggerManager.Instance?.RoomClearExecute();

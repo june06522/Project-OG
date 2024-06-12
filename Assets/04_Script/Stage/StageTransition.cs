@@ -10,6 +10,7 @@ public class StageTransition : MonoBehaviour
     private AudioClip _stageTransitionClip;
     [SerializeField]
     private CircleTransition _circleTransition;
+    public CircleTransition CircleTransitionUI => _circleTransition;
 
     public void StartTransition(float time)
     {
