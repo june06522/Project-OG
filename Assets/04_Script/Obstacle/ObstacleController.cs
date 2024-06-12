@@ -40,6 +40,7 @@ public class ObstacleController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.V))
         {
             MakeCannons();
+            
         }
     }
 
