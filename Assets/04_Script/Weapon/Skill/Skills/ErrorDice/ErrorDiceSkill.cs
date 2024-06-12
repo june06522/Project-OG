@@ -44,7 +44,7 @@ public class ErrorDiceSkill : Skill
         WeaponExplainManager.triggerExplain[(GeneratorID)i] == TriggerID.Move)
             StartCoroutine(Co(s, weaponTrm, target, power));
         else
-            s.Excute(weaponTrm, target, power);
+            s.Excute(weaponTrm, target, power, trigger);
     }
 
     IEnumerator Co(Skill s,Transform weaponTrm, Transform target, int power)
