@@ -41,14 +41,20 @@ public class CameraManager : MonoSingleton<CameraManager>
 
     public void SetOtherCam(CinemachineVirtualCamera changeCam, bool forceSet = false)
     {
-        if (forceSet)
-        {
-            _brain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Cut;
-        }
-        else
-        {
-            _brain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Linear;
-        }
+        if (changeCam == null && _brain == null)
+            return;
+
+        //Debug.Log($"{_brain}, {_brain.m_DefaultBlend}");
+        //Debug.Log($"{_brain}, {_brain.m_DefaultBlend.m_Style}");
+        //
+        //if (forceSet)
+        //{
+        //    _brain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Cut;
+        //}
+        //else
+        //{
+        //    _brain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Linear;
+        //}
 
         cam.Priority = 0;
         changeCam.Priority = 10;
