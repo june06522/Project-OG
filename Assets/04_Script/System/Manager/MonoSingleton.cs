@@ -13,10 +13,19 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
                 return instance;
 
             if (instance == null)
+            {
                 instance = FindObjectOfType<T>();
+            }
 
             if (instance != null)
+            {
+                if(FindObjectsOfType<T>().Length > 1)
+                {
+                    Debug.LogError($"Multiple {typeof(T).Name} is Running!");
+                }
+
                 return instance;
+            }
 
             Debug.LogError($"{typeof(T).Name} is null");
             return null;

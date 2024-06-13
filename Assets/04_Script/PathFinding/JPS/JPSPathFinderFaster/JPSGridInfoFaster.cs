@@ -339,55 +339,55 @@ namespace DSNavigation
             return false;
         }
 
-#if DEBUG
-        [Header("Debug Info")]
-        [SerializeField] bool DrawGizmo = false;
-        private void OnDrawGizmos()
-        {
-            if (EditorApplication.isPlaying && DrawGizmo)
-            {
-                DrawGrid();
-                DrawBlockNodes(new Color(1, 0, 0, 0.5f));
-            }
-        }
-
-        void DrawGrid()
-        {
-            Gizmos.color = Color.gray;
-            Vector2 gridMapSize = m_InGridEndPoint - m_InGridStartPoint;
-            Vector2 eachNodeSize = new Vector2(gridMapSize.x / m_InGridHorizontalSize, gridMapSize.y / m_InGridVerticalSize);
-
-            for (uint x = 0; x <= m_gridMapPathfinderInfo.m_gridMapHorizontalSize; x++)
-            {
-                Vector2 from = new Vector3(m_gridStartCalculated.x + eachNodeSize.x * x, m_gridStartCalculated.y);
-                Vector2 to = new Vector3(m_gridStartCalculated.x + eachNodeSize.x * x, m_gridEndCalculated.y);
-                Gizmos.DrawLine(from, to);
-            }
-
-            for (uint y = 0; y <= m_gridMapPathfinderInfo.m_gridMapVerticalSize; y++)
-            {
-                Vector2 from = new Vector3(m_gridStartCalculated.x, m_gridStartCalculated.y + eachNodeSize.y * y);
-                Vector2 to = new Vector3(m_gridEndCalculated.x, m_gridStartCalculated.y + eachNodeSize.y * y);
-                Gizmos.DrawLine(from, to);
-            }
-        }
-
-        void DrawBlockNodes(Color InColor)
-        {
-            Color originalColor = Gizmos.color;
-            Gizmos.color = InColor;
-
-            for (uint y = 0; y < m_gridMapPathfinderInfo.m_gridMapVerticalSize; y++)
-            {
-                for (uint x = 0; x < m_gridMapPathfinderInfo.m_gridMapHorizontalSize; x++)
-                {
-                    if (GetBlockAt(x, y))
-                        Gizmos.DrawCube(GetNodeCenter(x, y), m_eachNodesize);
-                }
-            }
-
-            Gizmos.color = originalColor;
-        }
-#endif
+//#if DEBUG
+//        [Header("Debug Info")]
+//        [SerializeField] bool DrawGizmo = false;
+//        private void OnDrawGizmos()
+//        {
+//            if (EditorApplication.isPlaying && DrawGizmo)
+//            {
+//                DrawGrid();
+//                DrawBlockNodes(new Color(1, 0, 0, 0.5f));
+//            }
+//        }
+//
+//        void DrawGrid()
+//        {
+//            Gizmos.color = Color.gray;
+//            Vector2 gridMapSize = m_InGridEndPoint - m_InGridStartPoint;
+//            Vector2 eachNodeSize = new Vector2(gridMapSize.x / m_InGridHorizontalSize, gridMapSize.y / m_InGridVerticalSize);
+//
+//            for (uint x = 0; x <= m_gridMapPathfinderInfo.m_gridMapHorizontalSize; x++)
+//            {
+//                Vector2 from = new Vector3(m_gridStartCalculated.x + eachNodeSize.x * x, m_gridStartCalculated.y);
+//                Vector2 to = new Vector3(m_gridStartCalculated.x + eachNodeSize.x * x, m_gridEndCalculated.y);
+//                Gizmos.DrawLine(from, to);
+//            }
+//
+//            for (uint y = 0; y <= m_gridMapPathfinderInfo.m_gridMapVerticalSize; y++)
+//            {
+//                Vector2 from = new Vector3(m_gridStartCalculated.x, m_gridStartCalculated.y + eachNodeSize.y * y);
+//                Vector2 to = new Vector3(m_gridEndCalculated.x, m_gridStartCalculated.y + eachNodeSize.y * y);
+//                Gizmos.DrawLine(from, to);
+//            }
+//        }
+//
+//        void DrawBlockNodes(Color InColor)
+//        {
+//            Color originalColor = Gizmos.color;
+//            Gizmos.color = InColor;
+//
+//            for (uint y = 0; y < m_gridMapPathfinderInfo.m_gridMapVerticalSize; y++)
+//            {
+//                for (uint x = 0; x < m_gridMapPathfinderInfo.m_gridMapHorizontalSize; x++)
+//                {
+//                    if (GetBlockAt(x, y))
+//                        Gizmos.DrawCube(GetNodeCenter(x, y), m_eachNodesize);
+//                }
+//            }
+//
+//            Gizmos.color = originalColor;
+//        }
+//#endif
     }
 }
