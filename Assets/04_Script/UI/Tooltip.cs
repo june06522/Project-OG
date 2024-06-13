@@ -29,7 +29,7 @@ public class Tooltip : MonoBehaviour
 
     private readonly float _tooltipDissolveStart = 1.6f;
     private readonly float _tooltipDissolveEnd = -0.2f;
- 
+
     private readonly float _textDissolveStart = 0f;
     private readonly float _textDissolveEnd = 1f;
 
@@ -56,10 +56,10 @@ public class Tooltip : MonoBehaviour
 
         imageDissolve = transform.Find("Image").GetComponent<ImageDissolve>();
 
-        tooltipDissolveParmas = 
+        tooltipDissolveParmas =
             new DissolveParameters(tooltipMat, _tooltipDissolveStart, _tooltipDissolveEnd, duration, ease, directionalGlowFade);
-    
-        textDissolveParams = 
+
+        textDissolveParams =
             new DissolveParameters(textMat, _textDissolveStart, _textDissolveEnd, textTweenDuration, Ease.Linear, alphaFade);
     }
 
@@ -69,12 +69,12 @@ public class Tooltip : MonoBehaviour
     }
 
     public void Init()
-    { 
+    {
         //Material √ ±‚»≠
         tooltipMat.SetFloat(directionalGlowFade, _textDissolveStart);
         textMat.SetFloat(alphaFade, _textDissolveStart);
         imageDissolve.Init(GetColor(CurrentItemRate));
-        
+
         seq.Kill();
     }
 
@@ -94,7 +94,17 @@ public class Tooltip : MonoBehaviour
         seq.Append(Dissolver.Dissolve(tooltipDissolveParmas, true));
         seq.Append(Dissolver.Dissolve(textDissolveParams, true));
         seq.Append(imageDissolve.Dissolve(true));
-                
+
         seq.Restart();
+    }
+
+    public void FadeIn()
+    {
+        
+    }
+
+    public void FadeOut()
+    {
+
     }
 }
