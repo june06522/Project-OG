@@ -45,7 +45,7 @@ public class NipperDashEnemyAttackState : FSM_State<ENormalEnemyState>
 
         _controller.animator.SetTrigger(_controller.shut);
 
-        while(curTime < dashTime)
+        while(curTime < dashTime && !_controller.isStop)
         {
             curTime += Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, targetPos, Time.deltaTime * speed);
@@ -54,7 +54,7 @@ public class NipperDashEnemyAttackState : FSM_State<ENormalEnemyState>
         }
 
         curTime = 0;
-        while(curTime < slideTime)
+        while(curTime < slideTime && !_controller.isStop)
         {
             curTime += Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, transform.position + (Vector3)dir, Time.deltaTime * speed);
@@ -68,5 +68,6 @@ public class NipperDashEnemyAttackState : FSM_State<ENormalEnemyState>
         _controller.animator.SetTrigger(_controller.idle);
         _controller.EnemyDataSO.SetCoolDown();
         _controller.ChangeState(ENormalEnemyState.Idle);
+        _controller.isStop = false;
     }
 }
