@@ -7,10 +7,6 @@ using DG.Tweening;
 // inspector에서 보이는 변수들
 public partial class SixthElite
 {
-    [field: Header("Feedback")]
-    [field: SerializeField]
-    public FeedbackPlayer feedbackPlayer { get; set; }
-
     [Header("Transform")]
     [SerializeField]
     private Transform _up;
@@ -27,10 +23,6 @@ public partial class SixthElite
     [SerializeField]
     private SixthEliteDataSO _so;
 
-    [Header("AudioClip")]
-    [SerializeField]
-    private AudioClip _hitSound;
-
     [Header("SixthEliteOnly")]
     [SerializeField]
     private float _animationPlayTime;
@@ -40,19 +32,14 @@ public partial class SixthElite
     private List<SpriteRenderer> _spriteRenderers = new List<SpriteRenderer>();
 }
 
-public partial class SixthElite : MonoBehaviour, IHitAble
+public partial class SixthElite : MonoBehaviour
 {
-    private Action _dieAction;
-
     private List<Material> _materials = new List<Material>();
 
     private Rigidbody2D _rigid;
 
     private LineRenderer _warningLine;
 
-    private float _currentHp;
-
-    private bool _isDead;
     private bool _once;
     private bool _y;
 
@@ -65,11 +52,6 @@ public partial class SixthElite : MonoBehaviour, IHitAble
 
     void Start()
     {
-        _dieAction += DieEvt;
-
-        _currentHp = _so.MaxHP;
-
-        _isDead = false;
         _once = false;
         _y = false;
 
@@ -87,34 +69,6 @@ public partial class SixthElite : MonoBehaviour, IHitAble
         Vector2 dir = GameManager.Instance.player.position - transform.position;
         float z = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         _visual.transform.rotation = Quaternion.Euler(0, 0, z - 90);
-    }
-
-    public bool Hit(float damage)
-    {
-        if (_isDead) return false;
-
-        SoundManager.Instance.SFXPlay("HitEnemy", _hitSound, 0.55f);
-        feedbackPlayer?.Play(damage + UnityEngine.Random.Range(0.25f, 1.75f));
-        _currentHp -= (int)damage;
-
-        if (_currentHp <= 0)
-        {
-            Die();
-            return false;
-        }
-
-        return true;
-    }
-
-    private void Die()
-    {
-        _isDead = true;
-        _dieAction?.Invoke();
-    }
-
-    private void DieEvt()
-    {
-        Destroy(gameObject);
     }
 
     private void StopImmediately()
@@ -173,6 +127,14 @@ public partial class SixthElite : MonoBehaviour, IHitAble
         return Vector2.zero;
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawRay(transform.position, Vector3.up * 3);
+        Gizmos.DrawRay(transform.position, Vector3.down * 3);
+        Gizmos.DrawRay(transform.position, Vector3.left * 3);
+        Gizmos.DrawRay(transform.position, Vector3.right * 3);
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         PlayerHP player;
@@ -193,10 +155,10 @@ public partial class SixthElite : MonoBehaviour, IHitAble
 
             StopImmediately();
 
-            RaycastHit2D up = Physics2D.Raycast(transform.position, Vector2.up, 2, LayerMask.GetMask("Wall"));
-            RaycastHit2D down = Physics2D.Raycast(transform.position, Vector2.down, 2, LayerMask.GetMask("Wall"));
-            RaycastHit2D left = Physics2D.Raycast(transform.position, Vector2.left, 2, LayerMask.GetMask("Wall"));
-            RaycastHit2D right = Physics2D.Raycast(transform.position, Vector2.right, 2, LayerMask.GetMask("Wall"));
+            RaycastHit2D up = Physics2D.Raycast(transform.position, Vector2.up, 3, LayerMask.GetMask("Wall"));
+            RaycastHit2D down = Physics2D.Raycast(transform.position, Vector2.down, 3, LayerMask.GetMask("Wall"));
+            RaycastHit2D left = Physics2D.Raycast(transform.position, Vector2.left, 3, LayerMask.GetMask("Wall"));
+            RaycastHit2D right = Physics2D.Raycast(transform.position, Vector2.right, 3, LayerMask.GetMask("Wall"));
 
             Vector3 originSize = Vector3.zero;
             Transform trans = null;
@@ -243,13 +205,15 @@ public partial class SixthElite : MonoBehaviour, IHitAble
                     correction = Vector2.right * 1f;
                 }
                 StartCoroutine(Charging(_animationPlayTime, _visual.parent.position + correction, dir));
-
+                Debug.Log("X Charging");
                 trans.DOScaleX(originSize.x / 2, _animationPlayTime)
                 .SetEase(Ease.InOutSine)
                 .OnComplete(() =>
                 {
+                    Debug.Log("X Charging Ended");
                     trans.DOScaleX(originSize.x, Time.deltaTime).SetEase(Ease.InOutSine);
                     _rigid.velocity = dir * _so.Speed;
+                    
                 });
             }
             else
@@ -265,13 +229,15 @@ public partial class SixthElite : MonoBehaviour, IHitAble
                     correction = Vector2.up * 1f;
                 }
                 StartCoroutine(Charging(_animationPlayTime, _visual.parent.position + correction, dir));
-
+                Debug.Log("Y Charging");
                 trans.DOScaleY(originSize.y / 2, _animationPlayTime)
                 .SetEase(Ease.InOutSine)
                 .OnComplete(() =>
                 {
+                    Debug.Log("Y Charging Ended");
                     trans.DOScaleY(originSize.y, Time.deltaTime).SetEase(Ease.InOutSine);
                     _rigid.velocity = dir * _so.Speed;
+                    
                 });
             }
         }
