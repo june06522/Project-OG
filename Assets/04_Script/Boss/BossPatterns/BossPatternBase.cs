@@ -4,6 +4,21 @@ using UnityEngine;
 
 public class BossPatternBase : MonoBehaviour
 {
+    protected bool _isHit = false;
+
+    protected virtual void Update()
+    {
+        if(_isHit)
+        {
+            Invoke("CanHit", 0.5f);
+        }
+    }
+
+    private void CanHit()
+    {
+        _isHit = false;
+    }
+
     protected void SetLineMaterial(Material mat, GameObject[] objs, LineRenderer[] lines)
     {
         for (int i = 0; i < objs.Length; i++)
@@ -26,15 +41,16 @@ public class BossPatternBase : MonoBehaviour
         }
     }
 
-    protected void RayPlayerCheck(Vector3 pos, Vector2 dir)
+    protected void RayPlayerCheck(Vector3 pos, Vector2 dir, float damage)
     {
         RaycastHit2D hit = Physics2D.Raycast(pos, dir, Mathf.Infinity, LayerMask.GetMask("Player"));
 
         if (hit.collider != null)
         {
-            if (hit.collider.TryGetComponent<IHitAble>(out var hitAble))
+            if (hit.collider.TryGetComponent<IHitAble>(out var hitAble) && !_isHit)
             {
-                hitAble.Hit(1);
+                hitAble.Hit(damage);
+                _isHit = true;
             }
         }
 

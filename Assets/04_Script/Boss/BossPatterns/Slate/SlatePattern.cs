@@ -6,7 +6,7 @@ using DG.Tweening;
 // 크기 변동의 문제, 시작 애니메이션 추가, 레이저 색 변경
 public class SlatePattern : BossPatternBase
 {
-    public IEnumerator LastLaserAttack(LineRenderer line, Vector3 pos, float speed, float scale)
+    public IEnumerator LastLaserAttack(SlateBoss boss, LineRenderer line, Vector3 pos, float speed, float scale)
     {
         line.SetPosition(0, pos);
         line.startWidth = scale;
@@ -15,6 +15,7 @@ public class SlatePattern : BossPatternBase
         yield return new WaitForSeconds(0.5f);
 
         float deg = 0;
+        _isHit = false;
         while(deg < 360)
         {
             deg += Time.deltaTime * speed;
@@ -26,12 +27,17 @@ public class SlatePattern : BossPatternBase
 
             Vector2 dir = new Vector2(x, y);
             line.SetPosition(1, RayWallCheck(pos, dir));
-            RayPlayerCheck(pos, dir);
+            RayPlayerCheck(pos, dir, boss.so.Damage);
 
             yield return null;
         }
 
         line.enabled = false;
+    }
+
+    protected override void Update()
+    {
+        base.Update();
     }
 
     public IEnumerator Laser(SlateBoss boss, GameObject[] objs, LineRenderer[] lines, Vector3[] pos, float warningTime, float fireTime, float speed, float goBackTime, float minimiMoveSpeed, bool breaker)
@@ -108,7 +114,7 @@ public class SlatePattern : BossPatternBase
 
         SoundManager.Instance.SFXPlay("Laser", boss.laserClip, boss.bulletCollector.transform, 0.3f);
 
-        
+        _isHit = false;
         while (curTime < fireTime)
         {
             curTime += Time.deltaTime;
@@ -146,8 +152,8 @@ public class SlatePattern : BossPatternBase
                         dir = new Vector2(x, y).normalized;
                         lines[i].SetPosition(0, RayWallCheck(objs[i].transform.position, -dir));
                         lines[i].SetPosition(1, RayWallCheck(objs[i].transform.position, dir));
-                        RayPlayerCheck(objs[i].transform.position, -dir);
-                        RayPlayerCheck(objs[i].transform.position, dir);
+                        RayPlayerCheck(objs[i].transform.position, -dir, boss.so.Damage);
+                        RayPlayerCheck(objs[i].transform.position, dir, boss.so.Damage);
                     }
                     else
                     {
@@ -157,8 +163,8 @@ public class SlatePattern : BossPatternBase
                         dir = new Vector2(x, y).normalized;
                         lines[i].SetPosition(0, RayWallCheck(objs[i].transform.position, -dir));
                         lines[i].SetPosition(1, RayWallCheck(objs[i].transform.position, dir));
-                        RayPlayerCheck(objs[i].transform.position, -dir);
-                        RayPlayerCheck(objs[i].transform.position, dir);
+                        RayPlayerCheck(objs[i].transform.position, -dir, boss.so.Damage);
+                        RayPlayerCheck(objs[i].transform.position, dir, boss.so.Damage);
                     }
                 }
             }
