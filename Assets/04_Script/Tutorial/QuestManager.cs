@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.Events;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
@@ -21,6 +22,7 @@ public enum QuestName
     EquiementWeapon,
     KillEnemy,
     EatTrigger,
+    ConnectSkill,
 }
 
 public class QuestManager : MonoSingleton<QuestManager>
@@ -96,6 +98,7 @@ public class QuestManager : MonoSingleton<QuestManager>
         if (questIndex >= questTxt.Length)
             Debug.LogError($"{transform} : Index out of range!");
 
+        isClick = false;
         SetStringEmpty();
         tutorialManager.speechBubble.SetActive(true);
         npcText.DOText(questTxt[questIndex], questTxt[questIndex].Length * textTime);
@@ -120,7 +123,10 @@ public class QuestManager : MonoSingleton<QuestManager>
         }
 
         if (curTime < delayTime)
+        {
+            SkipText();
             return true;
+        }
         else
         {
             curTime = 0;
@@ -214,8 +220,6 @@ public class QuestManager : MonoSingleton<QuestManager>
             delayTime = questTxt[questIndex].Length * textTime + waitTextTime;
             while (TextDelay()) { yield return null; }
             questIndex++;
-
-            SetStringEmpty();
         }
 
         tutorialManager.playerController.canMove = true;
@@ -233,6 +237,7 @@ public class QuestManager : MonoSingleton<QuestManager>
             yield return null;
         }
 
+        SetStringEmpty();
         npc.position = player.position + new Vector3(4.58f, 0);
         tutorialManager.playerController.canMove = false;
         yield return new WaitForSeconds(1.5f);
@@ -351,7 +356,6 @@ public class QuestManager : MonoSingleton<QuestManager>
             while (TextDelay()) { yield return null; }
             questIndex++;
         }
-
         SetStringEmpty();
         tutorialManager.playerController.canMove = true;
         Instantiate(tutorialManager.weapon, tutorialManager.weaponSpawnPos.position, Quaternion.identity);
@@ -381,21 +385,25 @@ public class QuestManager : MonoSingleton<QuestManager>
         while (enemy != null && enemy.activeSelf) { yield return null; }
 
         tutorialManager.playerController.canMove = false;
+        tutorialManager.playerController.Stop();
         for (int i = 0; i < 2; i++)
         {
             SetString();
 
             curTime = 0;
-            delayTime = questTxt[questIndex].Length * textTime + delayTime;
+            if (i == 0)
+                delayTime = questTxt[questIndex].Length * textTime + waitTextTime;
+            else
+                delayTime = questTxt[questIndex].Length * textTime;
             while (TextDelay()) { yield return null; }
             questIndex++;
         }
 
         GameObject.Find("TutorialStage1").GetComponent<Stage>().AppearChest();
-
+        
         Transform chest = GameObject.Find("TutorialChest(Clone)").transform;
-
-        while(Vector3.Distance(chest.position,player.position) < 2f)
+        chest.GetComponent<StageChest>().SetRateItems(ItemType.Generator);
+        while (Vector3.Distance(chest.position,player.position) < 2f)
             {
             chest.Translate(Vector3.left);
         }
@@ -411,7 +419,7 @@ public class QuestManager : MonoSingleton<QuestManager>
 
         SetString();
         curTime = 0;
-        delayTime = questTxt[questIndex].Length * textTime + delayTime;
+        delayTime = questTxt[questIndex].Length * textTime;
         while (TextDelay()) { yield return null; }
         questIndex++;
 
@@ -430,13 +438,36 @@ public class QuestManager : MonoSingleton<QuestManager>
             SetString();
 
             curTime = 0;
-            delayTime = questTxt[questIndex].Length * textTime + delayTime;
+            if (i == 1)
+                delayTime -= waitTextTime;
+            delayTime = questTxt[questIndex].Length * textTime + waitTextTime;
             while (TextDelay()) { yield return null; }
             questIndex++;
         }
 
         WeaponInventory inven = FindObjectOfType<WeaponInventory>();
         while (inven.GetContainerItemCnt() < 2) { yield return null; }
-        Debug.Log("퀘스트 클리어");
+
+        for (int i = 0; i < 3; i++)
+        {
+            SetString();
+
+            curTime = 0;
+            delayTime = questTxt[questIndex].Length * textTime + waitTextTime;
+            while (TextDelay()) { yield return null; }
+            questIndex++;
+        }
+
+        tutorialManager.NextQuest();
+    }
+
+    public void ConnectSkill()
+    {
+        StartCoroutine(ConnectSkillCo());
+    }
+
+    IEnumerator ConnectSkillCo()
+    {
+        yield return null;
     }
 }
