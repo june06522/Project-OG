@@ -21,6 +21,9 @@ public struct DissolveParameters
         Duration = duration;
         Shader = shader;
         Ease = ease;
+
+        //Init
+        mat.SetFloat(shader, StartPos);
     }
 }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.Rendering;
 using System;
+using UnityEngine.Rendering.Universal;
 
 public class CameraManager : MonoSingleton<CameraManager>
 {
@@ -16,7 +17,8 @@ public class CameraManager : MonoSingleton<CameraManager>
     private CinemachineBasicMultiChannelPerlin _defaultPerlin;
 
     [SerializeField]
-    private Camera _minimapCamera;
+    private Camera _uiCam;
+    public Camera UICam => _uiCam;
 
     [SerializeField]
     private Shockwave _shockwave;
@@ -34,18 +36,25 @@ public class CameraManager : MonoSingleton<CameraManager>
         _defaultPerlin = perlin = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
 
         _brain = Camera.main.transform.GetComponent<CinemachineBrain>();
+
     }
 
     public void SetOtherCam(CinemachineVirtualCamera changeCam, bool forceSet = false)
     {
-        if (forceSet)
-        {
-            _brain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Cut;
-        }
-        else
-        {
-            _brain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Linear;
-        }
+        if (changeCam == null && _brain == null)
+            return;
+
+        //Debug.Log($"{_brain}, {_brain.m_DefaultBlend}");
+        //Debug.Log($"{_brain}, {_brain.m_DefaultBlend.m_Style}");
+        //
+        //if (forceSet)
+        //{
+        //    _brain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Cut;
+        //}
+        //else
+        //{
+        //    _brain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Linear;
+        //}
 
         cam.Priority = 0;
         changeCam.Priority = 10;
@@ -135,17 +144,6 @@ public class CameraManager : MonoSingleton<CameraManager>
         perlin.m_FrequencyGain = Mathf.Clamp(perlin.m_FrequencyGain - shakeIntensity, 0, 100);
     }
 
-    public void SetMinimapCameraPostion(Vector3 worldPos)
-    {
-        worldPos.z = -10;
-        if(_minimapCamera != null)
-        {
-
-            _minimapCamera.transform.position = worldPos;
-
-        }
-    }
-
     public void SetLookObj(GameObject obj, float orthographicSize, float changeTime)
     {
         if(obj == null)
@@ -198,5 +196,12 @@ public class CameraManager : MonoSingleton<CameraManager>
         }
 
         cam.m_Lens.OrthographicSize = orthographicSize;
+    }
+
+    public void SetColor(Color cameraBackgroundColor)
+    {
+
+        Camera.main.backgroundColor = cameraBackgroundColor;
+
     }
 }

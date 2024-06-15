@@ -36,6 +36,8 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
     private readonly int idleHash = Animator.StringToHash("IsIdle");
 
+    private readonly string _playerColor = "_Color";
+
     protected override void Awake()
     {
 
@@ -118,6 +120,15 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
 
         inputController = null;
         eventController = null;
+
+    }
+
+    public void PlayerColorChange(Color color)
+    {
+
+        if(_spriteRenderer == null) return;
+
+        _spriteRenderer.material.SetColor(_playerColor, color);
 
     }
 }

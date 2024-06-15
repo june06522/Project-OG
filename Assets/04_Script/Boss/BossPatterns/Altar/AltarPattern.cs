@@ -14,16 +14,14 @@ public class AltarPattern : BossPatternBase
         StartCoroutine(boss.Blinking(boss.bigestBody, time, a, 1, Color.white));
     }
 
-    //private IEnumerator InTriangleAnim(AltarBoss boss, float time, float a)
-    //{
-    //    StartCoroutine(boss.Blinking(boss.bigestBody, time, a, 1, Color.white));
-    //    yield return new WaitForSeconds(time);
-    //    StartCoroutine(boss.Blinking(boss.mediumSizeBody, time, a, 1, Color.white));
-    //    yield return new WaitForSeconds(time);
-    //    StartCoroutine(boss.Blinking(boss.smallestBody, time, a, 1, Color.white));
-    //}
-
-    // 전방향으로 탄막을 날리고 잠시 뒤 탄막들이 플레이어 방향으로 날아간다 - 플레이어가 근접하기 좋은 패턴
+    private IEnumerator InTriangleAnim(AltarBoss boss, float time, float a)
+    {
+        StartCoroutine(boss.Blinking(boss.bigestBody, time, a, 1, Color.white));
+        yield return new WaitForSeconds(time);
+        StartCoroutine(boss.Blinking(boss.mediumSizeBody, time, a, 1, Color.white));
+        yield return new WaitForSeconds(time);
+        StartCoroutine(boss.Blinking(boss.smallestBody, time, a, 1, Color.white));
+    }
 
     public IEnumerator OmniGuidPlayerAttack(AltarBoss boss, int bulletCount, float speed, float time, int burstCount)
     {

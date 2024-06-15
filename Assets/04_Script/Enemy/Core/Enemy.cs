@@ -34,6 +34,9 @@ public class Enemy : MonoBehaviour, IHitAble
     }
 
     public bool Dead { get; private set; } = false;
+
+    public bool isNotMoveingEnemy = false;
+
     public event Action DeadEvent;
     public event Action<float> HitEvent;
 
@@ -80,6 +83,11 @@ public class Enemy : MonoBehaviour, IHitAble
 
     private void FixedUpdate()
     {
+        if(isNotMoveingEnemy)
+        {
+            return;
+        }
+
         float maxSpeed = EnemyDataSO.Speed * speedRatio;
         if (MovementInput.magnitude > 0 && currentSpeed >= 0)
         {

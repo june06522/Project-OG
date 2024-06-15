@@ -21,6 +21,8 @@ public class SnakePatrol : MonoBehaviour
         _target = GameManager.Instance.player;
         _root = transform;
 
+        _movePos = _target.position;
+
         ResetLerpData();
     }
 

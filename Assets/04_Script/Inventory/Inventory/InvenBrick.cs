@@ -289,6 +289,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
         //ItemExplain.Instance.HoverEvent(invenPoint);
         if (Type == ItemType.Generator)
+        {
             ItemExplain.Instance.HoverGenerator(
                 invenPoint, 
                 image.sprite, 
@@ -297,6 +298,11 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
                 itemRate,
                 WeaponExplainManager.generatorName[InvenObject.generatorID]
             );
+        }
+        else if(Type == ItemType.Connector)
+        {
+            ItemExplain.Instance.HoverConnector(invenPoint, image.sprite, itemRate);
+        }
     }
 
     public void OnDestroy()

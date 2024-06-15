@@ -87,8 +87,10 @@ public class IngameTooltip : MonoBehaviour
 
     private void SetPos(Vector3 itemPos)
     {
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(itemPos);
-        _rectTransform.position = screenPos;
+        _rectTransform.position = itemPos;
+
+        //Vector3 screenPos = Camera.main.WorldToScreenPoint(itemPos);
+        //_rectTransform.position = screenPos;
     }
 
     private void SetWeaponInfo(InvenBrick brick)

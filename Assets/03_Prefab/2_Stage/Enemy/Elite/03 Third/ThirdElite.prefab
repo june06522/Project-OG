@@ -54,15 +54,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyDataSO: {fileID: 11400000, guid: ae3128a65d5181a47a84eb3b7ad4a1ad, type: 2}
-  _visualTrm: {fileID: 244883404192918125}
   <enemyAnimController>k__BackingField: {fileID: 244883404192918102}
   acceleration: 50
   deacceleration: 100
   currentSpeed: 0
   _hitSound: {fileID: 8300000, guid: 735727e59073dd747808b3adb0c5bb21, type: 3}
   <feedbackPlayer>k__BackingField: {fileID: 2970613771832277700}
-  frozenColor: {r: 0.7584906, g: 0.9797822, b: 1, a: 1}
-  IsDebuffing: 0
 --- !u!114 &244883404192918100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,7 +101,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <EnemyDataSO>k__BackingField: {fileID: 11400000, guid: ae3128a65d5181a47a84eb3b7ad4a1ad, type: 2}
-  enemyFindEffect: {fileID: -6713558889965095767, guid: 11f2f1a4a9d7af04298f2fc1435e6a51, type: 3}
   bullet: {fileID: 3528023805197716268, guid: 43899e196ef87c640b6131ff7acdc21e, type: 3}
 --- !u!95 &244883404192918121
 Animator:
@@ -356,7 +352,7 @@ SpriteRenderer:
   m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 7d9677e1401e39845aa6c417cc838fcc, type: 3}
-  m_Color: {r: 1, g: 0.19607843, b: 0.42745098, a: 1}
+  m_Color: {r: 0.99607843, g: 0.59607846, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -373,6 +369,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 244883404192918125}
     m_Modifications:
+    - target: {fileID: 177079821362493866, guid: 76b54ff0443924a4d8fdcf03eb481dbb, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.g
+      value: 0.59607846
+      objectReference: {fileID: 0}
+    - target: {fileID: 177079821362493866, guid: 76b54ff0443924a4d8fdcf03eb481dbb, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 177079821362493866, guid: 76b54ff0443924a4d8fdcf03eb481dbb, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.g
+      value: 0.59607846
+      objectReference: {fileID: 0}
+    - target: {fileID: 177079821362493866, guid: 76b54ff0443924a4d8fdcf03eb481dbb, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
     - target: {fileID: 1202798671136205938, guid: 76b54ff0443924a4d8fdcf03eb481dbb, type: 3}
       propertyPath: m_Name
       value: circle_01

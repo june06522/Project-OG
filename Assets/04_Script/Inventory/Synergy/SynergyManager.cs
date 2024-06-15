@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-[Serializable]
-public struct SynergyData
+[System.Serializable]
+public class SynergyData
 {
     public TriggerID type;
-    public List<float> table;
+    public float[] table;
 }
 
 public class SynergyManager : MonoBehaviour
@@ -18,9 +17,14 @@ public class SynergyManager : MonoBehaviour
 
     public Action OnSynergyChange;
 
-    [SerializeField] List<SynergyData> tableList = new List<SynergyData>();
+    // 시너지 별 스탯 테이블
+    [SerializeField] List<SynergyData> tableList;
+    Dictionary<TriggerID, List<float>> synergeTable;
+
+    // 해당 시너지 레벨
     Dictionary<TriggerID, int> synergyLevel = new Dictionary<TriggerID, int>();
 
+    // 현재 시너지 적용치
     Dictionary<PlayerStatsType, float> synergyAmount = new Dictionary<PlayerStatsType, float>();
     public Dictionary<PlayerStatsType, float> SynergyAmount => synergyAmount;
 
@@ -33,13 +37,20 @@ public class SynergyManager : MonoBehaviour
             Debug.LogError("Multiple SynergyManager is running");
             Destroy(instance);
 
+
         }
 
         instance = this;
 
+        foreach (PlayerStatsType type in Enum.GetValues(typeof(PlayerStatsType)))
+        {
+            synergyAmount[type] = 0;
+        }
+
         foreach (TriggerID id in Enum.GetValues(typeof(TriggerID)))
         {
-            //UpdateSynergyAmount(id);
+            synergyLevel[id] = 0;
+            UpdateSynergyAmount(id);
         }
 
     }
@@ -94,7 +105,7 @@ public class SynergyManager : MonoBehaviour
             case TriggerID.Idle:
                 targetStat = PlayerStatsType.Defence;
                 break;
-            case TriggerID.RoomClear:
+            case TriggerID.RoomEnter:
                 targetStat = PlayerStatsType.EarningGold;
                 break;
             case TriggerID.GetHit:
@@ -119,7 +130,15 @@ public class SynergyManager : MonoBehaviour
         if (targetStat != PlayerStatsType.None)
         {
 
-            synergyAmount[targetStat] = tableList.FirstOrDefault((x) => x.type == id).table[synergyLevel[id]];
+            int currentLevel = synergyLevel[id];
+            SynergyData data = tableList.Find((x) => x.type == id);
+            if (data == null)
+            {
+                Debug.Log(data);
+            }
+            float amount = data.table[currentLevel];
+            synergyAmount[targetStat] = amount;
+
             OnSynergyChange?.Invoke();
 
         }

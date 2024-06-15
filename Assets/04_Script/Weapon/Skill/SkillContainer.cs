@@ -51,13 +51,14 @@ public enum TriggerID
     CoolTime,       // 쿨타임
     Move,           // 이동
     Idle,           // 가만히
-    RoomClear,      // 방 클리어
+    RoomEnter,      // 방 클리어
     GetHit,         // 피격
     Kill,           // 처치
     UseSkill,       // 스킬 사용
     StageClear,     // 스테이지 클리어
     WaveStart,      // 웨이브 시작
     Always,         // 항상
+    Regist,         // 등록(로테이트 전용)
 }
 // Skill 2차원 리스트는 인스펙터에서 안보임 이렇게 해야함
 [Serializable]

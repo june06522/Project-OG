@@ -51,7 +51,7 @@ public class SDeadState : BossBaseState
 
         yield return null;
 
-        _slate.StartCoroutine(_pattern.LastLaserAttack(_slate.line, _slate.transform.position, animTime, 0.1f));
+        _slate.StartCoroutine(_pattern.LastLaserAttack(_slate, _slate.line, _slate.transform.position, animTime, 0.1f));
 
         yield return new WaitForSeconds(360 / (animTime - 10));
 

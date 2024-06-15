@@ -407,10 +407,11 @@ public class Stage : MonoBehaviour
 
         }
     }
-    public bool SetCameraSize()
+    public void SetCameraSize()
     {
         if(_useChangeCameraSize)
             Debug.Log("IsNotUpdate");
+
         if (_vStageCam != null)
         {
             CameraManager.Instance.SetOtherCam(_vStageCam, true);
@@ -418,7 +419,6 @@ public class Stage : MonoBehaviour
         else
             CameraManager.Instance.SetDefaultCam();
 
-        return (_vStageCam != null);
     }
     private void DeleteStageCameraSetting()
     {

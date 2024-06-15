@@ -18,6 +18,7 @@ public class PlayerEventController : IDisposable
     public event Action OnSkill;        // 스킬 발동 시
     public event Action OnEnemyDie;     // 적 처치시
     public event Action OnAlways;       // 항상
+    public event Action OnRegist;       // 스킬등록
     #endregion
 
     #region 대리자
@@ -37,6 +38,7 @@ public class PlayerEventController : IDisposable
     public void OnSkillxecute()                         => OnSkill?.Invoke();
     public void OnEnemyDieExecute()                     => OnEnemyDie?.Invoke();
     public void OnAlwaysExecute()                       => OnAlways?.Invoke();
+    public void OnRegistExecute()                       => OnRegist?.Invoke();
     #endregion
 
     #region 디스포즈
@@ -55,6 +57,7 @@ public class PlayerEventController : IDisposable
         OnSkill = null;
         OnEnemyDie = null;
         OnAlways = null;
+        OnRegist = null;
     }
     #endregion
 }

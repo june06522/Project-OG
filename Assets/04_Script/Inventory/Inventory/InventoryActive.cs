@@ -58,6 +58,8 @@ public class InventoryActive : MonoBehaviour
     TextMeshProUGUI _warningTextInven;
     CinemachineVirtualCamera _cmVCam;
 
+    TooltipDissolve _tooltipDissolve;
+
     readonly string invenShader = "_SourceGlowDissolveFade";
 
     private void Start()
@@ -69,12 +71,12 @@ public class InventoryActive : MonoBehaviour
         _inveny = _invenPanel.transform.localPosition.y;
         _infox = _invenInfoPanel.transform.localPosition.x;
 
-        _components = _invenPanel.transform.Find("Components").transform;
+        //_components = _invenPanel.transform.Find("Components").transform;
         invenRenderer = _invenPanel.GetComponent<Image>();
         fade = transform.Find("FadePanel").GetComponent<PanelFade>();
         _warningText = transform.Find("WarningText").GetComponent<TextMeshProUGUI>();
         _warningTextInven = transform.Find("WarningTextInven").GetComponent<TextMeshProUGUI>();
-
+        _tooltipDissolve = transform.Find("Panel/Tooltip").GetComponent<TooltipDissolve>();
         cv = FindObjectOfType<ConnectVisible>();
 
         mat = invenRenderer.material;
@@ -123,10 +125,10 @@ public class InventoryActive : MonoBehaviour
         invenRenderer.enabled = true;
         float initValue = mat.GetFloat(invenShader);
 
-        seq.Append(DOTween.To(() => initValue, value => mat.SetFloat(invenShader, value), 15f, easingtime)).SetEase(ease);
+        seq.Append(DOTween.To(() => initValue, value => mat.SetFloat(invenShader, value), 20.0f, easingtime)).SetEase(ease);
         seq.Join(ScreenManager.Instance.SetEffect(0.11f, 0.65f, DG.Tweening.Ease.InQuad));
-
-        seq.AppendCallback(() => { isAnimation = true; });
+        seq.Insert(easingtime - 0.05f, _tooltipDissolve.On());
+        seq.OnComplete(() => { isAnimation = true; });
 
     }
 
@@ -148,6 +150,7 @@ public class InventoryActive : MonoBehaviour
         float initValue = mat.GetFloat(invenShader);
 
         seq = DOTween.Sequence();
+        seq.Append(_tooltipDissolve.Off());
         seq.Append(DOTween.To(() => initValue, value => mat.SetFloat(invenShader, value), 0f, easingtime).SetEase(ease));
         seq.AppendCallback(() => { StartCoroutine(DelayCo()); });
 

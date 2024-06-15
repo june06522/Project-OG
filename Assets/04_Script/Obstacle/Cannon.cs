@@ -31,8 +31,8 @@ public class Cannon : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            Shoot();
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //    Shoot();
     }
 
     public void Shoot() => StartCoroutine(ShootCoroutine());
@@ -57,6 +57,6 @@ public class Cannon : MonoBehaviour
 
         transform.DOPunchScale(originScale * scaleRatio, 0.5f, vibrato, elasticity).SetEase(ease);
         EnemyBullet clone = Instantiate(bullet, shootPoint.position, Quaternion.identity);
-        clone.Shoot(transform.up);
+        clone.Shoot(-transform.up);
     }
 }

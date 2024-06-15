@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ShopItem : MonoBehaviour, IPointerDownHandler
+public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField]
     private Shop _shop;
@@ -35,16 +35,65 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler
         }
 
         _item = item;
+        SetName(item);
 
         _itemImage.color = Color.white;
         _itemImage.sprite = item.Sprite;
-        _itemName.text = item.ItemName;
         _buyItemClip = buyItemSound;
 
         _isSold = false;
 
         SetColor(item.Rate);
         SetPrice(item.Rate);
+    }
+
+    private void SetName(ItemInfoSO item)
+    {
+        InvenBrick brick = item.Brick;
+
+        switch (brick.Type)
+        {
+            case ItemType.Weapon:
+                SetWeaponInfo(brick);
+                break;
+            case ItemType.Generator:
+                SetGeneratorInfo(brick);
+                break;
+            case ItemType.Connector:
+                SetConnectorInfo(brick);
+                break;
+        }
+
+    }
+
+    private void SetWeaponInfo(InvenBrick brick)
+    {
+        WeaponBrick weaponBrick = brick as WeaponBrick;
+
+        if (weaponBrick != null)
+        {
+
+            WeaponID id = weaponBrick.WeaponPrefab.id;
+
+            string nameText = WeaponExplainManager.weaponName[id];
+
+            _itemName.text = nameText;
+
+        }
+    }
+
+    private void SetGeneratorInfo(InvenBrick brick)
+    {
+        GeneratorID id = brick.InvenObject.generatorID;
+
+        string nameText = WeaponExplainManager.generatorName[id];
+
+        _itemName.text = nameText;
+    }
+
+    private void SetConnectorInfo(InvenBrick brick)
+    {
+        _itemName.text = "¿¬°á±â";
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -65,6 +114,8 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler
 
                 _isSold = true;
                 SoundManager.Instance.SFXPlay("Buy", _buyItemClip, 0.6f);
+
+                _shop.ShopItemInfoUI.SetEnableUI(false);
 
             }
             else
@@ -117,5 +168,32 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler
         }
 
         _itemPriceText.text = $"{_itemPrice}G";
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        //
+        if (_item.Brick.Type == ItemType.Connector
+            || _isSold)
+            return;
+
+        Debug.Log($"Enter {_item.Brick.Type}");
+
+        _shop.ShopItemInfoUI.SetPos(transform.position);
+        _shop.ShopItemInfoUI.SetInfo(_item);
+        _shop.ShopItemInfoUI.SetEnableUI(true);
+
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (_item.Brick.Type == ItemType.Connector
+            || _isSold)
+            return;
+
+        Debug.Log($"Exit {_item.Brick.Type}");
+
+        _shop.ShopItemInfoUI.SetEnableUI(false);
+        
     }
 }

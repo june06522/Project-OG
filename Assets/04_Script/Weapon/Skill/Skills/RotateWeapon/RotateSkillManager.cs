@@ -62,16 +62,16 @@ public class RotateSkillManager : MonoBehaviour
 
     //RotateSkill���� ȣ��.
 
-    public void SetCloneInfo(Weapon weapon, WeaponID id)
+    public void SetCloneInfo(Weapon weapon, WeaponID id, int count)
     {
-
         if(!_weaponTrmDictionary.ContainsKey(weapon))
         {
-            _weaponTrmDictionary[weapon] = 1;
+            _weaponTrmDictionary[weapon] = count;
+            _weaponSkillList[weapon] = SkillManager.Instance.GetSkillList(weapon);
         }
         else
         {
-            _weaponTrmDictionary[weapon]++; // 클론 갯수 증가.
+            _weaponTrmDictionary[weapon] += count; // 클론 갯수 증가.
         }
     }
 
@@ -91,20 +91,22 @@ public class RotateSkillManager : MonoBehaviour
         Transform playerTrm = GameManager.Instance.player;
 
         // Ŭ�� ����.
-        foreach (var info in _weaponTrmDictionary) 
-        {
-            for(int i = 0 ; i < info.Value; ++i)
-            {
-                RotateClone clone = Instantiate(GetClonePrefabInfo(info.Key.id), playerTrm); //재활용하는 걸로 바꿔야 함
-                clone.Init(_weaponSkillList[info.Key]);
-                rotateClones.Add(clone);
 
-                List<SendData> sendData = SkillManager.Instance.GetSkillList(clone); // 스킬 캐싱.
-                sendData.ForEach((data) =>
+        if(rotateClones.Count == 0) // 인벤토리가 재 세팅 되는 경우
+        {
+            foreach (var info in _weaponTrmDictionary) 
+            {
+                for(int i = 0 ; i < info.Value; ++i)
                 {
-                    SkillManager.Instance.RegisterSkill(data.TriggerID, clone, data);
-                });
+                    RotateClone clone = Instantiate(GetClonePrefabInfo(info.Key.id), playerTrm); //재활용하는 걸로 바꿔야 함
+                    clone.Init(_weaponSkillList[info.Key]);
+                    rotateClones.Add(clone);
+                }
             }
+        }
+        else
+        {
+            rotateClones.ForEach((clone) => clone.enabled = true); //클론 활성화
         }
 
         // Ŭ�� ��ġ ���� & Dissolve ����
@@ -141,26 +143,27 @@ public class RotateSkillManager : MonoBehaviour
         
         for (int i = 0; i < cloneCnt; i++)
         {
-            // rotateClones[i].Dissolve(dissolveTime, false);
-            // rotateClones[i].EndDissolve(); //조금의 최적화.
-            rotateClones[i].DestroyThis();
+            rotateClones[i].Dissolve(dissolveTime, false); //조금의 최적화.
         }
-        //Debug.Log("Clear");
-        //foreach(var info in _cloneDictionary)
-        //{
-        //    _cloneDictionary[info.Key] = 0;
-        //}
+    }
+
+    private void ClearDictionary()
+    {
         _weaponSkillList.Clear();
         _weaponTrmDictionary.Clear();
+        
+        rotateClones.ForEach((clone) => clone.DestroyThis());
         rotateClones.Clear();
     }
 
-    private void SetRunning()
+    private void SetRunning(TriggerID trigger, Weapon weapon)
     {
+        Debug.Log("Setting");
         IsRunning = true;
     }
-    private void SetIdle()
+    private void SetIdle(TriggerID trigger, Weapon weapon)
     {
+        Debug.Log("Idle");
         //Debug.Log(IsRunning);
         IsRunning = false;
     }
@@ -177,9 +180,11 @@ public class RotateSkillManager : MonoBehaviour
     {
         if (PlayerController.EventController != null)
         {
-            PlayerController.EventController.OnMove += SetRunning;
-            PlayerController.EventController.OnIdle += SetIdle;
+            EventTriggerManager.Instance.OnIdleExecute += SetIdle;
+            EventTriggerManager.Instance.OnMoveExecute += SetRunning;
         }
+
+        SkillManager.Instance.OnRegistEndEvent += ClearDictionary;
     }
 
     private void OnDisable()
@@ -187,10 +192,12 @@ public class RotateSkillManager : MonoBehaviour
         if (PlayerController.EventController != null)
         {
 
-            PlayerController.EventController.OnMove -= SetRunning;
-            PlayerController.EventController.OnIdle -= SetIdle;
+            EventTriggerManager.Instance.OnIdleExecute -= SetIdle;
+            EventTriggerManager.Instance.OnMoveExecute -= SetRunning;
 
         }
+
+        SkillManager.Instance.OnRegistEndEvent -= ClearDictionary;
     }
 
     private void Update()

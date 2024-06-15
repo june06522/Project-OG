@@ -16,6 +16,7 @@ public class WitheredState : BossBaseState
     public override void OnBossStateExit()
     {
         _flower.StopAllCoroutines();
+        _pattern.StopAllCoroutines();
 
         _flower.SetBody(_flower.bigestBody, Vector3.one, Vector3.zero, _flower.bossColor, 0.5f);
         _flower.SetBody(_flower.mediumSizeBody, Vector3.one, Vector3.zero, _flower.bossColor, 0.5f);
@@ -28,6 +29,8 @@ public class WitheredState : BossBaseState
     public override void OnBossStateOn()
     {
         _flower.gameObject.layer = LayerMask.NameToLayer("Boss");
+        _flower.gameObject.tag = "HitAble";
+
         _flower.withered = true;
         _flower.StartCoroutine(RandomPattern(_flower.so.PatternChangeTime));
     }
@@ -43,7 +46,8 @@ public class WitheredState : BossBaseState
 
     private IEnumerator RandomPattern(float waitTime)
     {
-        while(_flower.withered)
+        int beforeRand = 4;
+        while (_flower.withered)
         {
             if (_flower.isAttacking)
             {
@@ -53,15 +57,43 @@ public class WitheredState : BossBaseState
 
             yield return new WaitForSeconds(waitTime);
 
-            int rand = Random.Range(1, 3);
+            int rand = Random.Range(1, 4);
+            if (beforeRand == rand)
+            {
+                if (rand == 1)
+                {
+                    rand = Random.Range(2, 4);
+                }
+                else if (rand == 3)
+                {
+                    rand = Random.Range(1, 3);
+                }
+                else
+                {
+                    int chooseRand = Random.Range(1, 3);
+                    switch (chooseRand)
+                    {
+                        case 1:
+                            rand = 1;
+                            break;
+                        case 2:
+                            rand = 3;
+                            break;
+                    }
+                }
+            }
+            beforeRand = rand;
 
-            switch(rand)
+            switch (rand)
             {
                 case 1:
-                    NowCoroutine(_pattern.RandomOminidirShot(_flower, 3, 20, 3, 1, 2));
+                    NowCoroutine(_pattern.OminidirShot(_flower, 3, 20, 10, 1, 2));
                     break;
                 case 2:
-                    NowCoroutine(_pattern.WarmShot(_flower, 5, 5, 3, 0.35f, 2));
+                    NowCoroutine(_pattern.WarmShot(_flower, 5, 10, 5, 0.35f, 2));
+                    break;
+                case 3:
+                    NowCoroutine(_pattern.ComeBackShot(_flower, 30, 5, 5));
                     break;
             }
         }

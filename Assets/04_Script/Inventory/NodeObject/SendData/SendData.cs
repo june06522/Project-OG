@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 [Serializable]
@@ -31,7 +30,7 @@ public class SendData
             case TriggerID.NormalAttack:
             case TriggerID.Move:
             case TriggerID.Idle:
-            case TriggerID.RoomClear:
+            case TriggerID.RoomEnter:
             case TriggerID.GetHit:
             case TriggerID.StageClear:
             case TriggerID.WaveStart:

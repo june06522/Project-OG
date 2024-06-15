@@ -10,6 +10,13 @@ public class Shop : MonoBehaviour
     public Money PlayerMoney => _playerMoney;
 
     [Header("UI Info")]
+    // canvas
+    [SerializeField]
+    private Canvas _canvas;
+    [SerializeField]
+    private ShopItemInfo _shopItemInfo;
+    public ShopItemInfo ShopItemInfoUI => _shopItemInfo;
+
     // value
     [SerializeField]
     private int _reRollGold = 2;
@@ -42,6 +49,15 @@ public class Shop : MonoBehaviour
     [SerializeField] private AudioClip _reRollClip;
     [SerializeField] private AudioClip _buyItemClip;
 
+    // Random Value
+    private float _normalProbability;   // 50f
+    private float _rareProbability = 33f;
+    private float _epicProbability = 12f;
+    private float _legendaryProbability = 5f;
+
+    private Dictionary<ItemRate, Queue<ItemInfoSO>> _itemRateQ = new Dictionary<ItemRate, Queue<ItemInfoSO>>();
+
+
     private void Awake()
     {
         _playerMoney = FindObjectOfType<Money>();
@@ -52,6 +68,10 @@ public class Shop : MonoBehaviour
         _isOpen = false;
         inven = FindObjectOfType<InventoryActive>();
         _warningTxt = FindObjectOfType<WarningTxt>();
+
+        _canvas.worldCamera = CameraManager.Instance.UICam;
+        _normalProbability = 100f - (_rareProbability + _epicProbability + _legendaryProbability);
+
     }
 
     public void OpenShop()
@@ -122,13 +142,49 @@ public class Shop : MonoBehaviour
         _items.Clear();
         _items = _itemInfoListSO.ItemInfoList.ToList<ItemInfoSO>();
 
-        for(int i = 0; i < 4; i++)
+        _itemRateQ.Clear();
+        _itemRateQ = new Dictionary<ItemRate, Queue<ItemInfoSO>>
+        {
+            { ItemRate.NORMAL,  new Queue<ItemInfoSO>() },
+            { ItemRate.RARE,    new Queue<ItemInfoSO>() },
+            { ItemRate.EPIC,    new Queue<ItemInfoSO>() },
+            { ItemRate.LEGEND,  new Queue<ItemInfoSO>() }
+        };
+
+        // Q Setting
+        for(int i = 0; i < _items.Count; ++i)
         {
             int randomIndex = Random.Range(i, _items.Count);
 
             ItemInfoSO temp = _items[randomIndex];
+            _itemRateQ[temp.Rate].Enqueue(temp);
+
             _items[randomIndex] = _items[i];
-            _items[i] = temp;
+        }
+
+        for(int i = 0; i < 4; i++)
+        {
+            //Rate Check
+            float per = Random.Range(0f, 100f);
+            float[] ratePer = { _legendaryProbability, _epicProbability, _rareProbability };
+            ItemRate[] rateArr = { ItemRate.LEGEND, ItemRate.EPIC, ItemRate.RARE };
+            ItemRate rate = ItemRate.NORMAL;
+
+            for(int j = 0; j < 3; ++j)
+            {
+                if (per <= ratePer[j])
+                {
+
+                    rate = rateArr[j];
+                    break;
+
+                }
+
+                per -= ratePer[j];
+            }
+
+            ItemInfoSO itemInfo = _itemRateQ[rate].Dequeue();
+            _shopItemList[i].SetShopItem(itemInfo, _buyItemClip);
         }
 
         if(_shopItemList.Count < 4)
@@ -137,9 +193,11 @@ public class Shop : MonoBehaviour
             return;
         }
 
-        for(int i = 0; i < 4; ++i)
-        {
-            _shopItemList[i].SetShopItem(_items[i], _buyItemClip);
-        }
     }
+
+    private void OnDisable()
+    {
+        _shopItemInfo.SetEnableUI(false);
+    }
+
 }

@@ -6,8 +6,18 @@ using UnityEngine;
 public class EmpClone : RotateClone
 {
     [SerializeField] EMPBomb empBomb;
-    protected override void Attack()
+    Vector2 originScale;
+
+    private void Start()
     {
+        originScale = transform.localScale;    
+    }
+
+    public override void Attack(Transform targetTrm)
+    {
+        transform.DOKill();
+        transform.localScale = originScale;
+
         Vector3 targetPos = transform.position + transform.right * 2f;
         Instantiate(empBomb, transform.position, transform.rotation)
             .Throw(targetPos, damage: Data.GetDamage());

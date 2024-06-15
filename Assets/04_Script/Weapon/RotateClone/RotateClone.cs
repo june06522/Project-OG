@@ -18,7 +18,10 @@ public class RotateClone : Weapon
 
     private Tween dissolveTween;
 
-    public List<SendData> SkillList;
+    public List<SendData> skillList;
+
+    private Collider2D[] enemyArr;
+    LayerMask enemyLayer;
 
     protected override void Awake()
     {
@@ -27,23 +30,98 @@ public class RotateClone : Weapon
         spriteRenderer = visualTrm.GetComponent<SpriteRenderer>();
 
         material = spriteRenderer.material;
+
+        enemyArr = new Collider2D[50];
+        enemyLayer = LayerMask.GetMask("TriggerEnemy", "Enemy", "Boss");
     }
 
-    public void Init(Vector2 scale)
+    private void OnEnable()
     {
-        transform.localScale = scale;
-
         this.damage = Data.GetDamage();
         material.SetFloat("_FullGlowDissolveFade", 0);
     }
-
     public void Init(List<SendData> skillList)
     {
-        this.SkillList = skillList;
-        this.damage = Data.GetDamage();
-        material.SetFloat("_FullGlowDissolveFade", 0);
+        this.skillList = skillList;
+        skillList.ForEach((data) =>
+        {
+            SkillManager.Instance.RegisterSkill(data.TriggerID, this, data);
+        });
+    }
 
-        InvokeRepeating(nameof(Attack), 0.5f, Data.AttackCoolDown.GetValue());
+    private void Update()
+    {
+        CheckEnemy();
+    }
+    public void CheckEnemy()
+    {
+
+        int cnt = Physics2D.OverlapCircle(
+          transform.position,
+          Data.AttackRange.GetValue(),
+          new ContactFilter2D { layerMask = enemyLayer, useLayerMask = true, useTriggers = true }, enemyArr);
+
+        //Debug.Log($"{enemyArr.Length} : {cnt}");
+        if (cnt != 0)
+        {
+
+            Run(FindCloseEnemy(cnt));
+
+        }
+        else
+        {
+
+            Run(null);
+
+        }
+
+    }
+
+    public Transform FindCloseEnemy(int enemyCount)
+    {
+
+        float minDist = float.MaxValue;
+        Transform curTarget = null;
+
+        for (int i = 0; i < enemyCount; i++)
+        {
+
+            float dist = Vector2.Distance(enemyArr[i].transform.position, transform.position);
+
+            if (minDist > dist)
+            {
+
+                minDist = dist;
+                curTarget = enemyArr[i].transform;
+
+            }
+
+        }
+
+        return curTarget;
+
+    }
+
+
+    public override void Run(Transform target, bool isSkill = false)
+    {
+        if (enabled == false) return;
+
+        Debug.Log("Gang");
+        this.target = target;
+
+        if ((!Data.isAttackCoolDown || isSkill))
+        {
+            if (!Data.isAttackCoolDown)
+                Data.SetCoolDown();
+
+            EventTriggerManager.Instance?.BasicAttackExecute(this);
+
+            Debug.Log("Gang222");
+            Attack(target);
+
+        }
+
     }
 
     public void Dissolve(float dissolveTime, bool on)
@@ -65,13 +143,12 @@ public class RotateClone : Weapon
            {
                EndDissolve = true;
                if (on == false)
-                   DestroyThis();
+                   enabled = false;
            });
         dissolveTween.Play();
     }
 
-    protected virtual void Attack() { }
-    public override void Attack(Transform target) { } // ¾È¾¸
+    public override void Attack(Transform target) { }
 
     public void Move(Vector3 movePos)
     {
@@ -83,7 +160,6 @@ public class RotateClone : Weapon
         transform.localPosition = movePos;
 
     }
-
     public void DestroyThis()
     {
         Destroy(this.gameObject);

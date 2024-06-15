@@ -10,6 +10,7 @@ using UnityEngine;
 public struct FloorList
 {
     public List<FloorInfoSO> floors;
+    
 }
 
 public class RandomStageSystem : MonoBehaviour
@@ -46,6 +47,12 @@ public class RandomStageSystem : MonoBehaviour
         _spawnPos = _spawnPos + new Vector3(0, _stageInterval, 0);
 
         FloorInfoSO floorInfo = GetRandomFloor(_floorStageList[_step].floors);
+
+        // ColorShift
+        CameraManager.Instance.SetColor(floorInfo.FloorColor);
+        // Player Color Shift
+        GameManager.Instance.PlayerController.PlayerColorChange(floorInfo.FloorPlayerColor);
+
         PrintStage(floorInfo);
         StartStageEvent(floorInfo);
     }
@@ -119,6 +126,7 @@ public class RandomStageSystem : MonoBehaviour
         _step++;
 
         ResetStage();
+
         CreateStage();
     }
 
