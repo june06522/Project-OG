@@ -30,6 +30,7 @@ public class CrabPattern : BossPatternBase
     private bool _realLaserShoot;
     private bool _bubbleShooting;
     private bool _realBubbleShoot;
+    private bool _isLaserHit = false;
 
     private float _laserWidth;
 
@@ -58,12 +59,21 @@ public class CrabPattern : BossPatternBase
         }
     }
 
-    private void Update()
+    protected override void Update()
     {
         if(_boss.IsDie)
         {
             StopAllCoroutines();
         }
+        if(_isLaserHit)
+        {
+            Invoke("CanHit", 0.5f);
+        }
+    }
+
+    private void CanHit()
+    {
+        _isLaserHit = false;
     }
 
     public IEnumerator NipperLaserAttack()
@@ -78,6 +88,7 @@ public class CrabPattern : BossPatternBase
 
         _boss.animator.SetBool(_boss.laserShooting, _laserShooting);
 
+        _isLaserHit = false;
         while(_laserShooting)
         {
             if(_realLaserShoot)
@@ -174,9 +185,10 @@ public class CrabPattern : BossPatternBase
 
         if (hit.collider != null)
         {
-            if(hit.collider.gameObject.TryGetComponent<PlayerHP>(out player))
+            if(hit.collider.gameObject.TryGetComponent<PlayerHP>(out player) && !_isLaserHit)
             {
-                player.Hit(1);
+                player.Hit(_boss.so.Damage);
+                _isLaserHit = true;
             }
             else
             {

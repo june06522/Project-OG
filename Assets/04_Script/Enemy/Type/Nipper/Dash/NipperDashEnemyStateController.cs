@@ -13,6 +13,8 @@ public class NipperDashEnemyStateController : BaseFSM_Controller<ENormalEnemySta
 
     public GameObject eye;
 
+    [HideInInspector] public bool isStop = false; 
+
     protected override void Start()
     {
         base.Start();
@@ -42,6 +44,11 @@ public class NipperDashEnemyStateController : BaseFSM_Controller<ENormalEnemySta
         if(collision.transform.TryGetComponent<PlayerHP>(out player))
         {
             player.Hit(EnemyDataSO.AttackPower);
+        }
+
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
+        {
+            isStop = true;
         }
     }
 }

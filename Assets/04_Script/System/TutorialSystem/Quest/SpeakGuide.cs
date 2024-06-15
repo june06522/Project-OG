@@ -21,7 +21,7 @@ public class SpeakGuide : BaseTextGuideQuest
         {
 
             _isEndSpeak = true;
-            TutorialManager.Instance.TutorialUI.ResetGuideText();
+            BTutorialManager.Instance.TutorialUI.ResetGuideText();
         }
     }
 

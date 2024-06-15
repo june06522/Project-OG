@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class ShopInventory : MonoBehaviour
 {
-    [SerializeField] private Transform tile;
-    [SerializeField] private Transform block;
-    [SerializeField] private Transform lineRender;
+    [SerializeField] private RectTransform tile;
+    [SerializeField] private RectTransform block;
+    [SerializeField] private RectTransform lineRender;
 
     [Header("Prefab")]
     [SerializeField] private InvenSlot slotPrefab;
@@ -109,9 +109,15 @@ public class ShopInventory : MonoBehaviour
 
     void SetPos()
     {
-        block.localPosition = new Vector3(InventorySlotCenter.Instance.width * (50 * tile.localScale.x), InventorySlotCenter.Instance.height * (50 * tile.localScale.y));
+        block.anchoredPosition = new Vector3(InventorySlotCenter.Instance.width * (50 * tile.localScale.x), InventorySlotCenter.Instance.height * (50 * tile.localScale.y));
 
-        tile.localPosition = new Vector3(InventorySlotCenter.Instance.minuswidth * (100 * tile.localScale.x), InventorySlotCenter.Instance.minusheight * (100 * tile.localScale.y));
+        Debug.Log("X : " + InventorySlotCenter.Instance.minuswidth);
+        Debug.Log("Y : " + InventorySlotCenter.Instance.minusheight);
+
+        tile.anchoredPosition = new Vector3(InventorySlotCenter.Instance.minuswidth * (100 * tile.localScale.x), InventorySlotCenter.Instance.minusheight * (100 * tile.localScale.y));
+
+        Debug.Log("XPos : " + tile.anchoredPosition.x);
+        Debug.Log("YPos : " + tile.anchoredPosition.y);
     }
 
     void DrawLineRender()

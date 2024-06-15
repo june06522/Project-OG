@@ -7,12 +7,12 @@ public abstract class GuideQuest : MonoBehaviour
 {
     public event Action OnQuestComplete;
 
-    protected TutorialManager _tutorialManager;
+    protected BTutorialManager _tutorialManager;
     protected GuideUI _tutorialUI;
 
     protected virtual void Awake()
     {
-        _tutorialManager = TutorialManager.Instance;
+        _tutorialManager = BTutorialManager.Instance;
 
         if (_tutorialManager != null)
             _tutorialUI = _tutorialManager.TutorialUI;

@@ -210,7 +210,7 @@ public class Stage : MonoBehaviour
         IngameUIManager.Instance.SetStageTitle(_titleText, _explainText, 0.2f, 0.05f, 0.2f);
     }
 
-    private void AppearChest()
+    public void AppearChest()
     {
         // Box Sound
         //PlaySceneEffectSound.Instance.PlayChestOpenSound();

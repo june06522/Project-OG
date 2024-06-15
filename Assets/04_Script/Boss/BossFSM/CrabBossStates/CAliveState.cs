@@ -53,7 +53,7 @@ public class CAliveState : BossBaseState
 
             yield return new WaitForSeconds(waitTime);
 
-            int rand = Random.Range(1, 6);
+            int rand = 1;// Random.Range(1, 6);
             if(beforeRand == rand)
             {
                 if(rand == 1)

@@ -319,8 +319,8 @@ public class FlowerPattern : BossPatternBase
 
                     lines[i].SetPosition(0, RayWallCheck(boss.transform.position, -dir));
                     lines[i].SetPosition(1, RayWallCheck(boss.transform.position, dir));
-                    RayPlayerCheck(boss.transform.position, -dir);
-                    RayPlayerCheck(boss.transform.position, dir);
+                    RayPlayerCheck(boss.transform.position, -dir, boss.so.Damage);
+                    RayPlayerCheck(boss.transform.position, dir, boss.so.Damage);
                 }
             }
             else

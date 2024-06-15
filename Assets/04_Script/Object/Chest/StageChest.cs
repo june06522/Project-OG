@@ -164,7 +164,7 @@ public class StageChest : MonoBehaviour, IInteractable
             float endPercent = 100f;
             float normalProbability = Mathf.Clamp(endPercent - _legendProbability - _epicProbability - _rareProbability, 0f, 100f);
 
-            // ÇØ´ç µî±ÞÀÇ ItemÀÌ ¾øÀ» °æ¿ì ¹Ì¸® Ã¼Å©ÇÏ±â
+            // ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Itemï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ Ã¼Å©ï¿½Ï±ï¿½
             bool normalCheck    = RateItemQueueCheck(ItemRate.NORMAL, normalProbability, ref endPercent);
             bool rareCheck      = RateItemQueueCheck(ItemRate.RARE, _rareProbability, ref endPercent);
             bool epicCheck      = RateItemQueueCheck(ItemRate.EPIC, _epicProbability, ref endPercent);
@@ -216,7 +216,7 @@ public class StageChest : MonoBehaviour, IInteractable
 
     }
 
-    public void OnInteract()
+    public virtual void OnInteract()
     {
         Open();
     }

@@ -14,7 +14,7 @@ public class NipperLaserEnemyAttackState : FSM_State<ENormalPatrolEnemyState>
 
     protected override void EnterState()
     {
-        StartCoroutine(Laser(0.5f));
+        StartCoroutine(Laser(0.2f));
     }
 
     protected override void ExitState()
@@ -43,12 +43,11 @@ public class NipperLaserEnemyAttackState : FSM_State<ENormalPatrolEnemyState>
 
         float curTime = 0;
         MakeLaser(_controller.lineRenderer, origin, WallChecker(origin, dir), 0.1f, _controller.laserMat, Color.white);
+        PlayerChecker(origin, dir);
 
-        while(curTime < laserFireTime)
+        while (curTime < laserFireTime)
         {
             curTime += Time.deltaTime;
-
-            PlayerChecker(origin, dir);
             yield return null;
         }
 
@@ -93,7 +92,11 @@ public class NipperLaserEnemyAttackState : FSM_State<ENormalPatrolEnemyState>
         {
             if (hit.collider.TryGetComponent<IHitAble>(out var hitAble))
             {
-                hitAble.Hit(1);
+                hitAble.Hit(_controller.EnemyDataSO.AttackPower);
+            }
+            else
+            {
+                return;
             }
         }
     }

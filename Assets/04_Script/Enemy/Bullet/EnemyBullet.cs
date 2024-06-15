@@ -30,8 +30,10 @@ public class EnemyBullet : MonoBehaviour
     float endSpeed = 15;
     [SerializeField]
     float duration = 0.75f;
-    float curSpeed = 0;
-    //юс╫ц
+    protected float curSpeed = 0;
+    //О©╫с╫О©╫
+
+    protected bool isDestroy = true;
 
     private void Start()
     {
@@ -73,7 +75,7 @@ public class EnemyBullet : MonoBehaviour
         }
 
         if (curSpeed == 0) curSpeed = speed;
-        if (this.gameObject.activeSelf) DestroyThis(3);
+        if (this.gameObject.activeSelf && isDestroy) DestroyThis(3);
     }
 
     private void DestroyThis(float time = 0f)
@@ -90,7 +92,7 @@ public class EnemyBullet : MonoBehaviour
         transform.position += transform.up * curSpeed * Time.deltaTime;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
         if(_dataSO == null) return;
         if (collision.CompareTag(_dataSO.HitAbleTag[0]))
