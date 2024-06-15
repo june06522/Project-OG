@@ -8,21 +8,25 @@ public class Money : MonoSingleton<Money>
     public int Gold { get; private set; }
     public event Action<int> GoldChangedEvent;
 
-    //private float goldFactor;
+    private float goldFactor;
 
     private void Start()
     {
-        //SynergyManager.Instance.OnSynergyChange += ChangeGoldFactor;
+        SynergyManager.Instance.OnSynergyChange += ChangeGoldFactor;
     }
 
     private void ChangeGoldFactor()
     {
-        //goldFactor = SynergyManager.Instance.SynergyAmount[PlayerStatsType.EarningGold];
+
+        // 둘이 똑같은거임
+        goldFactor = SynergyManager.Instance.GetStatFactor(TriggerID.StageClear);
+        //goldFactor = SynergyManager.Instance.GetStatFactor(TriggerID.RoomEnter);
+
     }
 
     public void EarnGold(int gold)
     {
-        Gold += gold /*+ Mathf.RoundToInt(gold * goldFactor)*/;
+        Gold += gold + Mathf.CeilToInt(gold * goldFactor);
         GoldChangedEvent?.Invoke(Gold);
     }
 
@@ -38,6 +42,6 @@ public class Money : MonoSingleton<Money>
 
     private void OnDestroy()
     {
-        //SynergyManager.Instance.OnSynergyChange -= ChangeGoldFactor;
+        SynergyManager.Instance.OnSynergyChange -= ChangeGoldFactor;
     }
 }

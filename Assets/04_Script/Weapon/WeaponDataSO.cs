@@ -15,6 +15,8 @@ public class WeaponDataSO : ScriptableObject
     public float CoolDown = 0f;
     public float AddDamege = 0f;
 
+    public float coolTimeFactor = 0f;
+
     private Weapon owner;
 
     public bool isAttackCoolDown { get; protected set; }
@@ -25,6 +27,14 @@ public class WeaponDataSO : ScriptableObject
 
         //isSkillAttack = false;
         this.owner = owner;
+        SynergyManager.Instance.OnSynergyChange += ChangeCoolTimeFactor;
+
+    }
+
+    private void ChangeCoolTimeFactor()
+    {
+
+        coolTimeFactor = SynergyManager.Instance.GetStatFactor(TriggerID.NormalAttack);
 
     }
 
@@ -43,7 +53,8 @@ public class WeaponDataSO : ScriptableObject
     {
 
         isAttackCoolDown = true;
-        yield return new WaitForSeconds(AttackCoolDown.GetValue() /(1f + CoolDown / 100f));
+
+        yield return new WaitForSeconds(AttackCoolDown.GetValue() / (1f + CoolDown / 100f));
 
         isAttackCoolDown = false;
 

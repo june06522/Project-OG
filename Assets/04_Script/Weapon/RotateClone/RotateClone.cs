@@ -1,8 +1,6 @@
 using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.VFX;
 
 public class RotateClone : Weapon
 {
@@ -110,7 +108,7 @@ public class RotateClone : Weapon
         Debug.Log("Gang");
         this.target = target;
 
-        if ((!Data.isAttackCoolDown || isSkill))
+        if (!Data.isAttackCoolDown || isSkill)
         {
             if (!Data.isAttackCoolDown)
                 Data.SetCoolDown();
