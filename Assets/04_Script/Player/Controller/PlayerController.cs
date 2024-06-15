@@ -32,6 +32,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
     public static PlayerEventController EventController => eventController;
 
     Rigidbody2D rb2D;
+    public static PlayerDashState dash;
 
     private readonly int idleHash = Animator.StringToHash("IsIdle");
 
@@ -87,6 +88,7 @@ public class PlayerController : FSM_Controller<EnumPlayerState>
             .AddTransition<EnumPlayerState>(goToDash);
 
         var dashState = new PlayerDashState(this);
+        dash = dashState;
 
         AddState(idleState, EnumPlayerState.Idle);
         AddState(moveState, EnumPlayerState.Move);

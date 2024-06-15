@@ -11,6 +11,7 @@ public class WeaponController : MonoBehaviour
     private Collider2D[] enemyArr;
 
     private List<Weapon> weaponContainer = new();
+    public int GetWeaponCnt() => weaponContainer.Count;
 
     private void Awake()
     {

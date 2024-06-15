@@ -33,6 +33,7 @@ public class WeaponInventory : MonoBehaviour
     public WeaponInventoryViewer viewer { get; private set; }
     private List<SlotData> invenslots = new();
     private List<InventoryObjectData> container = new();
+    public int GetContainerItemCnt() => container.Count;
     private ConnectVisible line;
 
     public event SlotAdded OnSlotAddEvent;

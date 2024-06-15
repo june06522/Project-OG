@@ -11,7 +11,7 @@ public class PlayerInputController : IDisposable
 
     public event Action OnDashKeyPressed;
     public Vector2 MoveDir { get; private set; }
-    public Vector2 LastMoveDir { get; private set; } = Vector2.right;
+    public Vector2 LastMoveDir { get; set; } = Vector2.right;
     public bool isDashKeyPressed { get; private set; }
 
     private Vector3 _lastNearObjPos = Vector3.zero;
@@ -43,8 +43,6 @@ public class PlayerInputController : IDisposable
 
     }
 
-
-    // 남준성 인벤토리 열리는 거 이거 쓰면 됌
     public void Animation()
     {
 
@@ -263,6 +261,8 @@ public class PlayerInputController : IDisposable
         }
 
     }
+
+    public void UseDash() => OnDashKeyPressed?.Invoke();
 
     public void Dispose()
     {
