@@ -58,7 +58,7 @@ public class EventTriggerManager : MonoBehaviour
         RunExecute();
     }
     #endregion
-    
+
     public static ulong GetIndex()
     {
         if (index++ == ulong.MaxValue)
@@ -82,7 +82,7 @@ public class EventTriggerManager : MonoBehaviour
 
     public void BasicAttackExecute(Weapon weapon)
     {
-        SkillManager.Instance?.DetectTrigger(TriggerID.NormalAttack,weapon);
+        SkillManager.Instance?.DetectTrigger(TriggerID.NormalAttack, weapon);
     }
 
     public void RunExecute()
@@ -157,7 +157,7 @@ public class EventTriggerManager : MonoBehaviour
         PlayerController.EventController?.OnSkillxecute();
         PlayerController.EventController?.OnAlwaysExecute();
         PlayerController.EventController?.OnRegistExecute();
-        
+
         SkillManager.Instance.RegistEndEvent();
     }
 }

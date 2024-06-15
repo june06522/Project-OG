@@ -32,9 +32,9 @@ public class YondoSkill : Skill
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
         CurPowerInit(power);
-        if(Physics2D.OverlapCircle(weaponTrm.parent.position, radius, layerMask))
+        if (Physics2D.OverlapCircle(weaponTrm.parent.position, radius, layerMask))
         {
-            for(int i = 0; i < curInstCount; i++)
+            for (int i = 0; i < curInstCount; i++)
             {
                 SwordYondo obj = Instantiate(yondo, weaponTrm.parent.position, weaponTrm.rotation);
                 obj.Init(layerMask, power, radius, curCoolTime, curDamage);
