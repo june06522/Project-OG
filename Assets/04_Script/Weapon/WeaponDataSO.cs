@@ -16,6 +16,7 @@ public class WeaponDataSO : ScriptableObject
     public float AddDamege = 0f;
 
     public float coolTimeFactor = 0f;
+    public float damagefactor = 0f;
 
     private Weapon owner;
 
@@ -27,14 +28,15 @@ public class WeaponDataSO : ScriptableObject
 
         //isSkillAttack = false;
         this.owner = owner;
-        SynergyManager.Instance.OnSynergyChange += ChangeCoolTimeFactor;
+        SynergyManager.Instance.OnSynergyChange += Change_Cool_N_Damage_Factor;
 
     }
 
-    private void ChangeCoolTimeFactor()
+    private void Change_Cool_N_Damage_Factor()
     {
 
         coolTimeFactor = SynergyManager.Instance.GetStatFactor(TriggerID.NormalAttack);
+        damagefactor = SynergyManager.Instance.GetStatFactor(TriggerID.Kill);
 
     }
 
@@ -54,7 +56,8 @@ public class WeaponDataSO : ScriptableObject
 
         isAttackCoolDown = true;
 
-        yield return new WaitForSeconds(AttackCoolDown.GetValue() / (1f + CoolDown / 100f));
+        float coolTime = AttackCoolDown.GetValue() / (100f + coolTimeFactor * 100f + CoolDown) * 100f;
+        yield return new WaitForSeconds(coolTime/*AttackCoolDown.GetValue() / (1f + CoolDown / 100f)*/);
 
         isAttackCoolDown = false;
 
@@ -62,6 +65,14 @@ public class WeaponDataSO : ScriptableObject
 
     public float GetDamage()
     {
-        return AddDamege + AttackDamage.GetValue();
+        return (AddDamege + AttackDamage.GetValue()) * (1 + damagefactor);
     }
+
+    private void OnDestroy()
+    {
+
+        SynergyManager.Instance.OnSynergyChange -= Change_Cool_N_Damage_Factor;
+
+    }
+
 }
