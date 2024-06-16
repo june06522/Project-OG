@@ -121,7 +121,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
         var point = inventory.FindInvenPoint(p2);
 
-        if (point == null)
+        if (point == null && TutorialManager.Instance != null)
         {
             GameObject obj = Instantiate(origin, GameManager.Instance.player.position, Quaternion.identity);
 
@@ -133,7 +133,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         }
 
 
-        if (inventory.CheckFills(InvenObject.bricks, point.Value))
+        if (point != null && inventory.CheckFills(InvenObject.bricks, point.Value))
         {
             InvenPoint = point.Value;
 

@@ -111,13 +111,7 @@ public class ShopInventory : MonoBehaviour
     {
         block.anchoredPosition = new Vector3(InventorySlotCenter.Instance.width * (50 * tile.localScale.x), InventorySlotCenter.Instance.height * (50 * tile.localScale.y));
 
-        Debug.Log("X : " + InventorySlotCenter.Instance.minuswidth);
-        Debug.Log("Y : " + InventorySlotCenter.Instance.minusheight);
-
         tile.anchoredPosition = new Vector3(InventorySlotCenter.Instance.minuswidth * (100 * tile.localScale.x), InventorySlotCenter.Instance.minusheight * (100 * tile.localScale.y));
-
-        Debug.Log("XPos : " + tile.anchoredPosition.x);
-        Debug.Log("YPos : " + tile.anchoredPosition.y);
     }
 
     void DrawLineRender()

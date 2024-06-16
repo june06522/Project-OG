@@ -22,6 +22,8 @@ public class InventoryActive : MonoBehaviour
     public Image[] images;
     [HideInInspector]
     public bool canOpen = true;
+    [HideInInspector]
+    public bool tutoCanOpen = true;
 
     bool isOn = false;
     public bool isDrag = false;
@@ -62,6 +64,11 @@ public class InventoryActive : MonoBehaviour
 
     readonly string invenShader = "_SourceGlowDissolveFade";
 
+    private void Awake()
+    {
+        tutoCanOpen = true;
+    }
+
     private void Start()
     {
         if (CameraMovementChecker.Instance == null)
@@ -86,7 +93,7 @@ public class InventoryActive : MonoBehaviour
 
     private void Update()
     {
-        if (canOpen)
+        if (canOpen && tutoCanOpen)
         {
             if (((KeyManager.Instance == null && Input.GetKeyDown(KeyCode.Tab)) ||
                 (KeyManager.Instance != null && Input.GetKeyDown(KeyManager.Instance.inven)) ||

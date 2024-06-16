@@ -10,6 +10,7 @@ public class TutorialManager : MonoSingleton<TutorialManager>
     [Header("플레이어 관련")]
     public Transform player;
     [HideInInspector] public TutorialPlayerController playerController;
+    [HideInInspector] public InventoryActive inven;
 
     [Header("애니메이션 관련")]
     [SerializeField] Image blackImage;
@@ -26,10 +27,20 @@ public class TutorialManager : MonoSingleton<TutorialManager>
     public GameObject weapon;
     public Transform weaponSpawnPos;
 
+    [Header("스테이지1")]
+    public Transform portal1;
+    public Image guideUI1;
+    [HideInInspector]
+    public Vector3 guidePos1 = new Vector3(-12, -100, 0);
+
+    [Header("스테이지2")]
+    public List<Transform> enemys2;
+
     private void Awake()
     {
         player = GameManager.Instance.player;
         playerController = FindObjectOfType<TutorialPlayerController>();
+        inven = FindObjectOfType<InventoryActive>();
 
         blackImage.gameObject.SetActive(true);
     }

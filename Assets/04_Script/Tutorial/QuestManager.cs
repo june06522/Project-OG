@@ -9,6 +9,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Analytics;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -23,6 +25,8 @@ public enum QuestName
     KillEnemy,
     EatTrigger,
     ConnectSkill,
+    UsePortal2,
+    KillEnemys,
 }
 
 public class QuestManager : MonoSingleton<QuestManager>
@@ -62,6 +66,8 @@ public class QuestManager : MonoSingleton<QuestManager>
         player = GameManager.Instance.player;
         tutorialManager = TutorialManager.Instance;
         SetStringEmpty();
+
+        tutorialManager.inven.tutoCanOpen = false;
     }
 
     private void Update()
@@ -102,7 +108,6 @@ public class QuestManager : MonoSingleton<QuestManager>
         SetStringEmpty();
         tutorialManager.speechBubble.SetActive(true);
         npcText.DOText(questTxt[questIndex], questTxt[questIndex].Length * textTime);
-
     }
 
     private bool TextDelay()
@@ -124,11 +129,11 @@ public class QuestManager : MonoSingleton<QuestManager>
 
         if (curTime < delayTime)
         {
-            SkipText();
             return true;
         }
         else
         {
+            SkipText();
             curTime = 0;
             return false;
         }
@@ -197,9 +202,9 @@ public class QuestManager : MonoSingleton<QuestManager>
 
     public void PortalMove()
     {
-        StartCoroutine(MoveQuestCo());
+        StartCoroutine(PortalMoveCo());
     }
-    IEnumerator MoveQuestCo()
+    IEnumerator PortalMoveCo()
     {
         while (Vector2.Distance(player.position, npc.position) >= 4f && player.position.x < npc.position.x)
         {
@@ -240,6 +245,7 @@ public class QuestManager : MonoSingleton<QuestManager>
         SetStringEmpty();
         npc.position = player.position + new Vector3(4.58f, 0);
         tutorialManager.playerController.canMove = false;
+        tutorialManager.playerController.Stop();
         yield return new WaitForSeconds(1.5f);
         tutorialManager.playerController.SetRotation(Quaternion.identity);
         tutorialManager.playerController.Stop();
@@ -400,11 +406,11 @@ public class QuestManager : MonoSingleton<QuestManager>
         }
 
         GameObject.Find("TutorialStage1").GetComponent<Stage>().AppearChest();
-        
+
         Transform chest = GameObject.Find("TutorialChest(Clone)").transform;
         chest.GetComponent<StageChest>().SetRateItems(ItemType.Generator);
-        while (Vector3.Distance(chest.position,player.position) < 2f)
-            {
+        while (Vector3.Distance(chest.position, player.position) < 2f)
+        {
             chest.Translate(Vector3.left);
         }
 
@@ -447,7 +453,9 @@ public class QuestManager : MonoSingleton<QuestManager>
 
         WeaponInventory inven = FindObjectOfType<WeaponInventory>();
         while (inven.GetContainerItemCnt() < 2) { yield return null; }
-
+        yield return null;
+        tutorialManager.playerController.Stop();
+        tutorialManager.playerController.canMove = false;
         for (int i = 0; i < 3; i++)
         {
             SetString();
@@ -458,6 +466,7 @@ public class QuestManager : MonoSingleton<QuestManager>
             questIndex++;
         }
 
+        tutorialManager.inven.tutoCanOpen = true;
         tutorialManager.NextQuest();
     }
 
@@ -465,9 +474,141 @@ public class QuestManager : MonoSingleton<QuestManager>
     {
         StartCoroutine(ConnectSkillCo());
     }
-
     IEnumerator ConnectSkillCo()
     {
-        yield return null;
+        InvenBrick[] invenBricks = FindObjectsOfType<InvenBrick>();
+        WeaponInventory inven = FindObjectOfType<WeaponInventory>();
+        Image trigger = null;
+        Image weapon = null;
+
+        foreach (var brick in invenBricks)
+        {
+            if (brick.Type == ItemType.Generator)
+                trigger = brick.GetComponent<Image>();
+            else
+                weapon = brick.GetComponent<Image>();
+        }
+
+        tutorialManager.guideUI1.gameObject.SetActive(true);
+
+        while (GameObject.Find("LineRenderer(Clone)") == null)
+        {
+            yield return null;
+            trigger.raycastTarget = false;
+
+            if (inven.GetContainerItemCnt() == 2)
+            {
+                if (weapon == null)
+                    weapon = FindObjectOfType<WeaponBrick>().GetComponent<Image>();
+
+                tutorialManager.guideUI1.transform.position = weapon.transform.position;
+            }
+            else
+            {
+                tutorialManager.guideUI1.rectTransform.anchoredPosition = tutorialManager.guidePos1;
+            }
+        }
+
+        tutorialManager.guideUI1.gameObject.SetActive(false);
+
+        invenBricks = FindObjectsOfType<InvenBrick>();
+        while (!Input.GetKeyDown(KeyCode.Tab))
+        {
+            foreach (var brick in invenBricks)
+            {
+                brick.GetComponent<Image>().raycastTarget = false;
+            }
+            yield return null;
+        }
+        tutorialManager.inven.tutoCanOpen = false;
+
+
+        for (int i = 0; i < 2; i++)
+        {
+            SetString();
+
+            curTime = 0;
+            delayTime = questTxt[questIndex].Length * textTime + waitTextTime;
+            while (TextDelay())
+            {
+                yield return null;
+            }
+            questIndex++;
+        }
+        SetStringEmpty();
+
+        tutorialManager.portal1.gameObject.SetActive(true);
+
+        cmvcam.Follow = tutorialManager.portal1;
+        yield return new WaitForSeconds(1.2f);
+        cmvcam.Follow = tutorialManager.player;
+        yield return new WaitForSeconds(1.2f);
+
+        SetString();
+
+        curTime = 0;
+        delayTime = questTxt[questIndex].Length * textTime;
+        while (TextDelay())
+        {
+            yield return null;
+            if (Input.GetMouseButtonDown(0))
+                isClick = true;
+        }
+        questIndex++;
+
+        tutorialManager.playerController.canMove = true;
+        tutorialManager.NextQuest();
+    }
+
+    public void UsePortal2()
+    {
+        StartCoroutine(UsePortal2Co());
+    }
+    IEnumerator UsePortal2Co()
+    {
+        while (Vector2.Distance(player.position, npc.position) <= 80f) { yield return null; }
+        SetStringEmpty();
+        npc.position = player.position + new Vector3(4.58f, 0);
+        tutorialManager.playerController.canMove = false;
+        tutorialManager.playerController.Stop();
+        yield return new WaitForSeconds(1.5f);
+        tutorialManager.playerController.SetRotation(Quaternion.identity);
+        tutorialManager.playerController.Stop();
+        PlayerController.InputController.LastMoveDir = Vector2.up;
+
+        tutorialManager.NextQuest();
+    }
+
+    public void KillEnemys()
+    {
+        StartCoroutine(KillEnemysCo());
+    }
+    IEnumerator KillEnemysCo()
+    {
+        SetString();
+        curTime = 0;
+        delayTime = questTxt[questIndex].Length * textTime + waitTextTime;
+        while (TextDelay())
+        {
+            yield return null;
+        }
+        questIndex++;
+        SetStringEmpty();
+
+        cmvcam.Follow = tutorialManager.enemys2[1];
+        yield return new WaitForSeconds(1.5f);
+        cmvcam.Follow = player;
+        yield return new WaitForSeconds(1.5f);
+
+        SetString();
+        curTime = 0;
+        delayTime = questTxt[questIndex].Length * textTime;
+        while (TextDelay())
+        {
+            yield return null;
+            if(Input.GetMouseButtonDown(0))
+                isClick = true;
+        }
+        questIndex++;
     }
 }
