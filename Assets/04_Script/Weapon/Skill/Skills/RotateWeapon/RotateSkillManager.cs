@@ -158,12 +158,10 @@ public class RotateSkillManager : MonoBehaviour
 
     private void SetRunning(TriggerID trigger, Weapon weapon)
     {
-        Debug.Log("Setting");
         IsRunning = true;
     }
     private void SetIdle(TriggerID trigger, Weapon weapon)
     {
-        Debug.Log("Idle");
         //Debug.Log(IsRunning);
         IsRunning = false;
     }
