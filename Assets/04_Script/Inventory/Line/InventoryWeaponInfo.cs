@@ -101,7 +101,7 @@ public class InventoryWeaponInfo : MonoBehaviour
 
             if (isfind)
             {
-                list.Add(Tuple.Create(tempData.generatorID, new SkillUIInfo(1,ItemRate.NORMAL)));
+                list.Add(Tuple.Create(tempData.generatorID, new SkillUIInfo(1, tempData.invenBrick.ItemRate)));
             }
         }
 
