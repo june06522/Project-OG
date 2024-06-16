@@ -4,13 +4,26 @@ using UnityEngine;
 
 public class SynergyManager : MonoSingleton<SynergyManager>
 {
-    Dictionary<TriggerID, int> level;
+    public Dictionary<TriggerID, int> level;
     [SerializeField] SerializableDictionary<TriggerID, List<float>> table;
 
     public Action OnSynergyChange;
 
-    public void EquipItem(TriggerID id) => level[id]++;
-    public void RemoveItem(TriggerID id) => level[id]--;
+    public void EquipItem(TriggerID id)
+    {
+
+        level[id]++;
+        OnSynergyChange?.Invoke();
+
+    }
+
+    public void RemoveItem(TriggerID id)
+    {
+
+        level[id]--;
+        OnSynergyChange?.Invoke();
+
+    }
 
     public float GetStatFactor(TriggerID id)
     {
