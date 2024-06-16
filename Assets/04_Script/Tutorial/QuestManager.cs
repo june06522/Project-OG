@@ -924,6 +924,6 @@ public class QuestManager : MonoSingleton<QuestManager>
 
         DataManager.Instance.tutorialData.isClear = true;
         DataManager.Instance.SaveTutorialData();
-        SceneManager.LoadScene("Intro");
+        SceneManager.LoadScene("Tutorial");
     }
 }
