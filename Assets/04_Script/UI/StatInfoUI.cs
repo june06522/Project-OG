@@ -66,6 +66,8 @@ public class StatInfoUI : MonoBehaviour
 
         }
 
+        _statInfoText.text = statSB.ToString();
+
     }
 
     private string GetSynergeInfoText(TriggerID id)

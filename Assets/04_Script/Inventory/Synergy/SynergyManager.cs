@@ -9,7 +9,7 @@ public class SynergyManager : MonoSingleton<SynergyManager>
 
     public Action OnSynergyChange;
 
-    private void Start()
+    private void Awake()
     {
         table.GetContainer();
         level.Clear();
