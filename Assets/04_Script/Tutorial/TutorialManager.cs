@@ -5,8 +5,10 @@ using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UI;
 
-public class TutorialManager : MonoSingleton<TutorialManager>
+public class TutorialManager : MonoBehaviour
 {
+    public static TutorialManager Instance;
+
     [Header("플레이어 관련")]
     public Transform player;
     [HideInInspector] public TutorialPlayerController playerController;
@@ -53,6 +55,13 @@ public class TutorialManager : MonoSingleton<TutorialManager>
 
     private void Awake()
     {
+        if(Instance == null)
+            Instance = this;
+        else
+        {
+            Debug.LogError($"{transform} : TutorialManager is Multiply running!");
+            Destroy(gameObject);
+        }
         player = GameManager.Instance.player;
         playerController = FindObjectOfType<TutorialPlayerController>();
         inven = FindObjectOfType<InventoryActive>();
