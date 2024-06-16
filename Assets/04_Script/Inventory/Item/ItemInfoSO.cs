@@ -26,14 +26,14 @@ public class ItemInfoSO : ScriptableObject
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        
+
         //Brick = Brick.GetComponent<InvenBrick>();
         if (Brick == null)
             Debug.LogError("Don't find Item Class");
         else
         {
             Image image = Brick.GetComponent<Image>();
-            if( image != null )
+            if (image != null)
                 Sprite = image.sprite;
         }
     }
@@ -41,7 +41,13 @@ public class ItemInfoSO : ScriptableObject
 
     public bool GetItem()
     {
-        _parent = FindObjectOfType<WeaponInventoryViewer>().parent;
+        if (Brick.Type == ItemType.Weapon)
+            _parent = FindObjectOfType<InvenBrickAddType>().weapon;
+        if (Brick.Type == ItemType.Connector)
+            _parent = FindObjectOfType<InvenBrickAddType>().connector;
+        if (Brick.Type == ItemType.Generator)
+            _parent = FindObjectOfType<InvenBrickAddType>().generator;
+
         WeaponInventory inventory = GameManager.Instance.Inventory;
 
         var point = inventory.CheckItemAuto(Brick.InvenObject);
