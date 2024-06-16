@@ -79,7 +79,7 @@ public class StatInfoUI : MonoBehaviour
     private string GetStatInfoText(TriggerID id)
     {
 
-        return $"{_synergeManager.GetStatFactor(id) * 100f}%";
+        return $"{_synergeManager.GetStatFactor(id) * 100f}%\n";
 
     }
 
