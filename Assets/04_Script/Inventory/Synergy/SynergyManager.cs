@@ -13,19 +13,18 @@ public class SynergyManager : MonoSingleton<SynergyManager>
     {
         table.GetContainer();
         level.Clear();
+
+        foreach (TriggerID item in Enum.GetValues(typeof(TriggerID)))
+        {
+            level.Add(item, 0);
+        }
     }
 
     public void EquipItem(TriggerID id)
     {
 
-        if (level.ContainsKey(id))
-        {
-            level[id]++;
-        }
-        else
-        {
-            level.Add(id, 1);
-        }
+        level.Add(id, 1);
+
         OnSynergyChange?.Invoke();
 
     }
