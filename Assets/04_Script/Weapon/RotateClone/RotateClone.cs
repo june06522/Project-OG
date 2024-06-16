@@ -105,7 +105,6 @@ public class RotateClone : Weapon
     {
         if (enabled == false) return;
 
-        Debug.Log("Gang");
         this.target = target;
 
         if (!Data.isAttackCoolDown || isSkill)
@@ -115,7 +114,6 @@ public class RotateClone : Weapon
 
             EventTriggerManager.Instance?.BasicAttackExecute(this);
 
-            Debug.Log("Gang222");
             Attack(target);
 
         }
