@@ -922,6 +922,8 @@ public class QuestManager : MonoSingleton<QuestManager>
     {
         while (Vector2.Distance(player.position, npc.position) <= 80f) { yield return null; }
 
+        DataManager.Instance.tutorialData.isClear = true;
+        DataManager.Instance.SaveTutorialData();
         SceneManager.LoadScene("Intro");
     }
 }

@@ -19,4 +19,9 @@ public class KeyData
     public KeyCode action = KeyCode.F;
     public KeyCode map = KeyCode.M;
 }
+
+public class TutorialData
+{
+    public bool isClear = false;
+}
 #endregion

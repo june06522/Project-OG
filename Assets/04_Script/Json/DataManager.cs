@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Authentication.ExtendedProtection;
 using UnityEngine;
 
 public class DataManager : MonoBehaviour
@@ -10,6 +11,7 @@ public class DataManager : MonoBehaviour
     #region 데이터 생성
     public SoundData soundData = new SoundData();
     public KeyData keyData = new KeyData();
+    public TutorialData tutorialData = new TutorialData();
     #endregion
 
     #region 경로 지정
@@ -17,6 +19,8 @@ public class DataManager : MonoBehaviour
     private string _soundFileName = "/SoundData.json";
     private string _keyPath;
     private string _keyFileName = "/KeyData.json";
+    private string _tutorialPath;
+    private string _tutorialDataFileName = "/TutorialData.json";
     #endregion
 
     private void Awake()
@@ -35,8 +39,19 @@ public class DataManager : MonoBehaviour
 
         _savePath = Path.Combine(Application.persistentDataPath, "save");
         _keyPath = Path.Combine(Application.persistentDataPath, "key");
+        _tutorialPath = Path.Combine(Application.persistentDataPath, "tutorial");
 
         JsonLoad();
+    }
+
+    private void Update()
+    {
+        //테스트코드
+        if(Input.GetKeyDown(KeyCode.R) && Input.GetKey(KeyCode.E) && Input.GetKey(KeyCode.LeftControl))
+        {
+            tutorialData.isClear = false;
+            SaveTutorialData();
+        }
     }
 
     #region 데이터 관리
@@ -74,6 +89,8 @@ public class DataManager : MonoBehaviour
         else
             LoadKey();
         #endregion
+
+
     }
     #endregion
 
@@ -105,6 +122,20 @@ public class DataManager : MonoBehaviour
     }
     #endregion
 
+    #region 튜토리얼 데이터
+    public void SaveTutorialData()
+    {
+        string data = JsonUtility.ToJson(tutorialData);
+        File.WriteAllText(_savePath + _tutorialPath, data);
+    }
+
+    public void LoadTutorialData()
+    {
+        string data = File.ReadAllText(_savePath + _tutorialPath);
+        tutorialData = JsonUtility.FromJson<TutorialData>(data);
+    }
+    #endregion
+
     public void DataClear()
     {
         soundData = new SoundData();
@@ -113,6 +144,7 @@ public class DataManager : MonoBehaviour
         SaveKey();
     }
 
+    #region 경로복사
     public bool GetDirOption()
     {
         return Directory.Exists(_savePath);
@@ -122,4 +154,10 @@ public class DataManager : MonoBehaviour
     {
         return Directory.Exists(_keyPath);
     }
+
+    public bool GetDirTutorial()
+    {
+        return Directory.Exists(_tutorialPath);
+    }
+    #endregion
 }
