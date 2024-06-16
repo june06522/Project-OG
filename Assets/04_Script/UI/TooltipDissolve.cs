@@ -8,7 +8,9 @@ public class TooltipDissolve : MonoBehaviour
 {
     [SerializeField] Material tooltipMat;
     [SerializeField] Material iconShellMat;
+    [SerializeField] Material iconShellMat2;
     [SerializeField] Material iconMat;
+    [SerializeField] Material iconMat2;
     [SerializeField] Material imageMat;
     [SerializeField] Material textMat;
     [SerializeField] Material invenBrickMat;
@@ -41,7 +43,9 @@ public class TooltipDissolve : MonoBehaviour
 
     DissolveParameters _tooltipParameters;
     DissolveParameters _iconShellParameters;
+    DissolveParameters _iconShell2Parameters;
     DissolveParameters _iconParameters;
+    DissolveParameters _icon2Parameters;
     DissolveParameters _imageParameters;
     DissolveParameters _textParameters;
     DissolveParameters _invenBrickParameters;
@@ -57,7 +61,9 @@ public class TooltipDissolve : MonoBehaviour
     {
         _tooltipParameters = new DissolveParameters(tooltipMat, _tooltipDissolveStart, _tooltipDissolveEnd, duration, ease, directionalGlowFade);
         _iconShellParameters = new DissolveParameters(iconShellMat, _iconShellDissolveStart, _iconShellDissolveEnd, duration, ease, sourceGlowFade);
+        _iconShell2Parameters = new DissolveParameters(iconShellMat2, _iconShellDissolveStart, _iconShellDissolveEnd, duration, ease, sourceGlowFade);
         _iconParameters = new DissolveParameters(iconMat, _iconDissolveStart, _iconDissolveEnd, duration, ease, sourceGlowFade);
+        _icon2Parameters = new DissolveParameters(iconMat2, _iconDissolveStart, _iconDissolveEnd, duration, ease, sourceGlowFade);
         _imageParameters = new DissolveParameters(imageMat, _imageDissolveStart, _imageDissolveEnd, duration, ease, sourceGlowFade);
         _textParameters = new DissolveParameters(textMat, _textDissolveStart, _textDissolveEnd, duration, ease, alphaFade);
         _invenBrickParameters = new DissolveParameters(invenBrickMat, _invenBrickStart, _invenBrickEnd, 0.25f, ease, alphaFade);
@@ -80,7 +86,9 @@ public class TooltipDissolve : MonoBehaviour
 
         seq.Append(Dissolver.Dissolve(_tooltipParameters, true));
         seq.Join(Dissolver.Dissolve(_iconShellParameters, true));
+        seq.Join(Dissolver.Dissolve(_iconShell2Parameters, true));
         seq.Join(Dissolver.Dissolve(_iconParameters, true));
+        seq.Join(Dissolver.Dissolve(_icon2Parameters, true));
         seq.Join(Dissolver.Dissolve(_textParameters, true));
         seq.Append(ImageOn(true));
         return seq;  
@@ -93,7 +101,9 @@ public class TooltipDissolve : MonoBehaviour
         
         seq.Append(Dissolver.Dissolve(_tooltipParameters, false));
         seq.Join(Dissolver.Dissolve(_iconShellParameters, false));
+        seq.Join(Dissolver.Dissolve(_iconShell2Parameters, false));
         seq.Join(Dissolver.Dissolve(_iconParameters, false));
+        seq.Join(Dissolver.Dissolve(_icon2Parameters, false));
         seq.Join(Dissolver.Dissolve(_textParameters, false));
         seq.Join(ImageOn(false));
         return seq;

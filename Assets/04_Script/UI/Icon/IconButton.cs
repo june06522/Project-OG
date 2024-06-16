@@ -12,8 +12,8 @@ using UnityEngine.UI;
 
 public enum IconType
 {
-    INFO,
-    INVEN
+    INVEN,
+    INFO
 }
 
 public class IconButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -57,12 +57,12 @@ public class IconButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     void Start()
     {
-        Image image = GetComponent<Image>();
-        image.material = Instantiate(image.material);
-        material = image.materialForRendering;
+        Image image = transform.Find("Image").GetComponent<Image>();
+        //image.material = Instantiate(image.material);
+        material = image.material;
 
-        myBaseSize = new UISize(myTransform.rect.width, myTransform.rect.height);
-        childBaseSize = new UISize(childTransform.rect.width, childTransform.rect.height);
+        //myBaseSize = new UISize(myTransform.rect.width, myTransform.rect.height);
+        //childBaseSize = new UISize(childTransform.rect.width, childTransform.rect.height);
 
         GetComponent<Button>().onClick.AddListener(OnClick);
     }

@@ -71,8 +71,7 @@ public class ItemExplain : MonoBehaviour
         {
             case ExplainType.None:
                 break;
-            case ExplainType.Weapon:
-                activeWeapon = true; 
+            case ExplainType.Weapon: activeWeapon = true; 
                 break;
             case ExplainType.Generator: activeGenerator = true;
                 break;
@@ -159,9 +158,11 @@ public class ItemExplain : MonoBehaviour
 
     public void OnInfo()
     {
+        if (IsInven == false) return;
+
         IsInven = false;
-        _iconButtons[(int)IconType.INFO].DisConnect();
-        _iconButtons[(int)IconType.INVEN].OnConnect();
+        _iconButtons[(int)IconType.INFO].OnConnect();
+        _iconButtons[(int)IconType.INVEN].DisConnect();
 
         _Title.gameObject.SetActive(false);
         ActiveExplain(ExplainType.None);
@@ -171,9 +172,11 @@ public class ItemExplain : MonoBehaviour
 
     public void OnInven()
     {
+        if (IsInven == true) return;
+
         IsInven = true; 
-        _iconButtons[(int)IconType.INFO].OnConnect();
-        _iconButtons[(int)IconType.INVEN].DisConnect();
+        _iconButtons[(int)IconType.INFO].DisConnect();
+        _iconButtons[(int)IconType.INVEN].OnConnect();
 
         _Title.gameObject.SetActive(true);
         ActiveExplain(_prevType);
