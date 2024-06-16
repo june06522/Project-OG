@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SynergyManager : MonoSingleton<SynergyManager>
 {
-    public Dictionary<TriggerID, int> level;
+    public Dictionary<TriggerID, int> level = new Dictionary<TriggerID, int>();
     [SerializeField] SerializableDictionary<TriggerID, List<float>> table = new SerializableDictionary<TriggerID, List<float>>();
 
     public Action OnSynergyChange;
@@ -12,12 +12,20 @@ public class SynergyManager : MonoSingleton<SynergyManager>
     private void Start()
     {
         table.GetContainer();
+        level.Clear();
     }
 
     public void EquipItem(TriggerID id)
     {
 
-        level[id]++;
+        if (level.ContainsKey(id))
+        {
+            level[id]++;
+        }
+        else
+        {
+            level.Add(id, 1);
+        }
         OnSynergyChange?.Invoke();
 
     }
@@ -32,7 +40,7 @@ public class SynergyManager : MonoSingleton<SynergyManager>
 
     public float GetStatFactor(TriggerID id)
     {
-        if (table.dict.ContainsKey(id))
+        if (table.dict.ContainsKey(id) && level.ContainsKey(id))
             return table.dict[id][level[id]];
         else return 0;
     }
@@ -49,9 +57,6 @@ public class SerializableDictionary<T1, T2>
     {
         for (int i = 0; i < data.Count; i++)
         {
-            Debug.Log(data[i].key.ToString());
-            Debug.Log(data[i].Value.ToString());
-
             dict.Add(data[i].key, data[i].Value);
         }
         return dict;
