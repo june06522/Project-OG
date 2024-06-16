@@ -27,9 +27,9 @@ public class ErrorDiceSkill : Skill
         Skill s = null;
         int i = 0, j = 0;
 
-        while(s==null)
+        while (s == null)
         {
-            i = Random.Range(1,weaponList.Count);
+            i = Random.Range(1, weaponList.Count);
             if (weaponList[i].skillList == null || weaponList[i].skillList.Count <= 1 || i == (int)GeneratorID.ErrorDice)
                 continue;
 
@@ -38,7 +38,7 @@ public class ErrorDiceSkill : Skill
                 s = weaponList[i].skillList[j];
         }
 
-        if((GeneratorID)i == GeneratorID.RotateWeapon)
+        if ((GeneratorID)i == GeneratorID.RotateWeapon)
             s.Excute(weaponTrm, target, power);
         else if (WeaponExplainManager.triggerExplain[(GeneratorID)i] == TriggerID.Idle ||
         WeaponExplainManager.triggerExplain[(GeneratorID)i] == TriggerID.Move)
@@ -47,12 +47,12 @@ public class ErrorDiceSkill : Skill
             s.Excute(weaponTrm, target, power, trigger);
     }
 
-    IEnumerator Co(Skill s,Transform weaponTrm, Transform target, int power)
+    IEnumerator Co(Skill s, Transform weaponTrm, Transform target, int power)
     {
         curtime = 0.0f;
-        while(curtime < time)
+        while (curtime < time)
         {
-            if(target != null && weaponTrm != null)
+            if (target != null && weaponTrm != null)
                 s.Excute(weaponTrm, target, power);
             yield return null;
         }

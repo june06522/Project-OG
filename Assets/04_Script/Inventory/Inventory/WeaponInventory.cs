@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SlotData
@@ -164,6 +165,14 @@ public class WeaponInventory : MonoBehaviour
             FillSlots(item.bricks, origin, true);
             line.AddBrick(brick);
             OnAddItem?.Invoke();
+
+            if (brick.Type == ItemType.Generator)
+            {
+
+                SynergyManager.Instance.EquipItem(WeaponExplainManager.triggerExplain[brick.InvenObject.generatorID]);
+
+            }
+
             return true;
 
         }
@@ -178,6 +187,13 @@ public class WeaponInventory : MonoBehaviour
         container.Remove(item);
         OnAddItem?.Invoke();
         FillSlots(item.bricks, origin, false);
+
+        if (item.generatorID != GeneratorID.None)
+        {
+
+            SynergyManager.Instance.RemoveItem(WeaponExplainManager.triggerExplain[item.generatorID]);
+
+        }
 
     }
 
@@ -249,7 +265,7 @@ public class WeaponInventory : MonoBehaviour
                 return false;
             }
         }
-        if(settingSize)
+        if (settingSize)
             SetWidth(y);
         return true;
     }
@@ -263,14 +279,14 @@ public class WeaponInventory : MonoBehaviour
                 return false;
             }
         }
-        if(settingSize)
+        if (settingSize)
             SetHeight(x);
         return true;
     }
 
     public Vector2Int? FindInvenPoint(Vector2Int localPoint)
     {
-        if(StartWidth % 2 == 0)
+        if (StartWidth % 2 == 0)
             localPoint += new Vector2Int(1, 0);
 
         var c = viewer.slots.Find(x =>

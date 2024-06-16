@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SequenceAttackSkill : Skill
@@ -15,9 +14,9 @@ public class SequenceAttackSkill : Skill
     {
         for (int i = 0; i < power; i++)
         {
-            if(weapon != null)
+            if (weapon != null)
             {
-                weapon.Run(target,true);
+                weapon.Run(target, true);
                 yield return new WaitForSeconds(0.1f);
             }
         }

@@ -8,7 +8,7 @@ public class PlayerMoveState : PlayerRootState
     GameObject _visual;
 
     bool increase = false;
-    //float speedFactor = 0;
+    float speedFactor = 0;
 
     public PlayerMoveState(PlayerController controller) : base(controller)
     {
@@ -18,15 +18,11 @@ public class PlayerMoveState : PlayerRootState
 
     }
 
-    public void ChangeSpeedFactor()
-    {
-        //speedFactor = SynergyManager.Instance.SynergyAmount[PlayerStatsType.MoveSpeed];
-    }
 
     protected override void EnterState()
     {
 
-        //SynergyManager.Instance.OnSynergyChange += ChangeSpeedFactor;
+        speedFactor = SynergyManager.Instance.GetStatFactor(TriggerID.Move);
         moveParticle.Play();
         _visual.transform.DOScale(new Vector2(0.8f, 1.3f), 0.2f).SetEase(Ease.InOutBack);
 
@@ -68,7 +64,7 @@ public class PlayerMoveState : PlayerRootState
 
         }
 
-        rigid.velocity = _visual.transform.up * playerData.MoveSpeed/* * (1 + speedFactor)*/;
+        rigid.velocity = _visual.transform.up * playerData.MoveSpeed * (1 + speedFactor);
 
     }
 
@@ -83,9 +79,8 @@ public class PlayerMoveState : PlayerRootState
 
         rigid.velocity = Vector2.zero;
 
-        //SynergyManager.Instance.OnSynergyChange -= ChangeSpeedFactor;
     }
 
-    
+
 
 }

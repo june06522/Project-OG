@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3364007468332096638
+--- !u!1 &4767189428980534646
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3364007468332096639}
-  - component: {fileID: 3364007468332096624}
+  - component: {fileID: 4767189428980534647}
+  - component: {fileID: -6845220563097582038}
   m_Layer: 0
   m_Name: SynergyManager
   m_TagString: Untagged
@@ -17,13 +17,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3364007468332096639
+--- !u!4 &4767189428980534647
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3364007468332096638}
+  m_GameObject: {fileID: 4767189428980534646}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,112 +32,125 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3364007468332096624
+--- !u!114 &-6845220563097582038
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3364007468332096638}
+  m_GameObject: {fileID: 4767189428980534646}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ff7ba45f03eb6142b7bc7a88473eed0, type: 3}
+  m_Script: {fileID: 11500000, guid: fcfa0e055d864724da179ccf31d13255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tableList:
-  - type: 1
-    table:
-    - 0
-    - 0
-    - 0
-    - 0.25
-    - 0.25
-    - 0.5
-    - 0.5
-    - 1
-    - 1
-    - 1
-  - type: 2
-    table:
-    - 0
-    - 0
-    - 0
-    - 0.2
-    - 0.2
-    - 0.5
-    - 0.5
-    - 1
-    - 1
-    - 2
-  - type: 3
-    table:
-    - 0
-    - 0
-    - 0
-    - 0.3
-    - 0.3
-    - 0.3
-    - 0.5
-    - 0.5
-    - 0.5
-    - 0.8
-  - type: 4
-    table:
-    - 0
-    - 0
-    - 0.2
-    - 0.2
-    - 0.5
-    - 0.5
-    - 1
-    - 1
-    - 2
-    - 2
-  - type: 5
-    table:
-    - 0
-    - 0
-    - 0
-    - 0.2
-    - 0.2
-    - 0.3
-    - 0.3
-    - 0.5
-    - 0.5
-    - 0.9
-  - type: 6
-    table:
-    - 0
-    - 0.05
-    - 0.2
-    - 0.5
-    - 1
-    - 2
-    - 2
-    - 2
-    - 2
-    - 2
-  - type: 7
-    table:
-    - 0
-    - 0
-    - 0.05
-    - 0.05
-    - 0.15
-    - 0.15
-    - 0.3
-    - 0.3
-    - 0.5
-    - 0.5
-  - type: 8
-    table:
-    - 0
-    - 0
-    - 0.5
-    - 0.5
-    - 1
-    - 1
-    - 2.5
-    - 2.5
-    - 5
-    - 5
+  table:
+    data:
+    - key: 1
+      Value:
+      - 0
+      - 0
+      - 0
+      - 0.25
+      - 0.25
+      - 0.5
+      - 0.5
+      - 1
+      - 1
+      - 1
+    - key: 2
+      Value:
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.2
+      - 0.5
+      - 0.5
+      - 1
+      - 1
+      - 2
+    - key: 3
+      Value:
+      - 0
+      - 0
+      - 0
+      - 0.3
+      - 0.3
+      - 0.3
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.8
+    - key: 4
+      Value:
+      - 0
+      - 0
+      - 0.2
+      - 0.2
+      - 0.5
+      - 0.5
+      - 1
+      - 1
+      - 2
+      - 2
+    - key: 5
+      Value:
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.2
+      - 0.3
+      - 0.3
+      - 0.5
+      - 0.5
+      - 0.9
+    - key: 6
+      Value:
+      - 0
+      - 0.05
+      - 0.2
+      - 0.5
+      - 1
+      - 2
+      - 2
+      - 2
+      - 2
+      - 2
+    - key: 10
+      Value:
+      - 0
+      - 0.05
+      - 0.2
+      - 0.5
+      - 1
+      - 2
+      - 2
+      - 2
+      - 2
+      - 2
+    - key: 7
+      Value:
+      - 0
+      - 0
+      - 0.05
+      - 0.05
+      - 0.15
+      - 0.15
+      - 0.3
+      - 0.3
+      - 0.5
+      - 0.5
+    - key: 8
+      Value:
+      - 0
+      - 0
+      - 0.5
+      - 0.5
+      - 1
+      - 1
+      - 2.5
+      - 2.5
+      - 5
+      - 5

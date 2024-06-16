@@ -6,6 +6,13 @@ using UnityEngine;
 [Serializable]
 public class SendData
 {
+    private void ChangeDefenceFactor()
+    {
+
+        coolDownFactor = SynergyManager.Instance.GetStatFactor(TriggerID.CoolTime);
+
+    }
+
     public SendData(GeneratorID generatorID, Transform triggerTrm, TriggerID triggerID, double targetCnt = 0, int power = 1, Weapon weapon = null)
     {
         this.generatorID = generatorID;
@@ -19,6 +26,14 @@ public class SendData
 
         cnt = 0;
         this.targetCnt = targetCnt;
+
+        SynergyManager.Instance.OnSynergyChange += ChangeDefenceFactor;
+
+    }
+
+    ~SendData()
+    {
+        SynergyManager.Instance.OnSynergyChange -= ChangeDefenceFactor;
     }
 
     public virtual bool GetTrriger()
@@ -37,7 +52,10 @@ public class SendData
             case TriggerID.Always:
                 return true;
             case TriggerID.CoolTime:
-                cnt += Time.deltaTime;
+                {
+                    cnt += Time.deltaTime;
+                    coolDownOrigin = coolDownFactor;
+                }
                 break;
             case TriggerID.Kill:
                 cnt++;
@@ -46,7 +64,7 @@ public class SendData
                 cnt++;
                 break;
         }
-        if (cnt >= targetCnt)
+        if (cnt >= targetCnt * (1 - coolDownOrigin))
         {
             cnt -= targetCnt;
             return true;
@@ -72,6 +90,9 @@ public class SendData
         get => power;
         set => power = value;
     }
+
+    public float coolDownFactor;
+    public float coolDownOrigin;
 
     public double targetCnt = 0;
     private double cnt = 0;
