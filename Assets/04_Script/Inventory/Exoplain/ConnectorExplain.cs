@@ -18,10 +18,11 @@ public class ConnectorExplain : MonoBehaviour
         _name = rootTrm.Find("Name").GetComponent<TextMeshProUGUI>();
     }   
 
-    public void ON(Vector2 invenPos, Sprite image, ItemRate evaluation)
+    public void ON(Vector2 invenPos, Sprite image, RateColor evaluation)
     {
         _iamge.sprite = image;
-        _evaluation.text = evaluation.ToString();
+        _evaluation.text = evaluation.Rate.ToString();
+        _evaluation.color = evaluation.color;
         _name.text = "¿¬°á±â";
     }
 }

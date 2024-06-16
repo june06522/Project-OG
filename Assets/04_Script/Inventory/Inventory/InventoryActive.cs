@@ -134,6 +134,7 @@ public class InventoryActive : MonoBehaviour
 
         seq.Append(DOTween.To(() => initValue, value => mat.SetFloat(invenShader, value), 20.0f, easingtime)).SetEase(ease);
         seq.Join(ScreenManager.Instance.SetEffect(0.11f, 0.65f, DG.Tweening.Ease.InQuad));
+        seq.Join(_tooltipDissolve.BrickOn(true));
         seq.Insert(easingtime - 0.05f, _tooltipDissolve.On());
         seq.OnComplete(() => { isAnimation = true; });
 
@@ -158,8 +159,9 @@ public class InventoryActive : MonoBehaviour
 
         seq = DOTween.Sequence();
         seq.Append(_tooltipDissolve.Off());
-        seq.Append(DOTween.To(() => initValue, value => mat.SetFloat(invenShader, value), 0f, easingtime).SetEase(ease));
-        seq.AppendCallback(() => { StartCoroutine(DelayCo()); });
+        seq.Join(_tooltipDissolve.BrickOn(false));
+        seq.Insert(0.35f, DOTween.To(() => initValue, value => mat.SetFloat(invenShader, value), 0f, easingtime).SetEase(ease));
+        seq.OnComplete(() => { StartCoroutine(DelayCo()); });
 
     }
 
