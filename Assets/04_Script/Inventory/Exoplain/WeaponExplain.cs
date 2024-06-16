@@ -52,6 +52,11 @@ public class WeaponExplain : MonoBehaviour
         _evaluation.text = evaluation.Rate.ToString();
         _evaluation.color = evaluation.color;
 
+        for(int i = 0; i < _skillList.Length; i++)
+        {
+            _skillList[i].text = "";
+        }
+
         if (skillList != null)
         {
             skillList.Reverse();
