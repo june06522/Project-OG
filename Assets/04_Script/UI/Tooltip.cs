@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [Serializable]
-struct RateColor
+public struct RateColor
 {
     public ItemRate Rate;
     public Color color;

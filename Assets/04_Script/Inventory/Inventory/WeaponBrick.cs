@@ -6,6 +6,18 @@ using UnityEngine.EventSystems;
 
 // 인벤토리에 들어오는 아이템 이미지
 
+public struct SkillUIInfo
+{
+    public int Level;
+    public ItemRate Rate;
+
+    public SkillUIInfo(int level, ItemRate rate)
+    {
+        this.Level = level;
+        this.Rate = rate;
+    }
+}
+
 public class WeaponBrick : InvenBrick
 {
     [SerializeField] private InvenWeapon _weaponPrefab;
@@ -77,9 +89,9 @@ public class WeaponBrick : InvenBrick
     //private string GetEvaluation() => WeaponExplainManager.itemRate[itemRate];
     private ItemRate GetEvaluation() => itemRate;
 
-    private Tuple<GeneratorID, int>[] GetOnSkillList()
+    private Tuple<GeneratorID, SkillUIInfo>[] GetOnSkillList()
     {
-        List<Tuple<GeneratorID, int>> list = InventoryWeaponInfo.Instance.GetConnect(InvenObject.originPos.x, InvenObject.originPos.y);
+        List<Tuple<GeneratorID, SkillUIInfo>> list = InventoryWeaponInfo.Instance.GetConnect(InvenObject.originPos.x, InvenObject.originPos.y);
 
         return list.ToArray();
     }

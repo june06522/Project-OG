@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +20,8 @@ public class ItemExplain : MonoBehaviour
     [SerializeField] WeaponExplain weaponExplain;
     [SerializeField] GeneratorExplain generatorExplain;
     [SerializeField] ConnectorExplain connectorExplain;
+
+    [SerializeField] List<RateColor> colorList;
 
     private InventoryActive inventoryActive;
 
@@ -100,10 +103,10 @@ public class ItemExplain : MonoBehaviour
         }
 
         curInvenPoint = invenPoint;
-        connectorExplain.ON(invenPoint, image, evaluation);
+        connectorExplain.ON(invenPoint, image, GetRateColor(evaluation));
     }
 
-    public void HoverWeapon(Vector2 invenPoint, Sprite image, string name, float power, string explain, Tuple<GeneratorID, int>[] skillList, ItemRate evaluation)
+    public void HoverWeapon(Vector2 invenPoint, Sprite image, string name, float power, string explain, Tuple<GeneratorID, SkillUIInfo>[] skillList, ItemRate evaluation)
     {
         if (invenPoint == curInvenPoint) return;
         if (weaponExplain.gameObject.activeSelf == false)
@@ -112,7 +115,7 @@ public class ItemExplain : MonoBehaviour
         }
         
         curInvenPoint = invenPoint;
-        weaponExplain.ON(invenPoint, image, name, power, explain, skillList,evaluation);
+        weaponExplain.ON(invenPoint, image, name, power, explain, skillList, GetRateColor(evaluation));
     }
 
     public void HoverGenerator(Vector2 invenPoint, Sprite image, string trigger, string explain, ItemRate evaluation, string name)
@@ -124,7 +127,7 @@ public class ItemExplain : MonoBehaviour
         }
 
         curInvenPoint = invenPoint;
-        generatorExplain.ON(invenPoint, image, trigger, explain, evaluation, name);
+        generatorExplain.ON(invenPoint, image, trigger, explain, GetRateColor(evaluation), name);
     }
 
     public void HoverEnd()
@@ -135,4 +138,10 @@ public class ItemExplain : MonoBehaviour
 
 
     public bool IsOn() => weaponExplain.gameObject.activeSelf;
+
+    public RateColor GetRateColor(ItemRate currentItemRate)
+    {
+        return colorList.Find((item) => item.Rate == currentItemRate);
+    }
+
 }

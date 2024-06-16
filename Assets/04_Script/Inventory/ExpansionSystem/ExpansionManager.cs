@@ -44,7 +44,7 @@ public class ExpansionManager : MonoSingleton<ExpansionManager>
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Z) && Input.GetKey(KeyCode.LeftControl))
+        if (Input.GetKeyUp(KeyCode.Z) && Input.GetKey(KeyCode.LeftShift))
             AddSlotcnt(5);
     }
 
@@ -54,7 +54,7 @@ public class ExpansionManager : MonoSingleton<ExpansionManager>
         if (_leftCnt - plusVal <= 0)
             ShowAddTileBtn();
         if (leftText != null)
-            leftText.text = $"추가 갯수: {Mathf.Clamp(_leftCnt, 0, int.MaxValue)}";
+            leftText.text = $"{Mathf.Clamp(_leftCnt, 0, int.MaxValue)}";
     }
 
     public void UseSlot(int miusVal = 1)
@@ -66,7 +66,7 @@ public class ExpansionManager : MonoSingleton<ExpansionManager>
             InventorySlotCenter.Instance.SetPos();
         }
         if (leftText != null)
-            leftText.text = $"추가 갯수: {_leftCnt}";
+            leftText.text = $"{_leftCnt}";
     }
 
     public void ShowAddTileBtn()
