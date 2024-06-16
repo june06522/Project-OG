@@ -41,6 +41,8 @@ public class QuestManager : MonoSingleton<QuestManager>
 
     float textTime = 0.07f;
     float waitTextTime = 2f;
+    [Header("카메라 이동 사운드")]
+    public AudioSource cameraMoveSound;
 
     [Header("가이드 텍스트")]
     [TextArea] public string[] questTxt;
@@ -180,10 +182,12 @@ public class QuestManager : MonoSingleton<QuestManager>
         }
 
         cmvcam.Follow = animationObject;
+        cameraMoveSound.Play();
 
         yield return new WaitForSeconds(2f);
 
         cmvcam.Follow = player;
+        cameraMoveSound.Play();
 
         yield return new WaitForSeconds(1.5f);
 
@@ -284,8 +288,10 @@ public class QuestManager : MonoSingleton<QuestManager>
         }
 
         cmvcam.Follow = enemy.transform;
+        cameraMoveSound.Play();
         yield return new WaitForSeconds(2f);
         cmvcam.Follow = player;
+        cameraMoveSound.Play();
         yield return new WaitForSeconds(2f);
 
         SetString();
@@ -435,8 +441,10 @@ public class QuestManager : MonoSingleton<QuestManager>
         tutorialManager.playerController.Stop();
 
         cmvcam.Follow = chest;
+        cameraMoveSound.Play();
         yield return new WaitForSeconds(1.5f);
         cmvcam.Follow = player;
+        cameraMoveSound.Play();
         yield return new WaitForSeconds(1.5f);
 
         tutorialManager.playerController.canMove = true;
@@ -558,8 +566,10 @@ public class QuestManager : MonoSingleton<QuestManager>
         tutorialManager.portal1.gameObject.SetActive(true);
 
         cmvcam.Follow = tutorialManager.portal1;
+        cameraMoveSound.Play();
         yield return new WaitForSeconds(1.2f);
-        cmvcam.Follow = tutorialManager.player;
+        cmvcam.Follow = player;
+        cameraMoveSound.Play();
         yield return new WaitForSeconds(1.2f);
 
         SetString();
@@ -618,8 +628,10 @@ public class QuestManager : MonoSingleton<QuestManager>
         SetStringEmpty();
 
         cmvcam.Follow = tutorialManager.enemys2[1].transform;
+        cameraMoveSound.Play();
         yield return new WaitForSeconds(1.5f);
         cmvcam.Follow = player;
+        cameraMoveSound.Play();
         yield return new WaitForSeconds(1.5f);
 
         SetString();
@@ -672,8 +684,10 @@ public class QuestManager : MonoSingleton<QuestManager>
         tutorialManager.connecter2.gameObject.SetActive(true);
 
         cmvcam.Follow = tutorialManager.connecter2.transform;
+        cameraMoveSound.Play();
         yield return new WaitForSeconds(1f);
         cmvcam.Follow = player;
+        cameraMoveSound.Play();
         yield return new WaitForSeconds(1f);
 
         SetString();
@@ -840,8 +854,10 @@ public class QuestManager : MonoSingleton<QuestManager>
         tutorialManager.portal2.gameObject.SetActive(true);
 
         cmvcam.Follow = tutorialManager.portal2;
+        cameraMoveSound.Play();
         yield return new WaitForSeconds(1.2f);
         cmvcam.Follow = player;
+        cameraMoveSound.Play();
         yield return new WaitForSeconds(1.2f);
 
         SetString();
@@ -896,8 +912,10 @@ public class QuestManager : MonoSingleton<QuestManager>
             enemy.gameObject.SetActive(true);
 
         cmvcam.Follow = tutorialManager.enemys3[2].transform;
+        cameraMoveSound.Play();
         yield return new WaitForSeconds(1.5f);
         cmvcam.Follow = player;
+        cameraMoveSound.Play();
         yield return new WaitForSeconds(1.5f);
 
         curTime = 0;
