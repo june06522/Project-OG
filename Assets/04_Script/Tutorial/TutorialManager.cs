@@ -34,7 +34,13 @@ public class TutorialManager : MonoSingleton<TutorialManager>
     public Vector3 guidePos1 = new Vector3(-12, -100, 0);
 
     [Header("스테이지2")]
-    public List<Transform> enemys2;
+    public List<TutorialEnemyStateController> enemys2;
+    public GameObject connecter2;
+    public Transform portal2;
+
+    [Header("스테이지3")]
+    public List<TutorialEnemyStateController> enemys3;
+    public Transform portal3;
 
     private void Awake()
     {

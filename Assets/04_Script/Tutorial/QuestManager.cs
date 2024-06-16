@@ -27,6 +27,11 @@ public enum QuestName
     ConnectSkill,
     UsePortal2,
     KillEnemys,
+    EatConnecter,
+    ConnectConnecter,
+    UsePortal3,
+    KillEnemys2,
+    UsePortal4,
 }
 
 public class QuestManager : MonoSingleton<QuestManager>
@@ -576,6 +581,8 @@ public class QuestManager : MonoSingleton<QuestManager>
         tutorialManager.playerController.Stop();
         PlayerController.InputController.LastMoveDir = Vector2.up;
 
+        foreach (var enemy in tutorialManager.enemys2)
+            enemy.gameObject.SetActive(true);
         tutorialManager.NextQuest();
     }
 
@@ -585,6 +592,8 @@ public class QuestManager : MonoSingleton<QuestManager>
     }
     IEnumerator KillEnemysCo()
     {
+        yield return new WaitForSeconds(1f);
+
         SetString();
         curTime = 0;
         delayTime = questTxt[questIndex].Length * textTime + waitTextTime;
@@ -595,7 +604,7 @@ public class QuestManager : MonoSingleton<QuestManager>
         questIndex++;
         SetStringEmpty();
 
-        cmvcam.Follow = tutorialManager.enemys2[1];
+        cmvcam.Follow = tutorialManager.enemys2[1].transform;
         yield return new WaitForSeconds(1.5f);
         cmvcam.Follow = player;
         yield return new WaitForSeconds(1.5f);
@@ -606,9 +615,246 @@ public class QuestManager : MonoSingleton<QuestManager>
         while (TextDelay())
         {
             yield return null;
+            if (Input.GetMouseButtonDown(0))
+                isClick = true;
+        }
+        questIndex++;
+
+        tutorialManager.playerController.canMove = true;
+        foreach (var enemy in tutorialManager.enemys2)
+            enemy.AttackLoop();
+
+        while (tutorialManager.enemys2.Count > 0)
+        {
+            yield return null;
+            for (int i = 0; i < tutorialManager.enemys2.Count; i++)
+                if (tutorialManager.enemys2[i] == null)
+                    tutorialManager.enemys2.Remove(tutorialManager.enemys2[i]);
+        }
+
+        tutorialManager.playerController.canMove = false;
+        tutorialManager.playerController.Stop();
+        for (int i = 0; i < 2; i++)
+        {
+            SetString();
+
+            curTime = 0;
+            if (i == 1)
+                delayTime -= waitTextTime;
+            delayTime = questTxt[questIndex].Length * textTime + waitTextTime;
+            while (TextDelay()) { yield return null; }
+            questIndex++;
+        }
+        tutorialManager.connecter2.gameObject.SetActive(true);
+
+        cmvcam.Follow = tutorialManager.connecter2.transform;
+        yield return new WaitForSeconds(1f);
+        cmvcam.Follow = player;
+        yield return new WaitForSeconds(1f);
+
+        SetString();
+        curTime = 0;
+        delayTime = questTxt[questIndex].Length * textTime;
+        while (TextDelay())
+        {
+            yield return null;
+            if (Input.GetMouseButtonDown(0))
+                isClick = true;
+        }
+        questIndex++;
+        tutorialManager.playerController.canMove = true;
+        tutorialManager.NextQuest();
+    }
+
+    public void EatConnecter()
+    {
+        StartCoroutine(EatConnecterCo());
+    }
+    IEnumerator EatConnecterCo()
+    {
+        WeaponInventory inven = FindObjectOfType<WeaponInventory>();
+        while (inven.GetContainerItemCnt() < 3) { yield return null; }
+
+        yield return null;
+        tutorialManager.playerController.Stop();
+        tutorialManager.playerController.canMove = false;
+
+        for (int i = 0; i < 3; i++)
+        {
+            SetString();
+
+            curTime = 0;
+            delayTime = questTxt[questIndex].Length * textTime + waitTextTime;
+            while (TextDelay())
+            {
+                yield return null;
+            }
+            questIndex++;
+        }
+
+        ExpansionManager.Instance.AddTutorial();
+        tutorialManager.inven.tutoCanOpen = true;
+        tutorialManager.NextQuest();
+    }
+
+    public void ConnectConnecter()
+    {
+        StartCoroutine(ConnectConnecterCo());
+    }
+    IEnumerator ConnectConnecterCo()
+    {
+        InvenBrick[] invenBricks = FindObjectsOfType<InvenBrick>();
+        Image weapon = null, connecter = null, trigger = null;
+        foreach (var brick in invenBricks)
+        {
+            if (brick.Type == ItemType.Generator)
+                trigger = brick.GetComponent<Image>();
+            else if (brick.Type == ItemType.Weapon)
+                weapon = brick.GetComponent<Image>();
+            else if (brick.Type == ItemType.Connector)
+                connecter = brick.GetComponent<Image>();
+        }
+        while (GameObject.Find("LineRenderer(Clone)") == null || GameObject.Find("LineRenderer(Clone)").GetComponent<LineRenderer>().positionCount < 3)
+        {
+            yield return null;
+        }
+
+        while (!Input.GetKeyDown(KeyCode.Tab)) { yield return null; }
+        tutorialManager.inven.tutoCanOpen = false;
+
+        for (int i = 0; i < 2; i++)
+        {
+            SetString();
+
+            curTime = 0;
+            delayTime = questTxt[questIndex].Length * textTime + waitTextTime;
+            while (TextDelay())
+            {
+                yield return null;
+            }
+            questIndex++;
+        }
+        SetStringEmpty();
+
+        tutorialManager.portal2.gameObject.SetActive(true);
+
+        cmvcam.Follow = tutorialManager.portal2;
+        yield return new WaitForSeconds(1.2f);
+        cmvcam.Follow = player;
+        yield return new WaitForSeconds(1.2f);
+
+        SetString();
+
+        curTime = 0;
+        delayTime = questTxt[questIndex].Length * textTime;
+        while (TextDelay())
+        {
+            yield return null;
+            if (Input.GetMouseButtonDown(0))
+                isClick = true;
+        }
+        questIndex++;
+        tutorialManager.playerController.canMove = true;
+        tutorialManager.NextQuest();
+    }
+
+    public void UsePortal3()
+    {
+        StartCoroutine(UsePortal3Co());
+    }
+    IEnumerator UsePortal3Co()
+    {
+        while (Vector2.Distance(player.position, npc.position) <= 80f) { yield return null; }
+        SetStringEmpty();
+        npc.position = player.position + new Vector3(4.58f, 0);
+        tutorialManager.playerController.canMove = false;
+        tutorialManager.playerController.Stop();
+        yield return new WaitForSeconds(1.5f);
+        tutorialManager.playerController.SetRotation(Quaternion.identity);
+        tutorialManager.playerController.Stop();
+        PlayerController.InputController.LastMoveDir = Vector2.up;
+
+        foreach (var enemy in tutorialManager.enemys2)
+            enemy.gameObject.SetActive(true);
+
+
+
+        tutorialManager.playerController.canMove = false;
+        tutorialManager.playerController.Stop();
+        SetString();
+
+        curTime = 0;
+        delayTime = questTxt[questIndex].Length * textTime + waitTextTime;
+        while (TextDelay())
+        {
+            yield return null;
+        }
+        questIndex++;
+
+        foreach (var enemy in tutorialManager.enemys3)
+            enemy.gameObject.SetActive(true);
+
+        cmvcam.Follow = tutorialManager.enemys3[2].transform;
+        yield return new WaitForSeconds(1.5f);
+        cmvcam.Follow = player;
+        yield return new WaitForSeconds(1.5f);
+
+        curTime = 0;
+        delayTime = questTxt[questIndex].Length * textTime;
+        while (TextDelay())
+        {
+            yield return null;
             if(Input.GetMouseButtonDown(0))
                 isClick = true;
         }
         questIndex++;
+        tutorialManager.NextQuest();
+    }
+
+    public void KillEnemys2()
+    {
+        StartCoroutine(KillEnemys2Co());
+    }
+    IEnumerator KillEnemys2Co()
+    {
+        tutorialManager.playerController.canMove = true;
+        foreach (var enemy in tutorialManager.enemys3)
+            enemy.AttackLoop();
+
+        while (tutorialManager.enemys3.Count > 0)
+        {
+            yield return null;
+            for (int i = 0; i < tutorialManager.enemys3.Count; i++)
+                if (tutorialManager.enemys3[i] == null)
+                    tutorialManager.enemys3.Remove(tutorialManager.enemys3[i]);
+        }
+
+        tutorialManager.playerController.canMove = false;
+        tutorialManager.playerController.Stop();
+
+        tutorialManager.portal3.gameObject.SetActive(true);
+        for (int i = 0; i < 3; i++)
+        {
+            SetString();
+
+            curTime = 0;
+            delayTime = questTxt[questIndex].Length * textTime + waitTextTime;
+            while (TextDelay()) { yield return null; }
+            questIndex++;
+        }
+
+        tutorialManager.playerController.canMove = true;
+        tutorialManager.NextQuest();
+    }
+
+    public void UsePortal4()
+    {
+        StartCoroutine(UsePortal4Co());
+    }
+    IEnumerator UsePortal4Co()
+    {
+        while (Vector2.Distance(player.position, npc.position) <= 80f) { yield return null; }
+
+        SceneManager.LoadScene("Intro");
     }
 }

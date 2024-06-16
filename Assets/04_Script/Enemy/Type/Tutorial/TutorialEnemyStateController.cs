@@ -65,4 +65,18 @@ public class TutorialEnemyStateController : BaseFSM_Controller<ENormalPatrolEnem
     {
         state.AttackState();
     }
+
+    public void AttackLoop()
+    {
+        StartCoroutine(AttackLoopCo());
+    }
+
+    IEnumerator AttackLoopCo()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(1.2f);
+            Attack();
+        }
+    }
 }

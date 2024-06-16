@@ -41,35 +41,34 @@ public class SkillManager : MonoSingleton<SkillManager>
     //트리거 넘어오면 스킬 실행
     public void DetectTrigger(TriggerID id, Weapon weapon = null)
     {
-        foreach(var skillInfo in _skillList[id])
+        for(int i = 0; i < _skillList[id].Count; i++)
         {
-            if (skillInfo.weapon == null)
+            if (_skillList[id][i].weapon == null)
             {
-                _skillList[id].Remove(skillInfo);
+                _skillList[id].Remove(_skillList[id][i]);
+                i--;
                 continue;
             }
 
-            if(weapon != null)
+            if (weapon != null)
             {
-                if (skillInfo.weapon == weapon)
-                    skillInfo.data.startWeapon = weapon;
+                if (_skillList[id][i].weapon == weapon)
+                    _skillList[id][i].data.startWeapon = weapon;
                 else
                     continue;
             }
 
-            //if(skillInfo.weapon as RotateClone)
-            //{
-            //    Skill skill = SkillContainer.Instance.GetSKill((int)skillInfo.weapon.id, (int)skillInfo.data.GeneratorID);
-            //    Debug.Log(skill.gameObject.name);
-            //}
-
-            if(skillInfo.data.GetTrriger() && skillInfo.weapon != null)
+            if (_skillList[id][i].data.GetTrriger() && _skillList[id][i].weapon != null)
             {
 
-                SkillContainer.Instance.GetSKill((int)skillInfo.weapon.id, (int)skillInfo.data.GeneratorID)?.
-                    Excute(skillInfo.weapon.transform, skillInfo.weapon.Target,
-                    skillInfo.data.Power,skillInfo.data);
+                SkillContainer.Instance.GetSKill((int)_skillList[id][i].weapon.id, (int)_skillList[id][i].data.GeneratorID)?.
+                    Excute(_skillList[id][i].weapon.transform, _skillList[id][i].weapon.Target,
+                    _skillList[id][i].data.Power, _skillList[id][i].data);
             }
+        }
+        foreach(var skillInfo in _skillList[id])
+        {
+           
         }
     }
 

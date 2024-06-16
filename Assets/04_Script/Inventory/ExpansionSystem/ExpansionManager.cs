@@ -168,4 +168,44 @@ public class ExpansionManager : MonoSingleton<ExpansionManager>
         obj.pos = point;
         obj.transform.localPosition = pos;
     }
+
+    public void AddTutorial()
+    {
+        _leftCnt++;
+        tileParent.gameObject.SetActive(true);
+
+        List<Vector2Int> addBlock = new List<Vector2Int>();
+
+
+        Vector2Int pos = new Vector2Int(4, 1);
+        for (int i = 0; i < 4; i++)
+        {
+
+            if (!GameManager.Instance.Inventory.IsExist(pos + dxy[i]))
+            {
+                if (CanAdd(pos + dxy[i]))
+                {
+                    addBlock.Add(pos + dxy[i]);
+                    //CreateBtn(pos + dxy[i]);
+                }
+            }
+        }
+
+        Dictionary<Vector2Int, bool> dic = new();
+
+        for (int i = 0; i < _createCnt; i++)
+        {
+            if (addBlock.Count == 0)
+                return;
+            int idx = Random.Range(0, addBlock.Count);
+            if (!dic.ContainsKey(addBlock[idx]))
+            {
+                dic.Add(addBlock[idx], true);
+                CreateBtn(addBlock[idx]);
+            }
+            else
+                i--;
+            addBlock.RemoveAt(idx);
+        }
+    }
 }

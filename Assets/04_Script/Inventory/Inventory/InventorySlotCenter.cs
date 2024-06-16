@@ -66,7 +66,6 @@ public class InventorySlotCenter : MonoBehaviour
 
             rect.localPosition = new Vector3(width * (50 * rect.localScale.x), height * (50 * rect.localScale.y));
 
-            Debug.Log("킨 확장됨");
             _cv.VisibleLineAllChange(true);
         }
     }
