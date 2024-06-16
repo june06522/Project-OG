@@ -27,7 +27,9 @@ public class SynergyManager : MonoSingleton<SynergyManager>
 
     public float GetStatFactor(TriggerID id)
     {
-        return table.GetContainer()[id][level[id]];
+        if (table.GetContainer().ContainsKey(id))
+            return table.GetContainer()[id][level[id]];
+        else return 0;
     }
 
 }
