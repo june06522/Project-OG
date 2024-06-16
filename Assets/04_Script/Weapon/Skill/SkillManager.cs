@@ -32,7 +32,7 @@ public class SkillManager : MonoSingleton<SkillManager>
     {
         _skillList = new();
 
-        foreach(TriggerID id in Enum.GetValues(typeof(TriggerID)))
+        foreach (TriggerID id in Enum.GetValues(typeof(TriggerID)))
         {
             _skillList.Add(id, new());
         }
@@ -41,7 +41,7 @@ public class SkillManager : MonoSingleton<SkillManager>
     //트리거 넘어오면 스킬 실행
     public void DetectTrigger(TriggerID id, Weapon weapon = null)
     {
-        for(int i = 0; i < _skillList[id].Count; i++)
+        for (int i = 0; i < _skillList[id].Count; i++)
         {
             if (_skillList[id][i].weapon == null)
             {
@@ -66,9 +66,9 @@ public class SkillManager : MonoSingleton<SkillManager>
                     _skillList[id][i].data.Power, _skillList[id][i].data);
             }
         }
-        foreach(var skillInfo in _skillList[id])
+        foreach (var skillInfo in _skillList[id])
         {
-           
+
         }
     }
 
@@ -76,11 +76,11 @@ public class SkillManager : MonoSingleton<SkillManager>
     public void RegisterSkill(TriggerID id, Weapon weapon, SendData data)
     {
         SkillInfo info = new SkillInfo(weapon, data);
-        foreach(var skillInfo in _skillList[id])
+        foreach (var skillInfo in _skillList[id])
         {
-            if(skillInfo.data.index == info.data.index && skillInfo.weapon == info.weapon)
+            if (skillInfo.data.index == info.data.index && skillInfo.weapon == info.weapon)
             {
-                skillInfo.data.Power = Mathf.Max(skillInfo.data.Power, info.data.Power) ;
+                skillInfo.data.Power = Mathf.Max(skillInfo.data.Power, info.data.Power);
                 return;
             }
         }
@@ -93,9 +93,9 @@ public class SkillManager : MonoSingleton<SkillManager>
     {
         List<SendData> skillData = new();
 
-        foreach(List<SkillInfo> info in _skillList.Values)
+        foreach (List<SkillInfo> info in _skillList.Values)
         {
-            foreach(SkillInfo skill in info)
+            foreach (SkillInfo skill in info)
             {
                 if (skill.weapon == weapon)
                     skillData.Add(skill.data);

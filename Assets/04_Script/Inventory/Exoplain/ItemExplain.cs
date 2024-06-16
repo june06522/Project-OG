@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +21,7 @@ public class ItemExplain : MonoBehaviour
     [SerializeField] WeaponExplain weaponExplain;
     [SerializeField] GeneratorExplain generatorExplain;
     [SerializeField] ConnectorExplain connectorExplain;
+    [SerializeField] Transform statInfo;
 
     [SerializeField] List<RateColor> colorList;
 
@@ -30,6 +32,14 @@ public class ItemExplain : MonoBehaviour
     public bool useMove = false;
 
     Vector2 curInvenPoint;
+
+    IconType curInfoType;
+    private IconButton[] _iconButtons;
+
+    private Transform _Title;
+
+    private ExplainType _prevType;
+    public bool IsInven = true;
     private void Awake()
     {
         if (Instance == null)
@@ -41,10 +51,14 @@ public class ItemExplain : MonoBehaviour
 
 
         inventoryActive = FindObjectOfType<InventoryActive>();
+        _iconButtons = transform.Find("Icons").GetComponentsInChildren<IconButton>();
+        _Title = transform.Find("Title").transform;
     }
 
     private void Start()
     {
+        curInfoType = IconType.INVEN;
+        _prevType = ExplainType.None;
         ActiveExplain(ExplainType.None);
     }
 
@@ -57,13 +71,17 @@ public class ItemExplain : MonoBehaviour
         {
             case ExplainType.None:
                 break;
-            case ExplainType.Weapon: activeWeapon = true; 
+            case ExplainType.Weapon:
+                activeWeapon = true; 
                 break;
             case ExplainType.Generator: activeGenerator = true;
                 break;
             case ExplainType.Connector: activeConnector = true; 
                 break;
         }
+
+        if(type != ExplainType.None)
+            _prevType = type;
 
         weaponExplain.gameObject.SetActive(activeWeapon);
         generatorExplain.gameObject.SetActive(activeGenerator);
@@ -96,6 +114,7 @@ public class ItemExplain : MonoBehaviour
 
     public void HoverConnector(Vector2 invenPoint, Sprite image, ItemRate evaluation)
     {
+        if (!IsInven) return;
         if (invenPoint == curInvenPoint) return;
         if(connectorExplain.gameObject.activeSelf == false)
         {
@@ -108,6 +127,7 @@ public class ItemExplain : MonoBehaviour
 
     public void HoverWeapon(Vector2 invenPoint, Sprite image, string name, float power, string explain, Tuple<GeneratorID, SkillUIInfo>[] skillList, ItemRate evaluation)
     {
+        if (!IsInven) return;
         if (invenPoint == curInvenPoint) return;
         if (weaponExplain.gameObject.activeSelf == false)
         {
@@ -120,6 +140,7 @@ public class ItemExplain : MonoBehaviour
 
     public void HoverGenerator(Vector2 invenPoint, Sprite image, string trigger, string explain, ItemRate evaluation, string name)
     {
+        if (!IsInven) return;
         if (invenPoint == curInvenPoint) return;
         if (generatorExplain.gameObject.activeSelf == false)
         {
@@ -136,6 +157,29 @@ public class ItemExplain : MonoBehaviour
         //generatorExplain.Active(false);   
     }
 
+    public void OnInfo()
+    {
+        IsInven = false;
+        _iconButtons[(int)IconType.INFO].DisConnect();
+        _iconButtons[(int)IconType.INVEN].OnConnect();
+
+        _Title.gameObject.SetActive(false);
+        ActiveExplain(ExplainType.None);
+
+        statInfo.gameObject.SetActive(true);
+    }
+
+    public void OnInven()
+    {
+        IsInven = true; 
+        _iconButtons[(int)IconType.INFO].OnConnect();
+        _iconButtons[(int)IconType.INVEN].DisConnect();
+
+        _Title.gameObject.SetActive(true);
+        ActiveExplain(_prevType);
+
+        statInfo.gameObject.SetActive(false);
+    }
 
     public bool IsOn() => weaponExplain.gameObject.activeSelf;
 
@@ -144,4 +188,17 @@ public class ItemExplain : MonoBehaviour
         return colorList.Find((item) => item.Rate == currentItemRate);
     }
 
+    public void SetCurrentInfoType(IconType iconType)
+    {
+        switch (iconType)
+        {
+            case IconType.INFO:
+                OnInfo();
+                break;
+            case IconType.INVEN:
+                OnInven();
+                break;
+        }
+
+    }
 }
