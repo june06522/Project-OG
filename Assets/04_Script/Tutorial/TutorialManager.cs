@@ -12,6 +12,9 @@ public class TutorialManager : MonoSingleton<TutorialManager>
     [HideInInspector] public TutorialPlayerController playerController;
     [HideInInspector] public InventoryActive inven;
 
+    [Header("사운드 관련")]
+    public AudioSource textAudio;
+
     [Header("애니메이션 관련")]
     [SerializeField] Image blackImage;
     public GameObject speechBubble;

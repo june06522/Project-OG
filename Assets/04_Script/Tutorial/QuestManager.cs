@@ -39,7 +39,7 @@ public class QuestManager : MonoSingleton<QuestManager>
     TutorialManager tutorialManager;
     TextMeshPro npcText;
 
-    float textTime = 0.1f;
+    float textTime = 0.07f;
     float waitTextTime = 2f;
 
     [Header("가이드 텍스트")]
@@ -113,6 +113,7 @@ public class QuestManager : MonoSingleton<QuestManager>
         SetStringEmpty();
         tutorialManager.speechBubble.SetActive(true);
         npcText.DOText(questTxt[questIndex], questTxt[questIndex].Length * textTime);
+        tutorialManager.textAudio.Play();
     }
 
     private bool TextDelay()
@@ -131,7 +132,8 @@ public class QuestManager : MonoSingleton<QuestManager>
                 curTime = delayTime;
             }
         }
-
+        if(curTime > delayTime - waitTextTime)
+            tutorialManager.textAudio.Stop();
         if (curTime < delayTime)
         {
             return true;
@@ -967,4 +969,4 @@ public class QuestManager : MonoSingleton<QuestManager>
         //DataManager.Instance.SaveTutorialData(); 
         SceneManager.LoadScene("Intro");
     }
-}
+} 
