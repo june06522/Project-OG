@@ -60,7 +60,8 @@ public class ItemExplain : MonoBehaviour
         curInfoType = IconType.INVEN;
         _prevType = ExplainType.None;
         ActiveExplain(ExplainType.None);
-
+        
+        IsInven = false;
         OnInven();
     }
 

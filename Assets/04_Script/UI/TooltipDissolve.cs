@@ -13,6 +13,7 @@ public class TooltipDissolve : MonoBehaviour
     [SerializeField] Material iconMat2;
     [SerializeField] Material imageMat;
     [SerializeField] Material textMat;
+    [SerializeField] Material statTextMat;
     [SerializeField] Material invenBrickMat;
 
     [SerializeField] float duration = 0.4f;
@@ -48,6 +49,7 @@ public class TooltipDissolve : MonoBehaviour
     DissolveParameters _icon2Parameters;
     DissolveParameters _imageParameters;
     DissolveParameters _textParameters;
+    DissolveParameters _statTextParameters;
     DissolveParameters _invenBrickParameters;
 
     Sequence seq;
@@ -66,7 +68,9 @@ public class TooltipDissolve : MonoBehaviour
         _icon2Parameters = new DissolveParameters(iconMat2, _iconDissolveStart, _iconDissolveEnd, duration, ease, sourceGlowFade);
         _imageParameters = new DissolveParameters(imageMat, _imageDissolveStart, _imageDissolveEnd, duration, ease, sourceGlowFade);
         _textParameters = new DissolveParameters(textMat, _textDissolveStart, _textDissolveEnd, duration, ease, alphaFade);
+        _statTextParameters = new DissolveParameters(statTextMat, _textDissolveStart, _textDissolveEnd, duration, ease, alphaFade);
         _invenBrickParameters = new DissolveParameters(invenBrickMat, _invenBrickStart, _invenBrickEnd, 0.25f, ease, alphaFade);
+    
     }
 
     public Tween BrickOn(bool value)
@@ -90,6 +94,7 @@ public class TooltipDissolve : MonoBehaviour
         seq.Join(Dissolver.Dissolve(_iconParameters, true));
         seq.Join(Dissolver.Dissolve(_icon2Parameters, true));
         seq.Join(Dissolver.Dissolve(_textParameters, true));
+        seq.Join(Dissolver.Dissolve(_statTextParameters, true));
         seq.Append(ImageOn(true));
         return seq;  
     }
@@ -105,6 +110,7 @@ public class TooltipDissolve : MonoBehaviour
         seq.Join(Dissolver.Dissolve(_iconParameters, false));
         seq.Join(Dissolver.Dissolve(_icon2Parameters, false));
         seq.Join(Dissolver.Dissolve(_textParameters, false));
+        seq.Join(Dissolver.Dissolve(_statTextParameters, false));
         seq.Join(ImageOn(false));
         return seq;
     }
