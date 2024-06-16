@@ -703,8 +703,10 @@ public class QuestManager : MonoSingleton<QuestManager>
     }
     IEnumerator ConnectConnecterCo()
     {
+        WeaponInventory inven = FindObjectOfType<WeaponInventory>();
         InvenBrick[] invenBricks = FindObjectsOfType<InvenBrick>();
         Image weapon = null, connecter = null, trigger = null;
+
         foreach (var brick in invenBricks)
         {
             if (brick.Type == ItemType.Generator)
@@ -714,12 +716,77 @@ public class QuestManager : MonoSingleton<QuestManager>
             else if (brick.Type == ItemType.Connector)
                 connecter = brick.GetComponent<Image>();
         }
-        while (GameObject.Find("LineRenderer(Clone)") == null || GameObject.Find("LineRenderer(Clone)").GetComponent<LineRenderer>().positionCount < 3)
+
+        //칸확장
+        tutorialManager.guideUI2.gameObject.SetActive(true);
+        tutorialManager.guideUI2.rectTransform.anchoredPosition = tutorialManager.guide2Pos;
+        while (ExpansionManager.Instance.leftCnt > 0)
         {
+            weapon.raycastTarget = false;
+            connecter.raycastTarget = false;
+            trigger.raycastTarget = false;
             yield return null;
         }
+        tutorialManager.guideUI2.gameObject.SetActive(false);
 
-        while (!Input.GetKeyDown(KeyCode.Tab)) { yield return null; }
+        //무기 이동
+        weapon.raycastTarget = true;
+        tutorialManager.guideUI3.gameObject.SetActive(true);
+        while (weapon == null || weapon.GetComponent<InvenBrick>().InvenObject.originPos != new Vector2Int(3, 1))
+        {
+            if (weapon == null)
+            {
+                invenBricks = FindObjectsOfType<InvenBrick>();
+                foreach (var brick in invenBricks)
+                {
+                    if (brick.Type == ItemType.Weapon)
+                        weapon = brick.GetComponent<Image>();
+                }
+            }
+            if (inven.GetContainerItemCnt() == 2)
+                tutorialManager.guideUI3.rectTransform.anchoredPosition = tutorialManager.guide3Pos;
+            else
+                tutorialManager.guideUI3.transform.position = weapon.transform.position;
+
+            connecter.raycastTarget = false;
+            trigger.raycastTarget = false;
+            yield return null;
+        }
+        tutorialManager.guideUI3.gameObject.SetActive(false);
+        
+        //부품 이동
+        connecter.raycastTarget = true;
+        tutorialManager.guideUI4.gameObject.SetActive(true);
+        while (GameObject.Find("LineRenderer(Clone)") == null || GameObject.Find("LineRenderer(Clone)").GetComponent<LineRenderer>().positionCount < 3)
+        {
+            if (connecter == null)
+            {
+                invenBricks = FindObjectsOfType<InvenBrick>();
+                foreach (var brick in invenBricks)
+                {
+                    if (brick.Type == ItemType.Connector)
+                        connecter = brick.GetComponent<Image>();
+                }
+            }
+            if(inven.GetContainerItemCnt() == 2)
+                tutorialManager.guideUI4.rectTransform.anchoredPosition = tutorialManager.guide4Pos;
+            else
+                tutorialManager.guideUI4.transform.position = connecter.transform.position;
+
+            weapon.raycastTarget = false;
+            trigger.raycastTarget = false;
+            yield return null;
+        }
+        tutorialManager.guideUI4.gameObject.SetActive(false);
+
+        //닫기
+        while (!Input.GetKeyDown(KeyCode.Tab))
+        {
+            weapon.raycastTarget = false;
+            connecter.raycastTarget = false;
+            trigger.raycastTarget = false;
+            yield return null;
+        }
         tutorialManager.inven.tutoCanOpen = false;
 
         for (int i = 0; i < 2; i++)
@@ -804,7 +871,7 @@ public class QuestManager : MonoSingleton<QuestManager>
         while (TextDelay())
         {
             yield return null;
-            if(Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0))
                 isClick = true;
         }
         questIndex++;

@@ -37,6 +37,12 @@ public class TutorialManager : MonoSingleton<TutorialManager>
     public List<TutorialEnemyStateController> enemys2;
     public GameObject connecter2;
     public Transform portal2;
+    public Image guideUI2;
+    public Image guideUI3;
+    public Image guideUI4;
+    [HideInInspector]public Vector3 guide2Pos = new Vector3(295, -100);
+    [HideInInspector]public Vector3 guide3Pos = new Vector3(195, -100);
+    [HideInInspector]public Vector3 guide4Pos = new Vector3(-55, -100);
 
     [Header("스테이지3")]
     public List<TutorialEnemyStateController> enemys3;

@@ -9,6 +9,7 @@ public enum BrickType
     Two_Two,
     Two_Three,
     Two_Four,
+    Two_Five,
     Three_One,
     Three_Two,
     Three_Three,
