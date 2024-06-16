@@ -164,7 +164,7 @@ public class QuestManager : MonoSingleton<QuestManager>
     }
     IEnumerator StartConverSationCo()
     {
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2.5f);
         for (int i = 0; i < 5; i++)
         {
             SetString();
@@ -199,7 +199,7 @@ public class QuestManager : MonoSingleton<QuestManager>
         }
 
         npc.DOMoveX(27, 3f);
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(2f);
         tutorialManager.playerController.canMove = true;
 
         tutorialManager.NextQuest();
@@ -334,7 +334,7 @@ public class QuestManager : MonoSingleton<QuestManager>
         SetStringEmpty();
 
         PlayerController.dash.Enter();
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 40; i++)
         {
             PlayerController.dash.Update();
             yield return null;
@@ -397,6 +397,17 @@ public class QuestManager : MonoSingleton<QuestManager>
 
         tutorialManager.playerController.canMove = false;
         tutorialManager.playerController.Stop();
+
+        SetStringEmpty();
+        if(Vector3.Distance(npc.position, player.position) > 12f)
+        {
+            tutorialManager.FadeOut(5f);
+            player.position = npc.position;
+            player.transform.Translate(Vector3.left * 6f);
+            yield return new WaitForSeconds(2f);
+
+        }
+
         for (int i = 0; i < 2; i++)
         {
             SetString();
@@ -634,6 +645,17 @@ public class QuestManager : MonoSingleton<QuestManager>
 
         tutorialManager.playerController.canMove = false;
         tutorialManager.playerController.Stop();
+
+        SetStringEmpty();
+        if (Vector3.Distance(npc.position, player.position) > 12f)
+        {
+            tutorialManager.FadeOut(5f);
+            player.position = npc.position;
+            player.transform.Translate(Vector3.left * 6f);
+            yield return new WaitForSeconds(2f);
+
+        }
+
         for (int i = 0; i < 2; i++)
         {
             SetString();
@@ -678,6 +700,16 @@ public class QuestManager : MonoSingleton<QuestManager>
         yield return null;
         tutorialManager.playerController.Stop();
         tutorialManager.playerController.canMove = false;
+
+        SetStringEmpty();
+        if (Vector3.Distance(npc.position, player.position) > 12f)
+        {
+            tutorialManager.FadeOut(5f);
+            player.position = npc.position;
+            player.transform.Translate(Vector3.left * 6f);
+            yield return new WaitForSeconds(2f);
+
+        }
 
         for (int i = 0; i < 3; i++)
         {
@@ -898,8 +930,17 @@ public class QuestManager : MonoSingleton<QuestManager>
 
         tutorialManager.playerController.canMove = false;
         tutorialManager.playerController.Stop();
-
         tutorialManager.portal3.gameObject.SetActive(true);
+        SetStringEmpty();
+        if (Vector3.Distance(npc.position, player.position) > 12f)
+        {
+            tutorialManager.FadeOut(5f);
+            player.position = npc.position;
+            player.transform.Translate(Vector3.left * 6f);
+            yield return new WaitForSeconds(2f);
+
+        }
+
         for (int i = 0; i < 3; i++)
         {
             SetString();
@@ -922,8 +963,8 @@ public class QuestManager : MonoSingleton<QuestManager>
     {
         while (Vector2.Distance(player.position, npc.position) <= 80f) { yield return null; }
 
-        DataManager.Instance.tutorialData.isClear = true;
-        DataManager.Instance.SaveTutorialData();
+        //DataManager.Instance.tutorialData.isClear = true;
+        //DataManager.Instance.SaveTutorialData(); 
         SceneManager.LoadScene("Intro");
     }
 }

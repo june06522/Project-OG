@@ -126,12 +126,12 @@ public class DataManager : MonoBehaviour
     public void SaveTutorialData()
     {
         string data = JsonUtility.ToJson(tutorialData);
-        File.WriteAllText(_savePath + _tutorialPath, data);
+        File.WriteAllText(_tutorialPath + _tutorialPath, data);
     }
 
     public void LoadTutorialData()
     {
-        string data = File.ReadAllText(_savePath + _tutorialPath);
+        string data = File.ReadAllText(_tutorialPath + _tutorialPath);
         tutorialData = JsonUtility.FromJson<TutorialData>(data);
     }
     #endregion
