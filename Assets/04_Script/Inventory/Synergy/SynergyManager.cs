@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SynergyManager : MonoSingleton<SynergyManager>
 {
@@ -23,7 +24,18 @@ public class SynergyManager : MonoSingleton<SynergyManager>
     public void EquipItem(TriggerID id)
     {
 
-        level.Add(id, 1);
+        if (level.ContainsKey(id))
+        {
+
+            level[id]++;
+
+        }
+        else
+        {
+
+            level.Add(id, 1);
+
+        }
 
         OnSynergyChange?.Invoke();
 
