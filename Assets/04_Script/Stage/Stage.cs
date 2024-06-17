@@ -316,8 +316,15 @@ public class Stage : MonoBehaviour
 
             }
 
-            SpawnGate(NextStage, -new Vector3(3, 0, 0), itemTypes[0]);
-            SpawnGate(NextStage, new Vector3(3, 0, 0), itemTypes[1]);
+            if (stageGate != null)
+            {
+
+                SpawnGate(NextStage, -new Vector3(3, 0, 0), itemTypes[0]).OnInteractEvent += HandleDestroyGate;
+                SpawnGate(NextStage, new Vector3(3, 0, 0), itemTypes[1]).OnInteractEvent += HandleDestroyGate;
+
+            }
+
+            
         }
 
         // effect or tween
@@ -332,10 +339,10 @@ public class Stage : MonoBehaviour
             CameraManager.Instance.SetDefaultCam();
     }
 
-    private void SpawnGate(Stage stage, Vector3 offset, ItemType type)
+    private StageGate SpawnGate(Stage stage, Vector3 offset, ItemType type)
     {
         if (stageGate == null)
-            return;
+            return null;
 
         StageGate gate = null;
         if (_gateSpawnPos == null)
@@ -353,6 +360,8 @@ public class Stage : MonoBehaviour
             gate.SetStage(stage, type);
 
         }
+
+        return gate;
     }
 
     private void SpawnGate(Stage stage)
