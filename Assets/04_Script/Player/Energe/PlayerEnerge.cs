@@ -68,5 +68,5 @@ public class PlayerEnerge : MonoBehaviour
         SynergyManager.Instance.OnSynergyChange -= ChangeFactor;
     }
 
-    public void TutoMinusEnergy(int _val = 20) { CurrentEnerge -= _val; }//Use by tutorial
+    public void TutoMinusEnergy(int _val = 20) { CurrentEnerge -= _val; } //Use by tutorial
 }
