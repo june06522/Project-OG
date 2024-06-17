@@ -23,6 +23,6 @@ public class ConnectorExplain : MonoBehaviour
         _iamge.sprite = image;
         _evaluation.text = evaluation.Rate.ToString();
         _evaluation.color = evaluation.color;
-        _name.text = "¿¬°á±â";
+        _name.text = "ì—°ê²°ê¸°";
     }
 }
