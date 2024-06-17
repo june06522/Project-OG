@@ -53,43 +53,47 @@ public class CAliveState : BossBaseState
 
             yield return new WaitForSeconds(waitTime);
 
-            int rand = 1;// Random.Range(1, 6);
-            if(beforeRand == rand)
+            if (!_crab.isAttackTime)
             {
-                if(rand == 1)
+                int rand = Random.Range(1, 6);
+                if (beforeRand == rand)
                 {
-                    rand = Random.Range(2, 6);
+                    if (rand == 1)
+                    {
+                        rand = Random.Range(2, 6);
+                    }
+                    else if (rand == 5)
+                    {
+                        rand = Random.Range(1, 5);
+                    }
+                    else
+                    {
+                        rand = rand - 1;
+                    }
                 }
-                else if(rand == 5)
+
+                beforeRand = rand;
+
+                switch (rand)
                 {
-                    rand = Random.Range(1, 5);
-                }
-                else
-                {
-                    rand = rand - 1;
+                    case 1:
+                        _crab.StartCoroutine(_pattern.NipperLaserAttack());
+                        break;
+                    case 2:
+                        _pattern.SwingAttack();
+                        break;
+                    case 3:
+                        _crab.StartCoroutine(_pattern.BubbleAttack());
+                        break;
+                    case 4:
+                        _crab.StartCoroutine(_pattern.NipperPunch(_crab.crabLeftNipper, _crab.leftJoints));
+                        break;
+                    case 5:
+                        _crab.StartCoroutine(_pattern.NipperPunch(_crab.crabRightNipper, _crab.rightJoints, false));
+                        break;
                 }
             }
 
-            beforeRand = rand;
-
-            switch(rand)
-            {
-                case 1:
-                    _crab.StartCoroutine(_pattern.NipperLaserAttack());
-                    break;
-                case 2:
-                    _pattern.SwingAttack();
-                    break;
-                case 3:
-                    _crab.StartCoroutine(_pattern.BubbleAttack());
-                    break;
-                case 4:
-                    _crab.StartCoroutine(_pattern.NipperPunch(_crab.crabLeftNipper, _crab.leftJoints));
-                    break;
-                case 5:
-                    _crab.StartCoroutine(_pattern.NipperPunch(_crab.crabRightNipper, _crab.rightJoints, false));
-                    break;
-            }
         }
     }
 }
