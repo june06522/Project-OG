@@ -155,7 +155,9 @@ public class SoundManager : MonoBehaviour
 
     public void BgSoundPlay(AudioClip clip, float volume = 0.5f)
     {
-        BgSound.outputAudioMixerGroup = Mixer.FindMatchingGroups("BGSound")[0];
+        if (BgSound == null)
+            return;
+            BgSound.outputAudioMixerGroup = Mixer.FindMatchingGroups("BGSound")[0];
 
         BgSound.clip = clip;
         BgSound.loop = true;
