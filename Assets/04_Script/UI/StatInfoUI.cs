@@ -19,7 +19,7 @@ public class StatInfoUI : MonoBehaviour
 
     private void OnEnable()
     {
-        
+
         SetStatInfoUI();
     }
 
@@ -28,27 +28,27 @@ public class StatInfoUI : MonoBehaviour
 
         StringBuilder statSB = new StringBuilder();
 
-        TriggerID[] triggerInfoOrder = { 
-            TriggerID.Dash, 
-            TriggerID.NormalAttack, 
-            TriggerID.CoolTime, 
-            TriggerID.Move, 
-            TriggerID.Idle, 
-            TriggerID.StageClear, 
+        TriggerID[] triggerInfoOrder = {
+            TriggerID.Dash,
+            TriggerID.NormalAttack,
+            TriggerID.CoolTime,
+            TriggerID.Move,
+            TriggerID.Idle,
+            TriggerID.StageClear,
             TriggerID.Kill };
 
-        string[] triggerStatText = { 
-            "에너지 재생속도 증가", 
-            "공격속도 증가", 
-            "쿨타임 감소", 
-            "이동속도 증가", 
-            "데미지 감소", 
-            "골드 획득량 증가", 
+        string[] triggerStatText = {
+            "에너지 재생속도 증가",
+            "공격속도 증가",
+            "쿨타임 감소",
+            "이동속도 증가",
+            "데미지 감소",
+            "골드 획득량 증가",
             "공격력 증가" };
 
 
         // Synerge
-        for(int i = 0; i < triggerInfoOrder.Length; i++)
+        for (int i = 0; i < triggerInfoOrder.Length; i++)
         {
 
             statSB.Append(GetSynergeInfoText(triggerInfoOrder[i]));
@@ -73,7 +73,7 @@ public class StatInfoUI : MonoBehaviour
     private string GetSynergeInfoText(TriggerID id)
     {
 
-        return $"{WeaponExplainManager.triggerName[id]} - {_synergeManager.level[id]}\n";
+        return $"{WeaponExplainManager.triggerName[id]} - {(_synergeManager.level.ContainsKey(id) ? _synergeManager.level[id] : 0)}\n";
 
     }
     private string GetStatInfoText(TriggerID id)
