@@ -25,7 +25,8 @@ public class SynergyManager : MonoSingleton<SynergyManager>
     {
         if (id == TriggerID.Regist)
             id = TriggerID.Move;
-
+        if (id == TriggerID.RoomEnter)
+            id = TriggerID.StageClear;
         if (level.ContainsKey(id))
         {
 
