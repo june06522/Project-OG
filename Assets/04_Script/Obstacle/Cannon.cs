@@ -57,6 +57,6 @@ public class Cannon : MonoBehaviour
 
         transform.DOPunchScale(originScale * scaleRatio, 0.5f, vibrato, elasticity).SetEase(ease);
         EnemyBullet clone = Instantiate(bullet, shootPoint.position, Quaternion.identity);
-        clone.Shoot(-transform.up);
+        clone.Shoot(transform.up);
     }
 }

@@ -60,7 +60,7 @@ public partial class SixthElite : MonoBehaviour
             _materials.Add(matSprite.material);
         }
 
-        StartCoroutine(StartAttack(1));
+        StartCoroutine(StartAttack(1.5f));
     }
 
     private void Update()

@@ -30,7 +30,7 @@ public class ErrorDiceSkill : Skill
         while (s == null)
         {
             i = Random.Range(1, weaponList.Count);
-            if (weaponList[i].skillList == null || weaponList[i].skillList.Count <= 1 || i == (int)GeneratorID.ErrorDice)
+            if (weaponList[i].skillList == null || weaponList[i].skillList.Count <= 1 || i == (int)GeneratorID.ErrorDice || i == (int)GeneratorID.Firecracker)
                 continue;
 
             j = Random.Range(1, weaponList[i].skillList.Count);
