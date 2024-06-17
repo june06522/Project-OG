@@ -42,7 +42,6 @@ public partial class SixthElite : MonoBehaviour
 
     private bool _once;
     private bool _y;
-    private bool _isStop;
 
     private void Awake()
     {
@@ -69,30 +68,6 @@ public partial class SixthElite : MonoBehaviour
         Vector2 dir = GameManager.Instance.player.position - transform.position;
         float z = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         _visual.transform.rotation = Quaternion.Euler(0, 0, z - 90);
-
-        if(_rigid.velocity == Vector2.zero)
-        {
-            _isStop = true;
-            StartCoroutine(DashTimer(2));
-        }
-        else
-        {
-            _isStop = false;
-        }
-    }
-
-    private IEnumerator DashTimer(float waitTime)
-    {
-        yield return new WaitForSeconds(waitTime);
-
-        if(_isStop)
-        {
-            StartCoroutine(StartAttack(1f));
-        }
-        else
-        {
-            yield return null;
-        }
     }
 
     private IEnumerator StartAttack(float waitTime)
