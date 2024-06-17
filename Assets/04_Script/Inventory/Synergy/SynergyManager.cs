@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -55,7 +56,12 @@ public class SynergyManager : MonoSingleton<SynergyManager>
     public float GetStatFactor(TriggerID id)
     {
         if (table.dict.ContainsKey(id) && level.ContainsKey(id))
-            return table.dict[id][level[id]];
+        {
+            if (level[id] <= 9)
+                return table.dict[id][level[id]];
+            else
+                return table.dict[id][9];
+        }
         else return 0;
     }
 
