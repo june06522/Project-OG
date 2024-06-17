@@ -96,8 +96,7 @@ public class InventoryActive : MonoBehaviour
         if (canOpen && tutoCanOpen)
         {
             if (((KeyManager.Instance == null && Input.GetKeyDown(KeyCode.Tab)) ||
-                (KeyManager.Instance != null && Input.GetKeyDown(KeyManager.Instance.inven)) ||
-                (Input.GetKeyDown(KeyCode.Escape) && isOn)) && isAnimation)
+                (KeyManager.Instance != null && Input.GetKeyDown(KeyManager.Instance.inven))) && isAnimation)
             {
                 if (GameManager.Instance.isPlay)
                 {
