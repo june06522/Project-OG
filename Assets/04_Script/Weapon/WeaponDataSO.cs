@@ -71,7 +71,7 @@ public class WeaponDataSO : ScriptableObject
     private void OnDestroy()
     {
 
-        SynergyManager.Instance.OnSynergyChange -= Change_Cool_N_Damage_Factor;
+        //SynergyManager.Instance.OnSynergyChange -= Change_Cool_N_Damage_Factor;
 
     }
 

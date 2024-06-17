@@ -87,6 +87,6 @@ public class PlayerHP : MonoBehaviour, IHitAble
 
     private void OnDestroy()
     {
-        SynergyManager.Instance.OnSynergyChange -= ChangeDefenceFactor;
+        //SynergyManager.Instance.OnSynergyChange -= ChangeDefenceFactor;
     }
 }
