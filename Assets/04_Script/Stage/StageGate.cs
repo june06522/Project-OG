@@ -72,6 +72,10 @@ public class StageGate : MonoBehaviour, IInteractable
     {
         NextStage = nextStage;
     }
+    public void CheckInteract()
+    {
+        _interactCheck = true;
+    }
 
     public void OnInteract()
     {
