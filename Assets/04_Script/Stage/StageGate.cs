@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class StageGate : MonoBehaviour, IInteractable
 {
+    public event Action OnInteractEvent;
     public event Action OnGateEvent;
     public event Action OnMoveEndEvent;
 
@@ -85,6 +86,7 @@ public class StageGate : MonoBehaviour, IInteractable
     IEnumerator GoNextStage()
     {
         EventTriggerManager.Instance.ResetTrigger();
+        OnInteractEvent?.Invoke();
         // Next Stage
         invenactive.canOpen = false;
         _playerController.ChangeState(EnumPlayerState.Idle);
