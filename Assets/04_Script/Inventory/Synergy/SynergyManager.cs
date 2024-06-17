@@ -23,6 +23,8 @@ public class SynergyManager : MonoSingleton<SynergyManager>
 
     public void EquipItem(TriggerID id)
     {
+        if (id == TriggerID.Regist)
+            id = TriggerID.Move;
 
         if (level.ContainsKey(id))
         {
