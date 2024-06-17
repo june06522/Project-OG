@@ -309,6 +309,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     {
         foreach(var v in InvenObject.includes)
             Destroy(v);
-        GameManager.Instance.InventoryActive.isDrag = false;
+        if(GameManager.Instance != null)
+            GameManager.Instance.InventoryActive.isDrag = false;
     }
 }
