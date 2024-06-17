@@ -60,8 +60,7 @@ public partial class SixthElite : MonoBehaviour
             _materials.Add(matSprite.material);
         }
 
-        _rigid.velocity = (GameManager.Instance.player.position - transform.position).normalized * _so.Speed;
-        StartCoroutine(Charging(1, transform.position, _rigid.velocity));
+        StartCoroutine(StartAttack(1));
     }
 
     private void Update()
@@ -69,6 +68,14 @@ public partial class SixthElite : MonoBehaviour
         Vector2 dir = GameManager.Instance.player.position - transform.position;
         float z = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         _visual.transform.rotation = Quaternion.Euler(0, 0, z - 90);
+    }
+
+    private IEnumerator StartAttack(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+
+        _rigid.velocity = (GameManager.Instance.player.position - transform.position).normalized * _so.Speed;
+        StartCoroutine(Charging(waitTime, transform.position, _rigid.velocity));
     }
 
     private void StopImmediately()
