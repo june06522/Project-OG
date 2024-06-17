@@ -46,8 +46,11 @@ public partial class CrabBoss : Boss
     [HideInInspector] public readonly int leftPunching = Animator.StringToHash("IsLeftPunching");
     [HideInInspector] public readonly int die = Animator.StringToHash("Die");
     [HideInInspector] public readonly int start = Animator.StringToHash("Start");
+    [HideInInspector] public readonly int attackTime = Animator.StringToHash("AttackTime");
+    [HideInInspector] public readonly int nowIdle = Animator.StringToHash("IsIdle");
 
     [HideInInspector] public bool idleAnimationEnd;
+    [HideInInspector] public bool isAttackTime;
 
     private BossState _curBossState;
 
@@ -67,6 +70,7 @@ public partial class CrabBoss : Boss
 
         _curBossState = BossState.Idle;
         _bossFSM = new BossFSM(new CIdleState(this, _pattern));
+        StartCoroutine(AttackTime(5));
     }
 
     protected override void OnDisable()
@@ -80,7 +84,33 @@ public partial class CrabBoss : Boss
 
         ChangeState();
 
+        Debug.Log(isAttackTime);
         _bossFSM.UpdateBossState();
+    }
+
+    private IEnumerator AttackTime(float waitTime)
+    {
+        while(!IsDie)
+        {
+            yield return new WaitForSeconds(waitTime);
+
+            if(!isAttackTime && !isAttacking)
+            {
+                isAttackTime = true;
+                animator.SetBool(attackTime, true);
+            }
+        }
+    }
+
+    private void AttackTimeEnded()
+    {
+        animator.SetBool(attackTime, false);
+    }
+
+    private void NowIdle()
+    {
+        animator.SetTrigger(nowIdle);
+        isAttackTime = false;
     }
 
     private IEnumerator EyesAnimation(float animationTime)
