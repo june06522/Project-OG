@@ -42,6 +42,7 @@ public class Money : MonoSingleton<Money>
 
     private void OnDestroy()
     {
-        SynergyManager.Instance.OnSynergyChange -= ChangeGoldFactor;
+        if (SynergyManager.Instance != null)
+            SynergyManager.Instance.OnSynergyChange -= ChangeGoldFactor;
     }
 }

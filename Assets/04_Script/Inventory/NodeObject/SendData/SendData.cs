@@ -33,7 +33,8 @@ public class SendData
 
     ~SendData()
     {
-        SynergyManager.Instance.OnSynergyChange -= ChangeDefenceFactor;
+        if (SynergyManager.Instance != null)
+            SynergyManager.Instance.OnSynergyChange -= ChangeDefenceFactor;
     }
 
     public virtual bool GetTrriger()
