@@ -24,8 +24,16 @@ public class Money : MonoSingleton<Money>
 
     }
 
-    public void EarnGold(int gold)
+    public void EarnGold(int gold, bool force = false)
     {
+        if (force)
+        {
+            Gold += gold;
+            GoldChangedEvent?.Invoke(Gold);
+
+            return;
+        }
+
         Gold += gold + Mathf.CeilToInt(gold * goldFactor);
         GoldChangedEvent?.Invoke(Gold);
     }
