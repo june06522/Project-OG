@@ -28,6 +28,7 @@ public class SynergyManager : MonoSingleton<SynergyManager>
             id = TriggerID.Move;
         if (id == TriggerID.RoomEnter)
             id = TriggerID.StageClear;
+
         if (level.ContainsKey(id))
         {
 
@@ -47,6 +48,10 @@ public class SynergyManager : MonoSingleton<SynergyManager>
 
     public void RemoveItem(TriggerID id)
     {
+        if (id == TriggerID.Regist)
+            id = TriggerID.Move;
+        if (id == TriggerID.RoomEnter)
+            id = TriggerID.StageClear;
 
         level[id]--;
         OnSynergyChange?.Invoke();
