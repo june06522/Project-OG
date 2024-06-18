@@ -87,12 +87,12 @@ public class NipperLaserEnemyAttackState : FSM_State<ENormalPatrolEnemyState>
 
     private void PlayerChecker(Vector3 originVec, Vector2 dir)
     {
-        RaycastHit2D hit = Physics2D.Raycast(originVec, dir, Mathf.Infinity, LayerMask.GetMask("Player"));
+        RaycastHit2D hit = Physics2D.Raycast(originVec, dir, Mathf.Infinity, LayerMask.GetMask("Player", "Wall"));
         if (hit.collider)
         {
-            if (hit.collider.TryGetComponent<IHitAble>(out var hitAble))
+            if (hit.collider.TryGetComponent<PlayerHP>(out var player))
             {
-                hitAble.Hit(_controller.EnemyDataSO.AttackPower);
+                player.Hit(_controller.EnemyDataSO.AttackPower);
             }
             else
             {
