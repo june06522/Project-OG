@@ -319,8 +319,11 @@ public class Stage : MonoBehaviour
             if (stageGate != null)
             {
 
-                SpawnGate(NextStage, -new Vector3(3, 0, 0), itemTypes[0]).OnInteractEvent += HandleDestroyGate;
-                SpawnGate(NextStage, new Vector3(3, 0, 0), itemTypes[1]).OnInteractEvent += HandleDestroyGate;
+                StageGate gate1 = SpawnGate(NextStage, -new Vector3(3, 0, 0), itemTypes[0]);
+                StageGate gate2 = SpawnGate(NextStage, new Vector3(3, 0, 0), itemTypes[1]);
+
+                gate1.OnInteractEvent += gate2.CheckInteract;
+                gate2.OnInteractEvent += gate1.CheckInteract;
 
             }
 

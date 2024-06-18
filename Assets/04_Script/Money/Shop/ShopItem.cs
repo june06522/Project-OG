@@ -121,7 +121,7 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler
             else
             {
                 _warningTxt.FullInven();
-                _shop.PlayerMoney.EarnGold(_itemPrice);
+                _shop.PlayerMoney.EarnGold(_itemPrice, true);
             }
         }
         else

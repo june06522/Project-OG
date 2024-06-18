@@ -156,7 +156,7 @@ public partial class SixthElite : MonoBehaviour
             _rigid.velocity = reflectVec.normalized * _so.Speed;
         }
 
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Wall") || collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             _once = false;
 
@@ -212,12 +212,10 @@ public partial class SixthElite : MonoBehaviour
                     correction = Vector2.right * 1f;
                 }
                 StartCoroutine(Charging(_animationPlayTime, _visual.parent.position + correction, dir));
-                Debug.Log("X Charging");
                 trans.DOScaleX(originSize.x / 2, _animationPlayTime)
                 .SetEase(Ease.InOutSine)
                 .OnComplete(() =>
                 {
-                    Debug.Log("X Charging Ended");
                     trans.DOScaleX(originSize.x, Time.deltaTime).SetEase(Ease.InOutSine);
                     _rigid.velocity = dir * _so.Speed;
                     
@@ -236,12 +234,10 @@ public partial class SixthElite : MonoBehaviour
                     correction = Vector2.up * 1f;
                 }
                 StartCoroutine(Charging(_animationPlayTime, _visual.parent.position + correction, dir));
-                Debug.Log("Y Charging");
                 trans.DOScaleY(originSize.y / 2, _animationPlayTime)
                 .SetEase(Ease.InOutSine)
                 .OnComplete(() =>
                 {
-                    Debug.Log("Y Charging Ended");
                     trans.DOScaleY(originSize.y, Time.deltaTime).SetEase(Ease.InOutSine);
                     _rigid.velocity = dir * _so.Speed;
                     
