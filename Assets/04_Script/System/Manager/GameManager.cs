@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -37,6 +38,14 @@ public class GameManager : MonoSingleton<GameManager>
     [NonSerialized] public Transform player;
     private PlayerController playerController;
     public PlayerController PlayerController => playerController;
+
+    // Item Probablity
+    private float _normalProbability;
+    private float _rareProbability = 33f;
+    private float _epicProbability = 15f;
+    private float _legendaryProbability = 2f;
+
+    private Dictionary<ItemRate, float> _itemRateProbability;
 
     private void Awake()
     {
@@ -79,6 +88,16 @@ public class GameManager : MonoSingleton<GameManager>
                 Debug.LogError("invenAddType is null! You should add Component InvenBrickAddType in Inven Parent!");
         }
         #endregion
+
+        _normalProbability = 100f - _rareProbability - _epicProbability - _legendaryProbability;
+        _itemRateProbability = new Dictionary<ItemRate, float>()
+        {
+            { ItemRate.NORMAL, _normalProbability },
+            { ItemRate.RARE, _rareProbability },
+            { ItemRate.EPIC, _epicProbability },
+            { ItemRate.LEGEND, _legendaryProbability }
+        };
+
     }
 
     public void PlayerTeleport(Vector3 pos)
@@ -94,4 +113,10 @@ public class GameManager : MonoSingleton<GameManager>
         player.position = pos;
 
     }
+
+    public float GetRateProbability(ItemRate rate)
+    {
+        return _itemRateProbability[rate];
+    }
+
 }

@@ -51,9 +51,9 @@ public class Shop : MonoBehaviour
 
     // Random Value
     private float _normalProbability;   // 50f
-    private float _rareProbability = 33f;
-    private float _epicProbability = 12f;
-    private float _legendaryProbability = 5f;
+    private float _rareProbability;
+    private float _epicProbability;
+    private float _legendaryProbability;
 
     private Dictionary<ItemRate, Queue<ItemInfoSO>> _itemRateQ = new Dictionary<ItemRate, Queue<ItemInfoSO>>();
 
@@ -70,7 +70,12 @@ public class Shop : MonoBehaviour
         _warningTxt = FindObjectOfType<WarningTxt>();
 
         _canvas.worldCamera = CameraManager.Instance.UICam;
-        _normalProbability = 100f - (_rareProbability + _epicProbability + _legendaryProbability);
+
+        GameManager manager = GameManager.Instance;
+        _legendaryProbability   = manager.GetRateProbability(ItemRate.LEGEND);
+        _epicProbability        = manager.GetRateProbability(ItemRate.EPIC);
+        _rareProbability        = manager.GetRateProbability(ItemRate.RARE);
+        _normalProbability      = manager.GetRateProbability(ItemRate.NORMAL);
 
     }
 

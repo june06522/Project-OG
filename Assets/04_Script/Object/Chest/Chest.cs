@@ -10,9 +10,9 @@ public class Chest : MonoBehaviour, IInteractable
 
     // normal item probabilities are the remaining probabilities other than other item probabilities
     [Header("percent")]
-    [SerializeField] private float _rareProbability;     // rare item probability
-    [SerializeField] private float _epicProbability;     // epic item probability
-    [SerializeField] private float _legendProbability;   // legend item probability
+    private float _rareProbability;     // rare item probability
+    private float _epicProbability;     // epic item probability
+    private float _legendProbability;   // legend item probability
 
     [Header("Info")]
     [SerializeField]
@@ -47,7 +47,12 @@ public class Chest : MonoBehaviour, IInteractable
             Debug.LogError("ItemSOList is null");
             return;
         }
-        
+
+        GameManager manager = GameManager.Instance;
+        _legendProbability = manager.GetRateProbability(ItemRate.LEGEND);
+        _epicProbability = manager.GetRateProbability(ItemRate.EPIC);
+        _rareProbability = manager.GetRateProbability(ItemRate.RARE);
+
         SetRateItems(_itemList.ItemInfoList.ToArray());
     }
 
