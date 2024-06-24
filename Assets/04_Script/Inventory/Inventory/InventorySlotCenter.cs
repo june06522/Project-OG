@@ -26,7 +26,7 @@ public class InventorySlotCenter : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
             Instance = this;
         else
         {
@@ -63,6 +63,7 @@ public class InventorySlotCenter : MonoBehaviour
         {
             _lastWidth = width;
             _lastheight = height;
+
 
             rect.localPosition = new Vector3(width * (50 * rect.localScale.x), height * (50 * rect.localScale.y));
 

@@ -28,7 +28,8 @@ public class InventorySize : MonoBehaviour
     private void SetInvenScale()
     {
         float x = GetSize();
-        x = Mathf.Min(x, 12) + 2;
+        x = Mathf.Min(x, 12);
+        x = Mathf.Max(x, 6) + 2;
 
         float size;
 
@@ -37,6 +38,7 @@ public class InventorySize : MonoBehaviour
         //7개 일때 700 이면 개당 100
         //6개일때 100 + 100 / 6 -> 1.17f
         //5개일때 100 + 200 / 5 -> 1.4f
+        
         
         if (x == 7)
             size = 1f;
