@@ -1,3 +1,4 @@
+using FD.Dev;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,13 +15,30 @@ public class TouchDamageObject : MonoBehaviour
     [SerializeField]
     private float _overlapedTime = 1f;
     private float _currentTime = 0f;
+
+    private bool _isOn = true;
+    private bool _canDamage = true;
     
+    public void SetOnOff(bool onOff)
+    {
+        _isOn = onOff;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+
+        if (_isOn == false || _canDamage == false)
+            return;
+
         if(collision.CompareTag("Player") && collision.TryGetComponent<IHitAble>(out IHitAble hit))
         {
             _currentTime = 0f;
+
+            _canDamage = false;
+            FAED.InvokeDelay(() =>
+            {
+                _canDamage = true;
+            }, _overlapedTime);
 
             hit.Hit(_touchDamage);
         }
@@ -28,6 +46,10 @@ public class TouchDamageObject : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+
+        if (_isOn == false)
+            return;
+
         if (collision.CompareTag("Player"))
         {
             _currentTime += Time.deltaTime;
