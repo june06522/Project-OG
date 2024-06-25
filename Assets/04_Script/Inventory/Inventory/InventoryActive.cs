@@ -50,8 +50,6 @@ public class InventoryActive : MonoBehaviour
     private float time = 0.4f;
 
     Image invenRenderer;
-    Material mat;
-
     Vector3 playerPos;
 
     PanelFade fade;
@@ -61,8 +59,6 @@ public class InventoryActive : MonoBehaviour
     CinemachineVirtualCamera _cmVCam;
 
     TooltipDissolve _tooltipDissolve;
-
-    readonly string invenShader = "_SourceGlowDissolveFade";
 
     private void Awake()
     {
@@ -85,10 +81,6 @@ public class InventoryActive : MonoBehaviour
         _warningTextInven = transform.Find("WarningTextInven").GetComponent<TextMeshProUGUI>();
         _tooltipDissolve = transform.Find("Panel/Tooltip").GetComponent<TooltipDissolve>();
         cv = FindObjectOfType<ConnectVisible>();
-
-        mat = invenRenderer.material;
-
-        mat.SetFloat(invenShader, 0f);
     }
 
     private void Update()
@@ -129,9 +121,8 @@ public class InventoryActive : MonoBehaviour
         });
 
         invenRenderer.enabled = true;
-        float initValue = mat.GetFloat(invenShader);
 
-        seq.Append(DOTween.To(() => initValue, value => mat.SetFloat(invenShader, value), 20.0f, easingtime)).SetEase(ease);
+        seq.Append(_tooltipDissolve.InvenOn(true));
         seq.Join(ScreenManager.Instance.SetEffect(0.11f, 0.65f, DG.Tweening.Ease.InQuad));
         seq.Join(_tooltipDissolve.BrickOn(true));
         seq.Insert(easingtime - 0.05f, _tooltipDissolve.On());
@@ -154,12 +145,11 @@ public class InventoryActive : MonoBehaviour
         _components.localPosition = new Vector3(0, 1000, 0);
         cv.ClearLineRender();
         ScreenManager.Instance.SetEffect(0, 0.5f, DG.Tweening.Ease.InQuart);
-        float initValue = mat.GetFloat(invenShader);
-
+     
         seq = DOTween.Sequence();
         seq.Append(_tooltipDissolve.Off());
         seq.Join(_tooltipDissolve.BrickOn(false));
-        seq.Insert(0.35f, DOTween.To(() => initValue, value => mat.SetFloat(invenShader, value), 0f, easingtime).SetEase(ease));
+        seq.Insert(0.35f, _tooltipDissolve.InvenOn(false));
         seq.OnComplete(() => { StartCoroutine(DelayCo()); });
 
     }

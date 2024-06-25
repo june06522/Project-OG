@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 
@@ -40,8 +41,13 @@ public class Firecracker : Skill
     public override void Excute(Transform weaponTrm, Transform target, int power, SendData trigger = null)
     {
 
-        StartCoroutine(ExcuteCo(weaponTrm, target, power));
-        
+        Weapon weapon = weaponTrm.GetComponent<Weapon>();
+
+        // 넘어온 무기가 rotateClone이면 생성 X
+        if (weapon is not RotateClone)
+        {
+            StartCoroutine(ExcuteCo(weaponTrm, target, power));
+        }
     }
 
     IEnumerator ExcuteCo(Transform weaponTrm, Transform target, int power)
