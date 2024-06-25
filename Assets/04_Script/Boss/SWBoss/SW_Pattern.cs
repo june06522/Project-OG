@@ -140,6 +140,7 @@ public class SW_Pattern : MonoBehaviour
         RandomState();
     }
 
+    int _lastRandomStateValue = 0;
     public void RandomState()
     {
         if (_state != ESpikeWormState.None)
@@ -147,7 +148,18 @@ public class SW_Pattern : MonoBehaviour
 
         if(_isOutside)
         {
-            int rand = Random.Range(0, 3);
+
+            int rand = 0;
+
+            if (_lastRandomStateValue == 0)
+            {
+                rand = _lastRandomStateValue = Random.Range(1, 3);
+            }
+            else
+            {
+                rand = _lastRandomStateValue = Random.Range(0, 3);
+            }
+
             if(rand == 0)
             {
                 SetBossState(ESpikeWormState.TightSnakeBody);
@@ -163,6 +175,12 @@ public class SW_Pattern : MonoBehaviour
         }
         else
         {
+            if (_lastRandomStateValue == 1)
+            {
+                SetBossState(ESpikeWormState.EnergeCharge);
+                return;
+            }
+
             int rand = Random.Range(0, 2);
             if(rand == 0)
             {
