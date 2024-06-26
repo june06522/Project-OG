@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -128,14 +128,14 @@ public class TooltipDissolve : MonoBehaviour
         return seq;
     }
 
-    ?
-#if UNITY_EDITOR
 
     [MenuItem("MyMenu/Do InvenON with a Shortcut Key #o")]
     static void DisplayOn()
     {
+
         TooltipDissolve dissolve = FindObjectOfType<TooltipDissolve>(); 
 
+        dissolve.Init();
         dissolve.Display(true);
     }
 
@@ -143,10 +143,10 @@ public class TooltipDissolve : MonoBehaviour
     static void DisplayOff()
     {
         TooltipDissolve dissolve = FindObjectOfType<TooltipDissolve>();
+        dissolve.Init();
         dissolve.Display(false);
     }
 
-#endif
 
     public void Display(bool value)
     {

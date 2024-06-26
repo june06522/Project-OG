@@ -50,7 +50,8 @@ public class AppearWall : MonoBehaviour
 
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Space))
+        //if (
+        //(KeyCode.Space))
         //    Appear();
     }
 

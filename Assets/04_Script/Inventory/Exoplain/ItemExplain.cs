@@ -52,7 +52,7 @@ public class ItemExplain : MonoBehaviour
 
         inventoryActive = FindObjectOfType<InventoryActive>();
         _iconButtons = transform.Find("Icons").GetComponentsInChildren<IconButton>();
-        _Title = transform.Find("Title").transform;
+        _Title = transform.Find("TooltipPanel/Title").transform;
     }
 
     private void Start()
