@@ -10,6 +10,11 @@ public class WorldPlayerDown : MonoBehaviour
     [SerializeField]
     private float _speed;
 
+    public void ChangeSpeed(float value)
+    {
+        _speed = value;
+    }
+
     private void FixedUpdate()
     {
 

@@ -5,7 +5,7 @@ using UnityEngine;
 
 using Random = UnityEngine.Random;
 
-public class RandomPattern : MonoBehaviour
+public abstract class RandomPattern : MonoBehaviour
 {
 
     private List<Action> _patternList = new List<Action>();
@@ -14,10 +14,22 @@ public class RandomPattern : MonoBehaviour
     protected bool _isEnd = false;
     public bool IsEnd => _isEnd;
 
+    public abstract void OnPattern();
+
+    public abstract void OffPattern();
+
     public void Play()
     {
         if (_patternList.Count == 0)
             return;
+
+        _isEnd = false;
+
+        if (_patternList.Count == 1)
+        {
+            _patternList[0]?.Invoke();
+            return;
+        }
 
         // 중복 제거
         List<int> indexList = new List<int>();
@@ -26,10 +38,9 @@ public class RandomPattern : MonoBehaviour
             if (_lastIndex == i)
                 continue;
 
-            indexList.Add(_lastIndex);
+            indexList.Add(i);
         }
 
-        _isEnd = false;
         _lastIndex = indexList[Random.Range(0, indexList.Count)];
         _patternList[_lastIndex]?.Invoke();
 

@@ -1,4 +1,6 @@
 using DG.Tweening;
+using FD.Dev;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +10,9 @@ public class LastBossPattern : MonoBehaviour
 {
 
     Transform _playerTrm;
+
+    [SerializeField]
+    Boss _boss;
 
     #region BossAwakeEffect
     [Header("Boss Awake Effect")]       // 보스 등장할 때 효과
@@ -26,6 +31,7 @@ public class LastBossPattern : MonoBehaviour
     private SpriteRenderer _laserSprite;
     private TouchDamageObject _laserDamage;
 
+    WaitForSeconds _wfsBlinkDelay = new WaitForSeconds(0.05f);
     WaitForSeconds _wfsLaserTime = new WaitForSeconds(3f);
     WaitForSeconds _wfsLaserDangerDelayTime = new WaitForSeconds(0.2f);
     #endregion
@@ -40,8 +46,8 @@ public class LastBossPattern : MonoBehaviour
     RandomPattern _secondPattern;
 
     WaitUntil _wuBossPatternEnd;
+    Coroutine _laserLoopPatternCo;
     Coroutine _currentBossPatternCo;
-
     #endregion
 
     private void Awake()
@@ -57,7 +63,47 @@ public class LastBossPattern : MonoBehaviour
         _currentPattern = _firstPattern;
         _wuBossPatternEnd = new WaitUntil(() => { return _currentPattern.IsEnd; });
 
+        _boss.OnEndDamageCheckEvent += Phase2Check;
+
         StartCoroutine(AppearBossCo());
+
+    }
+
+    private void Phase2Check(float maxHp, float curHp)
+    {
+
+        if((curHp / maxHp) < 0.2f)
+        {
+            _boss.OnEndDamageCheckEvent -= Phase2Check;
+
+            _boss.SetCurrentHp(Mathf.Lerp(0, maxHp, 0.2f) + 100f);
+
+            _currentPattern.OffPattern();
+            _currentPattern = _secondPattern;
+            _currentPattern.OnPattern();
+
+            if(_currentPattern is LBRandomPattern)
+            {
+                (_currentPattern as LBRandomPattern).SetSmile(true);
+            }
+
+            // Upgrade
+            _wfsLaserTime = new WaitForSeconds(2.5f);
+            _bossVolume.weight = 1f;
+
+            StopCoroutine(_laserLoopPatternCo);
+            _laserDamage.SetOnOff(false);
+            _laserSprite.color = new Color(1f, 1f, 1f, 0f);
+
+            FAED.InvokeDelay(() =>
+            {
+
+                _laserLoopPatternCo     = StartCoroutine(Judgement_LaserLoopCo());
+                _bossVolume.weight      = _endVolumeValue;
+
+            }, 0.2f);
+
+        }
 
     }
 
@@ -84,8 +130,8 @@ public class LastBossPattern : MonoBehaviour
     private void PatternStart()
     {
 
-        StartCoroutine(Judgement_LaserLoopCo());
-        _currentBossPatternCo = StartCoroutine(BossPatternLoopCo());
+        _laserLoopPatternCo     = StartCoroutine(Judgement_LaserLoopCo());
+        _currentBossPatternCo   = StartCoroutine(BossPatternLoopCo());
 
     }
 
@@ -100,6 +146,16 @@ public class LastBossPattern : MonoBehaviour
             _laserTrm.position = new Vector3(_playerTrm.position.x, _laserTrm.position.y);
             _laserDamage.SetOnOff(false);
             _laserSprite.color = new Color(1f, 1f, 1f, 0.25f);
+
+            for (int i = 0; i < 4; ++i)
+            {
+
+                _laserSprite.color = new Color(1f, 1f, 1f, 0f);
+                yield return _wfsBlinkDelay;
+                _laserSprite.color = new Color(1f, 1f, 1f, 1f);
+                yield return _wfsBlinkDelay;
+
+            }
 
             yield return _wfsLaserDangerDelayTime;
 
