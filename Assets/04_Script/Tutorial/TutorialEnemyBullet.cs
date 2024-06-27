@@ -22,6 +22,11 @@ public class TutorialEnemyBullet : EnemyBullet
                 Destroy(gameObject);
             }
         }
+
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void SetSpeed(float val) => curSpeed = val;
