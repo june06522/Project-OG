@@ -21,6 +21,11 @@ public class EliteBullet : MonoBehaviour
         StopAllCoroutines();
     }
 
+    protected virtual void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
+
     protected IEnumerator InfinityRotateZ(GameObject obj, float speed = 1)
     {
         float angle = 0;
@@ -48,6 +53,11 @@ public class EliteBullet : MonoBehaviour
         {
             player.Hit(damage);
             UnityEngine.Object.Destroy(gameObject);
+        }
+
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
+        {
+            Destroy(gameObject);
         }
     }
 }
