@@ -11,6 +11,14 @@ public class CameraShakeFeedback : Feedback
 
     public override void Play(float damage)
     {
+        StartCoroutine(DelayCo());
         CameraManager.Instance.CameraShake(_shakeValue, _shakeTime);
+    }
+
+    IEnumerator DelayCo()
+    {
+        GameManager.Instance.InventoryActive.canOpen = false;
+        yield return new WaitForSeconds(_shakeTime);
+        GameManager.Instance.InventoryActive.canOpen = true;
     }
 }

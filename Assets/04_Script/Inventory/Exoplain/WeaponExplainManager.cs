@@ -11,22 +11,22 @@ public class WeaponExplainManager : MonoBehaviour
         {GeneratorID.DeathRay,         "죽음의 광선을 발사합니다."}, // 마관광살포
         {GeneratorID.Electronic,       "무기에 전기 속성을 부여합니다."}, // 전기 지짐이
         {GeneratorID.ErrorDice,        "무작위 스킬이 실행됩니다."}, // 에러다이스
-        {GeneratorID.Firecracker,      "축포를 터트립니다."}, // 축포
+        {GeneratorID.Firecracker,      "추가 보상(회복, 돈, 아이템 중 1)을 제공합니다."}, // 축포
         {GeneratorID.Force,            "쾅"}, // 포쓰
         {GeneratorID.HeartBeat,        "쿵"}, // 하트비트
         {GeneratorID.LaserPointer,     "무기에서 레이저를 발사합니다."}, // 레이저 포인터
         {GeneratorID.MagneticField,    "무기가 자기장을 생성합니다."}, //자기장
         {GeneratorID.OverLoad,         "과부화"}, // 과부화
         {GeneratorID.Reboot,           "리부트"}, // 리부트
-        {GeneratorID.RotateWeapon,     "무기를 회전시킵니다."}, // 로테이트 웨폰
-        {GeneratorID.SequenceAttack,   "연속 공격"}, // 시퀀스
+        {GeneratorID.RotateWeapon,     "회전하는 클론을 생성합니다."}, // 로테이트 웨폰
+        {GeneratorID.SequenceAttack,   "연속 공격을 합니다"}, // 시퀀스
         {GeneratorID.SiegeMode,        "공격 속도가 빨라집니다."}, // 시즈모드
-        {GeneratorID.Trinity,          "데미지가 증가합니다."}, //삼위일체
+        {GeneratorID.Trinity,          "데미지가 많이 증가합니다."}, //삼위일체
         {GeneratorID.WeaponShot,       "무기를 날려 공격합니다."}, // Weapon Shot
     };
     public static Dictionary<GeneratorID, TriggerID> triggerExplain = new()
     {
-        {GeneratorID.None,            TriggerID.None },
+        {GeneratorID.None,       TriggerID.None },
         {GeneratorID.DashAttack, TriggerID.Dash},
         {GeneratorID.DeathRay, TriggerID.NormalAttack},
         {GeneratorID.Electronic, TriggerID.Dash},

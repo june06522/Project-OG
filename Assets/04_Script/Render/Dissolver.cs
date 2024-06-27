@@ -25,6 +25,9 @@ public struct DissolveParameters
         //Init
         mat.SetFloat(shader, StartPos);
     }
+
+    public void Off() => Mat.SetFloat(Shader, StartPos);
+    public void On() => Mat.SetFloat(Shader, EndPos);
 }
 
 public class Dissolver
