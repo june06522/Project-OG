@@ -76,7 +76,7 @@ public class LastBossPattern : MonoBehaviour
         {
             _boss.OnEndDamageCheckEvent -= Phase2Check;
 
-            _boss.SetCurrentHp(Mathf.Lerp(0, maxHp, 0.2f) + 100f);
+            _boss.SetCurrentHp(maxHp * 0.6f);
 
             _currentPattern.OffPattern();
             _currentPattern = _secondPattern;

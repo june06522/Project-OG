@@ -12,6 +12,9 @@ public class LBHardPattern : LBRandomPattern
     Sequence _seq;
     Sequence _seq2;
 
+    [Header("World")]
+    [SerializeField] private Transform _worldCollider;
+
     #region Laser
     [Header("Laser")]
     [SerializeField]
@@ -22,8 +25,17 @@ public class LBHardPattern : LBRandomPattern
     [SerializeField]
     private Transform _laserY;
 
+    [SerializeField]
+    private EnemyBullet _enemyBullet;
+
     private SpriteRenderer _laserXSprite;
     private SpriteRenderer _laserYSprite;
+
+    [Header("Danger Space")]
+    [SerializeField] private SpriteRenderer _bulletDangerSpaceLeftUp;
+    [SerializeField] private SpriteRenderer _bulletDangerSpaceLeftDown;
+    [SerializeField] private SpriteRenderer _bulletDangerSpaceRightUp;
+    [SerializeField] private SpriteRenderer _bulletDangerSpaceRightDown;
 
     private TouchDamageObject _laserXDamage;
     private TouchDamageObject _laserYDamage;
@@ -32,12 +44,19 @@ public class LBHardPattern : LBRandomPattern
     private float _laserAwakeTime = 0.51f;
     private float _laserDelayTime = 1.0f;
     private float _laserDisappearTime = 0.25f;
-    private float _laserPatternEndDelay = 1.5f;
+    private float _laserPatternEndDelay = 0.5f;
 
     WaitForSeconds _wfsDashDelay;
     WaitForSeconds _wfsLaserAwake;
     WaitForSeconds _wfsLaserDelay;
+    WaitForSeconds _wfsBulletDanger = new WaitForSeconds(0.5f);
     WaitForSeconds _wfsBulletDelay = new WaitForSeconds(0.05f);
+
+    #endregion
+
+    #region ManyLaser
+    [Header("Many Laser")]
+    [SerializeField] private GameObject _laserObject;
     #endregion
 
     private void Awake()
@@ -81,7 +100,7 @@ public class LBHardPattern : LBRandomPattern
         bool isDiagonal = Random.Range(0, 2) == 0;
         float angle = isDiagonal ? 45f : 0f;
         _rootLaserTrm.eulerAngles = new Vector3(0, 0, angle);
-
+         
         _seq.Append(_laserX.DOScaleY(0.1f, 0.1f).SetEase(Ease.OutBack))
              .Join(_laserY.DOScaleX(0.1f, 0.1f).SetEase(Ease.OutBack));
 
@@ -96,14 +115,53 @@ public class LBHardPattern : LBRandomPattern
 
         // ÃÑ¾Ë ³­»ç
         bool shotLeftUpAndRightDown = Random.Range(0, 2) == 0;
-        if(shotLeftUpAndRightDown == false)
+        if (shotLeftUpAndRightDown == false)
         {
             angle += 90f;
         }
 
+        for(int i = 0; i < 3; ++i)
+        {
+
+            if (shotLeftUpAndRightDown)
+            {
+
+                _bulletDangerSpaceLeftDown.gameObject.SetActive(true);
+                _bulletDangerSpaceRightUp.gameObject.SetActive(true); 
+
+            }
+            else
+            {
+
+                _bulletDangerSpaceLeftUp.gameObject.SetActive(true);
+                _bulletDangerSpaceRightDown.gameObject.SetActive(true);
+
+            }
+            yield return _wfsBulletDelay;
+
+            if (shotLeftUpAndRightDown)
+            {
+                
+                _bulletDangerSpaceLeftDown.gameObject.SetActive(false);
+                _bulletDangerSpaceRightUp.gameObject.SetActive(false);
+
+            }
+            else
+            {
+
+                _bulletDangerSpaceLeftUp.gameObject.SetActive(false);
+                _bulletDangerSpaceRightDown.gameObject.SetActive(false);
+
+            }
+            yield return _wfsBulletDelay;
+
+        }
+
+        yield return _wfsBulletDanger;
+
         float angle2 = angle + 180f;
 
-        for(int i = 0; i < 60; ++i)
+        for(int i = 0; i < 20; ++i)
         {
 
             float randomAngle = Random.Range(angle, angle + 90f) % 360;
@@ -117,10 +175,11 @@ public class LBHardPattern : LBRandomPattern
 
         yield return _wfsLaserDelay;
 
-        _seq.Append(_laserX.DOScaleY(0, _laserDisappearTime).SetEase(Ease.OutElastic))
+        _seq2 = DOTween.Sequence();
+        _seq2.Append(_laserX.DOScaleY(0, _laserDisappearTime).SetEase(Ease.OutElastic))
               .Join(_laserY.DOScaleX(0, _laserDisappearTime).SetEase(Ease.OutElastic));
 
-        _seq.OnComplete(() =>
+        _seq2.OnComplete(() =>
         {
 
             _laserXDamage.SetOnOff(false);
@@ -136,12 +195,23 @@ public class LBHardPattern : LBRandomPattern
     private void ShotBullet(float degree_angle)
     {
 
+        float radAngle = degree_angle * Mathf.Deg2Rad;
+
+        EnemyBullet bullet = Instantiate(_enemyBullet, _boss.transform.position, Quaternion.identity);
+        bullet.Shoot(new Vector2(Mathf.Cos(radAngle), Mathf.Sin(radAngle)));
+
+    }
+
+    private void ManyLaserShot()
+    {
+
     }
 
     public override void OnPattern()
     {
         //
         _isEnd = true;
+        _worldCollider.localPosition = new Vector3(0, 15);
 
     }
 
