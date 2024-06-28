@@ -64,8 +64,8 @@ public class ChaseAction<T> : BaseAction<T> where T : Enum
             controller.ResetPath();
             if (dir.magnitude > _data.AttackAbleRange)
             {
-                if(controller.Enemy.enemyAnimController.IsMove == false)
-                    controller.Enemy.enemyAnimController.SetMove(true);
+                //if(controller.Enemy.enemyAnimController.IsMove == false)
+                //    controller.Enemy.enemyAnimController.SetMove(true);
                 movementInput = controller.Solver.GetDirectionToMove(behaviours, controller.AIdata);
                 controller.Enemy.MovementInput = movementInput;
             }
