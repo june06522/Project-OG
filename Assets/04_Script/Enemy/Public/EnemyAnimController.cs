@@ -7,12 +7,6 @@ public class EnemyAnimController : MonoBehaviour
     SpriteRenderer spriteRenderer;
     Animator animator;
 
-    private readonly int IdleHash = Animator.StringToHash("Idle");
-    private readonly int MoveHash = Animator.StringToHash("Move");
-    private readonly int AttackHash = Animator.StringToHash("Attack");
-
-    public bool IsMove => animator.GetBool(MoveHash);
-
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -21,14 +15,9 @@ public class EnemyAnimController : MonoBehaviour
 
     public void SetMove(bool value)
     {
-        if(MoveHash != 0)
-            animator.SetBool(MoveHash, value);
-        animator.SetBool(IdleHash, !value);
     }
     public void SetAttack()
     {
-        if(AttackHash != 0)
-            animator.SetTrigger(AttackHash);
     }
 
     public void Flip(Vector2 dir)
