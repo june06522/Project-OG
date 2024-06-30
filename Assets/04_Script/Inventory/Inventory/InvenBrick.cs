@@ -305,7 +305,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         }
     }
 
-    public void OnDestroy()
+    public void OnDisable()
     {
         foreach(var v in InvenObject.includes)
             Destroy(v);
