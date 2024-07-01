@@ -10,6 +10,11 @@ public class LBNormalPattern : LBRandomPattern
     Sequence _seq;
     Sequence _seq2;
 
+    [Header("Sound")]
+    [SerializeField] AudioClip _dangerClip;
+    [SerializeField] AudioClip _shotLaserClip;
+    [SerializeField] AudioClip _teleportClip;
+
     #region Laser
     [Header("Laser")]
     [SerializeField]
@@ -48,6 +53,19 @@ public class LBNormalPattern : LBRandomPattern
     private float _changeGravityTime = 5f;
 
     private WaitForSeconds _wfsChangeGravityTime;
+
+    #region ManyLaser
+    [Header("Many Laser")]
+    [SerializeField] private GameObject _leftDanger;
+    [SerializeField] private GameObject _rightDanger;
+    [SerializeField] private GameObject _laserObject;
+    private float _laserDangerTime = 0.5f;
+    private float _laserShotTerm = 1f;
+    private bool _isLeftLaser;
+    private bool _isDangerCheck = false;
+
+    private List<GameObject> _laserObjects = new List<GameObject>();
+    #endregion
 
     #endregion
 
@@ -101,11 +119,14 @@ public class LBNormalPattern : LBRandomPattern
         float randomX = Random.Range(-12f, 12f);
         _boss.transform.localPosition = new Vector3(randomX, 7.1f);
         _seq.Append(_boss.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutElastic));
+        SoundManager.Instance.SFXPlay("TP", _teleportClip);
 
         yield return _wfsLaserDelay;
 
         _seq.Append(_laserX.DOScaleY(0.1f, 0.1f).SetEase(Ease.OutBack))
              .Join(_laserY.DOScaleX(0.1f, 0.1f).SetEase(Ease.OutBack));
+        SoundManager.Instance.SFXPlay("Danger", _dangerClip);
+
 
         yield return _wfsLaserAwake;
 
@@ -115,6 +136,8 @@ public class LBNormalPattern : LBRandomPattern
         // Tweening
         _seq.Append(_laserX.DOScaleY(1, 0.5f).SetEase(Ease.OutElastic))
             .Join(_laserY.DOScaleX(1, 0.5f).SetEase(Ease.OutElastic));
+
+        SoundManager.Instance.SFXPlay("Laser", _shotLaserClip);
 
         SetPower(true);
 
@@ -173,11 +196,99 @@ public class LBNormalPattern : LBRandomPattern
 
         SetPower(true);
         float currentTime = 0f;
+        float laserShotTime = 0f;
         while(currentTime < _changeGravityTime)
         {
             currentTime += Time.deltaTime;
             obj.simulationSpeed = Mathf.Lerp(1f, 50f, currentTime / _changeGravityTime);
             _worldMover.ChangeSpeed(Mathf.Lerp(_defaultSpeed, _changeSpeed, currentTime / _changeGravityTime));
+
+            // Shot Laser
+            laserShotTime += Time.deltaTime;
+            if(_isDangerCheck == false) // 위험표시 우선
+            {
+
+                // 남은 시간이 레이저를 발사하는 과정의 시간보다 작다면 실행 안함
+                if(_changeGravityTime - currentTime < _laserDangerTime - laserShotTime + _laserShotTerm)
+                {
+                    continue;
+                }
+
+                if(laserShotTime > _laserDangerTime)
+                {
+
+                    laserShotTime -= _laserDangerTime;
+                    _isLeftLaser = Random.Range(0, 2) == 1;
+
+
+                    if(_isLeftLaser)
+                    {
+
+                        _leftDanger.SetActive(true);
+                        _leftDanger.transform.localScale = new Vector3(0, 10, 1);
+                        _leftDanger.transform.DOScaleX(1f, 0.4f).SetEase(Ease.OutElastic);
+
+                    }
+                    else
+                    {
+
+                        _rightDanger.SetActive(true);
+                        _rightDanger.transform.localScale = new Vector3(0, 10, 1);
+                        _rightDanger.transform.DOScaleX(1f, 0.4f).SetEase(Ease.OutElastic);
+
+                    }
+
+                    SoundManager.Instance.SFXPlay("Danger", _dangerClip);
+                    _isDangerCheck = true;
+
+                }
+            }
+            else
+            {
+
+                if (laserShotTime > _laserShotTerm)
+                {
+
+                    SoundManager.Instance.SFXPlay("ShotLaser", _shotLaserClip);
+
+                    laserShotTime -= _laserShotTerm;
+                    _isDangerCheck = false;
+
+                    GameObject laserObj = Instantiate(_laserObject, _boss.transform);
+                    _laserObjects.Add(laserObj);
+                    Sequence seq = DOTween.Sequence();
+
+                    if (_isLeftLaser)
+                    {
+
+                        _leftDanger.SetActive(false);
+                        laserObj.transform.localPosition = new Vector3(-25, 0);
+                        seq.Append(laserObj.transform.DOLocalMoveX(25, 3f));
+
+                    }
+                    else
+                    {
+                        _rightDanger.SetActive(false);
+                        laserObj.transform.localPosition = new Vector3(25, 0);
+                        seq.Append(laserObj.transform.DOLocalMoveX(-25, 3f));
+
+
+                    }
+
+                    seq.AppendCallback(() =>
+                    {
+
+                        _laserObjects.Remove(laserObj);
+                        Destroy(laserObj);
+
+                    });
+
+                }
+
+            }
+
+            
+
             yield return null;
 
         }
@@ -225,6 +336,15 @@ public class LBNormalPattern : LBRandomPattern
         SetPower(false);
 
         _boss.transform.localScale = Vector3.one;
+
+        foreach (GameObject laser in _laserObjects)
+        {
+            Destroy(laser);
+        }
+        _laserObjects.Clear();
+
+        _leftDanger.SetActive(false);
+        _rightDanger.SetActive(false);
 
         var obj = _stageParticle.main;
         obj.simulationSpeed = 0.5f;

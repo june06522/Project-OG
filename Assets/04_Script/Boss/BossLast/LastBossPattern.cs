@@ -13,6 +13,8 @@ public class LastBossPattern : MonoBehaviour
 
     [SerializeField]
     Boss _boss;
+    [SerializeField]
+    ParticleSystem _dieParticle;
 
     #region BossAwakeEffect
     [Header("Boss Awake Effect")]       // 보스 등장할 때 효과
@@ -34,6 +36,7 @@ public class LastBossPattern : MonoBehaviour
     WaitForSeconds _wfsBlinkDelay = new WaitForSeconds(0.05f);
     WaitForSeconds _wfsLaserTime = new WaitForSeconds(3f);
     WaitForSeconds _wfsLaserDangerDelayTime = new WaitForSeconds(0.2f);
+    WaitForSeconds _wfs1Time = new WaitForSeconds(1f);
     #endregion
 
     #region Boss Pattern
@@ -50,6 +53,13 @@ public class LastBossPattern : MonoBehaviour
     Coroutine _currentBossPatternCo;
     #endregion
 
+    [Header("Sound")]
+    [SerializeField] AudioClip _appearClip;
+    [SerializeField] AudioClip _dieClip;
+    [SerializeField] AudioClip _dangerClip;
+    [SerializeField] AudioClip _superLaserClip;
+    [SerializeField] AudioClip _changeClip;
+
     private void Awake()
     {
 
@@ -64,6 +74,7 @@ public class LastBossPattern : MonoBehaviour
         _wuBossPatternEnd = new WaitUntil(() => { return _currentPattern.IsEnd; });
 
         _boss.OnEndDamageCheckEvent += Phase2Check;
+        _boss.DieEvt += HandleDie;
 
         StartCoroutine(AppearBossCo());
 
@@ -74,6 +85,10 @@ public class LastBossPattern : MonoBehaviour
 
         if((curHp / maxHp) < 0.2f)
         {
+            CameraManager.Instance.CameraShake(10f, 0.1f);
+            SoundManager.Instance.SFXPlay("Change", _changeClip, 1f);
+
+
             _boss.OnEndDamageCheckEvent -= Phase2Check;
 
             _boss.SetCurrentHp(maxHp * 0.6f);
@@ -110,6 +125,7 @@ public class LastBossPattern : MonoBehaviour
     IEnumerator AppearBossCo()
     {
         _bossVolume.weight = _startVolumeValue;
+        SoundManager.Instance.SFXPlay("Appear", _appearClip, 1f);
 
         yield return new WaitForSeconds(1f);
 
@@ -142,6 +158,7 @@ public class LastBossPattern : MonoBehaviour
 
             yield return _wfsLaserTime;
             _laserTrm.localScale = new Vector3(0.1f, 30f, 1f);
+            SoundManager.Instance.SFXPlay("Danger", _dangerClip);
 
             _laserTrm.position = new Vector3(_playerTrm.position.x, _laserTrm.position.y);
             _laserDamage.SetOnOff(false);
@@ -162,10 +179,14 @@ public class LastBossPattern : MonoBehaviour
             _laserDamage.SetOnOff(true);
             _laserSprite.color = new Color(1f, 1f, 1f, 1f);
 
+            yield return _wfs1Time;
+
             // Tweening
             Sequence seq = DOTween.Sequence();
-            seq.Append(_laserTrm.DOScaleX(4f, 0.5f).SetEase(Ease.OutElastic).SetDelay(1f));
+            seq.Append(_laserTrm.DOScaleX(4f, 0.5f).SetEase(Ease.OutElastic));
             seq.Append(_laserTrm.DOScaleX(0f, 1f));
+            SoundManager.Instance.SFXPlay("QLaser", _superLaserClip, 1f);
+            CameraManager.Instance.CameraShake(5f, 0.1f);
 
             _laserTrm.localScale = new Vector3(0f, 30f, 1f);
 
@@ -186,6 +207,20 @@ public class LastBossPattern : MonoBehaviour
 
     }
 
+    private void HandleDie()
+    {
+        _dieParticle.Play();
+        SoundManager.Instance.SFXPlay("Clear", _dieClip, 1f);
+        CameraManager.Instance.CameraShake(10f, 0.1f);
 
+        _laserTrm.gameObject.SetActive(false);
+        _currentPattern.OffPattern();
+        StopAllCoroutines();
+
+        FAED.InvokeDelay(() =>
+        {
+            _boss.gameObject.SetActive(false);
+        }, 2f);
+    }
 
 }

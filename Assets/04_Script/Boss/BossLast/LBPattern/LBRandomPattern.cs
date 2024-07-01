@@ -10,6 +10,7 @@ public abstract class LBRandomPattern : RandomPattern
 
     private int _bossAnimIsSmileHash = Animator.StringToHash("IsSmile");
     private int _bossAnimIsPowerHash = Animator.StringToHash("IsPower");
+    private int _bossAnimIsDieHash = Animator.StringToHash("IsDie");
 
     public void SetSmile(bool value)
     {
@@ -19,6 +20,11 @@ public abstract class LBRandomPattern : RandomPattern
     public void SetPower(bool value)
     {
         _bossAnimator.SetBool(_bossAnimIsPowerHash, value);
+    }
+
+    public void SetDie(bool value)
+    {
+        _bossAnimator.SetBool(_bossAnimIsDieHash, value);
     }
 
 

@@ -12,6 +12,11 @@ public class LBHardPattern : LBRandomPattern
     Sequence _seq;
     Sequence _seq2;
 
+    [Header("Sound")]
+    [SerializeField] AudioClip _dangerClip;
+    [SerializeField] AudioClip _shotLaserClip;
+    [SerializeField] AudioClip _shotBulletClip;
+
     [Header("World")]
     [SerializeField] private Transform _worldCollider;
 
@@ -50,6 +55,7 @@ public class LBHardPattern : LBRandomPattern
     WaitForSeconds _wfsLaserAwake;
     WaitForSeconds _wfsLaserDelay;
     WaitForSeconds _wfsBulletDanger = new WaitForSeconds(0.5f);
+
     WaitForSeconds _wfsBulletDelay = new WaitForSeconds(0.05f);
 
     #endregion
@@ -57,6 +63,16 @@ public class LBHardPattern : LBRandomPattern
     #region ManyLaser
     [Header("Many Laser")]
     [SerializeField] private GameObject _laserObject;
+    List<GameObject> _spawnLaserObjects = new List<GameObject>();
+    Vector2[] _dirVec = new Vector2[4] { Vector2.left, Vector2.up, Vector2.right, Vector2.down };
+
+    [Header("Left, Up, Right, Down")]
+    [SerializeField]
+    List<GameObject> _dirLaserDangerObject = new List<GameObject>();
+
+
+    WaitForSeconds _wfs04Delay = new WaitForSeconds(0.4f);
+    WaitForSeconds _wfs2Delay = new WaitForSeconds(2f);
     #endregion
 
     private void Awake()
@@ -75,6 +91,7 @@ public class LBHardPattern : LBRandomPattern
         _wfsLaserDelay = new WaitForSeconds(_laserDelayTime);
 
         RegisterPattern(DashLaser);
+        RegisterPattern(ManyLaserShot);
 
     }
 
@@ -104,6 +121,8 @@ public class LBHardPattern : LBRandomPattern
         _seq.Append(_laserX.DOScaleY(0.1f, 0.1f).SetEase(Ease.OutBack))
              .Join(_laserY.DOScaleX(0.1f, 0.1f).SetEase(Ease.OutBack));
 
+        SoundManager.Instance.SFXPlay("Danger", _dangerClip);
+
         yield return _wfsLaserAwake;
 
         _laserXDamage.SetOnOff(true);
@@ -112,6 +131,9 @@ public class LBHardPattern : LBRandomPattern
         // Tweening
         _seq.Append(_laserX.DOScaleY(1, 0.5f).SetEase(Ease.OutElastic))
             .Join(_laserY.DOScaleX(1, 0.5f).SetEase(Ease.OutElastic));
+
+        SoundManager.Instance.SFXPlay("ShotLaser", _shotLaserClip);
+
 
         // 총알 난사
         bool shotLeftUpAndRightDown = Random.Range(0, 2) == 0;
@@ -122,6 +144,7 @@ public class LBHardPattern : LBRandomPattern
 
         for(int i = 0; i < 3; ++i)
         {
+            SoundManager.Instance.SFXPlay("Danger", _dangerClip);
 
             if (shotLeftUpAndRightDown)
             {
@@ -163,6 +186,8 @@ public class LBHardPattern : LBRandomPattern
 
         for(int i = 0; i < 20; ++i)
         {
+            
+            SoundManager.Instance.SFXPlay("ShotBullet", _shotBulletClip);
 
             float randomAngle = Random.Range(angle, angle + 90f) % 360;
             ShotBullet(randomAngle);
@@ -205,6 +230,69 @@ public class LBHardPattern : LBRandomPattern
     private void ManyLaserShot()
     {
 
+        // 방향 계산
+        StartCoroutine(ManyLaserShotCo());
+
+
+    }
+
+    IEnumerator ManyLaserShotCo()
+    {
+
+        for(int i = 0; i < 6; ++i)
+        {
+
+            yield return _wfs04Delay;
+            int dirType = Random.Range(0, 4); // 0 ~ 3
+            Vector3 dir = _dirVec[dirType];
+            GameObject dirDangerObj = _dirLaserDangerObject[dirType];
+
+            // Danger
+            dirDangerObj.SetActive(true);
+            SoundManager.Instance.SFXPlay("Danger", _dangerClip);
+
+
+            yield return _wfs04Delay;
+            // Danger Off
+            dirDangerObj.SetActive(false);
+
+
+            // Shot Laser
+            GameObject laserObj = Instantiate(_laserObject);
+            SoundManager.Instance.SFXPlay("ShotLaser", _shotLaserClip);
+
+
+            _seq = DOTween.Sequence();
+            if(dirType == 1 || dirType == 3)
+            {
+
+                laserObj.transform.eulerAngles = new Vector3(0, 0, 90);
+                laserObj.transform.position = _boss.transform.position + dir * 15f;
+                _seq.SetEase(Ease.Linear);
+                _seq.Append(laserObj.transform.DOMove(_boss.transform.position + dir * -15f, 1.5f).SetEase(Ease.Linear)); //30
+
+            }
+            else
+            {
+
+                laserObj.transform.position = _boss.transform.position + dir * 25f;
+                _seq.Append(laserObj.transform.DOMove(_boss.transform.position + dir * -25f, 2.5f).SetEase(Ease.Linear)); //50
+
+
+            }
+
+            _spawnLaserObjects.Add(laserObj);
+            _seq.AppendCallback(() =>
+            {
+                _spawnLaserObjects.Remove(laserObj);
+                Destroy(laserObj);
+            });
+
+        }
+
+        yield return _wfs2Delay;
+
+        _isEnd = true;
     }
 
     public override void OnPattern()
@@ -217,8 +305,27 @@ public class LBHardPattern : LBRandomPattern
 
     public override void OffPattern()
     {
-        //
+        SetDie(true);
 
+        //
+        StopAllCoroutines();
+        foreach(var obj in _spawnLaserObjects)
+        {
+            Destroy(obj);
+        }
+        _spawnLaserObjects.Clear();
+
+        _bulletDangerSpaceLeftDown.gameObject.SetActive(false);
+        _bulletDangerSpaceRightUp.gameObject.SetActive(false);
+
+        _bulletDangerSpaceLeftUp.gameObject.SetActive(false);
+        _bulletDangerSpaceRightDown.gameObject.SetActive(false);
+
+        _laserX.gameObject.SetActive(false);
+        _laserY.gameObject.SetActive(false);
+
+        _laserXDamage.SetOnOff(false);
+        _laserYDamage.SetOnOff(false);
 
     }
 
