@@ -55,7 +55,8 @@ public partial class Boss : MonoBehaviour, IHitAble
 
     [HideInInspector] public Color bossColor;
 
-    public Action DieEvt;
+    public event Action<float, float> OnEndDamageCheckEvent;    // MaxHP, CurrentHP
+    public event Action DieEvt;
     public event Action DeadEndEvt;
 
     public bool IsDie
@@ -95,6 +96,11 @@ public partial class Boss : MonoBehaviour, IHitAble
         return _currentHP;
     }
 
+    public void SetCurrentHp(float value)
+    {
+        _currentHP = value;
+    }
+
     public void MinusCurrentHp(float damage)
     {
         _currentHP -= damage;
@@ -124,6 +130,10 @@ public partial class Boss : MonoBehaviour, IHitAble
             .SetEase(Ease.InOutSine);
     }
 
+    public void OnDie()
+    {
+        DieEvt?.Invoke();
+    }
     private void DieEvent()
     {
         if(!_fakeDie)
@@ -143,6 +153,7 @@ public partial class Boss : MonoBehaviour, IHitAble
 
         _currentHP -= damage;
         feedbackPlayer?.Play(damage);
+        OnEndDamageCheckEvent?.Invoke(so.MaxHP, _currentHP);
 
         if (_currentHP < 0)
         {

@@ -22,7 +22,7 @@ public class HitBody : MonoBehaviour, IHitAble
 
         if (_boss.GetCurrentHp() < 0)
         {
-            _boss.DieEvt?.Invoke();
+            _boss.OnDie();
 
             return false;
         }

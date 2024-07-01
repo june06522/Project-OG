@@ -39,7 +39,6 @@ public class BTutorialManager : MonoSingleton<BTutorialManager>
 
         _currentGuide = _guideLine[_currentGuideIndex];
         _currentGuide?.SetQuestSetting();
-        ExpansionManager.Instance.AddSlotcnt(-2);
     }
 
     private void LateUpdate()

@@ -136,7 +136,10 @@ public class StageGate : MonoBehaviour, IInteractable
 
         // Transition
         stageTransition.EndTransition(1f);
-        SoundManager.Instance.BGMPlay(NextStage.ThisStageType); 
+        if(NextStage != null)
+        {
+            SoundManager.Instance.BGMPlay(NextStage.ThisStageType); 
+        }
         NextStage.HandleStageStart();
 
         yield return new WaitForSeconds(0.2f);

@@ -106,6 +106,9 @@ public class RandomStageSystem : MonoBehaviour
                 case StageType.Start:
                     stage = floorInfo.StartStage;
                     break;
+                case StageType.Heal:
+                    stage = floorInfo.HealStage;
+                    break;
             }
 
             _spawnPos = _spawnPos + new Vector3(0, _stageInterval, 0);
@@ -118,7 +121,7 @@ public class RandomStageSystem : MonoBehaviour
         GameManager.Instance.PlayerTeleport(_firstStage.playerSpawnPos);
         _firstStage.AppearGate();
         lastStage.OnGateEvent += ClearBossStage;
-        
+
     }
 
     public void ClearBossStage()
