@@ -51,7 +51,8 @@ public enum StageType
     BossStage = 2,
 
     Shop = 4,
-    Start = 5
+    Start = 5,
+    Heal = 6
 }
 
 public class Stage : MonoBehaviour
@@ -294,13 +295,13 @@ public class Stage : MonoBehaviour
         {
             SpawnGate(null);
         }
-        else if (_stageType == StageType.Start)
-        {
-            SpawnGate(NextStage, Vector3.zero, ItemType.Generator);
-        }
         else if (NextStage != null && NextStage.ThisStageType != StageType.EnemyStage)
         {
             SpawnGate(NextStage);
+        }
+        else if (_stageType == StageType.Start)
+        {
+            SpawnGate(NextStage, Vector3.zero, ItemType.Generator);
         }
         else
         {

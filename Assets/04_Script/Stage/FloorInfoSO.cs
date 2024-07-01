@@ -27,4 +27,7 @@ public class FloorInfoSO : ScriptableObject
     [Header("BossStageList")]
     public StageListSO BossStageList;
 
+    [Header("HealStageList")]
+    public Stage HealStage;
+
 }
