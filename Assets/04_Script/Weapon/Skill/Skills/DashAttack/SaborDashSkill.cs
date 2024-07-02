@@ -24,6 +24,7 @@ public class SaborDashSkill : Skill
         if (coroutine != null)
             StopCoroutine(coroutine);
 
+        if (sword != null)
         coroutine = StartCoroutine(sword.ReinforceAttack(target, targetScale));
     }
 
