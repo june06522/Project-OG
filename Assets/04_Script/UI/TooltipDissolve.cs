@@ -132,7 +132,7 @@ public class TooltipDissolve : MonoBehaviour
     }
 
 
-    [MenuItem("MyMenu/Do InvenON with a Shortcut Key #o")]
+    //[MenuItem("MyMenu/Do InvenON with a Shortcut Key #o")]
     static void DisplayOn()
     {
 
@@ -142,7 +142,7 @@ public class TooltipDissolve : MonoBehaviour
         dissolve.Display(true);
     }
 
-    [MenuItem("MyMenu/Do InvenOFF with a Shortcut Key #p")]
+    //[MenuItem("MyMenu/Do InvenOFF with a Shortcut Key #p")]
     static void DisplayOff()
     {
         TooltipDissolve dissolve = FindObjectOfType<TooltipDissolve>();
