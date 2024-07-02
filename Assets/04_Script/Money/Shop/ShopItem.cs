@@ -93,7 +93,7 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler
 
     private void SetConnectorInfo(InvenBrick brick)
     {
-        _itemName.text = "¿¬°á±â";
+        _itemName.text = "ì—°ê²°ê¸°";
     }
 
     public void OnPointerDown(PointerEventData eventData)
