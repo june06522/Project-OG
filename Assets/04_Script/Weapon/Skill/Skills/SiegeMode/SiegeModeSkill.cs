@@ -15,6 +15,8 @@ public class SiegeModeSkill : Skill
     {
 
         Weapon weapon = weaponTrm.GetComponent<Weapon>();
+        if (trigger == null || trigger.trigger == null || weaponTrm == null)
+            return;
         var tuple = Tuple.Create(weaponTrm, trigger.trigger);
         if (!_coolDownDic.ContainsKey(tuple))
         {
