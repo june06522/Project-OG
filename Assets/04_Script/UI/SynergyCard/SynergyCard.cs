@@ -124,7 +124,7 @@ public class SynergyCard : MonoBehaviour
     // card가 눌렸을 때 실행하는 이벤트
     public void FocusOn()
     {
-        if (IsFocus == true) return; // 중복 입력 방지
+        //if (IsFocus == true) return; // 중복 입력 방지
         IsFocus = true;
 
         _synergyInfo.SetCurrentSynergyCard(this);

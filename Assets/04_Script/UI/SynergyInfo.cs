@@ -121,7 +121,10 @@ public class SynergyInfo : MonoBehaviour
 
     public void SetCurrentSynergyCard(in SynergyCard synergyCard)
     {
-        _focusSynergyCard?.FocusOff();
-        _focusSynergyCard = synergyCard;  
+        if(synergyCard != _focusSynergyCard)
+        {
+            _focusSynergyCard?.FocusOff();
+            _focusSynergyCard = synergyCard;  
+        }
     }
 }

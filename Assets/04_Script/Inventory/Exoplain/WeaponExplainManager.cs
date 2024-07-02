@@ -31,7 +31,7 @@ public class WeaponExplainManager : MonoBehaviour
         {GeneratorID.DeathRay, TriggerID.NormalAttack},
         {GeneratorID.Electronic, TriggerID.Dash},
         {GeneratorID.ErrorDice, TriggerID.CoolTime},
-        {GeneratorID.Firecracker, TriggerID.RoomEnter},
+        {GeneratorID.Firecracker, TriggerID.StageClear},
         {GeneratorID.Force, TriggerID.NormalAttack},
         {GeneratorID.HeartBeat, TriggerID.Dash},
         {GeneratorID.LaserPointer, TriggerID.Move},
