@@ -20,9 +20,13 @@ public class EMPBomb : MonoBehaviour
 
     private void Awake()
     {
-
         animator = transform.GetChild(0).GetComponent<Animator>();
 
+    }
+
+    private void Start()
+    {
+        Destroy(gameObject,3f);
     }
 
     public void Throw(Vector3 targetPos, float damage, float interval = 0f, float offset = 1f)
@@ -52,6 +56,7 @@ public class EMPBomb : MonoBehaviour
         {
             var obj = Instantiate(bombEffect, transform.position, Quaternion.identity);
             obj.transform.localScale *= offset;
+            Destroy(obj, 1f);
         }
         EnemyHitCheck(targetPos);
         animator.SetTrigger(_BombHash);
@@ -78,5 +83,4 @@ public class EMPBomb : MonoBehaviour
         }
 
     }
-
 }

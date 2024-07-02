@@ -442,6 +442,7 @@ public class Stage : MonoBehaviour
             CameraManager.Instance.SetDefaultCam();
             FAED.InvokeDelay(() =>
             {
+                if(_vStageCam != null)
                 Destroy(_vStageCam.gameObject);
             }, 0.1f);
         }

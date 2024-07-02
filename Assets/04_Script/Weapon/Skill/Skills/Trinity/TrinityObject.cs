@@ -7,8 +7,8 @@ public class TrinityObject : MonoBehaviour
     bool isOn = false;
     Coroutine co = null;
     int lastPower = 0;
-    float _defaultVal = 40f;
-    float _plusVal = 10f;
+    float _defaultVal = 50f;
+    float _plusVal = 50f;
 
     public void Execute(Weapon weapon, Transform target, int power)
     {
