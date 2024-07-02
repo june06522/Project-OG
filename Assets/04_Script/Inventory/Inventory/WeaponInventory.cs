@@ -320,6 +320,11 @@ public class WeaponInventory : MonoBehaviour
         return invenslots;
     }
 
+    public List<InventoryObjectData> GetContainer()
+    {
+        return container;
+    }
+
     public void AddSlotData(Vector2Int point)
     {
         invenslots.Add(new SlotData(point));
