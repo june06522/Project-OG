@@ -16,21 +16,25 @@ public class SynergyLevelInfo : MonoBehaviour
     public int Level;
     private bool _on;
 
+    Image image;
+
     private void Awake()
     {
+
         _levelTxt = transform.Find("Level").GetComponent<TextMeshProUGUI>();
 
-        Image image = GetComponent<Image>();
+        image = GetComponent<Image>();
         image.material = Instantiate(image.material);
         material = image.material;
         
-        material.SetFloat(shader, 0f);
     }
 
     private void Start()
     {  
         dissolveParameters = new DissolveParameters(material, 0f, 1f, 0.5f, DG.Tweening.Ease.Linear, shader);
+        material.SetFloat(shader, 1f);
         _on = false;
+        
     }
 
     public void Init(int level)
@@ -41,19 +45,19 @@ public class SynergyLevelInfo : MonoBehaviour
 
     public void On()
     {
-        if(!_on)
-        {
-            dissolveParameters.On();
-            _on = true;
-        }
+
+        image.color = Color.white;
+        //dissolveParameters.On();
+        _on = true;
+    
     }
 
     public void Off()
     {
-        if(_on)
-        {
-            dissolveParameters.Off();
-            _on = false;
-        }
+
+        image.color = Color.black;
+        //dissolveParameters.Off();
+        _on = false;
+        
     }
 }

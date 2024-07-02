@@ -320,7 +320,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     public void FocusOn()
     {
-        transform.DOScale(1.3f, 0.25f).SetEase(Ease.OutBack);
+        transform.DOScale(1.25f, 0.3f).SetEase(Ease.InOutBack);
     }
 
     public void FocusOff()

@@ -21,6 +21,7 @@ public class SlotData
 public delegate void SlotAdded(Vector2Int point);
 public delegate void CameraSetting();
 public delegate void AddItem();
+public delegate void ItemUpdated(TriggerID triggerID);
 
 public class WeaponInventory : MonoBehaviour
 {
@@ -40,6 +41,7 @@ public class WeaponInventory : MonoBehaviour
     public event SlotAdded OnSlotAddEvent;
     public event CameraSetting camerasetting;
     public event AddItem OnAddItem;
+    public event ItemUpdated OnItemUpdated;
     //public event SlotChanged OnSlotChangeEvent;
 
     [HideInInspector]
@@ -156,7 +158,6 @@ public class WeaponInventory : MonoBehaviour
 
     public bool AddItem(InventoryObjectData item, Vector2Int origin, InvenBrick brick)
     {
-        FindObjectOfType<StatInfoUI>()?.SetStatInfoUI();
         if (CheckFills(item.bricks, origin))
         {
 
@@ -168,8 +169,9 @@ public class WeaponInventory : MonoBehaviour
 
             if (brick.Type == ItemType.Generator)
             {
-
-                SynergyManager.Instance.EquipItem(WeaponExplainManager.triggerExplain[brick.InvenObject.generatorID]);
+                TriggerID id = WeaponExplainManager.triggerExplain[brick.InvenObject.generatorID];
+                SynergyManager.Instance.EquipItem(id);
+                OnItemUpdated?.Invoke(id);
 
             }
 
@@ -183,7 +185,6 @@ public class WeaponInventory : MonoBehaviour
 
     public void RemoveItem(InventoryObjectData item, Vector2Int origin)
     {
-
         container.Remove(item);
         OnAddItem?.Invoke();
         FillSlots(item.bricks, origin, false);
@@ -191,7 +192,9 @@ public class WeaponInventory : MonoBehaviour
         if (item.generatorID != GeneratorID.None)
         {
 
-            SynergyManager.Instance.RemoveItem(WeaponExplainManager.triggerExplain[item.generatorID]);
+            TriggerID id = WeaponExplainManager.triggerExplain[item.generatorID];
+            SynergyManager.Instance.RemoveItem(id);
+            OnItemUpdated?.Invoke(id);
 
         }
 

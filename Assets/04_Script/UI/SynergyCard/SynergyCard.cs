@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,8 @@ public class SynergyCard : MonoBehaviour
     public bool IsFocus;
     public int CurLevel;
 
+    public bool CanUpdate;
+
     private void Awake()
     {
 
@@ -47,6 +50,8 @@ public class SynergyCard : MonoBehaviour
         _synergyParameters = new DissolveParameters(mat, 0f, 1f, 0.4f, Ease.Linear, shader);
         _weaponInventory = FindObjectOfType<WeaponInventory>();
         _generatorBricks = new();
+
+        CanUpdate = false;
     }
 
     private void Start()
@@ -57,18 +62,16 @@ public class SynergyCard : MonoBehaviour
     public void Update()
     {
         //LevelUpdate
-        CheckUpdateInfo();
+        if(CanUpdate)
+            CheckUpdateInfo();
     }
 
     private void CheckUpdateInfo()
     {
         int synergyLevel = SynergyManager.Instance.GetSynergyLevel(GetID);
-        if (synergyLevel != CurLevel)
-        {
-            float percent = SynergyManager.Instance.GetStatFactor(GetID) * 100f;
-            CurLevel = synergyLevel;
-            UpdateInfo(synergyLevel, percent);
-        }
+        float percent = SynergyManager.Instance.GetStatFactor(GetID) * 100f;
+        CurLevel = synergyLevel;
+        UpdateInfo(synergyLevel, percent);  
     }
 
     public void Init(SynergyInfo synergyInfo, SynergyCardSO cardSO)
@@ -128,17 +131,11 @@ public class SynergyCard : MonoBehaviour
         IsFocus = true;
 
         _synergyInfo.SetCurrentSynergyCard(this);
-       
-        // 같은 트리거를 가진 오브젝트만 가져옴
-        _generatorBricks.Clear();
-        _generatorBricks = (from invenBrickData in _weaponInventory.GetContainer()
-                                           where GetID == GetTrigger(invenBrickData.generatorID)
-                                           select invenBrickData.invenBrick).ToList();
 
-        _generatorBricks.ForEach((brick) =>
-        {
-            brick.FocusOn();
-        });
+        // 같은 트리거를 가진 오브젝트만 가져옴
+        GetGeneratorBricks();
+
+        BricksOn();
 
         _synergyInfo.SetTriggerText(GetID);
     }
@@ -146,6 +143,19 @@ public class SynergyCard : MonoBehaviour
     public void FocusOff()
     {
         IsFocus = false;
+        BricksOff();
+    }
+
+
+    private void BricksOn()
+    {
+        _generatorBricks.ForEach((brick) =>
+        {
+            brick.FocusOn();
+        });
+    }
+    private void BricksOff()
+    {
         _generatorBricks.ForEach((brick) =>
         {
             brick.FocusOff();
@@ -162,6 +172,8 @@ public class SynergyCard : MonoBehaviour
         _description.enabled = true;
         _levelTrm.gameObject.SetActive(true);
         Dissolver.Dissolve(_synergyParameters, true);
+
+        CanUpdate = true;
         //_levelTrm.gameObject.SetActive(true);
     }
 
@@ -174,12 +186,32 @@ public class SynergyCard : MonoBehaviour
         _name.enabled = false;
         _description.enabled = false;
         _levelTrm.gameObject.SetActive(false);
-        Dissolver.Dissolve(_synergyParameters, false); 
+        Dissolver.Dissolve(_synergyParameters, false);
+
+        CanUpdate = false;
         //_levelTrm.gameObject.SetActive(false);
+    }
+
+    private void GetGeneratorBricks()
+    {
+        // 같은 트리거를 가진 오브젝트만 가져옴
+        _generatorBricks.Clear();
+        _generatorBricks = (from invenBrickData in _weaponInventory.GetContainer()
+                            where GetID == GetTrigger(invenBrickData.generatorID)
+                            select invenBrickData.invenBrick).ToList();
     }
 
     private TriggerID GetTrigger(in GeneratorID generatorID)
     {
         return WeaponExplainManager.triggerExplain[generatorID];
+    }
+
+    public void UpdateItem()
+    {
+        GetGeneratorBricks();
+
+        if (IsFocus)
+            BricksOn();
+
     }
 }

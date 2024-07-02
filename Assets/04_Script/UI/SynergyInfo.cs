@@ -28,6 +28,7 @@ public class SynergyInfo : MonoBehaviour
     {
         _synergyManager = SynergyManager.Instance;
         _scrollView = ContentTrm.parent.parent.GetComponent<ScrollRect>();
+        FindObjectOfType<WeaponInventory>().OnItemUpdated += ItemUpdate;
     }
 
     private void Start()
@@ -92,6 +93,13 @@ public class SynergyInfo : MonoBehaviour
             synergyCard.UpdateInfo(level, percent); 
         }
 
+    }
+
+    public void ItemUpdate(TriggerID id)
+    {
+        SynergyCard synergyCard = _synergyCards.Find((card) => card.GetID == id);
+        if (synergyCard != null)
+            synergyCard.UpdateItem();
     }
 
     public void On()
