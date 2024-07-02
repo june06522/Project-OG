@@ -112,6 +112,7 @@ public class SynergyInfo : MonoBehaviour
             card.Off();
         });
         _scrollView.vertical = false;
+        SetCurrentSynergyCard(null);
     }
 
     public void SetTriggerText(in TriggerID triggerID)
