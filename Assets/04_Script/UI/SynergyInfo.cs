@@ -136,4 +136,9 @@ public class SynergyInfo : MonoBehaviour
             _focusSynergyCard = synergyCard;  
         }
     }
+
+    private void OnDisable()
+    {
+        SetCurrentSynergyCard(null);
+    }
 }
