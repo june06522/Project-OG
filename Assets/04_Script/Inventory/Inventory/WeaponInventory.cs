@@ -156,7 +156,7 @@ public class WeaponInventory : MonoBehaviour
 
     public bool AddItem(InventoryObjectData item, Vector2Int origin, InvenBrick brick)
     {
-
+        FindObjectOfType<StatInfoUI>()?.SetStatInfoUI();
         if (CheckFills(item.bricks, origin))
         {
 

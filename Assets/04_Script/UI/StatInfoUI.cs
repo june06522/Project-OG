@@ -23,7 +23,7 @@ public class StatInfoUI : MonoBehaviour
         SetStatInfoUI();
     }
 
-    private void SetStatInfoUI()
+    public void SetStatInfoUI()
     {
 
         StringBuilder statSB = new StringBuilder();
