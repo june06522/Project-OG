@@ -29,6 +29,7 @@ public class InventoryObjectData : ScriptableObject
     [HideInInspector] public List<InventoryObjectRoot> includes = new();
 
     public GeneratorID generatorID = GeneratorID.None;
+    public ItemType type = ItemType.Connector;
 
     private WeaponInventory inventory;
 
@@ -76,6 +77,9 @@ public class InventoryObjectData : ScriptableObject
         foreach (BrickPoint brick in bricks)
             pointdata.Add(brick.point);
 
+        if (type == ItemType.Weapon)
+            return;
+
         //send point
         foreach(BrickPoint brick in bricks)
         {
@@ -90,6 +94,9 @@ public class InventoryObjectData : ScriptableObject
                 }
             }
         }
+
+        if (type == ItemType.Generator)
+            return;
 
         //input point
         foreach(var sendPoint in sendPoints)
