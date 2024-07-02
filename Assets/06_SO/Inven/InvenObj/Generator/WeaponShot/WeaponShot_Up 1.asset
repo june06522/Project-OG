@@ -31,10 +31,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 3067479b-e16a-462b-879f-7e75cf5e5083
   connectedInput: []
+  connectedOutput: []
+  editorPos: {x: -1082, y: 450}
+  generatorID: 1
+--- !u!114 &-4616721483025373814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8a2e67e10b898e449a65cd93a78a877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 08cb9fc3-7b58-480c-9417-9061e148ed6f
+  connectedInput: []
+  connectedOutput: []
+  editorPos: {x: 0, y: 0}
+  generatorID: 0
+  cool: 0
+--- !u!114 &-2314010149266243047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8a2e67e10b898e449a65cd93a78a877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 83aca2d7-e7ea-46e3-8a8a-800a533ac124
+  connectedInput: []
   connectedOutput:
   - {fileID: 673156935237473557}
-  editorPos: {x: -1123, y: 461}
-  generatorID: 8
+  editorPos: {x: -2917.8071, y: 945.0398}
+  generatorID: 16
+  cool: 5
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45,18 +81,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9830de08a0b99f4e81ecc6ec92294b0, type: 3}
-  m_Name: LaserPointer_Right
+  m_Name: WeaponShot_Up 1
   m_EditorClassIdentifier: 
   <bricks>k__BackingField:
   - point: {x: 0, y: 0}
     dir:
-    - {x: 1, y: 0}
+    - {x: 0, y: 1}
   includes:
   - {fileID: 673156935237473557}
-  - {fileID: -5359527079972089626}
-  generatorID: 8
+  - {fileID: -2314010149266243047}
+  generatorID: 16
   type: 1
-  colorMat: {fileID: 2100000, guid: e08cf6fa42d168a45b80e65ca635471d, type: 2}
+  colorMat: {fileID: 2100000, guid: 41f1364b307df884a8b8dfc18f084695, type: 2}
   invenBrick: {fileID: 0}
 --- !u!114 &673156935237473557
 MonoBehaviour:
@@ -72,9 +108,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: dba6fc491204d5345a47ffd096fce7cd
   connectedInput:
-  - {fileID: -5359527079972089626}
+  - {fileID: -2314010149266243047}
   connectedOutput: []
-  editorPos: {x: -761, y: 450}
+  editorPos: {x: -2609, y: 915}
 --- !u!114 &1076542449526370482
 MonoBehaviour:
   m_ObjectHideFlags: 0
