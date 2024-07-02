@@ -22,7 +22,7 @@ public class MagneticObject : MonoBehaviour
         for (int i = enemiesOnTarget.Count - 1; i >= 0; i--)
         {
 
-            enemiesOnTarget[i].Hit(_damage);
+            enemiesOnTarget[i]?.Hit(_damage);
 
         }
     }

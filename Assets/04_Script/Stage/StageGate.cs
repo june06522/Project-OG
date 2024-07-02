@@ -139,8 +139,8 @@ public class StageGate : MonoBehaviour, IInteractable
         if(NextStage != null)
         {
             SoundManager.Instance.BGMPlay(NextStage.ThisStageType); 
+            NextStage.HandleStageStart();
         }
-        NextStage.HandleStageStart();
 
         yield return new WaitForSeconds(0.2f);
         _playerController.ChangeState(EnumPlayerState.Move);

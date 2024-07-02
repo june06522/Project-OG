@@ -4,7 +4,7 @@ public interface IHitAble
 {
     public FeedbackPlayer feedbackPlayer { get; set; }
 
-    /// <returns>Á×À¸¸é false¹ÝÈ¯</returns>
+    /// <returns>ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ falseï¿½ï¿½È¯</returns>
     public bool Hit(float damage)
     {
         feedbackPlayer.Play(damage + Random.Range(0.25f, 1.75f));
