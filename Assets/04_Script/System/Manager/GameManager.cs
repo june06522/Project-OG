@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class GameManager : MonoSingleton<GameManager>
+public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
     #region 인벤토리 관련
     [SerializeField] InventoryActive inventoryActive;
     public InventoryActive InventoryActive => inventoryActive;
@@ -49,7 +50,13 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void Awake()
     {
-
+        if (Instance == null)
+            Instance = this;
+        else
+        {
+            Debug.LogError("Intance is multiply");
+            Destroy(gameObject);
+        }
         #region 객체 할당
         player = GameObject.Find("Player").GetComponent<Transform>();
 

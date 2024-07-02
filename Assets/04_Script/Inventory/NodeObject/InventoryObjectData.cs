@@ -23,11 +23,13 @@ public class InventoryObjectData : ScriptableObject
 {
 
     [field:SerializeField] public List<BrickPoint> bricks { get; protected set; } = new();
-    [field:SerializeField] public List<SignalPoint> inputPoints { get; protected set; } = new();
-    [field:SerializeField] public List<SignalPoint> sendPoints { get; protected set; } = new();
+    public List<SignalPoint> inputPoints { get; protected set; } = new();
+    public List<SignalPoint> sendPoints { get; protected set; } = new();
+    private HashSet<Vector2Int> pointdata = new();
     [HideInInspector] public List<InventoryObjectRoot> includes = new();
 
     public GeneratorID generatorID = GeneratorID.None;
+    public ItemType type = ItemType.Connector;
 
     private WeaponInventory inventory;
 
@@ -41,6 +43,7 @@ public class InventoryObjectData : ScriptableObject
 
     public void Init(Transform owner)
     {
+        FillPoints();
 
         inventory = FindObjectOfType<WeaponInventory>();
 
@@ -66,6 +69,43 @@ public class InventoryObjectData : ScriptableObject
         }
 
         invenBrick = owner.GetComponent<InvenBrick>();
+    }
+
+    private void FillPoints()
+    {
+        //brick point information
+        foreach (BrickPoint brick in bricks)
+            pointdata.Add(brick.point);
+
+        if (type == ItemType.Weapon)
+            return;
+
+        //send point
+        foreach(BrickPoint brick in bricks)
+        {
+            foreach(Vector2Int vec in brick.dir)
+            {
+                if(!pointdata.Contains(vec + brick.point))
+                {
+                    SignalPoint brickpoint = new();
+                    brickpoint.point = brick.point;
+                    brickpoint.dir = vec;
+                    sendPoints.Add(brickpoint);
+                }
+            }
+        }
+
+        if (type == ItemType.Generator)
+            return;
+
+        //input point
+        foreach(var sendPoint in sendPoints)
+        {
+            SignalPoint brickpoint = new();
+            brickpoint.point = sendPoint.point;
+            brickpoint.dir = sendPoint.dir * -1;
+            inputPoints.Add(brickpoint);
+        }
     }
 
     public void GetSignal(object signal)
