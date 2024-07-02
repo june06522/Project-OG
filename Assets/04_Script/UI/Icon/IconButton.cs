@@ -45,19 +45,19 @@ public class IconButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     void Awake()
     {
         childTransform = transform.GetComponentInChildren<RectTransform>();
-        myTransform = GetComponent<RectTransform>();    
-    }
+        myTransform = GetComponent<RectTransform>();
 
-    void Start()
-    {
         Image image = transform.Find("Image").GetComponent<Image>();
-        //image.material = Instantiate(image.material);
         material = image.material;
 
+        GetComponent<Button>().onClick.AddListener(OnClick);
+    }
+
+    private void Start()
+    {
+        //image.material = Instantiate(image.material);
         //myBaseSize = new UISize(myTransform.rect.width, myTransform.rect.height);
         //childBaseSize = new UISize(childTransform.rect.width, childTransform.rect.height);
-
-        GetComponent<Button>().onClick.AddListener(OnClick);
     }
 
     public void OnClick()
