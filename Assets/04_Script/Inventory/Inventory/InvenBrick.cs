@@ -44,9 +44,14 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     Vector2 explainPos = new Vector2(-30.0f, 25f);
 
+    private Material mat;
+
     protected virtual void Awake()
     {
         image = GetComponent<Image>();
+        image.material = Instantiate(image.material);
+        mat = image.materialForRendering;
+
         InvenObject = Instantiate(InvenObject);
         InvenObject.Init(transform);
         inventory = FindObjectOfType<WeaponInventory>();
@@ -311,5 +316,15 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             Destroy(v);
         if(GameManager.Instance != null)
             GameManager.Instance.InventoryActive.isDrag = false;
+    }
+
+    public void FocusOn()
+    {
+        transform.DOScale(1.3f, 0.25f).SetEase(Ease.OutBounce);
+    }
+
+    public void FocusOff()
+    {
+        transform.DOScale(1f, 0f);
     }
 }

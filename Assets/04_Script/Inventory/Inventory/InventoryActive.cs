@@ -31,6 +31,7 @@ public class InventoryActive : MonoBehaviour
     //[SerializeField] GameObject _playerUI;
     [SerializeField] GameObject _invenPanel;
     [SerializeField] GameObject _invenInfoPanel;
+    [SerializeField] GameObject _synergyPanel;
     [SerializeField] Transform _components;
 
     Sequence seq;
@@ -59,6 +60,7 @@ public class InventoryActive : MonoBehaviour
     CinemachineVirtualCamera _cmVCam;
 
     TooltipDissolve _tooltipDissolve;
+    SynergyInfo _synergyInfo;
 
     private void Awake()
     {
@@ -80,7 +82,8 @@ public class InventoryActive : MonoBehaviour
         _warningText = transform.Find("WarningText").GetComponent<TextMeshProUGUI>();
         _warningTextInven = transform.Find("WarningTextInven").GetComponent<TextMeshProUGUI>();
         _tooltipDissolve = transform.Find("Panel/Tooltip").GetComponent<TooltipDissolve>();
-        cv = FindObjectOfType<ConnectVisible>();
+        _synergyInfo = _synergyPanel.GetComponent<SynergyInfo>();
+         cv = FindObjectOfType<ConnectVisible>();
     }
 
     private void Update()
@@ -125,9 +128,12 @@ public class InventoryActive : MonoBehaviour
         seq.Append(_tooltipDissolve.InvenOn(true));
         seq.Join(ScreenManager.Instance.SetEffect(0.11f, 0.65f, DG.Tweening.Ease.InQuad));
         seq.Join(_tooltipDissolve.BrickOn(true));
-        seq.Insert(easingtime - 0.05f, _tooltipDissolve.On());
-        seq.OnComplete(() => { isAnimation = true; });
-
+        seq.Insert(easingtime - 0.05f, _tooltipDissolve.On()).InsertCallback(easingtime -0.05f, () =>
+            _synergyInfo.On());
+        seq.OnComplete(() => 
+        {
+            isAnimation = true;
+        });   
     }
 
     public void ShowUI()
@@ -152,6 +158,8 @@ public class InventoryActive : MonoBehaviour
         seq.Insert(0.35f, _tooltipDissolve.InvenOn(false));
         seq.OnComplete(() => { StartCoroutine(DelayCo()); });
 
+
+        _synergyInfo.Off();
     }
 
     private void WarningText()

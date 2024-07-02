@@ -72,7 +72,6 @@ public class StatInfoUI : MonoBehaviour
 
     private string GetSynergeInfoText(TriggerID id)
     {
-
         return $"{WeaponExplainManager.triggerName[id]} - {(_synergeManager.level.ContainsKey(id) ? _synergeManager.level[id] : 0)}\n";
 
     }

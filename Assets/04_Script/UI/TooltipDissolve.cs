@@ -44,6 +44,9 @@ public class TooltipDissolve : MonoBehaviour
     private readonly float _invenBrickStart = 0f;
     private readonly float _invenBrickEnd = 1f;
 
+    private readonly float _synergyMatStart = 0f;
+    private readonly float _synergyMatEnd = 5f;
+
     private readonly float _invenStart = 0f;
     private readonly float _invenEnd = 20f;
     private readonly float _invenEasingTime = 0.5f;
@@ -175,7 +178,6 @@ public class TooltipDissolve : MonoBehaviour
             _statTextParameters.Off();
             _invenBrickParameters.Off();
             _invenParameters.Off();
-
         }
 
     }
