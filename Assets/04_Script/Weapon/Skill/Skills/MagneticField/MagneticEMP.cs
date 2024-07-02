@@ -21,8 +21,12 @@ public class MagneticEMP : Skill
 
         yield return new WaitForSeconds(0.5f);
 
-        var obj = Instantiate(prefab, target.position, Quaternion.identity);
-        obj.SetDamage(power * weapon.Data.GetDamage() / 10);
+        if(target != null)
+        {
+            var obj = Instantiate(prefab, target.position, Quaternion.identity);
+            obj.SetDamage(power * weapon.Data.GetDamage() / 10);
+
+        }
 
     }
 
