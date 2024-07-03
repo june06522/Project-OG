@@ -129,54 +129,54 @@ public class TooltipDissolve : MonoBehaviour
     }
 
 
-    [MenuItem("MyMenu/Do InvenON with a Shortcut Key #o")]
-    static void DisplayOn()
-    {
+    //[MenuItem("MyMenu/Do InvenON with a Shortcut Key #o")]
+    //static void DisplayOn()
+    //{
 
-        TooltipDissolve dissolve = FindObjectOfType<TooltipDissolve>(); 
+    //    TooltipDissolve dissolve = FindObjectOfType<TooltipDissolve>(); 
 
-        dissolve.Init();
-        dissolve.Display(true);
-    }
+    //    dissolve.Init();
+    //    dissolve.Display(true);
+    //}
 
-    [MenuItem("MyMenu/Do InvenOFF with a Shortcut Key #p")]
-    static void DisplayOff()
-    {
-        TooltipDissolve dissolve = FindObjectOfType<TooltipDissolve>();
-        dissolve.Init();
-        dissolve.Display(false);
-    }
+    //[MenuItem("MyMenu/Do InvenOFF with a Shortcut Key #p")]
+    //static void DisplayOff()
+    //{
+    //    TooltipDissolve dissolve = FindObjectOfType<TooltipDissolve>();
+    //    dissolve.Init();
+    //    dissolve.Display(false);
+    //}
 
 
-    public void Display(bool value)
-    {
-        if(value)
-        {
-            _tooltipParameters.On();
-            _iconShellParameters.On();
-            _iconShell2Parameters.On();
-            _iconParameters.On();
-            _icon2Parameters.On();
-            _imageParameters.On();
-            _textParameters.On();
-            _statTextParameters.On();
-            _invenBrickParameters.On();
-            _invenParameters.On();
-        }
-        else
-        {
-            _tooltipParameters.Off();
-            _iconShellParameters.Off();
-            _iconShell2Parameters.Off();
-            _iconParameters.Off();
-            _icon2Parameters.Off();
-            _imageParameters.Off();
-            _textParameters.Off();
-            _statTextParameters.Off();
-            _invenBrickParameters.Off();
-            _invenParameters.Off();
+    //public void Display(bool value)
+    //{
+    //    if(value)
+    //    {
+    //        _tooltipParameters.On();
+    //        _iconShellParameters.On();
+    //        _iconShell2Parameters.On();
+    //        _iconParameters.On();
+    //        _icon2Parameters.On();
+    //        _imageParameters.On();
+    //        _textParameters.On();
+    //        _statTextParameters.On();
+    //        _invenBrickParameters.On();
+    //        _invenParameters.On();
+    //    }
+    //    else
+    //    {
+    //        _tooltipParameters.Off();
+    //        _iconShellParameters.Off();
+    //        _iconShell2Parameters.Off();
+    //        _iconParameters.Off();
+    //        _icon2Parameters.Off();
+    //        _imageParameters.Off();
+    //        _textParameters.Off();
+    //        _statTextParameters.Off();
+    //        _invenBrickParameters.Off();
+    //        _invenParameters.Off();
 
-        }
+    //    }
 
-    }
+    //}
 }
