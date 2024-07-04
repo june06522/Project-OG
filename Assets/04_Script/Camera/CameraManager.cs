@@ -142,7 +142,7 @@ public class CameraManager : MonoSingleton<CameraManager>
 
     private IEnumerator CameraShakeCo(float shakeIntensity, float shakeTime)
     {
-        perlin.m_AmplitudeGain += shakeIntensity; // 노이즈의 진폭
+        perlin.m_AmplitudeGain = Mathf.Clamp(perlin.m_AmplitudeGain + shakeIntensity, 0, 5); // 노이즈의 진폭
         perlin.m_FrequencyGain += shakeIntensity; // 노이즈의 주파수
 
         yield return new WaitForSeconds(shakeTime);
