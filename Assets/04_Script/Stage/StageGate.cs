@@ -95,7 +95,7 @@ public class StageGate : MonoBehaviour, IInteractable
         invenactive.canOpen = false;
         _playerController.ChangeState(EnumPlayerState.Idle);
 
-        
+        CameraManager.Instance.ResetCamera();
 
         // Transition
         stageTransition.StartTransition(1f);
@@ -127,6 +127,7 @@ public class StageGate : MonoBehaviour, IInteractable
             GameManager.Instance.PlayerTeleport(NextStage.playerSpawnPos);
             NextStage.SetGlobalLight();
             NextStage.SetCameraSize();
+            CameraManager.Instance.ResetCamera();
 
         }
         else
