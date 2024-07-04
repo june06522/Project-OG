@@ -264,7 +264,7 @@ public partial class AltarBoss : Boss
         {
             if(_restraintIndex < 2)
                 ReturnChains();
-            CameraManager.Instance.StopCameraShake();
+            //CameraManager.Instance.StopCameraShake();
             isTied = false;
             isOneBroken = false;
             isDead = true;
