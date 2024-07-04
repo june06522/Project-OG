@@ -91,7 +91,7 @@ public class TooltipDissolve : MonoBehaviour
 
     public Tween BrickOn(bool value)
     {
-        return seq.Join(Dissolver.Dissolve(_invenBrickParameters, value));
+        return Dissolver.Dissolve(_invenBrickParameters, value);
     }
 
     public Tween ImageOn(bool value)
