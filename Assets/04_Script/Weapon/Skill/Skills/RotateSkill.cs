@@ -21,7 +21,7 @@ public class RotateSkill : Skill
         // 넘어온 무기가 rotateClone이면 생성 X
         if (weapon is not RotateClone)
         {
-            int count = Mathf.Clamp((power + 1) / 2, 1, 5);
+            int count = Mathf.Clamp((power + 1) / 2, 1, 7);
             //int count = power;
             rotateManager.SetCloneInfo(weapon, _ID, count);
         }
