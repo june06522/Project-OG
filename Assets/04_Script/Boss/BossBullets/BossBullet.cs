@@ -10,6 +10,10 @@ public class BossBullet : MonoBehaviour
 
     [SerializeField] protected bool isRotateBullet;
 
+    [SerializeField] private Color _color;
+
+    [SerializeField] private bool _isNotBlocked;
+
     private float f_currentDamage = 0;
 
     protected virtual void OnEnable()
@@ -26,6 +30,11 @@ public class BossBullet : MonoBehaviour
 
     protected virtual void OnDisable()
     {
+        if(_color != new Color(0, 0, 0, 0))
+        {
+            transform.GetComponent<SpriteRenderer>().color = _color;
+        }
+        
         StopAllCoroutines();
     }
 
@@ -42,6 +51,14 @@ public class BossBullet : MonoBehaviour
         {
             player.Hit(data.Damage);
             if(data.IfHitWillBreak)
+            {
+                ObjectPool.Instance.ReturnObject(this.gameObject);
+            }
+        }
+
+        if(!_isNotBlocked)
+        {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
             {
                 ObjectPool.Instance.ReturnObject(this.gameObject);
             }

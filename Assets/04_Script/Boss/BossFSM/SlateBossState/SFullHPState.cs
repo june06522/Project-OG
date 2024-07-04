@@ -119,13 +119,13 @@ public class SFullHPState : BossBaseState
                     NowCoroutine(_pattern.Laser(_slate, g_minimis, _minimiLaserLineRenderer, _originPos, 1, 5, 50, 1, 50, _slate.fullHP));
                     break;
                 case 2:
-                    NowCoroutine(_pattern.TornadoShot(_slate, g_minimis, 15, 5, 0.1f, 3, _slate.fullHP));
+                    NowCoroutine(_pattern.TornadoShot(_slate, g_minimis, 10, 5, 0.1f, 3, _slate.fullHP));
                     break;
                 case 3:
                     NowCoroutine(_pattern.RandomMoveAttack(_slate, g_minimis, 10, 5, 2, 3, _slate.fullHP));
                     break;
                 case 4:
-                    NowCoroutine(_pattern.StopAndGoAttack(_slate, 20, 3, 1, 3, _slate.fullHP));
+                    NowCoroutine(_pattern.StopAndGoAttack(_slate, 15, 3, 1, 3, _slate.fullHP));
                     break;
             }
         }
