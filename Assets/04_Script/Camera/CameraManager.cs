@@ -73,6 +73,13 @@ public class CameraManager : MonoSingleton<CameraManager>
         perlin = _defaultPerlin;
     }
 
+    public void ResetCamera()
+    {
+        _damageVolume.weight = 0;
+        _playerHitDamageVolume.weight = 0;
+
+        StopCameraShake();
+    }
     public void Shockwave(Vector2 pos, float strength, float endValue, float time, bool forceShockwave = false)
     {
         if (_shockwave == null)
