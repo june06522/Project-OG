@@ -83,7 +83,7 @@ public class FloweringState : BossBaseState
                     NowCoroutine(_pattern.ScatterShot(_flower, 5, 3, 2));
                     break;
                 case 3:
-                    NowCoroutine(_pattern.ComeBackShot(_flower, 30, 5, 5));
+                    NowCoroutine(_pattern.ComeBackShot(_flower, 20, 5, 5));
                     break;
             }
         }
