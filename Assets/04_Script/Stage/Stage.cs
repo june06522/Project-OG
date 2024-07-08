@@ -439,7 +439,10 @@ public class Stage : MonoBehaviour
             Debug.Log("IsNotUpdate");
         if (_vStageCam != null)
         {
-            CameraManager.Instance.SetDefaultCam();
+
+            if(CameraManager.Instance != null)
+                CameraManager.Instance.SetDefaultCam();
+
             FAED.InvokeDelay(() =>
             {
                 if(_vStageCam != null)

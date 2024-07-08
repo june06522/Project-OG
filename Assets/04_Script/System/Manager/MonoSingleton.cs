@@ -27,7 +27,6 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
                 return instance;
             }
 
-            Debug.LogError($"{typeof(T).Name} is null");
             return null;
         }
     }
