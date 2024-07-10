@@ -10,6 +10,7 @@ public class AnchorSpeaker : MonoBehaviour
     [ContextMenu("T")]
     public IEnumerator Attack(int cnt)
     {
+
         YieldInstruction one = new WaitForSeconds(1f);
         for (int i = 0; i < cnt; i++)
         {
