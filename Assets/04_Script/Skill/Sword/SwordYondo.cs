@@ -61,7 +61,7 @@ public class SwordYondo : MonoBehaviour
         curState = ESwordYondoState.Idle;
     }
 
-    public void Init(LayerMask layerMask, float power, float radius, float coolTime, float damage)
+    public void Init(LayerMask layerMask, float power, float radius, float lifeTime, float damage)
     {
         this.radius = radius;
         this.damage = damage;
@@ -71,12 +71,12 @@ public class SwordYondo : MonoBehaviour
         startLocalPos = transform.localPosition;
         startRot = transform.localRotation;
 
-        StartCoroutine("DestroyThisObj", coolTime);
+        StartCoroutine("DestroyThisObj", lifeTime);
     }
 
-    IEnumerator DestroyThisObj(float coolTime)
+    IEnumerator DestroyThisObj(float lifeTime)
     {
-        yield return new WaitForSeconds(coolTime);
+        yield return new WaitForSeconds(lifeTime);
         Destroy(this.gameObject);
     }
 
