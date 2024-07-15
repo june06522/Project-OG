@@ -92,7 +92,7 @@ public class StageGate : MonoBehaviour, IInteractable
         EventTriggerManager.Instance.ResetTrigger();
         OnInteractEvent?.Invoke();
         // Next Stage
-        invenactive.canOpen = false;
+        invenactive.CanOpen = false;
         _playerController.ChangeState(EnumPlayerState.Idle);
 
         CameraManager.Instance.ResetCamera();
@@ -171,6 +171,6 @@ public class StageGate : MonoBehaviour, IInteractable
         }
 
         OnMoveEndEvent?.Invoke();
-        invenactive.canOpen = true;
+        invenactive.CanOpen = true;
     }
 }

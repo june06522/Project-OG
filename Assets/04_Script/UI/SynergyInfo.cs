@@ -31,18 +31,19 @@ public class SynergyInfo : MonoBehaviour
         FindObjectOfType<WeaponInventory>().OnItemUpdated += ItemUpdate;
     }
 
-    private void Start()
-    {
-        MakeSynergyCard();
-    }
-
     private void OnEnable()
     {
         SetSynergyInfo();
     }
 
+    private void Start()
+    {
+        MakeSynergyCard();
+    }
+
     private void MakeSynergyCard()
     {
+        if (_synergyCards != null) return;
 
         _synergyCards = new List<SynergyCard>();
         _synergyCardSOs.ForEach((synergySO) =>
@@ -56,6 +57,8 @@ public class SynergyInfo : MonoBehaviour
         });
 
         _focusSynergyCard = null;
+
+
     }
 
     private void SetSynergyInfo()
@@ -76,6 +79,7 @@ public class SynergyInfo : MonoBehaviour
         
         });
 
+        On();
         SetCurrentSynergyCard(null);
     }
 
@@ -125,7 +129,7 @@ public class SynergyInfo : MonoBehaviour
 
     public void SetTriggerText(in TriggerID triggerID)
     {
-        _triggerInfoText.text = triggerID.ToString();
+        _triggerInfoText.text = WeaponExplainManager.triggerName[triggerID];
     }
 
     public void SetCurrentSynergyCard(in SynergyCard synergyCard)
@@ -140,5 +144,6 @@ public class SynergyInfo : MonoBehaviour
     private void OnDisable()
     {
         SetCurrentSynergyCard(null);
+        SetTriggerText(TriggerID.None);
     }
 }

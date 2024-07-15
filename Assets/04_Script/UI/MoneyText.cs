@@ -13,7 +13,7 @@ public class MoneyText : MonoBehaviour
 
     private void Start()
     {
-        _text.text = Money.Instance.Gold.ToString();
-        Money.Instance.GoldChangedEvent += (money) => _text.text = money.ToString();
+        _text.text = $"{Money.Instance.Gold}G";
+        Money.Instance.GoldChangedEvent += (money) => _text.text = $"{money}G";
     }
 }

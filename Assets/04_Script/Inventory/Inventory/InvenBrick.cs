@@ -103,7 +103,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     protected void SetPos()
     {
         isDrag = false;
-        ItemExplain.Instance.isDrag = false;
+        ItemExplain.Instance.IsDrag = false;
 
         Vector3 tempPos = rectTransform.localPosition;
         tempPos.x += (rectTransform.rect.width / 100 % 2 == 0) ? 50 : 0;
@@ -131,7 +131,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             GameObject obj = Instantiate(origin, GameManager.Instance.player.position, Quaternion.identity);
 
             isHover = true;
-            ItemExplain.Instance.HoverEnd();
+            //ItemExplain.Instance.HoverEnd();
             Destroy(gameObject);
             return;
              
@@ -188,14 +188,14 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             return;
 
         StopCoroutine("CheckMouse");
-        ItemExplain.Instance.HoverEnd();
+        //ItemExplain.Instance.HoverEnd();
 
 
         prevPos = transform.localPosition;
 
         isDrag = true;
         StartCoroutine("IDoShake");
-        ItemExplain.Instance.isDrag = true;
+        ItemExplain.Instance.IsDrag = true;
         inventory.RemoveItem(InvenObject, InvenObject.originPos);
         cv.EraseBrickLine(this);
 
@@ -209,7 +209,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public void OnPointerExit(PointerEventData eventData)
     {
         StopCoroutine("CheckMouse");
-        ItemExplain.Instance.HoverEnd();
+        //ItemExplain.Instance.HoverEnd();
         StartCoroutine("HoverEnd");
     }
 
@@ -243,7 +243,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
                 if (v.point == invenPos)
                     isOpen = true;
             }
-            if (!ItemExplain.Instance.isDrag && isOpen)
+            if (!ItemExplain.Instance.IsDrag && isOpen)
             {
                 Vector2 explainPosition = explainPoint == null
                 ? (Vector2)(rectTransform.position) + explainPos
@@ -252,7 +252,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             }
             else
             {
-                ItemExplain.Instance.HoverEnd();
+                //ItemExplain.Instance.HoverEnd();
             }
             yield return null;
         }
@@ -261,7 +261,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     IEnumerator IDoShake()
     {
-        GameManager.Instance.InventoryActive.isDrag = true;
+        GameManager.Instance.InventoryActive.IsDrag = true;
         float rotation = 4f;
         float rotationTime = 0.08f;
         WaitForSeconds wfs = new WaitForSeconds(rotationTime);
@@ -276,7 +276,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         }
         transform.DORotate(new Vector3(0, 0, 0f), 0.01f);
         transform.DOScale(new Vector3(1, 1, 1), 0.01f);
-        GameManager.Instance.InventoryActive.isDrag = false;
+        GameManager.Instance.InventoryActive.IsDrag = false;
         yield return null;
     }
 
@@ -298,10 +298,11 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             ItemExplain.Instance.HoverGenerator(
                 invenPoint, 
                 image.sprite, 
-                WeaponExplainManager.triggerExplain[InvenObject.generatorID].ToString(),
+                WeaponExplainManager.triggerName[WeaponExplainManager.triggerExplain[InvenObject.generatorID]],
                 WeaponExplainManager.generatorExplain[InvenObject.generatorID],
                 itemRate,
-                WeaponExplainManager.generatorName[InvenObject.generatorID]
+                WeaponExplainManager.generatorName[InvenObject.generatorID],
+                WeaponExplainManager.enforceExplain[InvenObject.generatorID]
             );
         }
         else if(Type == ItemType.Connector)
@@ -315,7 +316,7 @@ public class InvenBrick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         foreach(var v in InvenObject.includes)
             Destroy(v);
         if(GameManager.Instance != null)
-            GameManager.Instance.InventoryActive.isDrag = false;
+            GameManager.Instance.InventoryActive.IsDrag = false;
     }
 
     public void FocusOn()

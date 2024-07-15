@@ -74,7 +74,7 @@ public class QuestManager : MonoSingleton<QuestManager>
         tutorialManager = TutorialManager.Instance;
         SetStringEmpty();
 
-        tutorialManager.inven.tutoCanOpen = false;
+        tutorialManager.inven.TutoCanOpen = false;
     }
 
     private void Update()
@@ -492,7 +492,7 @@ public class QuestManager : MonoSingleton<QuestManager>
             questIndex++;
         }
 
-        tutorialManager.inven.tutoCanOpen = true;
+        tutorialManager.inven.TutoCanOpen = true;
         tutorialManager.NextQuest();
     }
 
@@ -546,7 +546,7 @@ public class QuestManager : MonoSingleton<QuestManager>
             }
             yield return null;
         }
-        tutorialManager.inven.tutoCanOpen = false;
+        tutorialManager.inven.TutoCanOpen = false;
 
 
         for (int i = 0; i < 2; i++)
@@ -741,7 +741,7 @@ public class QuestManager : MonoSingleton<QuestManager>
         }
 
         ExpansionManager.Instance.AddTutorial();
-        tutorialManager.inven.tutoCanOpen = true;
+        tutorialManager.inven.TutoCanOpen = true;
         tutorialManager.NextQuest();
     }
 
@@ -835,7 +835,7 @@ public class QuestManager : MonoSingleton<QuestManager>
             trigger.raycastTarget = false;
             yield return null;
         }
-        tutorialManager.inven.tutoCanOpen = false;
+        tutorialManager.inven.TutoCanOpen = false;
 
         for (int i = 0; i < 2; i++)
         {
