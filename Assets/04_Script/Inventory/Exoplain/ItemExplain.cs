@@ -18,15 +18,12 @@ public class ItemExplain : MonoBehaviour
         Connector,
     }
 
-    [SerializeField] Image panelImage;
     [SerializeField] WeaponExplain weaponExplain;
     [SerializeField] GeneratorExplain generatorExplain;
     [SerializeField] ConnectorExplain connectorExplain;
     [SerializeField] Transform statInfo;
 
     [SerializeField] List<RateColor> colorList;
-
-    private InventoryActive inventoryActive;
 
     public bool IsDrag = false;
     public bool UseMove = false;
@@ -51,7 +48,6 @@ public class ItemExplain : MonoBehaviour
             Debug.LogError($"{transform}: Item Explain is multiply running!");
         }
 
-        inventoryActive = FindObjectOfType<InventoryActive>();
         _iconButtons = transform.Find("Icons").GetComponentsInChildren<IconButton>();
         _Title = transform.Find("TooltipPanel/Title").transform;
  
@@ -100,28 +96,45 @@ public class ItemExplain : MonoBehaviour
 
     public void HoverConnector(Vector2 invenPoint, Sprite image, ItemRate evaluation)
     {
-        if (!IsInven) return;
-        if (invenPoint == _curInvenPoint) return;
-        if(connectorExplain.gameObject.activeSelf == false)
+
+        if(IsCanRefreshInfo(invenPoint))
         {
-            ActiveExplain(ExplainType.Connector);   
+
+            if (connectorExplain.gameObject.activeSelf == false)
+            {
+                ActiveExplain(ExplainType.Connector);
+            }
+
+            _curInvenPoint = invenPoint;
+            connectorExplain.ON(invenPoint, image, GetRateColor(evaluation));
         }
 
-        _curInvenPoint = invenPoint;
-        connectorExplain.ON(invenPoint, image, GetRateColor(evaluation));
+    }
+
+    private bool IsCanRefreshInfo(Vector2 invenPoint)
+    {
+
+        // 인벤이고 같은 아이템이 아니면 리프레시
+        bool isCanRefresh = IsInven && (invenPoint != _curInvenPoint);
+        return isCanRefresh;
+
     }
 
     public void HoverWeapon(Vector2 invenPoint, Sprite image, string name, float power, string explain, Tuple<GeneratorID, SkillUIInfo>[] skillList, ItemRate evaluation)
     {
-        if (!IsInven) return;
-        if (invenPoint == _curInvenPoint) return;
-        if (weaponExplain.gameObject.activeSelf == false)
+
+        if(IsCanRefreshInfo(invenPoint))
         {
-            ActiveExplain(ExplainType.Weapon);
-        }
+
+            if (weaponExplain.gameObject.activeSelf == false)
+            {
+                ActiveExplain(ExplainType.Weapon);
+            }
         
-        _curInvenPoint = invenPoint;
-        weaponExplain.ON(invenPoint, image, name, power, explain, skillList, GetRateColor(evaluation));
+            _curInvenPoint = invenPoint;
+            weaponExplain.ON(invenPoint, image, name, power, explain, skillList, GetRateColor(evaluation));
+        }
+
     }
 
     public void HoverGenerator(Vector2 invenPoint, Sprite image, string trigger, string explain, ItemRate evaluation, string name, string enforceInfo)

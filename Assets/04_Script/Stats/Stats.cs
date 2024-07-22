@@ -40,4 +40,11 @@ public class Stats
 
     }
 
+    public void RemoveAllModify()
+    {
+
+        modifys.Clear();
+
+    }
+
 }

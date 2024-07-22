@@ -1,10 +1,7 @@
 using DG.Tweening;
 using System.Collections;
-using System.Globalization;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.UIElements;
 
 // �׽�Ʈ��
 // ���߿� �����ѹ��� Ÿ�� 1ȸ�� ���ľ���
@@ -22,6 +19,7 @@ public class Sword : InvenWeapon
 
     Transform wayPointTrmParent;
     Coroutine attackCor;
+    Coroutine reinForceCor;
 
     private int _leftAttack = 0;
     private bool _isTween;
@@ -78,23 +76,35 @@ public class Sword : InvenWeapon
         attackCor = StartCoroutine(AttackTween(false, target));
     }
 
+    public void StartReinforceAttack(Transform target, float scaleFactor)
+    {
+        if (reinForceCor != null)
+            StopCoroutine(reinForceCor);
 
-    public IEnumerator ReinforceAttack(Transform target, Vector3 targetScale)
+        reinForceCor = StartCoroutine(ReinforceAttack(target, scaleFactor));
+    }
+
+    public IEnumerator ReinforceAttack(Transform target, float scaleFactor)
     {
         if (!_isTween)
-            SetScaleTween(targetScale);
+            SetScaleTween(scaleFactor);
+
+        Data.AttackRange.RemoveAllModify();
+        Data.AttackRange.AddModify(scaleFactor);
 
         yield return new WaitForSeconds(2f);
+
+        Data.AttackRange.RemoveAllModify();
 
         transform.localScale = Vector3.one;
         _isTween = false;
 
     }
 
-    private void SetScaleTween(Vector3 targetScale)
+    private void SetScaleTween(float scaleFactor)
     {
         _isTween = true;
-        transform.DOScale(targetScale, duration).SetEase(ease);
+        transform.DOScale(scaleFactor, duration).SetEase(ease);
     }
 
     int sign = 1;
