@@ -7,7 +7,7 @@ public class WeaponExplainManager : MonoBehaviour
     public static Dictionary<GeneratorID, string> generatorExplain = new()
     {
         {GeneratorID.None,             "아무 스킬도 없습니다." },
-        {GeneratorID.DashAttack,       "대쉬 시 강화 공격이 나갑니다."}, // 대쉬 어택
+        {GeneratorID.DashAttack,       "대쉬시 강화된 공격이 나갑니다."}, // 대쉬 어택
         {GeneratorID.DeathRay,         "죽음의 광선을 발사합니다."}, // 마관광살포
         {GeneratorID.Electronic,       "무기에 전기 속성을 부여합니다."}, // 전기 지짐이
         {GeneratorID.ErrorDice,        "무작위 스킬이 실행됩니다."}, // 에러다이스
@@ -19,10 +19,31 @@ public class WeaponExplainManager : MonoBehaviour
         {GeneratorID.OverLoad,         "과부화"}, // 과부화
         {GeneratorID.Reboot,           "리부트"}, // 리부트
         {GeneratorID.RotateWeapon,     "회전하는 클론을 생성합니다."}, // 로테이트 웨폰
-        {GeneratorID.SequenceAttack,   "연속 공격을 합니다"}, // 시퀀스
+        {GeneratorID.SequenceAttack,   "연속 공격을 합니다."}, // 시퀀스
         {GeneratorID.SiegeMode,        "공격 속도가 빨라집니다."}, // 시즈모드
         {GeneratorID.Trinity,          "데미지가 많이 증가합니다."}, //삼위일체
         {GeneratorID.WeaponShot,       "무기를 날려 공격합니다."}, // Weapon Shot
+    };
+
+    public static Dictionary<GeneratorID, string> enforceExplain = new()
+    {
+        {GeneratorID.None,             "아무 스킬도 없습니다." },
+        {GeneratorID.DashAttack,       "연결할수록 강화수치가 증가합니다."}, // 대쉬 어택
+        {GeneratorID.DeathRay,         "죽음의 광선을 발사합니다."}, // 마관광살포
+        {GeneratorID.Electronic,       "무기에 전기 속성을 부여합니다."}, // 전기 지짐이
+        {GeneratorID.ErrorDice,        "연결할수록 쿨타임이 줄어듭니다."}, // 에러다이스
+        {GeneratorID.Firecracker,      "연결할수록 더 많은 보상을 제공합니다."}, // 축포
+        {GeneratorID.Force,            "쾅"}, // 포쓰
+        {GeneratorID.HeartBeat,        "쿵"}, // 하트비트
+        {GeneratorID.LaserPointer,     "연결할수록 레이저의 데미지가 증가합니다."}, // 레이저 포인터
+        {GeneratorID.MagneticField,    "연결할수록 자기장의 데미지가 증가합니다."}, //자기장
+        {GeneratorID.OverLoad,         "과부화"}, // 과부화
+        {GeneratorID.Reboot,           "리부트"}, // 리부트
+        {GeneratorID.RotateWeapon,     "연결할수록 더 많은 클론을 생성합니다. (연결 개수 2개당 하나 생성)"}, // 로테이트 웨폰
+        {GeneratorID.SequenceAttack,   "연결할수록 연속 공격 횟수가 증가합니다."}, // 시퀀스
+        {GeneratorID.SiegeMode,        "연결할수록 공격속도가 더 빨라집니다."}, // 시즈모드
+        {GeneratorID.Trinity,          "연결할수록 데미지가 엄청나게 증가합니다. "}, //삼위일체
+        {GeneratorID.WeaponShot,       "연결할수록 날리는 무기에 데미지와 지속시간이 증가합니다."}, // Weapon Shot
     };
     public static Dictionary<GeneratorID, TriggerID> triggerExplain = new()
     {
@@ -46,7 +67,7 @@ public class WeaponExplainManager : MonoBehaviour
     };
     public static Dictionary<TriggerID, string> triggerName = new()
     {
-        { TriggerID.None,          "발동되지 않음" },// 없음
+        { TriggerID.None,          "" },// 없음
         { TriggerID.Dash,          "대쉬 시 발동" },// 대쉬
         { TriggerID.NormalAttack,  "기본 공격 시 발동" },// 기본 공격
         { TriggerID.CoolTime,      "쿨타임마다 발동" },// 쿨타임

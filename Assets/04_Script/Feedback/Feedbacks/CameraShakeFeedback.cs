@@ -17,8 +17,8 @@ public class CameraShakeFeedback : Feedback
 
     IEnumerator DelayCo()
     {
-        GameManager.Instance.InventoryActive.canOpen = false;
+        GameManager.Instance.InventoryActive.CanOpen = false;
         yield return new WaitForSeconds(_shakeTime);
-        GameManager.Instance.InventoryActive.canOpen = true;
+        GameManager.Instance.InventoryActive.CanOpen = true;
     }
 }

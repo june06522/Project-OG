@@ -1,165 +1,166 @@
 using Cinemachine;
 using DG.Tweening;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class InventoryActive : MonoBehaviour
 {
-    [SerializeField]
-    private float power = 5f;
-    [SerializeField]
-    private float easingtime = 0.5f;
-    [SerializeField]
-    Ease ease = Ease.Linear;
-    [SerializeField]
-    AnimationCurve animCurve;
-
-    private ConnectVisible cv;
-
-    [HideInInspector]
-    public Image[] images;
-    [HideInInspector]
-    public bool canOpen = true;
-    [HideInInspector]
-    public bool tutoCanOpen = true;
-
-    bool isOn = false;
-    public bool isDrag = false;
-
-    //[SerializeField] GameObject _playerUI;
+    //Objects
     [SerializeField] GameObject _invenPanel;
-    [SerializeField] GameObject _invenInfoPanel;
     [SerializeField] GameObject _synergyPanel;
-    [SerializeField] Transform _components;
+    [SerializeField] Transform  _components;
 
-    Sequence seq;
+    [SerializeField]
+    private float   _easingtime = 0.4f;
 
-    public bool IsOn => isOn;
+    [HideInInspector]
+    public bool     CanOpen = true;
+    [HideInInspector]
+    public bool     TutoCanOpen = true;
 
-    bool isAnimation = true;
+    public bool     IsOn = false;
+    public bool     IsDrag = false;
 
-    private float _uix;
-    private float _invenx;
-    private float _inveny;
-    private float _infox;
+    private bool    _isEndAnimation = true;
 
-    private int moveXVal = 650;
-    private int moveYVal = 2000;
+    private int     _moveYValue = 2000;
+    private float   _invenY;
+    private float   _time = 0.4f;
 
-    private float time = 0.4f;
+    Image               _invenRenderer;
+    TextMeshProUGUI     _warningText;
+    TextMeshProUGUI     _warningTextInven;
 
-    Image invenRenderer;
-    Vector3 playerPos;
+    ConnectVisible      _connectVisible;
+    TooltipDissolve     _tooltipDissolve;
+    PanelFade           _fadePanel;
+    SynergyInfo         _synergyInfo;
 
-    PanelFade fade;
+    Sequence            _seq;
 
-    TextMeshProUGUI _warningText;
-    TextMeshProUGUI _warningTextInven;
-    CinemachineVirtualCamera _cmVCam;
-
-    TooltipDissolve _tooltipDissolve;
-    SynergyInfo _synergyInfo;
+    //Actions
+    public event Action InventoryOnEvent;
+    public event Action InventoryOffEvent;
 
     private void Awake()
     {
-        tutoCanOpen = true;
+        InitValue();
+        InitComponents();
+        InitActions();
     }
 
     private void Start()
     {
         if (CameraMovementChecker.Instance == null)
             Debug.LogError($"CameraMovementChecker is null! : 아무데다가 이 스크립트 넣으셈");
+    }
 
-        _invenx = _invenPanel.transform.localPosition.x;
-        _inveny = _invenPanel.transform.localPosition.y;
-        _infox = _invenInfoPanel.transform.localPosition.x;
+    private void InitValue()
+    {
+        TutoCanOpen = true;
+        _invenY = _invenPanel.transform.localPosition.y;
+    }
 
-        //_components = _invenPanel.transform.Find("Components").transform;
-        invenRenderer = _invenPanel.GetComponent<Image>();
-        fade = transform.Find("FadePanel").GetComponent<PanelFade>();
+    private void InitComponents()
+    {
+        _invenRenderer = _invenPanel.GetComponent<Image>();
+        _fadePanel = transform.Find("FadePanel").GetComponent<PanelFade>();
         _warningText = transform.Find("WarningText").GetComponent<TextMeshProUGUI>();
         _warningTextInven = transform.Find("WarningTextInven").GetComponent<TextMeshProUGUI>();
         _tooltipDissolve = transform.Find("Panel/Tooltip").GetComponent<TooltipDissolve>();
         _synergyInfo = _synergyPanel.GetComponent<SynergyInfo>();
-         cv = FindObjectOfType<ConnectVisible>();
+        _connectVisible = FindObjectOfType<ConnectVisible>();
+    }
+
+    private void InitActions()
+    {
+        InventoryOnEvent = ShowInven;
+        InventoryOffEvent = ShowUI;
     }
 
     private void Update()
     {
-        if (canOpen && tutoCanOpen)
+        if (CanOpen && TutoCanOpen)
         {
-            if (((KeyManager.Instance == null && Input.GetKeyDown(KeyCode.Tab)) ||
-                (KeyManager.Instance != null && Input.GetKeyDown(KeyManager.Instance.inven))) && isAnimation)
+            bool inventoryOpen =
+                (KeyManager.Instance == null && Input.GetKeyDown(KeyCode.Tab)) ||
+                (KeyManager.Instance != null && Input.GetKeyDown(KeyManager.Instance.inven));
+                
+            if (inventoryOpen && _isEndAnimation)
             {
                 if (GameManager.Instance.isPlay)
                 {
                     WarningText();
                     return;
                 }
-                isAnimation = false;
-                isOn = !isOn;
-                if (isOn)
-                    StartCoroutine(ShowInven());
+
+                _isEndAnimation = false;
+
+                IsOn = !IsOn;
+                if (IsOn)
+                {
+                    InventoryOnEvent?.Invoke();
+                }
                 else
-                    ShowUI();
+                {
+                    InventoryOffEvent?.Invoke();
+                }
             }
         }
     }
 
-    IEnumerator ShowInven()
+    void ShowInven()
     {
-        isOn = true;
+
         CameraMovementChecker.Instance.Off();
-        fade.Fade(true);
-        yield return null;
+        _fadePanel.Fade(true);
 
         _components.localPosition = new Vector3(0, 0, 0);
-        seq = DOTween.Sequence();
-        seq.Append(_invenPanel.transform.DOLocalMoveY(_inveny, 0f));
-        seq.AppendCallback(() =>
+        _seq = DOTween.Sequence();
+        _seq.Append(_invenPanel.transform.DOLocalMoveY(_invenY, 0f));
+        _seq.AppendCallback(() =>
         {
-            cv.VisibleLineAllChange();
+            _connectVisible.VisibleLineAllChange();
         });
 
-        invenRenderer.enabled = true;
+        _invenRenderer.enabled = true;
 
-        seq.Append(_tooltipDissolve.InvenOn(true));
-        seq.Join(ScreenManager.Instance.SetEffect(0.11f, 0.65f, DG.Tweening.Ease.InQuad));
-        seq.Join(_tooltipDissolve.BrickOn(true));
-        seq.Insert(easingtime - 0.05f, _tooltipDissolve.On()).InsertCallback(easingtime -0.05f, () =>
+        _seq.Append(_tooltipDissolve.InvenOn(true));
+        _seq.Join(ScreenManager.Instance.SetEffect(0.11f, 0.65f, DG.Tweening.Ease.InQuad));
+        _seq.Join(_tooltipDissolve.BrickOn(true));
+        _seq.Insert(_easingtime - 0.05f, _tooltipDissolve.On()).InsertCallback(_easingtime -0.05f, () =>
             _synergyInfo.On());
-        seq.OnComplete(() => 
+        _seq.OnComplete(() => 
         {
-            isAnimation = true;
+            _isEndAnimation = true;
         });   
+    
     }
 
-    public void ShowUI()
+    void ShowUI()
     {
-        isOn = false;
 
         CameraMovementChecker.Instance.On();
-        fade.Fade(false);
-
-        //var energeBar = FindObjectOfType<PlayerEnergeBar>();
-        //energeBar.Image.color = new Color(energeBar.Image.color.r, energeBar.Image.color.g, energeBar.Image.color.b, 1);
+        _fadePanel.Fade(false);
 
         EventTriggerManager.Instance.ResetTrigger();
 
         _components.localPosition = new Vector3(0, 1000, 0);
-        cv.ClearLineRender();
-        ScreenManager.Instance.SetEffect(0, 0.5f, DG.Tweening.Ease.InQuart);
-     
-        seq = DOTween.Sequence();
-        seq.Append(_tooltipDissolve.Off());
-        seq.Join(_tooltipDissolve.BrickOn(false));
-        seq.Insert(0.35f, _tooltipDissolve.InvenOn(false));
-        seq.OnComplete(() => { StartCoroutine(DelayCo()); });
-
+        _connectVisible.ClearLineRender();
+        
+        _seq = DOTween.Sequence();
+        _seq.Append(_tooltipDissolve.Off());
+        _seq.Join(_tooltipDissolve.BrickOn(false));
+        _seq.Join(ScreenManager.Instance.SetEffect(0, 0.5f, DG.Tweening.Ease.InQuart));
+        _seq.Insert(0.35f, _tooltipDissolve.InvenOn(false));
+        _seq.OnComplete(() => { StartCoroutine(DelayCo()); });
 
         _synergyInfo.Off();
+
     }
 
     private void WarningText()
@@ -178,9 +179,9 @@ public class InventoryActive : MonoBehaviour
 
     IEnumerator DelayCo()
     {
-        _invenPanel.transform.DOLocalMoveY(_inveny + moveYVal, 0f);
-        invenRenderer.enabled = false;
-        yield return new WaitForSeconds(time);
-        isAnimation = true;
+        _invenPanel.transform.DOLocalMoveY(_invenY + _moveYValue, 0f);
+        _invenRenderer.enabled = false;
+        yield return new WaitForSeconds(_time);
+        _isEndAnimation = true;
     }
 }

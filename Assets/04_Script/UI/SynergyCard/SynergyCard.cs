@@ -1,9 +1,6 @@
 using DG.Tweening;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -154,6 +151,7 @@ public class SynergyCard : MonoBehaviour
             brick.FocusOn();
         });
     }
+
     private void BricksOff()
     {
         _generatorBricks.ForEach((brick) =>
@@ -171,10 +169,9 @@ public class SynergyCard : MonoBehaviour
         _name.enabled = true;
         _description.enabled = true;
         _levelTrm.gameObject.SetActive(true);
-        Dissolver.Dissolve(_synergyParameters, true);
+        _synergyParameters.On();
 
         CanUpdate = true;
-        //_levelTrm.gameObject.SetActive(true);
     }
 
     public void Off()
@@ -189,7 +186,6 @@ public class SynergyCard : MonoBehaviour
         Dissolver.Dissolve(_synergyParameters, false);
 
         CanUpdate = false;
-        //_levelTrm.gameObject.SetActive(false);
     }
 
     private void GetGeneratorBricks()

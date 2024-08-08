@@ -84,7 +84,7 @@ public class Shop : MonoBehaviour
         if(_isOpen || inven.IsOn) return;
 
         GameManager.Instance.isShopOpen = true;
-        inven.canOpen = false;
+        inven.CanOpen = false;
         _isOpen = true;
         _playerMoney.GoldChangedEvent += UpdatePlayerGoldUI;
         _shopUIObject.SetActive(true);
@@ -97,7 +97,7 @@ public class Shop : MonoBehaviour
         if (_isOpen == false) return;
 
         GameManager.Instance.isShopOpen = false;
-        inven.canOpen = true;
+        inven.CanOpen = true;
         _isOpen = false;
         _playerMoney.GoldChangedEvent -= UpdatePlayerGoldUI;
         _shopUIObject.SetActive(false);

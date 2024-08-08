@@ -12,6 +12,7 @@ public class GeneratorExplain : MonoBehaviour
     private TextMeshProUGUI _evaluation;
     private TextMeshProUGUI _name;
     private Tooltip _toolTip;
+    private TextMeshProUGUI _connectEnforceInfo;
 
     private void Awake()
     {
@@ -23,6 +24,9 @@ public class GeneratorExplain : MonoBehaviour
         Transform middleTrm = transform.Find("TooltipMiddle");
         _trigger = middleTrm.Find("Trigger").GetComponent<TextMeshProUGUI>();
         _skillExplain = middleTrm.Find("Explain").GetComponent<TextMeshProUGUI>();
+        
+        Transform underTrm = transform.Find("TooltipUnder");
+        _connectEnforceInfo = underTrm.Find("EnforceInfo").GetComponent<TextMeshProUGUI>();
     }
 
     public void Active(bool value)
@@ -33,7 +37,7 @@ public class GeneratorExplain : MonoBehaviour
     }
     //스킬 이름
     //등급도 표시
-    public void ON(Vector2 invenPos, Sprite image, string trigger, string skill, RateColor evaluation, string name)
+    public void ON(Vector2 invenPos, Sprite image, string trigger, string skill, RateColor evaluation, string name, string enforceInfo)
     {
         _iamge.sprite = image;
         _trigger.text = $"발동조건 : {trigger}";
@@ -41,6 +45,7 @@ public class GeneratorExplain : MonoBehaviour
         _name.text = name;
         _evaluation.text = evaluation.Rate.ToString();
         _evaluation.color = evaluation.color;
+        _connectEnforceInfo.text = enforceInfo;
 
         //_toolTip.CurrentItemRate = evaluation;
         //_toolTip.On(invenPos);
